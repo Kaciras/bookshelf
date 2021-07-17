@@ -1,0 +1,25 @@
+/*
+ * https://www.userchrome.org/
+ */
+
+:root {
+    --chrome-content-separator-color: #ddd !important;
+    --proton-tab-block-margin: 0px !important;
+}
+
+.tabbrowser-tab {
+    padding-inline: 0 !important;
+}
+
+/*
+ * 这里没使用变量 --tab-border-radius: 0 !important;
+ * 因为它也影响新建按钮，该按钮保留圆角更好看些。
+ */
+.tab-background {
+    border-radius: 0 !important;
+}
+
+.tab-background[multiselected="true"],
+.tab-background[selected="true"] {
+    background-color: var(--toolbar-bgcolor) !important;
+}

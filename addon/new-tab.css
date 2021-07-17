@@ -1,0 +1,14 @@
+body {
+	display: flex;
+	min-height: 100vh;
+	margin: 0;
+	background: #f9f9fb;
+}
+
+main {
+	margin: auto;
+}
+
+#bookmarks {
+	margin-top: 48px;
+}

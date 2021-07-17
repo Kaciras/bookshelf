@@ -1,0 +1,27 @@
+{
+	"manifest_version": 2,
+	"name": "Kaciras Firefox Theme",
+	"version": "1.0.0",
+	"description": "Kaciras Firefox Theme",
+	"developer": {
+		"name": "Kaciras",
+		"url": "TODO"
+	},
+	"applications": {
+		"gecko": {
+			"id": "kaciras-theme",
+			"strict_min_version": "89.0"
+		}
+	},
+	"permissions": [
+		"storage"
+	],
+	"optional_permissions": [
+		"<all_urls>",
+		"webRequest",
+		"webRequestBlocking"
+	],
+	"chrome_url_overrides" : {
+		"newtab": "new-tab.html"
+	}
+}
