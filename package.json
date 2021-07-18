@@ -4,9 +4,12 @@
 	"description": "",
 	"license": "MIT",
 	"author": "Kaciras",
-	"keywords": [],
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+	"keywords": [
+		"addon",
+		"firefox"
+	],
+	"devDependencies": {
+		"@kaciras/eslint-config-core": "^1.5.0",
+		"eslint": "^7.31.0"
 	}
 }
