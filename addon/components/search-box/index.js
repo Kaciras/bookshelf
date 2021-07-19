@@ -1,40 +1,103 @@
+const arrow = `
+<svg xmlns="http://www.w3.org/2000/svg" 
+	 width="1em"
+	 height="1em" 
+	 viewBox="0 0 24 24"
+	 stroke-width="2"
+	 stroke="currentColor" 
+	 fill="none" 
+	 stroke-linecap="round" 
+	 stroke-linejoin="round"
+>
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <line x1="5" y1="12" x2="19" y2="12"></line>
+   <line x1="13" y1="18" x2="19" y2="12"></line>
+   <line x1="13" y1="6" x2="19" y2="12"></line>
+</svg>`;
+
 const template = document.createElement("template");
 template.innerHTML = `
 	<link rel="stylesheet" href="components/search-box/index.css">
 	
-	<button type="button">
-		<img alt="icon" src="#">
-		<input placeholder="搜索">
-		<div id="button">按钮</div>
-	</button>
+	<div id="box">
+		<img alt="icon" src="components/search-box/search.ico">
+		<input id="input" placeholder="搜索">
+		<button id="button" type="button">${arrow}</button>
+	</div>
 	
 	<ul id="suggestions"></ul>
 `;
 
-export default class SearchBoxElement extends HTMLElement {
+const suggestAPI = "https://www.google.com/complete/search?client=firefox&q=";
+const searchAPI = "https://www.google.com/search?client=firefox-b-d&q=";
+
+/**
+ * 这里不使用 Search API 因为它不支持查询建议。
+ * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/search
+ */
+class SearchBoxElement extends HTMLElement {
 
 	constructor() {
 		super();
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
-		this.inputEl = root.host.getElementsByTagName("input")[0];
+		this.quering = new AbortController();
+		this.inputEl = root.getElementById("input");
 		this.iconEl = root.getElementById("favicon");
+		this.suggestions = root.getElementById("suggestions");
 
-		this.inputEl.addEventListener("input", this.handleInput);
+		this.suggest = this.suggest.bind(this);
 
-		this.addEventListener("click", this.handleClick);
-		this.addEventListener("keyup", this.handleKeyUp);
+		this.inputEl.addEventListener("input", this.handleInput.bind(this));
+		this.inputEl.addEventListener("keyup", this.handleKeyUp.bind(this));
+		root.getElementById("button").addEventListener("click", this.handleClick.bind(this));
 	}
 
 	async handleInput() {
-		const value = this.inputEl.value;
-		const response = await fetch(`http://suggestqueries.google.com/complete/search?output=firefox&q=${value}`)
+		if (!this.inputEl.value) {
+			this.suggestions.innerHTML = "";
+		} else {
+			setTimeout(this.suggest, 500);
+		}
+	}
+
+	async suggest() {
+		this.quering.abort();
+		this.quering = new AbortController();
+		const { value } = this.inputEl;
+		const { signal } = this.quering;
+
+		const response = await fetch(suggestAPI + value, { signal });
 		if (!response.ok) {
 			console.error("搜索建议错误" + response.status);
 		}
-		const json = await response.json();
+		const [, list, , _TODO] = await response.json();
 
+		this.suggestions.innerHTML = "";
+		for (let i = 0; i < list.length; i++) {
+			const text = list[i];
+
+			const el = document.createElement("li");
+			el.textContent = text;
+			el.onclick = () => location.href = searchAPI + text;
+			this.suggestions.append(el);
+		}
+	}
+
+	handleKeyUp(event) {
+		if (event.key !== "Enter") {
+			return;
+		}
+		event.stopPropagation();
+		location.href = searchAPI + this.inputEl.value;
+	}
+
+	handleClick(event) {
+		if (event.button !== 0) {
+			return;
+		}
+		location.href = searchAPI + this.inputEl.value;
 	}
 }
 

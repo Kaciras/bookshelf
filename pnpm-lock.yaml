@@ -2,10 +2,12 @@ lockfileVersion: 5.3
 
 specifiers:
   '@kaciras/eslint-config-core': ^1.5.0
+  '@types/firefox-webext-browser': ^82.0.1
   eslint: ^7.31.0
 
 devDependencies:
   '@kaciras/eslint-config-core': 1.5.0_eslint@7.31.0
+  '@types/firefox-webext-browser': 82.0.1
   eslint: 7.31.0
 
 packages:
@@ -69,6 +71,10 @@ packages:
       eslint: '>=7'
     dependencies:
       eslint: 7.31.0
+    dev: true
+
+  /@types/firefox-webext-browser/82.0.1:
+    resolution: {integrity: sha512-odcPKiJ34N8k53clIWen3hLvl09ja7SQ9NqtUbgmqeJ/a/ZRQiF665iXSFPcnl6cBn2XQgEg2lsUUApYNiyj+g==}
     dev: true
 
   /acorn-jsx/5.3.2_acorn@7.4.1:

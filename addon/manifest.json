@@ -9,17 +9,13 @@
 	},
 	"applications": {
 		"gecko": {
-			"id": "kaciras-theme",
+			"id": "theme@kaciras",
 			"strict_min_version": "89.0"
 		}
 	},
 	"permissions": [
-		"storage"
-	],
-	"optional_permissions": [
-		"<all_urls>",
-		"webRequest",
-		"webRequestBlocking"
+		"storage",
+		"<all_urls>"
 	],
 	"chrome_url_overrides" : {
 		"newtab": "new-tab.html"

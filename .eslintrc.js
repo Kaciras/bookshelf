@@ -1,5 +1,9 @@
 module.exports = {
 	root: true,
 	extends: ["@kaciras/core"],
-	env: { browser: true },
+	env: {
+		browser: true,
+		node: true,
+		webextensions: true,
+	},
 };
