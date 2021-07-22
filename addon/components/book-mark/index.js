@@ -1,6 +1,6 @@
 const template = document.createElement("template");
 template.innerHTML = `
-	<link rel="stylesheet" href="components/book-mark/index.css">
+	<link rel="stylesheet" href="./index.css">
 	<button type="button"></button>
 	<div id="icon-box">
 		<img id="favicon" alt="favicon" src="#">
@@ -8,7 +8,7 @@ template.innerHTML = `
 	<span id="name"></span>
 `;
 
-export default class BookMarkElement extends HTMLElement {
+class BookMarkElement extends HTMLElement {
 
 	static get observedAttributes() {
 		return ["name", "favicon", "url"];

@@ -1,28 +1,14 @@
-const arrow = `
-<svg xmlns="http://www.w3.org/2000/svg" 
-	 width="1em"
-	 height="1em" 
-	 viewBox="0 0 24 24"
-	 stroke-width="2"
-	 stroke="currentColor" 
-	 fill="none" 
-	 stroke-linecap="round" 
-	 stroke-linejoin="round"
->
-   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-   <line x1="5" y1="12" x2="19" y2="12"></line>
-   <line x1="13" y1="18" x2="19" y2="12"></line>
-   <line x1="13" y1="6" x2="19" y2="12"></line>
-</svg>`;
+import GoogleIcon from "./search.ico";
+import Arrow from "./ArrowRight.svg";
 
 const template = document.createElement("template");
 template.innerHTML = `
-	<link rel="stylesheet" href="components/search-box/index.css">
+	<link rel="stylesheet" href="./index.css">
 	
 	<div id="box">
-		<img alt="icon" src="components/search-box/search.ico">
+		<img alt="icon" src="${GoogleIcon}">
 		<input id="input" placeholder="搜索">
-		<button id="button" type="button">${arrow}</button>
+		<button id="button" type="button">${Arrow}</button>
 	</div>
 	
 	<ul id="suggestions"></ul>
@@ -72,7 +58,7 @@ class SearchBoxElement extends HTMLElement {
 		if (!response.ok) {
 			console.error("搜索建议错误" + response.status);
 		}
-		const [, list, , _TODO] = await response.json();
+		const [, list] = await response.json();
 
 		this.suggestions.innerHTML = "";
 		for (let i = 0; i < list.length; i++) {

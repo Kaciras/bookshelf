@@ -8,9 +8,16 @@
 		"addon",
 		"firefox"
 	],
+	"scripts": {
+		"build": "rollup -c"
+	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^1.5.0",
+		"@rollup/plugin-html": "^0.2.3",
+		"@rollup/plugin-url": "^6.0.0",
 		"@types/firefox-webext-browser": "^82.0.1",
-		"eslint": "^7.31.0"
+		"eslint": "^7.31.0",
+		"rollup": "^2.53.3",
+		"webextension-polyfill": "^0.8.0"
 	}
 }
