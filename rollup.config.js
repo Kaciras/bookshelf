@@ -53,7 +53,7 @@ function generateHtml({ attributes, files, meta, publicPath }) {
 		metas: meta.map(input => `<meta${htmlPlugin.makeHtmlAttributes(input)}>`),
 	};
 
-	let content = readFileSync("addon/new-tab/index.html", "utf8");
+	let content = readFileSync("new-tab/index.html", "utf8");
 	content = content.replaceAll(/\${([a-z]+)}/g, (_, v) => replacements[v]);
 
 	return minify(content, {
@@ -65,7 +65,7 @@ function generateHtml({ attributes, files, meta, publicPath }) {
 }
 
 module.exports = {
-	input: "addon/new-tab/index.js",
+	input: "new-tab/index.js",
 	output: {
 		file: "dist/index.js",
 		format: "esm",
@@ -83,8 +83,8 @@ module.exports = {
 		}),
 		copyPlugin({
 			targets: [
-				{ src: "addon/new-tab/index.css", dest: "dist" },
-				{ src: "addon/manifest.json", dest: "dist" },
+				{ src: "new-tab/index.css", dest: "dist" },
+				{ src: "manifest.json", dest: "dist" },
 				{ src: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js", dest: "dist" },
 			],
 		}),
