@@ -18,6 +18,6 @@
 		"<all_urls>"
 	],
 	"chrome_url_overrides" : {
-		"newtab": "new-tab.html"
+		"newtab": "index.html"
 	}
 }

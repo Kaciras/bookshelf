@@ -1,9 +1,10 @@
 import GoogleIcon from "./search.ico";
 import Arrow from "./ArrowRight.svg";
+import styles from "./index.css";
 
 const template = document.createElement("template");
 template.innerHTML = `
-	<link rel="stylesheet" href="./index.css">
+	<style>${styles}</style>
 	
 	<div id="box">
 		<img alt="icon" src="${GoogleIcon}">

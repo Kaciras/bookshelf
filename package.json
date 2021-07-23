@@ -9,6 +9,7 @@
 		"firefox"
 	],
 	"scripts": {
+		"dev": "rollup -c --watch",
 		"build": "rollup -c"
 	},
 	"devDependencies": {
@@ -17,7 +18,12 @@
 		"@rollup/plugin-url": "^6.0.0",
 		"@types/firefox-webext-browser": "^82.0.1",
 		"eslint": "^7.31.0",
+		"html-minifier-terser": "^5.1.1",
+		"postcss": "^8.3.6",
+		"postcss-csso": "^5.0.1",
 		"rollup": "^2.53.3",
+		"rollup-plugin-copy": "^3.4.0",
+		"svgo": "^2.3.1",
 		"webextension-polyfill": "^0.8.0"
 	}
 }

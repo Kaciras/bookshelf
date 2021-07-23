@@ -3,11 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title>新标签页</title>
-	${scripts} ${links}
+	<script type="module" defer src="webextension-polyfill.min.js"></script>
+	${scripts}
+	${links}
+	<link rel="stylesheet" href="index.css">
 </head>
 <body>
+<aside id="setting"></aside>
 <main>
-<section id="bookmarks"></section>
+	<section id="bookmarks"></section>
 </main>
 </body>
 </html>

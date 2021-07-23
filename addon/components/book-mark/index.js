@@ -1,6 +1,9 @@
+import styles from "./index.css";
+
 const template = document.createElement("template");
 template.innerHTML = `
-	<link rel="stylesheet" href="./index.css">
+	<style>${styles}</style>
+	
 	<button type="button"></button>
 	<div id="icon-box">
 		<img id="favicon" alt="favicon" src="#">
