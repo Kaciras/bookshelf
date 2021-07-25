@@ -9,7 +9,7 @@ template.innerHTML = `
 	<div id="box">
 		<img alt="icon" src="${GoogleIcon}">
 		<input id="input" placeholder="搜索">
-		<button id="button" type="button">${Arrow}</button>
+		<button id="button" type="button" tabindex="-1">${Arrow}</button>
 	</div>
 	
 	<ul id="suggestions"></ul>
@@ -26,24 +26,30 @@ class SearchBoxElement extends HTMLElement {
 
 	constructor() {
 		super();
+		this.quering = new AbortController();
+
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
-		this.quering = new AbortController();
 		this.inputEl = root.getElementById("input");
 		this.iconEl = root.getElementById("favicon");
+		this.boxEl = root.getElementById("box");
 		this.suggestions = root.getElementById("suggestions");
 
 		this.suggest = this.suggest.bind(this);
 
 		this.inputEl.addEventListener("input", this.handleInput.bind(this));
 		this.inputEl.addEventListener("keyup", this.handleKeyUp.bind(this));
+		this.inputEl.addEventListener("blur", this.closeSuggest.bind(this));
+
+		this.addEventListener("keydown", this.handleKeyDown.bind(this));
+
 		root.getElementById("button").addEventListener("click", this.handleClick.bind(this));
 	}
 
 	async handleInput() {
 		if (!this.inputEl.value) {
-			this.suggestions.innerHTML = "";
+			this.closeSuggest();
 		} else {
 			setTimeout(this.suggest, 500);
 		}
@@ -57,11 +63,13 @@ class SearchBoxElement extends HTMLElement {
 
 		const response = await fetch(suggestAPI + value, { signal });
 		if (!response.ok) {
-			console.error("搜索建议错误" + response.status);
+			console.error("搜索建议失败：" + response.status);
 		}
 		const [, list] = await response.json();
 
 		this.suggestions.innerHTML = "";
+		this.boxEl.classList.add("extend");
+
 		for (let i = 0; i < list.length; i++) {
 			const text = list[i];
 
@@ -70,6 +78,11 @@ class SearchBoxElement extends HTMLElement {
 			el.onclick = () => location.href = searchAPI + text;
 			this.suggestions.append(el);
 		}
+	}
+
+	closeSuggest() {
+		this.suggestions.innerHTML = "";
+		this.boxEl.classList.remove("extend");
 	}
 
 	handleKeyUp(event) {
@@ -85,6 +98,33 @@ class SearchBoxElement extends HTMLElement {
 			return;
 		}
 		location.href = searchAPI + this.inputEl.value;
+	}
+
+	handleKeyDown(event) {
+		const oldSuggest = this.selected;
+
+		switch (event.key) {
+			case "ArrowDown":
+				this.selected = oldSuggest
+					? oldSuggest.nextElementSibling
+					: this.suggestions.firstElementChild;
+				break;
+			case "ArrowUp":
+				this.selected = oldSuggest
+					? oldSuggest.previousElementSibling
+					: this.suggestions.lastElementChild;
+				break;
+			case "Escape":
+				this.closeSuggest();
+				return;
+			default:
+				return;
+		}
+
+		event.preventDefault();
+		this.inputEl.value = this.selected.textContent;
+		this.selected.classList.add("active");
+		oldSuggest?.classList.remove("active");
 	}
 }
 

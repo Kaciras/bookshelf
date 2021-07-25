@@ -85,6 +85,7 @@ li {
 	cursor: pointer;
 }
 
+li.active,
 li:hover,
 li:focus-visible {
 	background: rgba(0, 0, 0, 0.04);
