@@ -1,7 +1,9 @@
 import "../components/book-mark/index.js";
 import "../components/edit-dialog/index.js";
 import "../components/search-box/index.js";
-import settingIcon from "./Setting.svg";
+import "./shortcuts.js";
+import settingIcon from "../assets/Setting.svg";
+import checkIcon from "../assets/Check.svg";
 
 document.getElementsByTagName("main")[0].insertBefore(
 	document.createElement("search-box"),

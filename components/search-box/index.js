@@ -1,5 +1,5 @@
-import GoogleIcon from "./search.ico";
-import Arrow from "./ArrowRight.svg";
+import GoogleIcon from "../../assets/search.ico";
+import Arrow from "../../assets/ArrowRight.svg";
 import styles from "./index.css";
 
 const template = document.createElement("template");

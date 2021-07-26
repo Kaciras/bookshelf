@@ -1,4 +1,4 @@
-import xIcon from "./Close.svg";
+import xIcon from "../../assets/Close.svg";
 import styles from "./index.css";
 
 const template = document.createElement("template");
