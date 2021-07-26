@@ -1,46 +1,12 @@
 const { readFileSync } = require("fs");
 const htmlPlugin = require("@rollup/plugin-html");
 const urlPlugin = require("@rollup/plugin-url");
-const postcss = require("postcss");
-const csso = require("postcss-csso");
 const { minify } = require("html-minifier-terser");
-const { optimize, extendDefaultPlugins } = require("svgo");
 const copyPlugin = require("rollup-plugin-copy");
-const { createFilter } = require("@rollup/pluginutils");
 const { terser: terserPlugin } = require("rollup-plugin-terser");
-
-const PostCSS = postcss([csso()]);
-
-const filter = createFilter("components/**/*.css");
-
-const CSSPlugin = {
-	name: "css",
-	async transform(code, id) {
-		if (!filter(id)) {
-			return;
-		}
-		this.addWatchFile(id);
-		const { css } = await PostCSS.process(code);
-		return `export default ${JSON.stringify(css)};`;
-	},
-};
-
-const SvgoPlugins = extendDefaultPlugins([
-	{ name: "removeViewBox", active: false },
-]);
-
-const SVGPlugin = {
-	name: "svg-inline-optimize",
-	transform(code, id) {
-		if (!id.endsWith(".svg")) {
-			return;
-		}
-		code = optimize(code, SvgoPlugins).data;
-		code = code.replaceAll('"', "'");
-		code = JSON.stringify(code);
-		return `export default ${code};`;
-	},
-};
+const postcssPlugin = require("./rollup/postcss");
+const svgPlugin = require("./rollup/svg");
+const inlinePlugin = require("./rollup/inline");
 
 function generateHtml({ attributes, files, meta, publicPath }) {
 	const { js = [], css = [] } = files;
@@ -76,8 +42,11 @@ module.exports = {
 	},
 	plugins: [
 		terserPlugin(),
-		SVGPlugin,
-		CSSPlugin,
+		svgPlugin(),
+		postcssPlugin(),
+		inlinePlugin({
+			include: ["components/**/*.css", "**/*.svg"],
+		}),
 		urlPlugin({
 			include: ["**/*.ico"],
 			limit: 4096,
