@@ -6,13 +6,17 @@ const csso = require("postcss-csso");
 const { minify } = require("html-minifier-terser");
 const { optimize, extendDefaultPlugins } = require("svgo");
 const copyPlugin = require("rollup-plugin-copy");
+const { createFilter } = require("@rollup/pluginutils");
+const { terser: terserPlugin } = require("rollup-plugin-terser");
 
 const PostCSS = postcss([csso()]);
+
+const filter = createFilter("components/**/*.css");
 
 const CSSPlugin = {
 	name: "css",
 	async transform(code, id) {
-		if (!id.includes("components") || !id.endsWith(".css")) {
+		if (!filter(id)) {
 			return;
 		}
 		this.addWatchFile(id);
@@ -71,6 +75,7 @@ module.exports = {
 		format: "esm",
 	},
 	plugins: [
+		terserPlugin(),
 		SVGPlugin,
 		CSSPlugin,
 		urlPlugin({
