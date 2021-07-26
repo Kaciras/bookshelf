@@ -1,6 +1,8 @@
+const { resolve } = require("path");
 const { readFileSync } = require("fs");
 const htmlPlugin = require("@rollup/plugin-html");
 const urlPlugin = require("@rollup/plugin-url");
+const aliasPlugin = require("@rollup/plugin-alias");
 const { minify } = require("html-minifier-terser");
 const copyPlugin = require("rollup-plugin-copy");
 const { terser: terserPlugin } = require("rollup-plugin-terser");
@@ -44,6 +46,11 @@ module.exports = {
 		terserPlugin(),
 		svgPlugin(),
 		postcssPlugin(),
+		aliasPlugin({
+			entries: [
+				{ find: "@assets", replacement: resolve(__dirname, "assets") },
+			],
+		}),
 		inlinePlugin({
 			include: ["components/**/*.css", "**/*.svg"],
 		}),
