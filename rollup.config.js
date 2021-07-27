@@ -63,9 +63,9 @@ module.exports = {
 			template: generateHtml,
 		}),
 		copyPlugin([
-			{ src: "new-tab/index.css", dest: "dist" },
-			{ src: "manifest.json", dest: "dist" },
-			{ src: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js", dest: "dist" },
+			{ src: "new-tab/index.css" },
+			{ src: "manifest.json" },
+			{ src: "node_modules/webextension-polyfill/dist/browser-polyfill.js" },
 		]),
 	],
 };

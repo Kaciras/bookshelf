@@ -14,4 +14,4 @@ module.exports = function inlinePlugin(options) {
 			return `export default ${code};`;
 		},
 	};
-}
+};

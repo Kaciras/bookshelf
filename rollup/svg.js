@@ -1,7 +1,7 @@
 const { optimize, extendDefaultPlugins } = require("svgo");
 
 const changeRootAttributePlugin = {
-	name: "customPluginName",
+	name: "changeSVGAttribute",
 	type: "perItem",
 	active: true,
 	params: {
@@ -29,7 +29,7 @@ module.exports = function svgoPlugin() {
 	return {
 		name: "svg-inline-optimize",
 		transform(code, id) {
-			if (!id.endsWith(".svg")) {
+			if (!/\.svg(\?|$)/.test(id)) {
 				return;
 			}
 			const { data } = optimize(code, config);
