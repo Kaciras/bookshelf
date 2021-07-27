@@ -4,7 +4,7 @@ const htmlPlugin = require("@rollup/plugin-html");
 const urlPlugin = require("@rollup/plugin-url");
 const aliasPlugin = require("@rollup/plugin-alias");
 const { minify } = require("html-minifier-terser");
-const copyPlugin = require("rollup-plugin-copy");
+const copyPlugin = require("./rollup/copy");
 const { terser: terserPlugin } = require("rollup-plugin-terser");
 const postcssPlugin = require("./rollup/postcss");
 const svgPlugin = require("./rollup/svg");
@@ -39,8 +39,8 @@ function generateHtml({ attributes, files, meta, publicPath }) {
 module.exports = {
 	input: "new-tab/index.js",
 	output: {
-		file: "dist/index.js",
 		format: "esm",
+		dir: "dist",
 	},
 	plugins: [
 		terserPlugin(),
@@ -62,12 +62,10 @@ module.exports = {
 			attributes: { script: { defer: "defer" } },
 			template: generateHtml,
 		}),
-		copyPlugin({
-			targets: [
-				{ src: "new-tab/index.css", dest: "dist" },
-				{ src: "manifest.json", dest: "dist" },
-				{ src: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js", dest: "dist" },
-			],
-		}),
+		copyPlugin([
+			{ src: "new-tab/index.css", dest: "dist" },
+			{ src: "manifest.json", dest: "dist" },
+			{ src: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js", dest: "dist" },
+		]),
 	],
 };
