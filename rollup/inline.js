@@ -1,6 +1,9 @@
 const { createFilter } = require("@rollup/pluginutils");
 
-module.exports = function inlinePlugin(options) {
+/**
+ * 将模块的内容作为字符串导出的插件，相当于 webpack 的 type: "asset/source"
+ */
+module.exports = function inline(options) {
 	const { include, exclude } = options;
 	const filter = createFilter(include, exclude);
 

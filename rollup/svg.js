@@ -1,9 +1,11 @@
 const { optimize, extendDefaultPlugins } = require("svgo");
 
+/**
+ * 替换 SVG 的属性，比如宽高设为 1em 以便外层用 font-size 控制。
+ */
 const changeRootAttributePlugin = {
 	name: "changeSVGAttribute",
 	type: "perItem",
-	active: true,
 	params: {
 		width: "1em",
 		height: "1em",
@@ -27,7 +29,7 @@ const config = {
 
 module.exports = function svgoPlugin() {
 	return {
-		name: "svg-inline-optimize",
+		name: "optimize-svg",
 		transform(code, id) {
 			if (!/\.svg(\?|$)/.test(id)) {
 				return;
