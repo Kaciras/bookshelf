@@ -10,6 +10,8 @@ const postcssPlugin = require("./rollup/postcss");
 const svgPlugin = require("./rollup/svg");
 const inlinePlugin = require("./rollup/inline");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 function generateHtml({ attributes, files, meta, publicPath }) {
 	const { js = [], css = [] } = files;
 
@@ -28,7 +30,7 @@ function generateHtml({ attributes, files, meta, publicPath }) {
 	let content = readFileSync("new-tab/index.html", "utf8");
 	content = content.replaceAll(/\${([a-z]+)}/g, (_, v) => replacements[v]);
 
-	return minify(content, {
+	return !isProduction ? content : minify(content, {
 		removeComments: true,
 		collapseWhitespace: true,
 		collapseBooleanAttributes: true,
@@ -43,14 +45,14 @@ module.exports = {
 		dir: "dist",
 	},
 	plugins: [
-		terserPlugin(),
-		svgPlugin(),
-		postcssPlugin(),
 		aliasPlugin({
 			entries: [
 				{ find: "@assets", replacement: resolve(__dirname, "assets") },
 			],
 		}),
+		isProduction && terserPlugin(),
+		svgPlugin(),
+		postcssPlugin(),
 		inlinePlugin({
 			include: ["components/**/*.css", "**/*.svg"],
 		}),

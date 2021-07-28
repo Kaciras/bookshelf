@@ -10,7 +10,7 @@
 	],
 	"scripts": {
 		"dev": "rollup -c --watch",
-		"build": "rollup -c"
+		"build": "rollup -c -environment NODE_ENV:production"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^1.5.0",
