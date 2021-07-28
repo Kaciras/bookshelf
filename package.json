@@ -1,11 +1,16 @@
 {
-	"name": "firefox-theme",
+	"name": "browser-theme",
 	"version": "1.0.0",
-	"description": "",
+	"description": "My custom browser theme addon",
 	"license": "MIT",
 	"author": "Kaciras",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Kaciras/browser-theme"
+	},
 	"keywords": [
 		"addon",
+		"theme",
 		"firefox"
 	],
 	"scripts": {
