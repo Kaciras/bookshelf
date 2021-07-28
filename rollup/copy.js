@@ -1,5 +1,5 @@
 const { readFile } = require("fs/promises");
-const { basename, resolve } = require("path");
+const { basename, join } = require("path");
 const glob = require("fast-glob");
 
 function isCopyChunk(id) {
@@ -9,7 +9,7 @@ function isCopyChunk(id) {
 /**
  * 该插件支持将复制的文件传递给其它插件处理，请注意插件的顺序。
  *
- * @param list 复制项列表
+ * @param list 复制项列表，格式参考了 copy-webpack-plugin。
  */
 module.exports = function copyPlugin(list) {
 	const processedChunks = new Map();
@@ -23,15 +23,22 @@ module.exports = function copyPlugin(list) {
 		 * Chunk 将作为源码被后续插件处理，而 asset 则不行。
 		 */
 		async buildStart() {
-			for (const entry of list) {
-				const files = await glob(entry.src);
+			const groups = await Promise.all(list.map(entry => {
+				const { from, context } = entry;
+				return glob(context ? `${context}/${from}` : from);
+			}));
+			for (let i = 0; i < list.length; i++) {
+				const { to, toDirectory } = list[i];
+				const files = groups[i];
+
 				for (const file of files) {
-					const fileName = basename(file);
-					this.emitFile({
-						type: "chunk",
-						fileName,
-						id: file + "?copy",
-					});
+					let fileName = basename(file);
+					if (toDirectory) {
+						fileName = join(to, fileName);
+					} else if (to) {
+						fileName = to;
+					}
+					this.emitFile({ type: "chunk", fileName, id: file + "?copy" });
 				}
 			}
 		},
