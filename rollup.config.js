@@ -48,6 +48,7 @@ module.exports = {
 		alias({
 			entries: [
 				{ find: "@assets", replacement: resolve(__dirname, "assets") },
+				{ find: "@common", replacement: resolve(__dirname, "common/index.js") },
 			],
 		}),
 		isProduction && terser(),

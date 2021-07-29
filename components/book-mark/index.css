@@ -1,7 +1,7 @@
+@import "/global.css";
+
 :host {
-	display: inline-flex;
-	flex-direction: column;
-	align-items: center;
+	display: inline-block;
 
 	position: relative;
 	padding: 12px 20px;
@@ -13,9 +13,18 @@
 	background: rgba(0, 0, 0, 0.05);
 }
 
+a {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+
+	color: inherit;
+	text-decoration: none;
+}
+
 #icon-box {
 	padding: 16px;
-	border-radius: 8px;
+	border-radius: $panel-radius;
 	background: white;
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.2);
 }
@@ -26,7 +35,7 @@
 	height: 48px;
 }
 
-#name {
+#label {
 	margin-top: 5px;
 	font-size: 0.875em;
 }

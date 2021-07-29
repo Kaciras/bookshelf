@@ -8,6 +8,7 @@ module.exports = {
 	resolve: {
 		alias: {
 			"@assets": resolve(__dirname, "assets"),
+			"@common": resolve(__dirname, "common/index.js"),
 		},
 	},
 };

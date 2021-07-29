@@ -1,64 +1,48 @@
+import { delegate } from "@common";
 import styles from "./index.css";
 
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 	
-	<button type="button"></button>
-	<div id="icon-box">
-		<img id="favicon" alt="favicon" src="#">
-	</div>
-	<span id="name"></span>
+	<a id="link">
+		<div id="icon-box">
+			<img id="favicon" alt="favicon" src="#">
+		</div>
+		<span id="label"></span>
+	</a>
+	
+	<button id="edit" type="button"></button>
+	<button id="remove" type="button"></button>
 `;
 
-class BookMarkElement extends HTMLElement {
 
-	static get observedAttributes() {
-		return ["name", "favicon", "url"];
-	}
+/**
+ * 因为该元素仅通过 JS 创建，所以就不写 observedAttributes 了。
+ */
+class BookMarkElement extends HTMLElement {
 
 	constructor() {
 		super();
+		this.disabled = false;
+
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
-		this.nameEl = root.getElementById("name");
+		this.labelEl = root.getElementById("label");
 		this.iconEl = root.getElementById("favicon");
+		this.linkEl = root.getElementById("link");
 
-		this.addEventListener("click", this.handleClick);
-		this.addEventListener("keyup", this.handleKeyUp);
+		delegate(this, "label", this.labelEl, "textContent");
+		delegate(this, "url", this.linkEl, "href");
+		delegate(this, "favicon", this.iconEl, "src");
+
+		this.linkEl.addEventListener("click", this.handleClick.bind(this));
 	}
 
-	handleClick() {
-		window.open(this.url);
-	}
-
-	handleKeyUp() {
-		window.open(this.url);
-	}
-
-	get name() {
-		return this.nameEl.textContent;
-	}
-
-	set name(value) {
-		this.nameEl.textContent = value;
-	}
-
-	get favicon() {
-		return this.iconEl.src;
-	}
-
-	set favicon(value) {
-		this.iconEl.src = value;
-	}
-
-	attributeChangedCallback(name, oldValue, newValue) {
-		const { input } = this;
-		if (newValue === null) {
-			input.removeAttribute(name);
-		} else {
-			input.setAttribute(name, newValue);
+	handleClick(event) {
+		if (this.disabled) {
+			event.preventDefault();
 		}
 	}
 }

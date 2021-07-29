@@ -1,43 +1,5 @@
-import xIcon from "@assets/Close.svg";
+import { blobToURL, delegate, openFile } from "@common";
 import styles from "./index.css";
-
-/**
- * 弹出文件选择框，在用户点确定之后 resolve。
- *
- * @param accept 文件类型
- * @param multiple 是否多选，如果为 true 返回文件列表，否则返回单个文件
- * @return 在用户点击确定时完成的 Promise
- */
-export function openFile(accept, multiple = false) {
-	const input = document.createElement("input");
-	input.type = "file";
-	input.accept = accept;
-	input.multiple = multiple;
-	input.click();
-
-	return new Promise(resolve => input.onchange = event => {
-		const { files } = event.target;
-		resolve(multiple ? files : files[0]);
-	});
-}
-
-/**
- * 将 Blob 对象转为 base64 编码的 Data-URL 字符串。
- *
- * 【其他方案】
- * 如果可能，使用 URL.createObjectURL + URL.revokeObjectURL 性能更好。
- *
- * @param blob Blob对象
- * @return Data-URL 字符串
- */
-export function blobToURL(blob) {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onerror = reject;
-		reader.onloadend = () => resolve(reader.result);
-		reader.readAsDataURL(blob);
-	});
-}
 
 /**
  * 获取网页中所有包含图标的 <link> 元素。
@@ -103,12 +65,17 @@ class EditDialogElement extends HTMLElement {
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
 
-		root.getElementById("cancel").addEventListener("click", this.handleResultButtonClick.bind(this));
-		root.getElementById("accept").addEventListener("click", this.handleResultButtonClick.bind(this));
-		root.getElementById("close").addEventListener("click", this.handleResultButtonClick.bind(this));
+		delegate(this, "label", this.nameInput, "value");
+		delegate(this, "url", this.urlInput, "value");
+		delegate(this, "favicon", this.iconEl, "src");
 
-		root.getElementById("icon-box").addEventListener("click", this.selectFile.bind(this));
-		root.getElementById("fetch").addEventListener("click", this.fetchFavicon.bind(this));
+		this.handleActionClick = this.handleActionClick.bind(this);
+
+		root.getElementById("cancel").onclick = this.handleActionClick;
+		root.getElementById("accept").onclick = this.handleActionClick;
+
+		root.getElementById("fetch").onclick = this.fetchFavicon.bind(this);
+		root.getElementById("icon-box").onclick = this.selectFile.bind(this);
 	}
 
 	// 不能再构造方法里设置属性，否则会报错。
@@ -121,14 +88,14 @@ class EditDialogElement extends HTMLElement {
 		return new Promise(resolve => this.resolve = resolve);
 	}
 
-	handleResultButtonClick(event) {
+	handleActionClick(event) {
 		this.style.display = "none";
 		this.resolve(event.target.id === "accept");
 	}
 
 	async selectFile() {
 		const file = await openFile("image/*");
-		this.iconEl.src = await blobToURL(file);
+		this.url = await blobToURL(file);
 	}
 
 	async fetchFavicon() {
@@ -146,7 +113,7 @@ class EditDialogElement extends HTMLElement {
 		href = new URL(href, url).toString();
 
 		const response = await fetch(href, { mode: "no-cors" });
-		this.iconEl.src = await blobToURL(await response.blob());
+		this.url = await blobToURL(await response.blob());
 	}
 }
 
