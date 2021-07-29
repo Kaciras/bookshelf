@@ -1,6 +1,8 @@
 /**
- * 本文件对构建无任何影响，仅作为 WebStorm 识别别名用。
- * 在 File -> Settings -> Languages & Frameworks -> JavaScript -> Webpack 选择该文件即可。
+ * WebStorm 不支持解析 Rollup，只能用 Webpack 的配置来记录别名。
+ * 在 File -> Settings -> Languages & Frameworks -> JavaScript -> Webpack 选择该文件。
+ *
+ * Rollup 的配置文件也会从这里读取别名信息。
  */
 const { resolve } = require("path");
 

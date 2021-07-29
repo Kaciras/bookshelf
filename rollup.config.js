@@ -1,10 +1,10 @@
-const { resolve } = require("path");
 const { readFileSync } = require("fs");
 const html = require("@rollup/plugin-html");
 const url = require("@rollup/plugin-url");
 const alias = require("@rollup/plugin-alias");
 const { minify } = require("html-minifier-terser");
 const { terser } = require("rollup-plugin-terser");
+const webpackConfig = require("./alias.idea");
 const copy = require("./rollup/copy");
 const postcss = require("./rollup/postcss");
 const svg = require("./rollup/svg");
@@ -46,10 +46,8 @@ module.exports = {
 	},
 	plugins: [
 		alias({
-			entries: [
-				{ find: "@assets", replacement: resolve(__dirname, "assets") },
-				{ find: "@common", replacement: resolve(__dirname, "common/index.js") },
-			],
+			entries: Object.entries(webpackConfig.resolve.alias)
+				.map(e => ({ find: e[0], replacement: e[1] })),
 		}),
 		isProduction && terser(),
 		svg(),
@@ -66,7 +64,7 @@ module.exports = {
 			template: generateHtml,
 		}),
 		copy([
-			{ from: "new-tab/index.css" },
+			{ from: "new-tab/*.css" },
 			{ from: "manifest.json" },
 			{
 				from: "browser-polyfill.min.js",
