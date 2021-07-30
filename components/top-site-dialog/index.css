@@ -1,0 +1,31 @@
+@import "/global.css";
+
+ul {
+	width: 700px;
+	height: 400px;
+	padding: 0;
+	overflow: auto;
+}
+
+li {
+	list-style: none;
+	display: grid;
+	column-gap: 12px;
+	grid-template-areas: "img title button" "img url button";
+	grid-template-columns: auto 1fr auto;
+	margin: 20px;
+}
+
+img {
+	grid-area: img;
+	width: 48px;
+	height: 48px;
+}
+
+span {
+	text-overflow: ellipsis;
+}
+
+button {
+	grid-area: button;
+}
