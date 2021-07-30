@@ -27,31 +27,30 @@ async function getFavicons(url, signal) {
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	<form id="dialog">
-		<button id="close" type="button">${xIcon}</button>
-		<h1>编辑快捷方式</h1>
-		
-		<div id="icon-group">
-			<div id="icon-box" title="选择图标">
-				<img id="favicon" alt="icon" src>
+	<dialog-base name="编辑快捷方式">
+		<form>
+			<div id="icon-group">
+				<div id="icon-box" title="选择图标">
+					<img id="favicon" alt="icon" src>
+				</div>
+				<button id="fetch" type="button">自动获取</button>
 			</div>
-			<button id="fetch" type="button">自动获取</button>
-		</div>
-		<div id="field-group">
-			<label>
-				名字（标题）
-				<input name="name" placeholder="某某小站" required>
-			</label>
-			<label>
-				地址（URL）
-				<input name="url" type="url" required>
-			</label>
-		</div>
-		<div id="actions">
-			<button id="cancel" type="button">取消</button>
-			<button id="accept" type="button">确定</button>
-		</div>
-	</form>	
+			<div id="field-group">
+				<label>
+					名字（标题）
+					<input name="name" placeholder="某某小站" required>
+				</label>
+				<label>
+					地址（URL）
+					<input name="url" type="url" required>
+				</label>
+			</div>
+			<div id="actions">
+				<button id="cancel" type="button">取消</button>
+				<button id="accept" type="button">确定</button>
+			</div>
+		</form>
+	</dialog-base>
 `;
 
 class EditDialogElement extends HTMLElement {
@@ -61,6 +60,7 @@ class EditDialogElement extends HTMLElement {
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
+		this.dialogEl = root.querySelector("dialog-base");
 		this.iconEl = root.getElementById("favicon");
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
@@ -78,18 +78,13 @@ class EditDialogElement extends HTMLElement {
 		root.getElementById("icon-box").onclick = this.selectFile.bind(this);
 	}
 
-	// 不能再构造方法里设置属性，否则会报错。
-	connectedCallback() {
-		this.style.display = "none";
-	}
-
 	show() {
-		this.style.removeProperty("display");
+		this.dialogEl.showModal();
 		return new Promise(resolve => this.resolve = resolve);
 	}
 
 	handleActionClick(event) {
-		this.style.display = "none";
+		this.dialogEl.hide();
 		this.resolve(event.target.id === "accept");
 	}
 

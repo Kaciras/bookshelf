@@ -1,0 +1,41 @@
+@import "/global.css";
+
+:host {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 100;
+
+	background: rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(2px);
+}
+
+div {
+	position: relative;
+	background: white;
+	border-radius: $panel-radius;
+	box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.2);
+}
+
+h1 {
+	margin: 10px 20px;
+	font-size: 1.4rem;
+	font-weight: normal;
+}
+
+#close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 12px;
+}
+
+#close > svg {
+	font-size: 28px;
+}

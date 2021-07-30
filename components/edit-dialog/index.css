@@ -1,41 +1,11 @@
-:host {
-	display: inline-flex;
-	flex-direction: column;
-	align-items: center;
+@import "/global.css";
 
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	z-index: 100;
-
-	background: rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(2px);
-}
-
-#dialog {
+form {
 	display: grid;
-	grid-template-areas: "header header" "icon attrs" "actions actions";
-	grid-template-columns: auto 1fr;
 	gap: 20px;
-
-	position: relative;
+	grid-template-areas: "icon attrs" "actions actions";
+	grid-template-columns: auto 1fr;
 	padding: 20px;
-	background: white;
-	border-radius: 8px;
-	box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.2);
-}
-
-#close {
-	position: absolute;
-	right: 0;
-	top: 0;
-}
-
-h1 {
-	margin: 0;
-	font-size: 1.5em;
 }
 
 #icon-group {
@@ -47,9 +17,9 @@ h1 {
 }
 
 #icon-box {
-	margin: 10px 0;
+	margin: 10px 20px;
 	padding: 16px;
-	border-radius: 8px;
+	border-radius: $panel-radius;
 	background: white;
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.2);
 	cursor: pointer;
