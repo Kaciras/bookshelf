@@ -1,0 +1,44 @@
+* {
+	box-sizing: border-box;
+}
+
+button {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	padding: 8px;
+	border: 0;
+	font-size: 1rem;
+
+	border-radius: 4px;
+	cursor: pointer;
+	background: #efeff2;
+
+	transition: background-color .15s;
+}
+
+button > svg {
+	font-size: 24px;
+}
+
+button > svg + span {
+	margin: 0 5px;
+}
+
+button.accept {
+	color: white;
+	background: #0060df;
+}
+
+.plain {
+	background: none;
+}
+
+.plain:hover {
+	background: rgba(0, 0, 0, 0.04);
+}
+
+.plain:active {
+	background: rgba(0, 0, 0, 0.06);
+}

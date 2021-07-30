@@ -1,3 +1,5 @@
+@import "/global.css";
+
 :host {
 	display: block;
 	position: relative;
@@ -12,7 +14,7 @@
 
 	background: white;
 	border: none;
-	border-radius: 8px;
+	border-radius: $panel-radius;
 	overflow: hidden;
 
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
@@ -46,19 +48,9 @@ input:focus-visible {
 	font-size: 24px;
 	color: #333;
 	padding: 14px;
-	box-sizing: border-box;
-	transition: background-color .15s;
 
 	border: 0;
 	background: none;
-}
-
-#button:hover {
-	background: rgba(0, 0, 0, 0.04);
-}
-
-#button:active {
-	background: rgba(0, 0, 0, 0.06);
 }
 
 #suggestions {
@@ -68,7 +60,6 @@ input:focus-visible {
 	width: 100%;
 	z-index: 10;
 
-	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 	background: white;

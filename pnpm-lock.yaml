@@ -12,6 +12,7 @@ specifiers:
   html-minifier-terser: ^5.1.1
   postcss: ^8.3.6
   postcss-csso: ^5.0.1
+  postcss-simple-vars: ^6.0.3
   rollup: ^2.55.0
   rollup-plugin-terser: ^7.0.2
   svgo: ^2.3.1
@@ -29,6 +30,7 @@ devDependencies:
   html-minifier-terser: 5.1.1
   postcss: 8.3.6
   postcss-csso: 5.0.1_postcss@8.3.6
+  postcss-simple-vars: 6.0.3_postcss@8.3.6
   rollup: 2.55.0
   rollup-plugin-terser: 7.0.2_rollup@2.55.0
   svgo: 2.3.1
@@ -985,6 +987,15 @@ packages:
       postcss: ^8.0.0
     dependencies:
       csso: 4.2.0
+      postcss: 8.3.6
+    dev: true
+
+  /postcss-simple-vars/6.0.3_postcss@8.3.6:
+    resolution: {integrity: sha512-fkNn4Zio8vN4vIig9IFdb8lVlxWnYR769RgvxCM6YWlFKie/nQaOcaMMMFz/s4gsfHW4/5bJW+i57zD67mQU7g==}
+    engines: {node: '>=10.0'}
+    peerDependencies:
+      postcss: ^8.2.1
+    dependencies:
       postcss: 8.3.6
     dev: true
 

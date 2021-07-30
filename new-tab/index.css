@@ -1,29 +1,28 @@
+@import "/global.css";
+
+html {
+	background: #f9f9fb;
+	min-height: 100vh;
+	padding: 0;
+}
+
 body {
 	display: flex;
-	min-height: 100vh;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
 	margin: 0;
-	background: #f9f9fb;
+	border: dashed 3px transparent;
+}
+
+body.editing {
+	border-color: #007eed;
 }
 
 main {
 	margin: auto;
-}
-
-button {
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-
-	padding: 8px;
-	border: 0;
-	border-radius: 4px;
-	cursor: pointer;
-	background: #efeff2;
-}
-
-button.accept {
-	color: white;
-	background: #0250bb;
 }
 
 #bookmarks {
@@ -34,4 +33,5 @@ button.accept {
 	position: absolute;
 	top: 20px;
 	right: 20px;
+	z-index: 10;
 }
