@@ -2,6 +2,9 @@ import GoogleIcon from "@assets/search.ico";
 import Arrow from "@assets/ArrowRight.svg";
 import styles from "./index.css";
 
+// 最多显示 8 个建议，太多反而乱而且显示不下。
+const SUGGEST_LIMIT = 8;
+
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
@@ -70,7 +73,8 @@ class SearchBoxElement extends HTMLElement {
 		this.suggestions.innerHTML = "";
 		this.boxEl.classList.add("extend");
 
-		for (let i = 0; i < list.length; i++) {
+		const count = Math.min(SUGGEST_LIMIT, list.length);
+		for (let i = 0; i < count; i++) {
 			const text = list[i];
 
 			const el = document.createElement("li");
