@@ -2,6 +2,7 @@ const { optimize, extendDefaultPlugins } = require("svgo");
 
 /**
  * 替换 SVG 的属性，比如宽高设为 1em 以便外层用 font-size 控制。
+ * 不同来源的图标使用的颜色属性不一样，有的是 fill 而有的是 stroke，没法统一替换。
  */
 const changeRootAttributePlugin = {
 	name: "changeSVGAttribute",

@@ -1,6 +1,8 @@
+import "../components/dialog-base/index.js";
 import "../components/book-mark/index.js";
 import "../components/edit-dialog/index.js";
 import "../components/search-box/index.js";
+import "../components/top-site-dialog/index.js";
 import "./shortcuts.js";
 import settingIcon from "@assets/Setting.svg";
 import checkIcon from "@assets/Check.svg";

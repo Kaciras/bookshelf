@@ -7,7 +7,9 @@ function isCopyChunk(id) {
 }
 
 /**
- * 该插件支持将复制的文件传递给其它插件处理，请注意插件的顺序。
+ * 复制资源的插件，与 rollup-plugin-copy 相比增加了功能：
+ * 1）将复制的文件加入监视。
+ * 2）复制的文件能够被其它插件处理，请注意插件的顺序。
  *
  * @param list 复制项列表，格式参考了 copy-webpack-plugin。
  */

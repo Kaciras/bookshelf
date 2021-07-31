@@ -1,9 +1,14 @@
 const postcss = require("postcss");
+const vars = require("postcss-simple-vars");
 const csso = require("postcss-csso");
 
-const cssLangRE = /\.(css|less|sass|scss|styl|stylus|pcss|postcss)($|\?)/;
+const variables = {
+	"panel-radius": "8px",
+};
 
-const convertor = postcss([csso()]);
+const cssLangRE = /\.(css|less|sass|scss|styl|pcss)($|\?)/;
+
+const convertor = postcss([csso(), vars({ variables })]);
 
 module.exports = function postcssPlugin() {
 	return {
