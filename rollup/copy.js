@@ -1,10 +1,8 @@
-const { readFile } = require("fs/promises");
 const { basename, join } = require("path");
 const glob = require("fast-glob");
+const { chunkImport } = require("./html");
 
-function isCopyChunk(id) {
-	return id.endsWith("?copy");
-}
+const hostId = "COPY_IMPORTER";
 
 /**
  * 复制资源的插件，与 rollup-plugin-copy 相比增加了功能：
@@ -14,7 +12,7 @@ function isCopyChunk(id) {
  * @param list 复制项列表，格式参考了 copy-webpack-plugin。
  */
 module.exports = function copyPlugin(list) {
-	const processedChunks = new Map();
+	const ids = new Set();
 
 	return {
 		name: "copy",
@@ -40,9 +38,10 @@ module.exports = function copyPlugin(list) {
 					} else if (to) {
 						fileName = to;
 					}
-					this.emitFile({ type: "chunk", fileName, id: file + "?copy" });
+					ids.add(file + "?resource&filename=" + fileName);
 				}
 			}
+			this.emitFile({ type: "chunk", fileName: hostId, id: hostId });
 		},
 
 		/**
@@ -52,64 +51,24 @@ module.exports = function copyPlugin(list) {
 		 * @return {Promise<string|null>}
 		 */
 		async resolveId(source) {
-			if (!isCopyChunk(source)) {
-				return null;
+			if (source === hostId) {
+				return hostId;
 			}
-			source = source.slice(0, -"?copy".length);
-			const resolution = await this.resolve(source, undefined, { skipSelf: true });
-			if (!resolution) {
-				return null;
-			}
-			return `${resolution.id}?copy`;
+			return ids.has(source) ? source : null;
 		},
 
-		/**
-		 * 根据模块解析后的 ID 加载其内容，这里就直接读取文件。
-		 *
-		 * @param id 模块的 ID
-		 * @return {Promise<string|null>} 内容，如果不归本插件管就返回 null。
-		 */
 		load(id) {
-			if (!isCopyChunk(id)) {
+			if (id !== hostId) {
 				return null;
 			}
-			const importee = id.slice(0, -"?copy".length);
-			this.addWatchFile(importee);
-			return readFile(importee, "utf8");
+			return chunkImport(ids);
 		},
 
 		/**
-		 * 在这里把模块的内容保存下来，以便后续取出，因为 rollup 只认 JS 代码，
-		 * 所以不能把模块的内容返回。
 		 *
-		 * 注意 rollup-plugin-terser 使用的是 renderChunk 所以没法处理复制的文件。
-		 *
-		 * @param code 模块的内容
-		 * @param id 模块的 ID
-		 * @return {string} 返回空模块以免 rollup 不认识。
+		 * @param _ 没用的参数
+		 * @param bundle 输出的入口文件
 		 */
-		transform(code, id) {
-			if (!isCopyChunk(id)) {
-				return code;
-			}
-			processedChunks.set(id, code);
-			return "export default null";
-		},
-
-		/**
-		 * 最后输出 Chunk，这里不使用 code 因为它是空模块，
-		 * 而是从前面保存的模块里取出对应的内容。
-		 *
-		 * @param code 这个代码并不使用。
-		 * @param chunk
-		 * @return {null|any} 内容，如果不归本插件管就返回 null。
-		 */
-		renderChunk(code, chunk) {
-			const [id] = Object.keys(chunk.modules);
-			if (!isCopyChunk(id)) {
-				return null;
-			}
-			return processedChunks.get(id);
-		},
+		generateBundle: (_, bundle) => delete bundle[hostId],
 	};
 };

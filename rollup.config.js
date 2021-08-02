@@ -1,6 +1,5 @@
 const { readFileSync } = require("fs");
 const html = require("@rollup/plugin-html");
-const url = require("@rollup/plugin-url");
 const alias = require("@rollup/plugin-alias");
 const { minify } = require("html-minifier-terser");
 const { terser } = require("rollup-plugin-terser");
@@ -8,7 +7,7 @@ const webpackConfig = require("./alias.idea");
 const copy = require("./rollup/copy");
 const postcss = require("./rollup/postcss");
 const svg = require("./rollup/svg");
-const inline = require("./rollup/inline");
+const asset = require("./rollup/asset");
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -49,15 +48,13 @@ module.exports = {
 			entries: Object.entries(webpackConfig.resolve.alias)
 				.map(e => ({ find: e[0], replacement: e[1] })),
 		}),
-		isProduction && terser(),
-		svg(),
-		postcss(),
-		inline({
-			include: ["components/**/*.css", "**/*.svg"],
-		}),
-		url({
-			include: ["**/*.ico"],
-			limit: 4096,
+		asset({
+			loaders: [
+				postcss, svg,
+			],
+			source: { include: ["**/*.css", "**/*.svg"] },
+			url: { include: ["**/*.ico"] },
+			resource: { include: "_$" },
 		}),
 		html({
 			attributes: { script: { defer: "defer" } },
@@ -72,5 +69,6 @@ module.exports = {
 				context: "node_modules/webextension-polyfill/dist",
 			},
 		]),
+		isProduction && terser(),
 	],
 };

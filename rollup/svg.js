@@ -28,15 +28,10 @@ const config = {
 	],
 };
 
-module.exports = function svgoPlugin() {
-	return {
-		name: "optimize-svg",
-		transform(code, id) {
-			if (!/\.svg(\?|$)/.test(id)) {
-				return;
-			}
-			const { data } = optimize(code, config);
-			return data.replaceAll('"', "'");
-		},
-	};
+module.exports = function (source, id) {
+	if (!/\.svg(\?|$)/.test(id)) {
+		return;
+	}
+	const { data } = optimize(source.string, config);
+	return data.replaceAll('"', "'");
 };
