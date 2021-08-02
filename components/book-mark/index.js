@@ -1,4 +1,4 @@
-import { delegate } from "@common";
+import { delegate } from "@share";
 import styles from "./index.css";
 
 const template = document.createElement("template");

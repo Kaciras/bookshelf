@@ -1,4 +1,4 @@
-import { blobToURL, delegate, openFile } from "@common";
+import { blobToURL, delegate, openFile } from "@share";
 import styles from "./index.css";
 
 /**
