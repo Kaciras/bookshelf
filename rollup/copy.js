@@ -5,9 +5,11 @@ const { chunkImport } = require("./html");
 const hostId = "COPY_IMPORTER";
 
 /**
- * 复制资源的插件，与 rollup-plugin-copy 相比增加了功能：
+ * 复制资源的插件，该插件需要搭配 asset 插件使用。
+ *
+ * 与 rollup-plugin-copy 相比有些区别：
  * 1）将复制的文件加入监视。
- * 2）复制的文件能够被其它插件处理，请注意插件的顺序。
+ * 2）复制的文件将作为资源由 asset 插件处理。
  *
  * @param list 复制项列表，格式参考了 copy-webpack-plugin。
  */
@@ -18,9 +20,8 @@ module.exports = function copyPlugin(list) {
 		name: "copy",
 
 		/**
-		 * 在构建开始时将要复制的文件作为 Chunk 加入。
-		 *
-		 * Chunk 将作为源码被后续插件处理，而 asset 则不行。
+		 * 在构建开始时找到所有要复制的文件，将它们加入 ID 集合。
+		 * 然后插入一个虚拟模块用于后续处理。
 		 */
 		async buildStart() {
 			const groups = await Promise.all(list.map(entry => {
@@ -48,7 +49,7 @@ module.exports = function copyPlugin(list) {
 		 * 对于 ID 不等于文件名的模块，必须要有自定义的 resolveId，否则报错。
 		 *
 		 * @param source 模块的 ID
-		 * @return {Promise<string|null>}
+		 * @return {Promise<string|null>} 解析后的 ID
 		 */
 		async resolveId(source) {
 			if (source === hostId) {
@@ -57,6 +58,9 @@ module.exports = function copyPlugin(list) {
 			return ids.has(source) ? source : null;
 		},
 
+		/**
+		 * 将待复制的文件路径转换为虚拟模块里的 import 语句。
+		 */
 		load(id) {
 			if (id !== hostId) {
 				return null;
@@ -65,6 +69,7 @@ module.exports = function copyPlugin(list) {
 		},
 
 		/**
+		 * 默认每个模块都生成一个文件，所以要从构建的输出中删除虚拟模块。
 		 *
 		 * @param _ 没用的参数
 		 * @param bundle 输出的入口文件

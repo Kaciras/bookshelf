@@ -3,10 +3,21 @@ const { basename } = require("path");
 const { createFilter } = require("@rollup/pluginutils");
 const mime = require("mime");
 
+const ASSET_SOURCE = 0;
+const ASSET_URL = 1;
+const ASSET_RESOURCE = 2;
+
 const srcRE = /([?&])source(?:&|$)/;
 const urlRE = /([?&])url(?:&|$)/;
 const resRE = /([?&])resource(?:&|$)/;
 
+function detectFromQuery(id) {
+	if (srcRE.test(id)) return ASSET_SOURCE;
+	if (urlRE.test(id)) return ASSET_URL;
+	if (resRE.test(id)) return ASSET_RESOURCE;
+}
+
+// https://github.com/rollup/plugins/blob/master/packages/url/src/index.js
 function encodeSVG(code) {
 	code = code
 		.replace(/[\n\r]/gim, "")
@@ -21,18 +32,27 @@ function encodeSVG(code) {
 		.replace(/\)/g, "%29");
 }
 
-function toDataUrl(code, mimetype) {
+function toDataUrl(buffer, mimetype) {
 	const isSVG = mimetype === "image/svg+xml";
-	code = isSVG ? encodeSVG(code)
-		: Buffer.from(code).toString("base64");
+	const code = isSVG
+		? encodeSVG(buffer.toString())
+		: buffer.toString("base64");
 	const encoding = isSVG ? "" : ";base64";
 	return `data:${mimetype}${encoding},${code}`;
 }
 
+/**
+ * 本模块的 loader 跟一样 Webpack 用 StringSource 和 BufferSource
+ * 分别包装字符串和 Buffer 两种类型的结果，提供一致的接口：
+ */
 class StringSource {
 
-	constructor(string) {
-		this.string = string;
+	constructor(data) {
+		this.data = data;
+	}
+
+	get string() {
+		return this.data;
 	}
 
 	get buffer() {
@@ -43,26 +63,20 @@ class StringSource {
 class BufferSource {
 
 	constructor(buffer) {
-		this.buffer = buffer;
+		this.data = buffer;
+	}
+
+	get buffer() {
+		return this.data;
 	}
 
 	get string() {
-		return this.buffer.toString();
+		return this.data.toString();
 	}
 }
 
-const ASSET_SOURCE = 0;
-const ASSET_URL = 1;
-const ASSET_RESOURCE = 2;
-
-function detectFromQuery(id) {
-	if (srcRE.test(id)) return ASSET_SOURCE;
-	if (urlRE.test(id)) return ASSET_URL;
-	if (resRE.test(id)) return ASSET_RESOURCE;
-}
-
 /**
- * 将模块的内容作为字符串导出的插件，相当于 webpack 的 type: "asset/source"
+ * Rollup 似乎没有提供处理资源的接口，只能自己撸一个了。
  */
 module.exports = function createInlinePlugin(options) {
 	const { source = {}, url = {}, resource = {}, limit = 4096, loaders = [] } = options;
@@ -84,21 +98,17 @@ module.exports = function createInlinePlugin(options) {
 
 		async load(id) {
 			const type = detectFromQuery(id) ?? detectFromPath(id);
-			if (!type) {
+			if (type === undefined) {
 				return null;
 			}
 			const [file, query] = id.split("?", 2);
 			const params = new URLSearchParams(query);
+			this.addWatchFile(file);
 
-			let data = await readFile(file);
-			let source = new BufferSource(data);
+			let source = new BufferSource(await readFile(file));
 
 			for (const loaderFn of loaders) {
 				const rv = await loaderFn(source, id);
-				if (rv === undefined) {
-					continue;
-				}
-				data = rv;
 				if (typeof rv === "string") {
 					source = new StringSource(rv);
 				} else if (Buffer.isBuffer(rv)) {
@@ -111,15 +121,14 @@ module.exports = function createInlinePlugin(options) {
 			}
 			if (type === ASSET_URL) {
 				const { buffer } = source;
-
 				if (buffer.length < limit) {
 					const mimetype = mime.getType(file);
-					const code = toDataUrl(code, mimetype);
+					const code = toDataUrl(buffer, mimetype);
 					return `export default "${code}"`;
 				}
 			}
 			const fileName = params.get("filename") || basename(file);
-			copies.set(id, { type: "asset", fileName, source: data });
+			copies.set(id, { type: "asset", fileName, source: source.data });
 			return `export default "${fileName}"`;
 		},
 
