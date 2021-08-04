@@ -7,9 +7,10 @@ template.innerHTML = `
 	<div>
 		<h1></h1>
 		<button 
-			id="close" 
-			type="button"
+			id="close"
 			class="plain"
+			title="关闭"
+			type="button"
 		 >
 			${xIcon}
 		</button>
@@ -33,6 +34,7 @@ class DialogBaseElement extends HTMLElement {
 
 		this.titleEl = root.querySelector("h1");
 
+		this.addEventListener("click", this.handleClick.bind(this));
 		root.getElementById("close").onclick = () => this.hide();
 	}
 
@@ -45,6 +47,15 @@ class DialogBaseElement extends HTMLElement {
 		this.setAttribute("aria-labelledby", value);
 	}
 
+	showModal() {
+		this.classList.add("open");
+	}
+
+	hide() {
+		this.dispatchEvent(new CustomEvent("close"));
+		this.classList.remove("open");
+	}
+
 	attributeChangedCallback(name, old, value) {
 		this.name = value;
 	}
@@ -52,15 +63,13 @@ class DialogBaseElement extends HTMLElement {
 	// 不能再构造方法里设置属性，否则会报错。
 	connectedCallback() {
 		this.setAttribute("role", "dialog");
-		this.style.display = "none";
 	}
 
-	showModal() {
-		this.style.removeProperty("display");
-	}
-
-	hide(accept) {
-		this.style.display = "none";
+	handleClick(event) {
+		if(event.target !== this) {
+			return;
+		}
+		this.dispatchEvent(new CustomEvent("backdrop-click"));
 	}
 }
 

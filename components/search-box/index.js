@@ -12,7 +12,14 @@ template.innerHTML = `
 	<div id="box">
 		<img alt="icon" src="${GoogleIcon}">
 		<input id="input" placeholder="搜索">
-		<button id="button" type="button" tabindex="-1">${Arrow}</button>
+		<button 
+			id="button" 
+			class="plain" 
+			type="button" 
+			tabindex="-1"
+		>
+			${Arrow}
+		</button>
 	</div>
 	
 	<ul id="suggestions"></ul>
@@ -70,6 +77,7 @@ class SearchBoxElement extends HTMLElement {
 		}
 		const [, list] = await response.json();
 
+		this.suggestions.classList.add("open");
 		this.suggestions.innerHTML = "";
 		this.boxEl.classList.add("extend");
 
@@ -85,6 +93,7 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	closeSuggest() {
+		this.suggestions.classList.remove("open");
 		this.suggestions.innerHTML = "";
 		this.boxEl.classList.remove("extend");
 	}

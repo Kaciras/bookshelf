@@ -7,15 +7,30 @@ button {
 	justify-content: center;
 	align-items: center;
 
-	padding: 8px;
+	padding: 8px 12px;
 	border: 0;
 	font-size: 1rem;
 
+	--bg: #efeff2;
+	--bg-focus: #e1e1e3;
+	--bg-active: #e8e8eb;
+
 	border-radius: 4px;
 	cursor: pointer;
-	background: #efeff2;
 
-	transition: background-color .15s;
+	color: var(--color);
+	background: var(--bg);
+
+	transition: .15s;
+}
+
+button:hover,
+button:focus-visible {
+	background: var(--bg-focus);
+}
+
+button:active {
+	background: var(--bg-active);
 }
 
 button > svg {
@@ -26,19 +41,21 @@ button > svg + span {
 	margin: 0 5px;
 }
 
-button.accept {
-	color: white;
-	background: #0060df;
+/* 用于内容只有一个图标的按钮 */
+button.icon {
+	padding: 8px;
+}
+
+.primary {
+	--color: white;
+	--bg: #0066eb;
+	--bg-focus: #005ac7;
+	--bg-active: #0061e0;
 }
 
 .plain {
 	background: none;
-}
-
-.plain:hover {
-	background: rgba(0, 0, 0, 0.04);
-}
-
-.plain:active {
-	background: rgba(0, 0, 0, 0.06);
+	--bg: none;
+	--bg-focus: rgba(0, 0, 0, 0.04);
+	--bg-active: rgba(0, 0, 0, 0.06);
 }

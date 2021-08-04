@@ -1,7 +1,8 @@
 @import "/global.css";
 
+/* ::backdrop */
 :host {
-	display: flex;
+	display: none;
 	justify-content: center;
 	align-items: center;
 
@@ -16,11 +17,23 @@
 	backdrop-filter: blur(2px);
 }
 
+:host(.open) {
+	display: flex;
+}
+
+/* dialog */
 div {
 	position: relative;
 	background: white;
-	border-radius: $panel-radius;
 	box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.2);
+
+	border-radius: $panel-radius;
+	transform: translateY(20px);
+	transition: 1s;
+}
+
+.open > div {
+	transform: translateY(0);
 }
 
 h1 {
@@ -34,6 +47,7 @@ h1 {
 	top: 0;
 	right: 0;
 	padding: 12px;
+	border-radius: 0;
 }
 
 #close > svg {

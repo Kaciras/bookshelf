@@ -12,22 +12,66 @@ document.getElementsByTagName("main")[0].insertBefore(
 	document.getElementById("bookmarks"),
 );
 
-browser.storage.sync.get("bookmarks").then(entries => {
+const dialog = document.createElement("edit-dialog");
+document.body.append(dialog);
 
-});
+const importDialog = document.createElement("top-site-dialog");
+document.body.append(importDialog);
 
-const el = document.createElement("book-mark");
-el.name = "测试测试";
-el.favicon = "https://blog.kaciras.com/favicon.svg";
-el.url = "https://google.com";
-document.getElementById("bookmarks").append(el);
+async function addShortcut() {
+	const isAccept = await dialog.show();
+	if (!isAccept) {
+		return;
+	}
+
+}
+
+function importTopSites() {
+	importDialog.show();
+	importDialog.addEventListener("add", event => {
+		const el = document.createElement("book-mark");
+		Object.assign(el, event.detail);
+		document.getElementById("bookmarks").append(el);
+	});
+}
 
 const settingEl = document.getElementById("setting");
-const btn = document.createElement("button");
-btn.innerHTML = settingIcon;
-btn.title = "进入设置模式";
-btn.onclick = () => {
-	btn.style.display = "none";
 
-};
-settingEl.append(btn);
+function switchSettingMode() {
+	settingEl.innerHTML = "";
+
+	const acceptBtn = document.createElement("button");
+	acceptBtn.innerHTML = checkIcon + "<span>确定</span>";
+	acceptBtn.title = null;
+	acceptBtn.classList.add("primary");
+	acceptBtn.onclick = switchNormalMode;
+	settingEl.append(acceptBtn);
+
+	const addBtn = document.createElement("button");
+	addBtn.innerHTML = "添加网站";
+	addBtn.onclick = addShortcut;
+	settingEl.append(addBtn);
+
+	const importBtn = document.createElement("button");
+	importBtn.innerHTML = "导入常用网站";
+	importBtn.onclick = importTopSites;
+	settingEl.append(importBtn);
+
+	document.body.classList.add("editing");
+}
+
+function switchNormalMode() {
+	settingEl.innerHTML = "";
+
+	const button = document.createElement("button");
+	button.innerHTML = settingIcon;
+	button.title = "进入设置模式";
+	button.className = "icon";
+	button.onclick = switchSettingMode;
+	settingEl.append(button);
+
+	document.body.classList.remove("editing");
+}
+
+switchNormalMode();
+

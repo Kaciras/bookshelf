@@ -1,3 +1,4 @@
+import WebsiteIcon from "@assets/Website.svg?url";
 import { blobToURL, delegate, openFile } from "@share";
 import styles from "./index.css";
 
@@ -64,6 +65,8 @@ class EditDialogElement extends HTMLElement {
 		this.iconEl = root.getElementById("favicon");
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
+
+		this.iconEl.src = WebsiteIcon;
 
 		delegate(this, "label", this.nameInput, "value");
 		delegate(this, "url", this.urlInput, "value");
