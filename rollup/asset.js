@@ -17,19 +17,19 @@ function detectFromQuery(id) {
 	if (resRE.test(id)) return ASSET_RESOURCE;
 }
 
-// https://github.com/rollup/plugins/blob/master/packages/url/src/index.js
+// https://www.zhangxinxu.com/wordpress/2018/08/css-svg-background-image-base64-encode/
+const encodeMap = {
+	'"': "'",
+	"%": "%25",
+	"#": "%23",
+	"{": "%7B",
+	"}": "%7D",
+	"<": "%3C",
+	">": "%3E",
+};
+
 function encodeSVG(code) {
-	code = code
-		.replace(/[\n\r]/gim, "")
-		.replace(/\t/gim, " ")
-		.replace(/<!--(.*(?=-->))-->/gim, "")
-		.replace(/'/gim, "\\i");
-
-	code = encodeURIComponent(code);
-
-	return code
-		.replace(/\(/g, "%28")
-		.replace(/\)/g, "%29");
+	return code.replaceAll(/["%#{}<>]/g, v => encodeMap[v]);
 }
 
 function toDataUrl(buffer, mimetype) {
