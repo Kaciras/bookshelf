@@ -2,6 +2,21 @@ import WebsiteIcon from "@assets/Website.svg?url";
 import { blobToURL, delegate, openFile } from "@share";
 import styles from "./index.css";
 
+// TODO: 跟 Rollup 插件里重复，但那边目前没法用 ESModule 只能分开了。
+const encodeMap = {
+	'"': "'",
+	"%": "%25",
+	"#": "%23",
+	"{": "%7B",
+	"}": "%7D",
+	"<": "%3C",
+	">": "%3E",
+};
+
+function encodeSVG(code) {
+	return code.replaceAll(/["%#{}<>]/g, v => encodeMap[v]);
+}
+
 /**
  * 获取网页中所有包含图标的 <link> 元素。
  *
@@ -66,7 +81,6 @@ class EditDialogElement extends HTMLElement {
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
 
-
 		delegate(this, "label", this.nameInput, "value");
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
@@ -110,13 +124,27 @@ class EditDialogElement extends HTMLElement {
 
 		let href = "/favicon.ico";
 		if (links.length > 0) {
+
+			// 优先使用 SVG 格式的。
+			const link = links.find(v => v.type === "image/svg+xml") ?? links[0];
+
 			// 不能直接 .href 因为它会转成完整的 URL
-			href = links[0].getAttribute("href");
+			href = link.getAttribute("href");
 		}
 		href = new URL(href, url).toString();
 
 		const response = await fetch(href, { mode: "no-cors" });
-		this.url = await blobToURL(await response.blob());
+		if (!response.ok) {
+			return alert("无法获取该网站的图标！");
+		}
+
+		const blob = await response.blob();
+		if (blob.type === "image/svg+xml") {
+			const code = encodeSVG(await blob.text());
+			this.favicon = `data:image/svg+xml,${code}`;
+		} else {
+			this.favicon = await blobToURL(await response.blob());
+		}
 	}
 }
 
