@@ -4,7 +4,7 @@
 	display: inline-block;
 
 	position: relative;
-	padding: 12px 20px;
+	padding: 20px 20px 12px 20px;
 	cursor: pointer;
 	border-radius: 6px;
 }
@@ -41,15 +41,27 @@ a {
 }
 
 button {
-	align-self: flex-end;
-	width: 24px;
-	height: 24px;
+	--icon-size: 22px;
+
+	position: absolute;
+	top: -15px;
+	padding: 4px;
 
 	opacity: 0;
-	border: 0;
-	cursor: pointer;
+	border: solid 1px #777;
+	border-radius: 100%;
+	background: white;
 }
 
-:host:hover > button {
+:host(:hover) > button {
 	opacity: 1;
+}
+
+#edit {
+	right: 30px
+}
+
+#remove {
+	right: -15px;
+	color: red;
 }

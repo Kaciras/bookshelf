@@ -34,7 +34,7 @@ button:active {
 }
 
 button > svg {
-	font-size: 24px;
+	font-size: var(--icon-size, 24px);
 }
 
 button > svg + span {

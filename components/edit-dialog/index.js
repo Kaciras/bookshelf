@@ -66,7 +66,6 @@ class EditDialogElement extends HTMLElement {
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
 
-		this.iconEl.src = WebsiteIcon;
 
 		delegate(this, "label", this.nameInput, "value");
 		delegate(this, "url", this.urlInput, "value");
@@ -79,6 +78,12 @@ class EditDialogElement extends HTMLElement {
 
 		root.getElementById("fetch").onclick = this.fetchFavicon.bind(this);
 		root.getElementById("icon-box").onclick = this.selectFile.bind(this);
+	}
+
+	reset() {
+		this.label = "";
+		this.url = "";
+		this.favicon = WebsiteIcon;
 	}
 
 	show() {

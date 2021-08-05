@@ -1,4 +1,6 @@
 import { delegate } from "@share";
+import EditIcon from "@assets/Edit.svg";
+import CloseIcon from "@assets/Close.svg";
 import styles from "./index.css";
 
 const template = document.createElement("template");
@@ -12,10 +14,22 @@ template.innerHTML = `
 		<span id="label"></span>
 	</a>
 	
-	<button id="edit" type="button"></button>
-	<button id="remove" type="button"></button>
+	<button
+		type="button"
+		id="edit"
+		title="编辑"
+	>
+		${EditIcon}
+	</button>
+	
+	<button 
+		type="button"
+		id="remove"
+		title="删除"
+	>
+		${CloseIcon}
+	</button>
 `;
-
 
 /**
  * 因为该元素仅通过 JS 创建，所以就不写 observedAttributes 了。
@@ -38,6 +52,9 @@ class BookMarkElement extends HTMLElement {
 		delegate(this, "favicon", this.iconEl, "src");
 
 		this.linkEl.addEventListener("click", this.handleClick.bind(this));
+
+		root.getElementById("edit").onclick = () => this.dispatchEvent(new CustomEvent("edit"));
+		root.getElementById("remove").onclick = () => this.dispatchEvent(new CustomEvent("remove"));
 	}
 
 	handleClick(event) {
