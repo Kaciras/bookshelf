@@ -8,6 +8,7 @@ const copy = require("./rollup/copy");
 const postcss = require("./rollup/postcss");
 const svg = require("./rollup/svg");
 const asset = require("./rollup/asset");
+const template = require("./rollup/template");
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -69,6 +70,7 @@ module.exports = {
 				context: "node_modules/webextension-polyfill/dist",
 			},
 		]),
+		template(),
 		isProduction && terser(),
 	],
 };
