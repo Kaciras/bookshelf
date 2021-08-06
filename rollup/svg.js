@@ -1,19 +1,26 @@
 const { optimize, extendDefaultPlugins } = require("svgo");
 
 /**
- * 替换 SVG 的属性，比如宽高设为 1em 以便外层用 font-size 控制。
- * 不同来源的图标使用的颜色属性不一样，有的是 fill 而有的是 stroke，没法统一替换。
+ * 调整 SVG 的属性，使其能够用容器元素的 CSS 控制：
+ * 1）宽高设为 1em 以便外层用 font-size 控制。
+ * 2）将 fill 和 stroke 改为 currentColor 以便用 color 控制。
  */
-const changeRootAttributePlugin = {
-	name: "changeSVGAttribute",
+const reactiveRootAttributePlugin = {
+	name: "reactiveSVGAttribute",
 	type: "perItem",
-	params: {
-		width: "1em",
-		height: "1em",
-	},
 	fn(ast, params) {
 		const { type, name, attributes } = ast;
+		const { fill, stroke } = attributes;
+
 		if (type === "element" && name === "svg") {
+			if (stroke && stroke !== "none") {
+				attributes.stroke = "currentColor";
+			}
+			if (fill && fill !== "none") {
+				attributes.fill = "currentColor";
+			}
+			attributes.width = attributes.height = "1em";
+
 			Object.assign(attributes, params);
 		}
 	},
@@ -24,7 +31,7 @@ const config = {
 		...extendDefaultPlugins([
 			{ name: "removeViewBox", active: false },
 		]),
-		changeRootAttributePlugin,
+		reactiveRootAttributePlugin,
 	],
 };
 
