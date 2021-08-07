@@ -2,25 +2,24 @@ const { minify } = require("html-minifier-terser");
 const { createFilter } = require("@rollup/pluginutils");
 const { minifyOptions } = require("./html");
 
-// 这 ESTree 匹配个 template.innerHtml = `...` 真麻烦啊。
+// 这 ESTree 匹配个 .innerHtml = `...` 真麻烦啊。
 function getTemplateLiteral(node) {
 	if (node.type !== "ExpressionStatement") return;
+
 	const { expression } = node;
 	if (expression.type !== "AssignmentExpression") return;
-	const { left } = expression;
-	const { object, property } = left;
-	if (left.type !== "MemberExpression"
-		|| object.name !== "template"
-		|| property.name !== "innerHTML") return;
-	const { type, value } = expression.right;
-	if (type !== "Literal" || !value) return;
-	return expression.right;
-}
 
-function findTemplateHtml(ast) {
-	for (const node of ast.body) {
-		const literal = getTemplateLiteral(node);
-		if (literal) return literal;
+	const { left } = expression;
+	const { property } = left;
+	if (left.type !== "MemberExpression"
+		|| property.name !== "innerHTML") return;
+
+	const { type, value } = expression.right;
+	switch (type) {
+		case "TemplateLiteral":
+			return expression.right;
+		case "Literal":
+			return value && expression.right;
 	}
 }
 
@@ -38,7 +37,7 @@ module.exports = function templatePlugin() {
 				return;
 			}
 			const ast = this.parse(code);
-			const literal = findTemplateHtml(ast);
+			const literal = ast.body.map(getTemplateLiteral).find(Boolean);
 			if (!literal) {
 				return;
 			}
