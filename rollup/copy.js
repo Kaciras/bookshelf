@@ -60,12 +60,16 @@ module.exports = function copyPlugin(list) {
 
 		/**
 		 * 将待复制的文件路径转换为虚拟模块里的 import 语句。
+		 * 禁止了 TreeShake 以避免空模块警告。
 		 */
 		load(id) {
 			if (id !== hostId) {
 				return null;
 			}
-			return chunkImport(ids);
+			return {
+				code: chunkImport(ids),
+				moduleSideEffects: "no-treeshake",
+			};
 		},
 
 		/**

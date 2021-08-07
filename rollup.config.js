@@ -1,5 +1,4 @@
-const { readFileSync } = require("fs");
-const html = require("@rollup/plugin-html");
+const html = require("./rollup/html");
 const alias = require("@rollup/plugin-alias");
 const { minify } = require("html-minifier-terser");
 const { terser } = require("rollup-plugin-terser");
@@ -12,34 +11,8 @@ const template = require("./rollup/template");
 
 const isProduction = process.env.NODE_ENV === "production";
 
-function generateHtml({ attributes, files, meta, publicPath }) {
-	const { js = [], css = [] } = files;
-
-	const replacements = {
-		scripts: js.map(file => {
-			const attrs = html.makeHtmlAttributes(attributes.script);
-			return `<script src="${publicPath}${file.fileName}" ${attrs}></script>`;
-		}),
-		links: css.map(file => {
-			const attrs = html.makeHtmlAttributes(attributes.link);
-			return `<link href="${publicPath}${file.fileName}" rel="stylesheet" ${attrs}>`;
-		}),
-		metas: meta.map(input => `<meta${html.makeHtmlAttributes(input)}>`),
-	};
-
-	let content = readFileSync("new-tab/index.html", "utf8");
-	content = content.replaceAll(/\${([a-z]+)}/g, (_, v) => replacements[v]);
-
-	return !isProduction ? content : minify(content, {
-		removeComments: true,
-		collapseWhitespace: true,
-		collapseBooleanAttributes: true,
-		removeAttributeQuotes: true,
-	});
-}
-
 module.exports = {
-	input: "new-tab/index.js",
+	input: "new-tab/index.html",
 	output: {
 		format: "esm",
 		dir: "dist",
@@ -57,12 +30,8 @@ module.exports = {
 			url: { include: ["**/*.ico"] },
 			resource: { include: "_$" },
 		}),
-		html({
-			attributes: { script: { defer: "defer" } },
-			template: generateHtml,
-		}),
 		copy([
-			{ from: "new-tab/*.css" },
+			{ from: "new-tab/global.css" },
 			{ from: "manifest.json" },
 			{
 				from: "browser-polyfill.min.js",
@@ -70,6 +39,7 @@ module.exports = {
 				context: "node_modules/webextension-polyfill/dist",
 			},
 		]),
+		html(),
 		template(),
 		isProduction && terser(),
 	],

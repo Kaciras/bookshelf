@@ -1,10 +1,11 @@
+const { resolve, dirname, basename } = require("path");
 const { existsSync } = require("fs");
 const { minify } = require("html-minifier-terser");
 const { parse } = require("node-html-parser");
 
 /**
  * 构造一个 JS 模块，导入所有 ID 。
- * 该模块还会导出一个 null 用于避免空模块警告。
+ * 没有用 reduce 因为参数是 Iterable，当然写成 [].reduce.call() 也行但不好看。
  *
  * @param ids 要导入的 ID 列表
  * @return {string} JS 代码
@@ -14,22 +15,21 @@ function chunkImport(ids) {
 	for (const id of ids) {
 		code += `import "${id}"\n`;
 	}
-	return code + "export default null";
+	return code;
 }
 
-const htmlMinifyOptions = {
+const minifyOptions = {
 	collapseWhitespace: true,
 	collapseBooleanAttributes: true,
 	removeComments: true,
 	removeAttributeQuotes: true,
 };
 
-module.exports = function htmlPlugin(options) {
-	const { isMinify } = options;
+module.exports = function htmlPlugin() {
 	const processedHtml = new Map();
 
 	return {
-		name: "html",
+		name: "html-entry",
 		transform(code, id) {
 			if (!id.endsWith(".html")) {
 				return;
@@ -43,7 +43,8 @@ module.exports = function htmlPlugin(options) {
 				if (src.charCodeAt(0) === 0x2F) {
 					continue;
 				}
-				if (existsSync(src)) {
+				const file = resolve(dirname(id), src);
+				if (existsSync(file)) {
 					script.remove();
 					imports.push(src);
 				}
@@ -55,37 +56,38 @@ module.exports = function htmlPlugin(options) {
 				if (src.charCodeAt(0) === 0x2F) {
 					continue;
 				}
-				if (existsSync(src)) {
-					link.remove();
+				const file = resolve(dirname(id), src);
+				if (existsSync(file)) {
 					imports.push(src);
 				}
 			}
 
-			processedHtml.set(id, code);
+			processedHtml.set(id, document);
 			return chunkImport(imports);
 		},
 
 		async generateBundle(_, bundle) {
-			for (const [id, html] of processedHtml) {
+			for (const [id, document] of processedHtml) {
+				const head = document.querySelector("head");
+
 				const chunk = Object.values(bundle).find(
 					(chunk) =>
 						chunk.type === "chunk" &&
 						chunk.isEntry &&
 						chunk.facadeModuleId === id,
 				);
-
 				if (chunk) {
-					// TODO
+					const el = `<script type="module" src="${chunk.fileName}"></script>`;
+					head.insertAdjacentHTML("beforeend", el);
 				}
 
-				let source = html;
-				if (isMinify) {
-					source = minify(html, htmlMinifyOptions);
-				}
-				this.emitFile({ type: "asset", fileName: id, source });
+				let source = document.toString();
+				source = minify(source, minifyOptions);
+				this.emitFile({ type: "asset", fileName: basename(id), source });
 			}
 		},
 	};
 };
 
 module.exports.chunkImport = chunkImport;
+module.exports.minifyOptions = minifyOptions;
