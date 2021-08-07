@@ -46,7 +46,7 @@ template.innerHTML = `
 	<dialog-base name="编辑快捷方式">
 		<form>
 			<div id="icon-group">
-				<div id="icon-box" title="选择图标">
+				<div id="icon-box">
 					<img id="favicon" alt="icon" src>
 				</div>
 				<button id="fetch" type="button">自动获取</button>
@@ -69,6 +69,11 @@ template.innerHTML = `
 	</dialog-base>
 `;
 
+/*
+ * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储的限制，
+ * 能同步的数据很少，图标等资源会超出限额所以只能存在本地，当数据同步到新的设备上后需必须新下载图标。
+ * Firefox 自己的标签页也和书签也是这样的。
+ */
 class EditDialogElement extends HTMLElement {
 
 	constructor() {
@@ -89,9 +94,7 @@ class EditDialogElement extends HTMLElement {
 
 		root.getElementById("cancel").onclick = this.handleActionClick;
 		root.getElementById("accept").onclick = this.handleActionClick;
-
 		root.getElementById("fetch").onclick = this.fetchFavicon.bind(this);
-		root.getElementById("icon-box").onclick = this.selectFile.bind(this);
 	}
 
 	reset() {
@@ -108,11 +111,6 @@ class EditDialogElement extends HTMLElement {
 	handleActionClick(event) {
 		this.dialogEl.hide();
 		this.resolve(event.target.id === "accept");
-	}
-
-	async selectFile() {
-		const file = await openFile("image/*");
-		this.url = await blobToURL(file);
 	}
 
 	async fetchFavicon() {

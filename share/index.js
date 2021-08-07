@@ -8,26 +8,6 @@ export function delegate(object, name, target, prop) {
 }
 
 /**
- * 弹出文件选择框，在用户点确定之后 resolve。
- *
- * @param accept 文件类型
- * @param multiple 是否多选，如果为 true 返回文件列表，否则返回单个文件
- * @return 在用户点击确定时完成的 Promise
- */
-export function openFile(accept, multiple = false) {
-	const input = document.createElement("input");
-	input.type = "file";
-	input.accept = accept;
-	input.multiple = multiple;
-	input.click();
-
-	return new Promise(resolve => input.onchange = event => {
-		const { files } = event.target;
-		resolve(multiple ? files : files[0]);
-	});
-}
-
-/**
  * 将 Blob 对象转为 base64 编码的 Data-URL 字符串。
  *
  * 【其他方案】
