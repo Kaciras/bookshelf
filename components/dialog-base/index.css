@@ -1,6 +1,5 @@
 @import "/global.css";
 
-/* ::backdrop */
 :host {
 	display: none;
 	justify-content: center;
@@ -12,32 +11,33 @@
 	width: 100vw;
 	height: 100vh;
 	z-index: 100;
-
-	background: rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(2px);
 }
 
 :host(.open) {
 	display: flex;
 }
 
-/* dialog */
-div {
+#backdrop {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+	background: rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(2px);
+}
+
+#dialog {
 	position: relative;
 	background: white;
 	box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.2);
-
 	border-radius: $panel-radius;
-	transform: translateY(20px);
-	transition: 1s;
-}
-
-.open > div {
-	transform: translateY(0);
 }
 
 h1 {
-	margin: 10px 20px;
+	margin: 0;
+	padding: 10px 20px;
 	font-size: 1.4rem;
 	font-weight: normal;
 }
