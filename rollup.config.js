@@ -1,6 +1,6 @@
 const html = require("./rollup/html");
 const alias = require("@rollup/plugin-alias");
-const { minify } = require("html-minifier-terser");
+const { visualizer } = require("rollup-plugin-visualizer");
 const { terser } = require("rollup-plugin-terser");
 const webpackConfig = require("./alias.idea");
 const copy = require("./rollup/copy");
@@ -42,5 +42,6 @@ module.exports = {
 		html(),
 		template(),
 		isProduction && terser(),
+		isProduction && visualizer(),
 	],
 };
