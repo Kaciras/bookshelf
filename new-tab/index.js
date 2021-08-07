@@ -7,6 +7,7 @@ import { addShortcut, importTopSites } from "./shortcuts";
 import settingIcon from "@assets/Setting.svg";
 import checkIcon from "@assets/Check.svg";
 
+// module js 自带 defer 属性，所以没法在 html 里使用自定义元素
 document.getElementsByTagName("main")[0].insertBefore(
 	document.createElement("search-box"),
 	document.getElementById("bookmarks"),
@@ -14,14 +15,14 @@ document.getElementsByTagName("main")[0].insertBefore(
 
 const settingEl = document.getElementById("setting");
 
-function switchSettingMode() {
+function switchToSettingMode() {
 	settingEl.innerHTML = "";
 
 	const acceptBtn = document.createElement("button");
 	acceptBtn.innerHTML = checkIcon + "<span>确定</span>";
 	acceptBtn.title = null;
 	acceptBtn.classList.add("primary");
-	acceptBtn.onclick = switchNormalMode;
+	acceptBtn.onclick = switchToNormalMode;
 	settingEl.append(acceptBtn);
 
 	const addBtn = document.createElement("button");
@@ -37,18 +38,17 @@ function switchSettingMode() {
 	document.body.classList.add("editing");
 }
 
-function switchNormalMode() {
+function switchToNormalMode() {
 	settingEl.innerHTML = "";
 
 	const button = document.createElement("button");
 	button.innerHTML = settingIcon;
 	button.title = "进入设置模式";
 	button.className = "icon";
-	button.onclick = switchSettingMode;
+	button.onclick = switchToSettingMode;
 	settingEl.append(button);
 
 	document.body.classList.remove("editing");
 }
 
-switchNormalMode();
-
+switchToNormalMode();

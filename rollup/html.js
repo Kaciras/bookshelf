@@ -19,14 +19,15 @@ function chunkImport(ids) {
 }
 
 const minifyOptions = {
-	collapseWhitespace: true,
 	collapseBooleanAttributes: true,
+	collapseWhitespace: true,
+	collapseInlineTagWhitespace: true,
 	removeComments: true,
 	removeAttributeQuotes: true,
 };
 
 module.exports = function htmlPlugin() {
-	const processedHtml = new Map();
+	const documents = new Map();
 
 	return {
 		name: "html-entry",
@@ -37,14 +38,19 @@ module.exports = function htmlPlugin() {
 			const document = parse(code);
 			const imports = [];
 
+			// 绝对路径和找不到文件的不处理
+			function check(url) {
+				if (url.charCodeAt(0) === 0x2F) {
+					return false;
+				}
+				const file = resolve(dirname(id), url);
+				return existsSync(file);
+			}
+
 			const scripts = document.querySelectorAll("script");
 			for (const script of scripts) {
 				const src = script.getAttribute("src");
-				if (src.charCodeAt(0) === 0x2F) {
-					continue;
-				}
-				const file = resolve(dirname(id), src);
-				if (existsSync(file)) {
+				if (check(src)) {
 					script.remove();
 					imports.push(src);
 				}
@@ -52,22 +58,18 @@ module.exports = function htmlPlugin() {
 
 			const links = document.querySelectorAll("link");
 			for (const link of links) {
-				const src = link.getAttribute("href");
-				if (src.charCodeAt(0) === 0x2F) {
-					continue;
-				}
-				const file = resolve(dirname(id), src);
-				if (existsSync(file)) {
-					imports.push(src);
+				const href = link.getAttribute("href");
+				if (check(href)) {
+					imports.push(href);
 				}
 			}
 
-			processedHtml.set(id, document);
+			documents.set(id, document);
 			return chunkImport(imports);
 		},
 
 		async generateBundle(_, bundle) {
-			for (const [id, document] of processedHtml) {
+			for (const [id, document] of documents) {
 				const head = document.querySelector("head");
 
 				const chunk = Object.values(bundle).find(

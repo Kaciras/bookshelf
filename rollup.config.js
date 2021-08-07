@@ -1,8 +1,8 @@
-const html = require("./rollup/html");
 const alias = require("@rollup/plugin-alias");
 const { visualizer } = require("rollup-plugin-visualizer");
 const { terser } = require("rollup-plugin-terser");
 const webpackConfig = require("./alias.idea");
+const htmlEntry = require("./rollup/html");
 const copy = require("./rollup/copy");
 const postcss = require("./rollup/postcss");
 const svg = require("./rollup/svg");
@@ -39,7 +39,7 @@ module.exports = {
 				context: "node_modules/webextension-polyfill/dist",
 			},
 		]),
-		html(),
+		htmlEntry(),
 		template(),
 		isProduction && terser(),
 		isProduction && visualizer(),

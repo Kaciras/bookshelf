@@ -1,20 +1,20 @@
 import WebsiteIcon from "@assets/Website.svg?url";
-import { blobToURL, delegate, openFile } from "@share";
+import { blobToBase64URL, delegate, encodeSVG } from "@share";
 import styles from "./index.css";
 
-// TODO: 跟 Rollup 插件里重复，但那边目前没法用 ESModule 只能分开了。
-const encodeMap = {
-	'"': "'",
-	"%": "%25",
-	"#": "%23",
-	"{": "%7B",
-	"}": "%7D",
-	"<": "%3C",
-	">": "%3E",
-};
+async function imageUrlToLocal(url) {
+	const response = await fetch(url, { mode: "no-cors" });
+	if (!response.ok) {
+		return alert("资源下载失败：" + url);
+	}
+	const blob = await response.blob();
 
-function encodeSVG(code) {
-	return code.replaceAll(/["%#{}<>]/g, v => encodeMap[v]);
+	if (blob.type === "image/svg+xml") {
+		const code = encodeSVG(await blob.text());
+		return `data:image/svg+xml,${code}`;
+	} else {
+		return await blobToBase64URL(blob);
+	}
 }
 
 /**
@@ -130,19 +130,7 @@ class EditDialogElement extends HTMLElement {
 			href = link.getAttribute("href");
 		}
 		href = new URL(href, url).toString();
-
-		const response = await fetch(href, { mode: "no-cors" });
-		if (!response.ok) {
-			return alert("无法获取该网站的图标！");
-		}
-
-		const blob = await response.blob();
-		if (blob.type === "image/svg+xml") {
-			const code = encodeSVG(await blob.text());
-			this.favicon = `data:image/svg+xml,${code}`;
-		} else {
-			this.favicon = await blobToURL(await response.blob());
-		}
+		this.favicon = await imageUrlToLocal(href);
 	}
 }
 

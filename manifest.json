@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
-	"name": "Kaciras Firefox Theme",
+	"name": "Kaciras Theme",
 	"version": "1.0.0",
-	"description": "Kaciras Firefox Theme",
+	"description": "Kaciras broeser theme",
 	"developer": {
 		"name": "Kaciras",
 		"url": "https://github.com/Kaciras/browser-theme"
