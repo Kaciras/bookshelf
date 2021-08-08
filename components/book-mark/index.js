@@ -21,7 +21,6 @@ template.innerHTML = `
 	>
 		${EditIcon}
 	</button>
-	
 	<button 
 		type="button"
 		id="remove"
@@ -38,8 +37,6 @@ class BookMarkElement extends HTMLElement {
 
 	constructor() {
 		super();
-		this.disabled = false;
-
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
@@ -55,6 +52,28 @@ class BookMarkElement extends HTMLElement {
 
 		root.getElementById("edit").onclick = () => this.dispatchEvent(new CustomEvent("edit"));
 		root.getElementById("remove").onclick = () => this.dispatchEvent(new CustomEvent("remove"));
+	}
+
+	/**
+	 * 是否处于被拖动中，为 true 时将隐藏图标和标题。
+	 */
+	get isDragging() {
+		return this.linkEl.className === "blank";
+	}
+
+	set isDragging(value) {
+		this.linkEl.className = value ? "blank" : null;
+	}
+
+	/**
+	 * 是否显示右上角的编辑和删除按钮，默认不显示以免误碰。
+	 */
+	get isEditable() {
+		return this.classList.contains("editable");
+	}
+
+	set isEditable(value) {
+		value ? this.classList.add("editable") : this.classList.remove("editable");
 	}
 
 	handleClick(event) {

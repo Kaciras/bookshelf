@@ -39,3 +39,13 @@ const encodeMap = {
 export function encodeSVG(code) {
 	return code.replaceAll(/["%#{}<>]/g, v => encodeMap[v]);
 }
+
+/**
+ * 获取元素在其父元素的所有子元素中的位置。
+ *
+ * @param el DOM 元素
+ * @return {number} 位置，如果没有父元素则出错。
+ */
+export function indexOfParent(el) {
+	return Array.prototype.indexOf.call(el.parentNode.children, el);
+}

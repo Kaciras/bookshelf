@@ -7,6 +7,7 @@
 	padding: 20px 20px 12px 20px;
 	cursor: pointer;
 	border-radius: 6px;
+	transition: background-color .15s;
 }
 
 :host(:hover) {
@@ -43,25 +44,38 @@ a {
 button {
 	--icon-size: 22px;
 
+	display: none;
 	position: absolute;
 	top: -15px;
 	padding: 4px;
 
-	opacity: 0;
-	border: solid 1px #777;
+	border: solid 1px #a0a0a0;
 	border-radius: 100%;
+	opacity: 0;
 	background: white;
+	transform: scale(0.5);
+}
+
+:host(.editable) > button {
+	display: inline-flex;
 }
 
 :host(:hover) > button {
 	opacity: 1;
+	transform: scale(1);
 }
 
 #edit {
-	right: 30px
+	right: 20px
 }
 
 #remove {
 	right: -15px;
 	color: red;
+	border-color: red;
+}
+
+.blank #favicon,
+.blank > #label {
+	visibility: hidden;
 }
