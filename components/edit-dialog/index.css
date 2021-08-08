@@ -55,3 +55,7 @@ input {
 	grid-area: actions;
 	justify-self: right;
 }
+
+button {
+	margin-left: 10px;
+}

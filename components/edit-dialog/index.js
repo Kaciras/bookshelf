@@ -63,7 +63,7 @@ template.innerHTML = `
 			</div>
 			<div id="actions">
 				<button id="cancel" type="button">取消</button>
-				<button id="accept" type="button">确定</button>
+				<button id="accept" class="primary" type="button">确定</button>
 			</div>
 		</form>
 	</dialog-base>
