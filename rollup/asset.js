@@ -100,6 +100,23 @@ module.exports = function createInlinePlugin(options) {
 	return {
 		name: "asset-module",
 
+		/**
+		 * 默认的 ID 解析器将 ID 视为相对路径，无法处理带 URL 参数的情况。
+		 * 这里先调用默认链解析文件路径，然后再把参数加回结果。
+		 *
+		 * @param source 模块的 ID
+		 * @param importer 引用此模块的模块
+		 * @return {Promise<string|null>} 解析后的 ID
+		 */
+		async resolveId(source, importer) {
+			if (!detectFromQuery(source)) {
+				return null;
+			}
+			const [file, query] = source.split("?", 2);
+			const { id } = await this.resolve(file, importer, { skipSelf: true });
+			return id + "?" + query;
+		},
+
 		async load(id) {
 			const type = detectFromQuery(id) ?? detectFromPath(id);
 			if (type === undefined) {

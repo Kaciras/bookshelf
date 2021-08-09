@@ -63,7 +63,7 @@ module.exports = function htmlPlugin() {
 			for (const link of links) {
 				const href = link.getAttribute("href");
 				if (check(href)) {
-					imports.push(href);
+					imports.push(href + "?resource");
 				}
 			}
 

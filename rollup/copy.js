@@ -46,16 +46,16 @@ module.exports = function copyPlugin(list) {
 		},
 
 		/**
-		 * 对于 ID 不等于文件名的模块，必须要有自定义的 resolveId，否则报错。
-		 *
-		 * @param source 模块的 ID
-		 * @return {Promise<string|null>} 解析后的 ID
+		 * importer 是一个虚拟的模块，无法被默认的解析器解析，需要自己处理下。
 		 */
-		async resolveId(source) {
+		async resolveId(source, importer) {
 			if (source === hostId) {
 				return hostId;
 			}
-			return ids.has(source) ? source : null;
+			if (importer !== hostId) {
+				return null;
+			}
+			return this.resolve(source, undefined, { skipSelf: true });
 		},
 
 		/**
@@ -73,7 +73,7 @@ module.exports = function copyPlugin(list) {
 		},
 
 		/**
-		 * 默认每个模块都生成一个文件，所以要从构建的输出中删除虚拟模块。
+		 * 默认每个 chunk 都生成一个文件，所以要从构建的输出中删除虚拟模块。
 		 *
 		 * @param _ 没用的参数
 		 * @param bundle 输出的入口文件

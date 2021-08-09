@@ -26,7 +26,7 @@ module.exports = {
 			loaders: [
 				postcss, svg,
 			],
-			source: { include: ["**/*.css", "**/*.svg"] },
+			source: { include: ["components/*/*.css", "**/*.svg"] },
 			url: { include: ["**/*.ico"] },
 			resource: { include: "_$" },
 		}),
