@@ -22,28 +22,28 @@ button {
 	background: var(--bg);
 
 	transition: .15s;
-}
 
-button:hover,
-button:focus-visible {
-	background: var(--bg-focus);
-}
+	&:hover, &:focus-visible {
+		background: var(--bg-focus);
+	}
 
-button:active {
-	background: var(--bg-active);
-}
+	&:active {
+		background: var(--bg-active);
+	}
 
-button > svg {
-	font-size: var(--icon-size, 24px);
-}
+	/* 用于内容只有一个图标的按钮 */
 
-button > svg + span {
-	margin: 0 5px;
-}
+	&.icon {
+		padding: 8px;
+	}
 
-/* 用于内容只有一个图标的按钮 */
-button.icon {
-	padding: 8px;
+	& > svg {
+		font-size: var(--icon-size, 24px);
+	}
+
+	& > svg + span {
+		margin: 0 5px;
+	}
 }
 
 .primary {

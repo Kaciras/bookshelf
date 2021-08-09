@@ -12,6 +12,7 @@ specifiers:
   node-html-parser: ^4.1.3
   postcss: ^8.3.6
   postcss-csso: ^5.0.1
+  postcss-nested: ^5.0.6
   postcss-simple-vars: ^6.0.3
   rollup: ^2.56.0
   rollup-plugin-terser: ^7.0.2
@@ -31,6 +32,7 @@ devDependencies:
   node-html-parser: 4.1.3
   postcss: 8.3.6
   postcss-csso: 5.0.1_postcss@8.3.6
+  postcss-nested: 5.0.6_postcss@8.3.6
   postcss-simple-vars: 6.0.3_postcss@8.3.6
   rollup: 2.56.0
   rollup-plugin-terser: 7.0.2_rollup@2.56.0
@@ -378,6 +380,12 @@ packages:
   /css-what/5.0.1:
     resolution: {integrity: sha512-FYDTSHb/7KXsWICVsxdmiExPjCfRC4qRFBdVwv7Ax9hMnvMmEjP9RfxTEZ3qPZGmADDn2vAKSo9UcN1jKVYscg==}
     engines: {node: '>= 6'}
+    dev: true
+
+  /cssesc/3.0.0:
+    resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
+    engines: {node: '>=4'}
+    hasBin: true
     dev: true
 
   /csso/4.2.0:
@@ -998,6 +1006,24 @@ packages:
       postcss: 8.3.6
     dev: true
 
+  /postcss-nested/5.0.6_postcss@8.3.6:
+    resolution: {integrity: sha512-rKqm2Fk0KbA8Vt3AdGN0FB9OBOMDVajMG6ZCf/GoHgdxUJ4sBFp0A/uMIRm+MJUdo33YXEtjqIz8u7DAp8B7DA==}
+    engines: {node: '>=12.0'}
+    peerDependencies:
+      postcss: ^8.2.14
+    dependencies:
+      postcss: 8.3.6
+      postcss-selector-parser: 6.0.6
+    dev: true
+
+  /postcss-selector-parser/6.0.6:
+    resolution: {integrity: sha512-9LXrvaaX3+mcv5xkg5kFwqSzSH1JIObIx51PrndZwlmznwXRfxMddDvo9gve3gVR8ZTKgoFDdWkbRFmEhT4PMg==}
+    engines: {node: '>=4'}
+    dependencies:
+      cssesc: 3.0.0
+      util-deprecate: 1.0.2
+    dev: true
+
   /postcss-simple-vars/6.0.3_postcss@8.3.6:
     resolution: {integrity: sha512-fkNn4Zio8vN4vIig9IFdb8lVlxWnYR769RgvxCM6YWlFKie/nQaOcaMMMFz/s4gsfHW4/5bJW+i57zD67mQU7g==}
     engines: {node: '>=10.0'}
@@ -1304,6 +1330,10 @@ packages:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.1.1
+    dev: true
+
+  /util-deprecate/1.0.2:
+    resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
     dev: true
 
   /v8-compile-cache/2.3.0:

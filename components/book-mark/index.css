@@ -23,7 +23,7 @@ a {
 
 #icon-box {
 	padding: 16px;
-	border-radius: $panel-radius;
+	border-radius: var(--panel-radius);
 	background: white;
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.2);
 }
@@ -43,6 +43,11 @@ a {
 	text-align: center;
 }
 
+.blank #favicon,
+.blank > #label {
+	visibility: hidden;
+}
+
 button {
 	--icon-size: 22px;
 
@@ -56,15 +61,15 @@ button {
 	opacity: 0;
 	background: white;
 	transform: scale(0.5);
-}
 
-:host(.editable) > button {
-	display: inline-flex;
-}
+	:host(.editable) > & {
+		display: inline-flex;
+	}
 
-:host(:hover) > button {
-	opacity: 1;
-	transform: scale(1);
+	:host(:hover) > & {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
 
 #edit {
@@ -75,9 +80,4 @@ button {
 	right: -15px;
 	color: red;
 	border-color: red;
-}
-
-.blank #favicon,
-.blank > #label {
-	visibility: hidden;
 }

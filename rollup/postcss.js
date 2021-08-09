@@ -1,14 +1,15 @@
 const postcss = require("postcss");
-const vars = require("postcss-simple-vars");
+const nested = require("postcss-nested");
 const csso = require("postcss-csso");
-
-const variables = {
-	"panel-radius": "8px",
-};
+const vars = require("postcss-simple-vars");
 
 const cssLangRE = /\.(css|less|sass|scss|styl|pcss)($|\?)/;
 
-const convertor = postcss([csso(), vars({ variables })]);
+const convertor = postcss([
+	vars(),		// 局部变量还是预处理方便些
+	csso(),		// 压缩结果
+	nested(),	// 支持嵌套语法
+]);
 
 module.exports = function (source, id) {
 	if (!cssLangRE.test(id)) {

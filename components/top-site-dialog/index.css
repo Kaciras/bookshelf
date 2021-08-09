@@ -16,7 +16,7 @@ li {
 	grid-template-areas: "img title button" "img url button";
 	grid-template-columns: auto 1fr auto;
 
-	margin:  12px 20px;
+	margin: 12px 20px;
 	padding: 12px;
 	border: solid 1px #ddd;
 	border-radius: 8px;
@@ -39,10 +39,10 @@ span {
 button {
 	grid-area: button;
 	align-self: center;
-}
 
-.added > button {
-	color: $added-color;
-	background: none;
-	pointer-events: none;
+	.added > & {
+		color: $added-color;
+		background: none;
+		pointer-events: none;
+	}
 }

@@ -1,6 +1,11 @@
 @import "/global.css";
 
-$edi-padding: 15px;
+$edit-padding: 15px;
+
+:root {
+	--panel-radius: 8px;
+	--widget-radius: 4px;
+}
 
 html {
 	color: #333;
@@ -15,27 +20,27 @@ body {
 	position: relative;
 	margin: 0;
 	min-height: 100vh;
-}
 
-body::after {
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	right: 0;
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		right: 0;
 
-	border: dashed 4px transparent;
-	transition: .15s;
-	pointer-events: none;
-}
+		border: dashed 4px transparent;
+		transition: .15s;
+		pointer-events: none;
+	}
 
-body.editing::after {
-	left: $edi-padding;
-	top: $edi-padding;
-	bottom: $edi-padding;
-	right: $edi-padding;
-	border-color: #b3b3b3;
+	&.editing::after {
+		left: $edit-padding;
+		top: $edit-padding;
+		bottom: $edit-padding;
+		right: $edit-padding;
+		border-color: #b3b3b3;
+	}
 }
 
 main {
@@ -52,7 +57,7 @@ main {
 	gap: 10px;
 
 	position: absolute;
-	top: calc($edi-padding * 2);
-	right: calc($edi-padding * 2);
+	top: calc($edit-padding * 2);
+	right: calc($edit-padding * 2);
 	z-index: 10;
 }
