@@ -3,18 +3,20 @@ const { basename } = require("path");
 const { createFilter } = require("@rollup/pluginutils");
 const mime = require("mime");
 
-const ASSET_SOURCE = 0;
-const ASSET_URL = 1;
-const ASSET_RESOURCE = 2;
+const AssetType = {
+	Source: 0,		// 作为字符串导入。
+	Url: 1,			// 作为 URL 导入，可能会内联为 DataUrl。
+	Resource: 2,	// 作为外部 URL 导入。
+};
 
 const srcRE = /([?&])source(?:&|$)/;
 const urlRE = /([?&])url(?:&|$)/;
 const resRE = /([?&])resource(?:&|$)/;
 
 function detectFromQuery(id) {
-	if (srcRE.test(id)) return ASSET_SOURCE;
-	if (urlRE.test(id)) return ASSET_URL;
-	if (resRE.test(id)) return ASSET_RESOURCE;
+	if (srcRE.test(id)) return AssetType.Source;
+	if (urlRE.test(id)) return AssetType.Url;
+	if (resRE.test(id)) return AssetType.Resource;
 }
 
 // https://www.zhangxinxu.com/wordpress/2018/08/css-svg-background-image-base64-encode/
@@ -32,11 +34,12 @@ function encodeSVG(code) {
 	return code.replaceAll(/["%#{}<>]/g, v => encodeMap[v]);
 }
 
-function toDataUrl(buffer, mimetype) {
+// https://github.com/rollup/plugins/blob/master/packages/url/src/index.js
+function toDataUrl(source, mimetype) {
 	const isSVG = mimetype === "image/svg+xml";
 	const code = isSVG
-		? encodeSVG(buffer.toString())
-		: buffer.toString("base64");
+		? encodeSVG(source.string)
+		: source.buffer.toString("base64");
 	const encoding = isSVG ? "" : ";base64";
 	return `data:${mimetype}${encoding},${code}`;
 }
@@ -77,6 +80,7 @@ class BufferSource {
 
 /**
  * Rollup 似乎没有提供处理资源的接口，只能自己撸一个了。
+ * 本插件提供一个通用的规则，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
  */
 module.exports = function createInlinePlugin(options) {
 	const { source = {}, url = {}, resource = {}, limit = 4096, loaders = [] } = options;
@@ -86,9 +90,9 @@ module.exports = function createInlinePlugin(options) {
 	const isResource = createFilter(resource.include, resource.exclude);
 
 	function detectFromPath(id) {
-		if (isInline(id)) return ASSET_SOURCE;
-		if (isUrl(id)) return ASSET_URL;
-		if (isResource(id)) return ASSET_RESOURCE;
+		if (isInline(id)) return AssetType.Source;
+		if (isUrl(id)) return AssetType.Url;
+		if (isResource(id)) return AssetType.Resource;
 	}
 
 	const copies = new Map();
@@ -116,15 +120,19 @@ module.exports = function createInlinePlugin(options) {
 				}
 			}
 
-			if (type === ASSET_SOURCE) {
+			if (type === AssetType.Source) {
 				return `export default ${JSON.stringify(source.string)};`;
 			}
-			if (type === ASSET_URL) {
+			if (type === AssetType.Url) {
 				const { buffer } = source;
 				if (buffer.length < limit) {
+
+					// 避免再次获取时的转换开销。
+					source.buffer = buffer;
+
 					const mimetype = mime.getType(file);
-					const code = toDataUrl(buffer, mimetype);
-					return `export default "${code}"`;
+					const url = toDataUrl(source, mimetype);
+					return `export default "${url}"`;
 				}
 			}
 			const fileName = params.get("filename") || basename(file);
@@ -137,3 +145,5 @@ module.exports = function createInlinePlugin(options) {
 		},
 	};
 };
+
+module.exports.AssetType = AssetType;

@@ -5,28 +5,28 @@ import styles from "./index.css";
 // 最多显示 8 个建议，太多反而乱而且显示不下。
 const SUGGEST_LIMIT = 8;
 
+const suggestAPI = "https://www.google.com/complete/search?client=firefox&q=";
+const searchAPI = "https://www.google.com/search?client=firefox-b-d&q=";
+
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	
+
 	<div id="box">
 		<img alt="icon" src="${GoogleIcon}">
 		<input id="input" placeholder="搜索">
-		<button 
-			id="button" 
-			class="plain" 
-			type="button" 
+		<button
+			id="button"
+			class="plain"
+			type="button"
 			tabindex="-1"
 		>
 			${Arrow}
 		</button>
 	</div>
-	
+
 	<ul id="suggestions"></ul>
 `;
-
-const suggestAPI = "https://www.google.com/complete/search?client=firefox&q=";
-const searchAPI = "https://www.google.com/search?client=firefox-b-d&q=";
 
 /**
  * 这里不使用 Search API 因为它不支持查询建议。
@@ -36,8 +36,6 @@ class SearchBoxElement extends HTMLElement {
 
 	constructor() {
 		super();
-		this.quering = new AbortController();
-
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
@@ -46,15 +44,16 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl = root.getElementById("box");
 		this.suggestions = root.getElementById("suggestions");
 
+		this.quering = new AbortController();
 		this.suggest = this.suggest.bind(this);
 
-		this.inputEl.addEventListener("input", this.handleInput.bind(this));
-		this.inputEl.addEventListener("keyup", this.handleKeyUp.bind(this));
-		this.inputEl.addEventListener("blur", this.closeSuggest.bind(this));
+		this.inputEl.oninput = this.handleInput.bind(this);
+		this.inputEl.onkeyup = this.handleKeyUp.bind(this);
+		this.inputEl.onblur = this.closeSuggest.bind(this);
+
+		root.getElementById("button").onclick = this.handleClick.bind(this);
 
 		this.addEventListener("keydown", this.handleKeyDown.bind(this));
-
-		root.getElementById("button").addEventListener("click", this.handleClick.bind(this));
 	}
 
 	async handleInput() {
@@ -66,14 +65,15 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async suggest() {
-		this.quering.abort();
-		this.quering = new AbortController();
 		const { value } = this.inputEl;
 		const { signal } = this.quering;
 
+		this.quering.abort();
+		this.quering = new AbortController();
+
 		const response = await fetch(suggestAPI + value, { signal });
 		if (!response.ok) {
-			console.error("搜索建议失败：" + response.status);
+			return console.error("搜索建议失败：" + response.status);
 		}
 		const [, list] = await response.json();
 

@@ -26,6 +26,9 @@ const minifyOptions = {
 	removeAttributeQuotes: true,
 };
 
+/**
+ * 支持 HTML 文件作为 Rollup 的 input，自动提取并处理其中的资源。
+ */
 module.exports = function htmlPlugin() {
 	const documents = new Map();
 

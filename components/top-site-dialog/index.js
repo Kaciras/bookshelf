@@ -20,11 +20,12 @@ class TopSiteDialogElement extends HTMLElement {
 		this.dialogEl = root.querySelector("dialog-base");
 		this.listEl = root.getElementById("top-sites");
 
-		this.dialogEl.addEventListener("backdrop-click",() => {
+		// 自定义的事件没法用 onXXX 啊……
+		this.dialogEl.addEventListener("backdrop-click", () => {
 			this.resolve();
 			this.dialogEl.hide();
 		});
-		this.dialogEl.addEventListener("close",() => this.resolve());
+		this.dialogEl.addEventListener("close", () => this.resolve());
 	}
 
 	async show() {
@@ -36,11 +37,13 @@ class TopSiteDialogElement extends HTMLElement {
 		this.listEl.innerHTML = "";
 
 		for (const site of sites) {
-			const { title, url, favicon } = site;
-			const item = document.createElement("li");
+			let { title, url, favicon } = site;
 
 			// 标题可能为空字符串，所以不能用 ??=
-			site.title ||= new URL(url).hostname;
+			title ||= new URL(url).hostname;
+			url = decodeURI(url);
+
+			const item = document.createElement("li");
 
 			const imgEl = document.createElement("img");
 			imgEl.alt = "favicon";

@@ -48,8 +48,6 @@ class BookMarkElement extends HTMLElement {
 		delegate(this, "url", this.linkEl, "href");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		this.linkEl.addEventListener("click", this.handleClick.bind(this));
-
 		root.getElementById("edit").onclick = () => this.dispatchEvent(new CustomEvent("edit"));
 		root.getElementById("remove").onclick = () => this.dispatchEvent(new CustomEvent("remove"));
 	}
@@ -74,12 +72,6 @@ class BookMarkElement extends HTMLElement {
 
 	set isEditable(value) {
 		value ? this.classList.add("editable") : this.classList.remove("editable");
-	}
-
-	handleClick(event) {
-		if (this.disabled) {
-			event.preventDefault();
-		}
 	}
 }
 

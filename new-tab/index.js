@@ -20,7 +20,6 @@ function switchToSettingMode() {
 
 	const acceptBtn = document.createElement("button");
 	acceptBtn.innerHTML = checkIcon + "<span>确定</span>";
-	acceptBtn.title = null;
 	acceptBtn.classList.add("primary");
 	acceptBtn.onclick = switchToNormalMode;
 	settingEl.append(acceptBtn);

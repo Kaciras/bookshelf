@@ -9,12 +9,12 @@ import styles from "./index.css";
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	
+
 	<div id="backdrop"></div>
-	
+
 	<div id="dialog">
 		<h1></h1>
-		<button 
+		<button
 			id="close"
 			class="plain"
 			title="关闭"

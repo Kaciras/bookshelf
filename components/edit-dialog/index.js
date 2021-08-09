@@ -2,10 +2,16 @@ import WebsiteIcon from "@assets/Website.svg?url";
 import { blobToBase64URL, delegate, encodeSVG } from "@share";
 import styles from "./index.css";
 
+/**
+ * 将远程的图片 URL 转换为本地的 DataURL。
+ *
+ * @param url 原始 URL
+ * @return {Promise<string>} DataURL
+ */
 async function imageUrlToLocal(url) {
 	const response = await fetch(url, { mode: "no-cors" });
 	if (!response.ok) {
-		return alert("资源下载失败：" + url);
+		throw new Error(`资源下载失败：${url}`);
 	}
 	const blob = await response.blob();
 
@@ -25,7 +31,7 @@ async function imageUrlToLocal(url) {
  *
  * @param url 页面的 URL
  * @param signal AbortSignal 取消加载页面
- * @return <link> 元素列表
+ * @return <link> 元素的列表
  */
 async function getFavicons(url, signal) {
 	const response = await fetch(url, { mode: "no-cors", signal });
@@ -130,7 +136,10 @@ class EditDialogElement extends HTMLElement {
 			href = link.getAttribute("href");
 		}
 		href = new URL(href, url).toString();
-		this.favicon = await imageUrlToLocal(href);
+
+		return imageUrlToLocal(href)
+			.then(url => this.favicon = url)
+			.catch(err => alert(err.message));
 	}
 }
 
