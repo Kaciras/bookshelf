@@ -8,6 +8,7 @@ const postcss = require("./rollup/postcss");
 const svg = require("./rollup/svg");
 const asset = require("./rollup/asset");
 const template = require("./rollup/template");
+const importMeta = require("./rollup/meta");
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -41,6 +42,7 @@ module.exports = {
 		]),
 		htmlEntry(),
 		template(),
+		importMeta({ dev: !isProduction }),
 		isProduction && terser(),
 		isProduction && visualizer(),
 	],
