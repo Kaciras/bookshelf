@@ -124,18 +124,7 @@ class EditDialogElement extends HTMLElement {
 			return alert("地址的格式错误！");
 		}
 		const url = this.urlInput.value;
-		const links = await getFavicons(url);
-
-		let href = "/favicon.ico";
-		if (links.length > 0) {
-
-			// 优先使用 SVG 格式的。
-			const link = links.find(v => v.type === "image/svg+xml") ?? links[0];
-
-			// 不能直接 .href 因为它会转成完整的 URL
-			href = link.getAttribute("href");
-		}
-		href = new URL(href, url).toString();
+		const href = await getFaviconUrl(url);
 
 		return imageUrlToLocal(href)
 			.then(url => this.favicon = url)
