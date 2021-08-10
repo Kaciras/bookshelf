@@ -59,6 +59,7 @@ class EditDialogElement extends HTMLElement {
 	}
 
 	reset() {
+		this.iconUrl = null;
 		this.label = "";
 		this.url = "";
 		this.favicon = WebsiteIcon;
@@ -83,6 +84,7 @@ class EditDialogElement extends HTMLElement {
 
 		try {
 			const href = await getFaviconUrl(url);
+			this.iconUrl = href;
 			this.favicon = await imageUrlToLocal(href);
 		} catch (e) {
 			alert(e.message);

@@ -5,7 +5,7 @@ import "../components/search-box/index.js";
 import "../components/top-site-dialog/index.js";
 import settingIcon from "@assets/Setting.svg";
 import checkIcon from "@assets/Check.svg";
-import { addShortcut, importTopSites, setShortcutEditable } from "./shortcuts";
+import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";
 
 // module js 自带 defer 属性，所以没法在 html 里使用自定义元素
 document.getElementsByTagName("main")[0].insertBefore(
@@ -26,12 +26,12 @@ function switchToSettingMode() {
 
 	const addBtn = document.createElement("button");
 	addBtn.innerHTML = "添加网站";
-	addBtn.onclick = addShortcut;
+	addBtn.onclick = startAddShortcut;
 	settingEl.append(addBtn);
 
 	const importBtn = document.createElement("button");
 	importBtn.innerHTML = "导入常用网站";
-	importBtn.onclick = importTopSites;
+	importBtn.onclick = startImportTopSites;
 	settingEl.append(importBtn);
 
 	setShortcutEditable(true);
