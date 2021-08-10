@@ -1,50 +1,6 @@
 import WebsiteIcon from "@assets/Website.svg?url";
-import { blobToBase64URL, delegate, encodeSVG } from "@share";
+import { delegate, getFaviconUrl, imageUrlToLocal } from "@share";
 import styles from "./index.css";
-
-/**
- * 将远程的图片 URL 转换为本地的 DataURL。
- *
- * @param url 原始 URL
- * @return {Promise<string>} DataURL
- */
-async function imageUrlToLocal(url) {
-	const response = await fetch(url, { mode: "no-cors" });
-	if (!response.ok) {
-		throw new Error(`资源下载失败：${url}`);
-	}
-	const blob = await response.blob();
-
-	if (blob.type === "image/svg+xml") {
-		const code = encodeSVG(await blob.text());
-		return `data:image/svg+xml,${code}`;
-	} else {
-		return await blobToBase64URL(blob);
-	}
-}
-
-/**
- * 获取网页中所有包含图标的 <link> 元素。
- *
- * Firefox 的实现挺复杂而且用得 C艹：
- * https://github.com/mozilla/gecko-dev/blob/master/toolkit/components/places/FaviconHelpers.cpp
- *
- * @param url 页面的 URL
- * @param signal AbortSignal 取消加载页面
- * @return <link> 元素的列表
- */
-async function getFavicons(url, signal) {
-	const response = await fetch(url, { mode: "no-cors", signal });
-	if (!response.ok) {
-		throw new Error(`Request is not OK (status = ${response.status})`);
-	}
-	const parser = new DOMParser();
-	const doc = parser.parseFromString(await response.text(), "text/html");
-	const links = doc.head.getElementsByTagName("link");
-
-	return Array.from(links)
-		.filter(({ rel }) => rel === "icon" || rel === "shortcut icon");
-}
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -75,11 +31,8 @@ template.innerHTML = `
 	</dialog-base>
 `;
 
-/*
- * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储的限制，
- * 能同步的数据很少，图标等资源会超出限额所以只能存在本地，当数据同步到新的设备上后需必须新下载图标。
- * Firefox 自己的标签页也和书签也是这样的。
- */
+const loadingHTML = "<span class='dot-flashing'><div class='middle'></div></span>";
+
 class EditDialogElement extends HTMLElement {
 
 	constructor() {
@@ -91,16 +44,18 @@ class EditDialogElement extends HTMLElement {
 		this.iconEl = root.getElementById("favicon");
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
+		this.fetchBtn = root.getElementById("fetch");
 
 		delegate(this, "label", this.nameInput, "value");
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		this.handleActionClick = this.handleActionClick.bind(this);
+		this.fetchBtn.onclick = this.fetchFavicon.bind(this);
+		this.fetchBtn.innerHTML = loadingHTML;
 
+		this.handleActionClick = this.handleActionClick.bind(this);
 		root.getElementById("cancel").onclick = this.handleActionClick;
 		root.getElementById("accept").onclick = this.handleActionClick;
-		root.getElementById("fetch").onclick = this.fetchFavicon.bind(this);
 	}
 
 	reset() {
@@ -123,12 +78,17 @@ class EditDialogElement extends HTMLElement {
 		if (!this.urlInput.checkValidity()) {
 			return alert("地址的格式错误！");
 		}
+		this.fetchBtn.innerHTML = loadingHTML;
 		const url = this.urlInput.value;
-		const href = await getFaviconUrl(url);
 
-		return imageUrlToLocal(href)
-			.then(url => this.favicon = url)
-			.catch(err => alert(err.message));
+		try {
+			const href = await getFaviconUrl(url);
+			this.favicon = await imageUrlToLocal(href);
+		} catch (e) {
+			alert(e.message);
+		} finally {
+			this.fetchBtn.textContent = "自动获取";
+		}
 	}
 }
 

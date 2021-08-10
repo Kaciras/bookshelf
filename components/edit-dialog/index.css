@@ -54,8 +54,57 @@ input {
 #actions {
 	grid-area: actions;
 	justify-self: right;
+
+	& > button {
+		margin-left: 10px;
+	}
 }
 
-button {
-	margin-left: 10px;
+/*
+ * Tree dots loading animation, copied from:
+ * https://github.com/nzbin/three-dots
+ */
+.dot-flashing {
+	$animation-time: 0.8s;
+	--color: #004bff;
+
+	&::before, &::after {
+		content: "";
+		display: inline-block;
+
+		width: 10px;
+		height: 10px;
+
+		border-radius: 100%;
+		background-color: var(--color);
+	}
+
+	&::before {
+		animation: dotFlashing $animation-time infinite alternate;
+	}
+
+	&::after {
+		animation: dotFlashing $animation-time $animation-time infinite alternate;
+	}
+}
+
+.middle {
+	display: inline-block;
+	margin: 0 5px;
+	width: 10px;
+	height: 10px;
+
+	border-radius: 100%;
+	background-color: var(--color);
+
+	animation: dotFlashing $animation-time calc($animation-time / 2) infinite linear alternate;
+}
+
+@keyframes dotFlashing {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0.1;
+	}
 }
