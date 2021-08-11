@@ -34,6 +34,7 @@ module.exports = {
 		copy([
 			{ from: "new-tab/global.css" },
 			{ from: "manifest.json" },
+			{ from: "assets/Star.svg" },
 			{
 				from: "browser-polyfill.min.js",
 				to: "browser-polyfill.js",

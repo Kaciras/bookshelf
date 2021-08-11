@@ -7,6 +7,10 @@
 		"name": "Kaciras",
 		"url": "https://github.com/Kaciras/browser-theme"
 	},
+	"icons": {
+		"48": "Star.svg",
+		"96": "Star.svg"
+	},
 	"applications": {
 		"gecko": {
 			"id": "theme@kaciras",
