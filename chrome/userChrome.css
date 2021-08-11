@@ -4,6 +4,7 @@
 
 :root {
     --chrome-content-separator-color: #ddd !important;
+    --tab-block-margin: 0 !important;
     --proton-tab-block-margin: 0px !important;
 }
 
