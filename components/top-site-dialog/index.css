@@ -46,3 +46,8 @@ button {
 		pointer-events: none;
 	}
 }
+
+.url {
+	font-size: 14px;
+	color: #767779;
+}

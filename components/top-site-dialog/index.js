@@ -2,6 +2,13 @@ import AddIcon from "@assets/Add.svg";
 import CheckIcon from "@assets/Check.svg";
 import styles from "./index.css";
 
+function adviceTitle(url) {
+	const { hostname } = new URL(url);
+	const parts = hostname.split(".");
+	const top = parts.pop();
+	return parts.length ? parts.pop() : top;
+}
+
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
@@ -10,6 +17,10 @@ template.innerHTML = `
 	</dialog-base>
 `;
 
+/**
+ * browser.topSites 仅支持读取，而新标签页却需要自定义快捷方式，
+ * 所以只能从 topSites 导入然后保存到本插件的存储。
+ */
 class TopSiteDialogElement extends HTMLElement {
 
 	constructor() {
@@ -40,8 +51,8 @@ class TopSiteDialogElement extends HTMLElement {
 			let { title, url, favicon } = site;
 
 			// 标题可能为空字符串，所以不能用 ??=
-			title ||= new URL(url).hostname;
 			url = decodeURI(url);
+			title ||= adviceTitle(url);
 
 			const item = document.createElement("li");
 
@@ -50,10 +61,10 @@ class TopSiteDialogElement extends HTMLElement {
 			imgEl.src = favicon;
 
 			const titleEl = document.createElement("span");
-			titleEl.className = "title";
 			titleEl.textContent = title;
 
 			const urlEl = document.createElement("span");
+			urlEl.className = "url";
 			urlEl.textContent = url;
 
 			const button = document.createElement("button");

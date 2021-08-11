@@ -36,11 +36,13 @@ a {
 
 #label {
 	display: block;
-	overflow: hidden;
-	text-overflow: ellipsis;
 	margin-top: 5px;
 	font-size: 15px;
 	text-align: center;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .blank #favicon,
