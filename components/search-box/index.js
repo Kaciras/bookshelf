@@ -51,9 +51,8 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl.onkeyup = this.handleKeyUp.bind(this);
 		this.inputEl.onblur = this.closeSuggest.bind(this);
 
+		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleClick.bind(this);
-
-		this.addEventListener("keydown", this.handleKeyDown.bind(this));
 	}
 
 	async handleInput() {
@@ -65,11 +64,11 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async suggest() {
-		const { value } = this.inputEl;
-		const { signal } = this.quering;
-
 		this.quering.abort();
 		this.quering = new AbortController();
+
+		const { value } = this.inputEl;
+		const { signal } = this.quering;
 
 		const response = await fetch(suggestAPI + value, { signal });
 		if (!response.ok) {
@@ -95,6 +94,7 @@ class SearchBoxElement extends HTMLElement {
 	closeSuggest() {
 		this.suggestions.classList.remove("open");
 		this.suggestions.innerHTML = "";
+		this.index = null;
 		this.boxEl.classList.remove("extend");
 	}
 
@@ -114,18 +114,14 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	handleKeyDown(event) {
-		const oldSuggest = this.selected;
+		let diff;
 
 		switch (event.key) {
 			case "ArrowDown":
-				this.selected = oldSuggest
-					? oldSuggest.nextElementSibling
-					: this.suggestions.firstElementChild;
+				diff = 1;
 				break;
 			case "ArrowUp":
-				this.selected = oldSuggest
-					? oldSuggest.previousElementSibling
-					: this.suggestions.lastElementChild;
+				diff = -1;
 				break;
 			case "Escape":
 				this.closeSuggest();
@@ -135,9 +131,19 @@ class SearchBoxElement extends HTMLElement {
 		}
 
 		event.preventDefault();
-		this.inputEl.value = this.selected.textContent;
-		this.selected.classList.add("active");
-		oldSuggest?.classList.remove("active");
+		const { children } = this.suggestions;
+		const { index } = this;
+		const { length } = children;
+
+		if (Number.isInteger(index)) {
+			children[index].classList.remove("active");
+			this.index = (index + diff + length) % length;
+		} else {
+			this.index = diff > 0 ? 0 : length - 1;
+		}
+
+		children[this.index].classList.add("active");
+		this.inputEl.value = children[this.index].textContent;
 	}
 }
 

@@ -47,6 +47,11 @@ main {
 	margin: auto;
 }
 
+search-box {
+	width: 720px;
+	margin: 0 auto;
+}
+
 #bookmarks {
 	margin-top: 48px;
 }
