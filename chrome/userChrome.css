@@ -3,13 +3,14 @@
  */
 
 :root {
-    --chrome-content-separator-color: #ddd !important;
-    --tab-block-margin: 0 !important;
-    --proton-tab-block-margin: 0px !important;
+	--chrome-content-separator-color: #ddd !important;
+	--tab-block-margin: 0 !important;
+	--tab-border-radius: 0 !important;
+	--proton-tab-block-margin: 0px !important;
 }
 
 .tabbrowser-tab {
-    padding-inline: 0 !important;
+	padding-inline: 0 !important;
 }
 
 /*
@@ -17,10 +18,10 @@
  * 因为它也影响新建按钮，该按钮保留圆角更好看些。
  */
 .tab-background {
-    border-radius: 0 !important;
+	border-radius: 0 !important;
 }
 
 .tab-background[multiselected="true"],
 .tab-background[selected="true"] {
-    background-color: var(--toolbar-bgcolor) !important;
+	background-color: var(--toolbar-bgcolor) !important;
 }
