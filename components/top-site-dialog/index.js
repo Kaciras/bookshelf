@@ -41,7 +41,7 @@ class TopSiteDialogElement extends HTMLElement {
 
 	async show() {
 		const sites = await browser.topSites.get({
-			includePinned: true,
+			newtab: true,
 			includeFavicon: true,
 		});
 
