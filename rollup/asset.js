@@ -131,7 +131,7 @@ module.exports = function createInlinePlugin(options) {
 			let source = new BufferSource(await readFile(file));
 
 			for (const loaderFn of loaders) {
-				const rv = await loaderFn(source, id);
+				const rv = await loaderFn(source, id, type);
 				if (typeof rv === "string") {
 					source = new StringSource(rv);
 				} else if (Buffer.isBuffer(rv)) {
