@@ -1,5 +1,5 @@
-import { getFaviconUrl, imageUrlToLocal, indexInParent } from "@share";
-import { isRemoteSynced, loadConfig, saveConfig, setLocalSynced } from "./storage";
+import { getFaviconUrl, imageUrlToLocal, indexInParent, jump } from "@share";
+import { loadConfig, saveConfig, syncLocalStorage } from "./storage";
 
 const container = document.getElementById("bookmarks");
 const importDialog = document.createElement("top-site-dialog");
@@ -10,6 +10,10 @@ let dragEl = null;	// 当前被拖动的元素
 
 function persistDataModel() {
 	return saveConfig({ bookmarks: model });
+}
+
+function iconKey(shortcut) {
+	return "FI." + new URL(shortcut.url).host;
 }
 
 async function handleEdit(event) {
@@ -31,7 +35,9 @@ async function handleEdit(event) {
 
 async function handleRemove(event) {
 	const i = indexInParent(event.target);
-	delete model[i];
+	event.target.remove();
+	model.splice(i, 1);
+	clean(); // 可能较慢，但删除操作不频繁。
 	await persistDataModel();
 }
 
@@ -54,14 +60,13 @@ const DragSortHandlers = {
 		const i = indexInParent(dragEl);
 		const j = indexInParent(target);
 
-		if (i > j) {
-			target.before(dragEl);
-		} else {
-			target.after(dragEl);
-		}
+		jump(model, i, j);
 
-		const [shortcut] = model.splice(i, 1);
-		model.splice(j, 0, shortcut);
+		if (i < j) {
+			target.after(dragEl);
+		} else {
+			target.before(dragEl);
+		}
 	},
 };
 
@@ -83,9 +88,8 @@ function appendElement(props) {
 
 function add(request) {
 	const { label, iconUrl, favicon, url } = request;
-	const { host } = new URL(url);
 
-	localStorage.setItem("FI." + host, favicon);
+	localStorage.setItem(iconKey(request), favicon);
 	appendElement(request);
 
 	model.push({ label, iconUrl, url });
@@ -127,18 +131,18 @@ async function queueDownload(el, key) {
 	localStorage.setItem(key, favicon);
 }
 
-async function buildModel({ bookmarks = [] }) {
+function buildModel({ bookmarks = [] }) {
+	model = bookmarks;
 	const hosts = new Set();
 
 	if (import.meta.dev) {
-		console.debug(bookmarks);
+		console.debug("Shortcuts model:", bookmarks);
 	}
 
 	for (const shortcut of bookmarks) {
-		const { host } = new URL(shortcut.url);
+		const key = iconKey(shortcut);
 		const el = appendElement(shortcut);
 
-		const key = "FI." + host;
 		hosts.add(key);
 
 		let favicon = localStorage.getItem(key);
@@ -149,18 +153,20 @@ async function buildModel({ bookmarks = [] }) {
 		}
 	}
 
-	isRemoteSynced().then(v => {
-		if (!v) {
-			return;
+	requestIdleCallback(() => syncLocalStorage(clean));
+}
+
+function clean() {
+	const inUse = new Set(model.map(iconKey));
+	const toRemove = [];
+
+	for (let i = 0; i < localStorage.length; i++) {
+		const key = localStorage[i];
+		if (key.startsWith("FI.") && !inUse.has(key)) {
+			toRemove.push(key);
 		}
-		for (let i = 0; i < localStorage.length; i++) {
-			const key = localStorage[i];
-			if (!hosts.has(key)) {
-				localStorage.removeItem(key);
-			}
-		}
-		setLocalSynced();
-	});
+	}
+	toRemove.forEach(k => localStorage.removeItem(k));
 }
 
 document.body.append(importDialog, editDialog);
