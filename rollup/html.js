@@ -28,6 +28,8 @@ const minifyOptions = {
 
 /**
  * 支持 HTML 文件作为 Rollup 的 input，自动提取并处理其中的资源。
+ * 所有的 <script> 会被打包为一个文件。
+ * 同时还会压缩 HTML，这是必须的处理因为要删除空白内容。
  */
 module.exports = function htmlPlugin() {
 	const documents = new Map();

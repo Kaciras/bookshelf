@@ -15,7 +15,6 @@ template.innerHTML = `
 	<div id="dialog">
 		<h1></h1>
 		<button
-			id="close"
 			class="plain"
 			title="关闭"
 			type="button"
@@ -42,7 +41,7 @@ class DialogBaseElement extends HTMLElement {
 
 		this.titleEl = root.querySelector("h1");
 
-		root.getElementById("close").onclick = this.hide.bind(this);
+		root.querySelector("button").onclick = this.hide.bind(this);
 		root.getElementById("backdrop").onclick = this.handleBackdropClick.bind(this);
 	}
 

@@ -21,7 +21,9 @@ module.exports = function copyPlugin(list) {
 
 		/**
 		 * 在构建开始时找到所有要复制的文件，将它们加入 ID 集合。
-		 * 然后插入一个虚拟模块用于后续处理。
+		 * 然后插入一个虚拟模块用于引用被复制的文件。
+		 *
+		 * 所有资源的 ID 中会加入 resource 参数，使其能够被 asset 插件处理。
 		 */
 		async buildStart() {
 			const groups = await Promise.all(list.map(entry => {
@@ -46,7 +48,7 @@ module.exports = function copyPlugin(list) {
 		},
 
 		/**
-		 * importer 是一个虚拟的模块，无法被默认的解析器解析，需要自己处理下。
+		 * 虚拟模块无法被默认的解析器解析，需要自己处理下。
 		 */
 		async resolveId(source, importer) {
 			if (source === hostId) {
@@ -59,8 +61,8 @@ module.exports = function copyPlugin(list) {
 		},
 
 		/**
-		 * 将待复制的文件路径转换为虚拟模块里的 import 语句。
-		 * 禁止了 TreeShake 以避免空模块警告。
+		 * 将待复制的文件的 ID 转换为虚拟模块里的 import 语句。
+		 * 同时还禁止了 TreeShake 以避免空模块警告。
 		 */
 		load(id) {
 			if (id !== hostId) {
