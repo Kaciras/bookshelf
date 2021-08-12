@@ -51,7 +51,6 @@ class EditDialogElement extends HTMLElement {
 		delegate(this, "favicon", this.iconEl, "src");
 
 		this.fetchBtn.onclick = this.fetchFavicon.bind(this);
-		this.fetchBtn.innerHTML = loadingHTML;
 
 		this.handleActionClick = this.handleActionClick.bind(this);
 		root.getElementById("cancel").onclick = this.handleActionClick;
