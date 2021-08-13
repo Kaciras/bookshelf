@@ -76,11 +76,8 @@ class SearchBoxElement extends HTMLElement {
 		}
 		const [, list] = await response.json();
 
-		this.suggestions.classList.add("open");
-		this.suggestions.innerHTML = "";
-		this.boxEl.classList.add("extend");
-
 		const count = Math.min(SUGGEST_LIMIT, list.length);
+		this.suggestions.innerHTML = "";
 		for (let i = 0; i < count; i++) {
 			const text = list[i];
 
@@ -89,6 +86,9 @@ class SearchBoxElement extends HTMLElement {
 			el.onclick = () => location.href = searchAPI + text;
 			this.suggestions.append(el);
 		}
+
+		this.boxEl.classList.add("extend");
+		this.suggestions.classList.add("open");
 	}
 
 	closeSuggest() {
@@ -134,6 +134,11 @@ class SearchBoxElement extends HTMLElement {
 		const { children } = this.suggestions;
 		const { index } = this;
 		const { length } = children;
+
+		// 如果建议被关闭了按 ↓ 即可再次打开。
+		if (length === 0) {
+			return diff === 1 && this.suggest();
+		}
 
 		if (Number.isInteger(index)) {
 			children[index].classList.remove("active");
