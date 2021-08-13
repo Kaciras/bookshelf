@@ -1,12 +1,23 @@
 import { blobToBase64URL, encodeSVG } from "./codec.js";
 
+function isFaviconLink(link) {
+	switch (link.rel) {
+		case "shortcut icon":
+		case "icon":
+		case "apple-touch-icon":
+			return true;
+		default:
+			return false;
+	}
+}
+
 /**
  * 获取网页中所有包含图标的 <link> 元素。
  *
  * Firefox 的实现挺复杂而且用得 C艹：
  * https://github.com/mozilla/gecko-dev/blob/master/toolkit/components/places/FaviconHelpers.cpp
  */
-async function fetchFaviconLinks(url, signal) {
+async function fetchLinks(url, signal) {
 	const response = await fetch(url, { mode: "no-cors", signal });
 	if (!response.ok) {
 		throw new Error(`Request is not OK (status = ${response.status})`);
@@ -15,27 +26,45 @@ async function fetchFaviconLinks(url, signal) {
 	const doc = parser.parseFromString(await response.text(), "text/html");
 	const links = doc.head.getElementsByTagName("link");
 
-	return Array.from(links)
-		.filter(({ rel }) => rel === "icon" || rel === "shortcut icon");
+	return Array.from(links).filter(isFaviconLink);
 }
 
 /**
- * 从页面的 link 元素列表中选出最佳的图标，如果没有则尝试默认的 /favicon.ico。
+ * 从页面的 link 元素列表中选出最佳的图标，如果没有则返回 /favicon.ico
+ *
+ * 优选规则：
+ * 如果有 SVG 格式则选中，否则在尺寸至少为 48 的图中选择最小的，如果全部小于 48 或没写尺寸则选第一个。
  *
  * @param url 页面的 URL
  * @param signal AbortSignal 取消加载页面
  * @return {Promise<string>} 图标的 URL 片段。
  */
 export async function getFaviconUrl(url, signal) {
-	const links = await fetchFaviconLinks(url, signal);
+	const links = await fetchLinks(url, signal);
 
-	if (links.length === 0) {
-		return "/favicon.ico";
+	let size = Number.MAX_SAFE_INTEGER;
+	let best = links[0];
+	for (const link of links) {
+		const { sizes, type } = link;
+
+		if (type === "image/svg+xml") {
+			best = link;
+			break;
+		}
+		if (!sizes.length) {
+			continue;
+		}
+		let [w] = /(\d+)x(\d+)/.exec(sizes[0]);
+		w = parseInt(w);
+		if (w >= 48 && w < size) {
+			size = w;
+			best = link;
+		}
 	}
-	const link = links.find(v => v.type === "image/svg+xml") ?? links[0];
 
-	// 不能直接 .href 因为它会转成完整的 URL
-	return new URL(link.getAttribute("href"), url).toString();
+	// 不能直接 .href 因为它会转成以本页面为基础的 URL。
+	const href = best?.getAttribute("href");
+	return new URL(href || "/favicon.ico", url).toString();
 }
 
 /**
