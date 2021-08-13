@@ -79,15 +79,29 @@ class BufferSource {
 }
 
 /**
+ * rollup/pluginutils 的 createFilter 在空参数时默认为全部通过，
+ * 这跟常识不符，一般没有指定的话都是全部拦截的。
+ *
+ * @param options 包含 include 和 exclude 的对象
+ */
+function createFilter2(options) {
+	const { include, exclude } = options;
+	if (!include?.length) {
+		return () => false;
+	}
+	return createFilter(include, exclude);
+}
+
+/**
  * Rollup 似乎没有提供处理资源的接口，只能自己撸一个了。
  * 本插件提供一个通用的规则，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
  */
 module.exports = function createInlinePlugin(options) {
 	const { source = {}, url = {}, resource = {}, limit = 4096, loaders = [] } = options;
 
-	const isInline = createFilter(source.include, source.exclude);
-	const isUrl = createFilter(url.include, url.exclude);
-	const isResource = createFilter(resource.include, resource.exclude);
+	const isInline = createFilter2(source);
+	const isUrl = createFilter2(url);
+	const isResource = createFilter2(resource);
 
 	function detectFromPath(id) {
 		if (isInline(id)) return AssetType.Source;

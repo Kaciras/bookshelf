@@ -12,6 +12,11 @@ const importMeta = require("./rollup/meta");
 
 const isProduction = process.env.NODE_ENV === "production";
 
+function webpackAliasToRollup() {
+	const { alias } = webpackConfig.resolve;
+	return Object.entries(alias).map(e => ({ find: e[0], replacement: e[1] }));
+}
+
 module.exports = {
 	input: "new-tab/index.html",
 	output: {
@@ -19,17 +24,11 @@ module.exports = {
 		dir: "dist",
 	},
 	plugins: [
-		alias({
-			entries: Object.entries(webpackConfig.resolve.alias)
-				.map(e => ({ find: e[0], replacement: e[1] })),
-		}),
+		alias({ entries: webpackAliasToRollup() }),
 		asset({
-			loaders: [
-				postcss, svg,
-			],
+			loaders: [postcss, svg],
 			source: { include: ["components/*/*.css", "**/*.svg"] },
 			url: { include: ["**/*.ico"] },
-			resource: { include: "_$" },
 		}),
 		copy([
 			{ from: "new-tab/global.css" },

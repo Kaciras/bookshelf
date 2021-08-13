@@ -64,13 +64,13 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async suggest() {
+		const searchTerms = this.inputEl.value;
+
 		this.quering.abort();
 		this.quering = new AbortController();
-
-		const { value } = this.inputEl;
 		const { signal } = this.quering;
 
-		const response = await fetch(suggestAPI + value, { signal });
+		const response = await fetch(suggestAPI + searchTerms, { signal });
 		if (!response.ok) {
 			return console.error("搜索建议失败：" + response.status);
 		}
