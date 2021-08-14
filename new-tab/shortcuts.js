@@ -20,24 +20,23 @@ async function handleEdit(event) {
 	const el = event.target;
 	const i = indexInParent(el);
 
-	Object.assign(editDialog, model[i]);
-	const isAccept = await editDialog.show();
-	if (!isAccept) {
-		return;
-	}
-	const { label, favicon, url } = editDialog;
-	const newValue = { label, favicon, url };
+	const data = await editDialog.show(el);
+	if (data) {
+		const { favicon, ...newValue } = data;
+		Object.assign(el, data);
 
-	Object.assign(el, newValue);
-	model[i] = newValue;
-	await persistDataModel();
+		localStorage.setItem(iconKey(el), favicon);
+		model[i] = newValue;
+		cleanIconCache();
+		await persistDataModel();
+	}
 }
 
 async function handleRemove(event) {
 	const i = indexInParent(event.target);
 	event.target.remove();
 	model.splice(i, 1);
-	clean(); // 可能较慢，但删除操作不频繁。
+	cleanIconCache();
 	await persistDataModel();
 }
 
@@ -99,12 +98,10 @@ function add(request) {
 importDialog.addEventListener("add", event => add(event.detail));
 
 export async function startAddShortcut() {
-	editDialog.reset();
-	const isAccept = await editDialog.show();
-	if (!isAccept) {
-		return;
+	const data = await editDialog.show();
+	if (data) {
+		return add(editDialog);
 	}
-	return add(editDialog);
 }
 
 export function startImportTopSites() {
@@ -153,20 +150,27 @@ function buildModel({ bookmarks = [] }) {
 		}
 	}
 
-	requestIdleCallback(() => syncLocalStorage(clean));
+	requestIdleCallback(() => syncLocalStorage(cleanIconCache));
 }
 
-function clean() {
+/**
+ * 清理没有用到的图标缓存，该函数虽然开销较大，但调用并不频繁。
+ *
+ * 因为可能存在多个快捷方式使用同一图标的情况，
+ * 所以不能仅靠被修改的对象来确定是否清理，只能全部扫描一遍。
+ */
+function cleanIconCache() {
 	const inUse = new Set(model.map(iconKey));
 	const toRemove = [];
 
 	for (let i = 0; i < localStorage.length; i++) {
-		const key = localStorage[i];
+		const key = localStorage.key(i);
 		if (key.startsWith("FI.") && !inUse.has(key)) {
 			toRemove.push(key);
 		}
 	}
 	toRemove.forEach(k => localStorage.removeItem(k));
+	console.debug(`删除 ${toRemove.length} 个图标缓存`);
 }
 
 document.body.append(importDialog, editDialog);

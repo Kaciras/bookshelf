@@ -2,6 +2,13 @@ import WebsiteIcon from "@assets/Website.svg?url";
 import { delegate, getFaviconUrl, imageUrlToLocal } from "@share";
 import styles from "./index.css";
 
+const defaultData = {
+	iconUrl: null,
+	label: "",
+	url: "",
+	favicon: WebsiteIcon,
+};
+
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
@@ -57,21 +64,31 @@ class EditDialogElement extends HTMLElement {
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
 
-	reset() {
-		this.iconUrl = null;
-		this.label = "";
-		this.url = "";
-		this.favicon = WebsiteIcon;
-	}
+	// 不要使用 Object.assign 因为参数可能含有额外的字段。
+	show(data = defaultData) {
+		this.url = data.url;
+		this.favicon = data.favicon;
+		this.label = data.label;
+		this.iconUrl = data.iconUrl;
 
-	show() {
 		this.dialogEl.showModal();
 		return new Promise(resolve => this.resolve = resolve);
 	}
 
+	// 把要传递的属性挑出来，以便调用方解构。
 	handleActionClick(event) {
 		this.dialogEl.hide();
-		this.resolve(event.target.id === "accept");
+		if (event.target.id === "accept") {
+			const data = {
+				label: this.label,
+				favicon: this.favicon,
+				url: this.url,
+				iconUrl: this.iconUrl,
+			};
+			this.resolve(data);
+		} else {
+			this.resolve(null);
+		}
 	}
 
 	async fetchFavicon() {
