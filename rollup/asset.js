@@ -109,8 +109,6 @@ module.exports = function createInlinePlugin(options) {
 		if (isResource(id)) return AssetType.Resource;
 	}
 
-	const copies = new Map();
-
 	return {
 		name: "asset-module",
 
@@ -169,12 +167,12 @@ module.exports = function createInlinePlugin(options) {
 				}
 			}
 			const fileName = params.get("filename") || basename(file);
-			copies.set(id, { type: "asset", fileName, source: source.data });
-			return `export default "${fileName}"`;
-		},
-
-		generateBundle() {
-			for (const file of copies.values()) this.emitFile(file);
+			this.emitFile({
+				type: "asset",
+				fileName,
+				source: source.data,
+			});
+			return `export default "${fileName}"`; // 好像没必要用 JSON.stringify
 		},
 	};
 };
