@@ -3,8 +3,8 @@ import "../components/book-mark/index.js";
 import "../components/edit-dialog/index.js";
 import "../components/search-box/index.js";
 import "../components/top-site-dialog/index.js";
-import settingIcon from "@assets/Setting.svg";
-import checkIcon from "@assets/Check.svg";
+import SettingIcon from "@assets/Setting.svg";
+import CheckIcon from "@assets/Check.svg";
 import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";
 
 // module js 自带 defer 属性，所以没法在 html 里使用自定义元素
@@ -19,18 +19,18 @@ function switchToSettingMode() {
 	settingEl.innerHTML = "";
 
 	const acceptBtn = document.createElement("button");
-	acceptBtn.innerHTML = checkIcon + "<span>确定</span>";
+	acceptBtn.innerHTML = CheckIcon + "<span>确定</span>";
 	acceptBtn.classList.add("primary");
 	acceptBtn.onclick = switchToNormalMode;
 	settingEl.append(acceptBtn);
 
 	const addBtn = document.createElement("button");
-	addBtn.innerHTML = "添加网站";
+	addBtn.textContent = "添加网站";
 	addBtn.onclick = startAddShortcut;
 	settingEl.append(addBtn);
 
 	const importBtn = document.createElement("button");
-	importBtn.innerHTML = "导入常用网站";
+	importBtn.textContent = "导入常用网站";
 	importBtn.onclick = startImportTopSites;
 	settingEl.append(importBtn);
 
@@ -42,7 +42,7 @@ function switchToNormalMode() {
 	settingEl.innerHTML = "";
 
 	const button = document.createElement("button");
-	button.innerHTML = settingIcon;
+	button.innerHTML = SettingIcon;
 	button.title = "进入设置模式";
 	button.className = "icon";
 	button.onclick = switchToSettingMode;
