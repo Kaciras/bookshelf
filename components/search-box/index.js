@@ -1,5 +1,5 @@
 import GoogleIcon from "@assets/search.ico";
-import Arrow from "@assets/ArrowRight.svg";
+import ArrowIcon from "@assets/ArrowRight.svg";
 import styles from "./index.css";
 
 // 最多显示 8 个建议，太多反而乱而且显示不下。
@@ -17,11 +17,11 @@ template.innerHTML = `
 		<input id="input" placeholder="搜索">
 		<button
 			id="button"
+			title="搜索"
 			class="plain"
 			type="button"
-			tabindex="-1"
 		>
-			${Arrow}
+			${ArrowIcon}
 		</button>
 	</div>
 
@@ -45,39 +45,69 @@ class SearchBoxElement extends HTMLElement {
 		this.suggestions = root.getElementById("suggestions");
 
 		this.quering = new AbortController();
-		this.suggest = this.suggest.bind(this);
+		this.updateSuggestions = this.updateSuggestions.bind(this);
+
+		/*
+		 * 实现点击搜索框外时关闭建议列表的功能。
+		 *
+		 * 无论是 blur 事件还是 :focus 伪类的触发都先于 click 事件，导致点击建议项时无法跳转，
+		 * 因为此时建议列表已经关闭了。
+		 *
+		 * 所以换了种思路，监听全局 click 并排除本元素内触发的，我看 Edge 也是这么做的。
+		 */
+		window.addEventListener("click", event => {
+			if (event.target !== this) this.setSuggestVisible(false);
+		});
 
 		this.inputEl.oninput = this.handleInput.bind(this);
 		this.inputEl.onkeyup = this.handleKeyUp.bind(this);
-		this.inputEl.onblur = this.closeSuggest.bind(this);
+		this.inputEl.onfocus = () => this.setSuggestVisible(true);
 
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
-		root.getElementById("button").onclick = this.handleClick.bind(this);
+		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
+	}
+
+	/*
+	 * 建议列表的显示由两个类控制：
+	 * 1）suggested 表示列表拥有项目，在获取建议后设置，当输入框为空时删除。
+	 * 2）focused 表示聚焦，在失去焦点时删除。
+	 *
+	 * 这两个类分别表示两个独立的条件，仅当同时存在建议列表才会显示。
+	 */
+
+	setSuggestVisible(value) {
+		const { classList } = this.boxEl;
+		value ? classList.add("focused") : classList.remove("focused");
 	}
 
 	async handleInput() {
-		if (!this.inputEl.value) {
-			this.closeSuggest();
+		if (this.inputEl.value) {
+			setTimeout(this.updateSuggestions, 500);
 		} else {
-			setTimeout(this.suggest, 500);
+			this.index = null;
+			this.boxEl.classList.remove("suggested");
 		}
 	}
 
-	async suggest() {
+	async updateSuggestions() {
 		const searchTerms = this.inputEl.value;
 
 		this.quering.abort();
 		this.quering = new AbortController();
-		const { signal } = this.quering;
 
-		const response = await fetch(suggestAPI + searchTerms, { signal });
+		// 禁止发送 Cookies 避免跟踪
+		const response = await fetch(suggestAPI + searchTerms, {
+			credentials: "omit",
+			signal: this.quering.signal,
+		});
 		if (!response.ok) {
 			return console.error("搜索建议失败：" + response.status);
 		}
-		const [, list] = await response.json();
 
+		const [, list] = await response.json();
 		const count = Math.min(SUGGEST_LIMIT, list.length);
 		this.suggestions.innerHTML = "";
+
 		for (let i = 0; i < count; i++) {
 			const text = list[i];
 
@@ -87,15 +117,7 @@ class SearchBoxElement extends HTMLElement {
 			this.suggestions.append(el);
 		}
 
-		this.boxEl.classList.add("extend");
-		this.suggestions.classList.add("open");
-	}
-
-	closeSuggest() {
-		this.suggestions.classList.remove("open");
-		this.suggestions.innerHTML = "";
-		this.index = null;
-		this.boxEl.classList.remove("extend");
+		this.boxEl.classList.add("suggested");
 	}
 
 	handleKeyUp(event) {
@@ -106,10 +128,8 @@ class SearchBoxElement extends HTMLElement {
 		location.href = searchAPI + this.inputEl.value;
 	}
 
-	handleClick(event) {
-		if (event.button !== 0) {
-			return;
-		}
+	// click 只由左键触发，无需检查 event.button
+	handleSearchClick() {
 		location.href = searchAPI + this.inputEl.value;
 	}
 
@@ -124,7 +144,7 @@ class SearchBoxElement extends HTMLElement {
 				diff = -1;
 				break;
 			case "Escape":
-				this.closeSuggest();
+				this.setSuggestVisible(false);
 				return;
 			default:
 				return;
@@ -134,11 +154,6 @@ class SearchBoxElement extends HTMLElement {
 		const { children } = this.suggestions;
 		const { index } = this;
 		const { length } = children;
-
-		// 如果建议被关闭了按 ↓ 即可再次打开。
-		if (length === 0) {
-			return diff === 1 && this.suggest();
-		}
 
 		if (Number.isInteger(index)) {
 			children[index].classList.remove("active");
