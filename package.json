@@ -1,7 +1,7 @@
 {
 	"name": "browser-theme",
 	"version": "1.0.0",
-	"description": "My custom browser theme addon",
+	"description": "My browser theme addon",
 	"license": "MIT",
 	"author": "Kaciras",
 	"repository": {
@@ -19,7 +19,7 @@
 		"build": "rollup -c --environment NODE_ENV:production"
 	},
 	"devDependencies": {
-		"@kaciras/eslint-config-core": "^1.5.0",
+		"@kaciras/eslint-config-core": "^1.6.0",
 		"@rollup/plugin-alias": "^3.1.5",
 		"@rollup/pluginutils": "^4.1.1",
 		"@types/firefox-webext-browser": "^82.0.1",
@@ -32,10 +32,10 @@
 		"postcss-csso": "^5.0.1",
 		"postcss-nested": "^5.0.6",
 		"postcss-simple-vars": "^6.0.3",
-		"rollup": "^2.56.0",
+		"rollup": "^2.56.2",
 		"rollup-plugin-terser": "^7.0.2",
 		"rollup-plugin-visualizer": "^5.5.2",
-		"svgo": "^2.3.1",
+		"svgo": "^2.4.0",
 		"webextension-polyfill": "^0.8.0"
 	}
 }

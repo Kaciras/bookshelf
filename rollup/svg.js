@@ -1,4 +1,4 @@
-const { optimize, extendDefaultPlugins } = require("svgo");
+const { optimize } = require("svgo");
 const { AssetType } = require("./asset");
 
 /**
@@ -42,20 +42,25 @@ function reactivePlugin(options) {
  * 另外必须禁用内置插件中的 removeViewBox 不然布局会出错。
  */
 
-const builtInPlugins = extendDefaultPlugins([
-	{ name: "removeViewBox", active: false },
-]);
+const builtInPlugins = {
+	name: "preset-default",
+	params: {
+		overrides: {
+			removeViewBox: false,
+		},
+	},
+};
 
 const inlineConfig = {
 	plugins: [
-		...builtInPlugins,
+		builtInPlugins,
 		reactivePlugin(),
 	],
 };
 
 const resourceConfig = {
 	plugins: [
-		...builtInPlugins,
+		builtInPlugins,
 		reactivePlugin({ size: false }),
 	],
 };
