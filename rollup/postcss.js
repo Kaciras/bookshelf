@@ -11,8 +11,8 @@ const convertor = postcss([
 	nested(),	// 支持嵌套语法
 ]);
 
-module.exports = function (source, id) {
-	if (!cssLangRE.test(id)) {
+module.exports = function (source, info) {
+	if (!cssLangRE.test(info.id)) {
 		return;
 	}
 	return convertor.process(source.string).css;

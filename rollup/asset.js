@@ -116,8 +116,6 @@ module.exports = function createInlinePlugin(options) {
 		 * 默认的 ID 解析器将 ID 视为相对路径，无法处理带 URL 参数的情况。
 		 * 这里先调用默认链解析文件路径，然后再把参数加回结果。
 		 *
-		 * TODO: filename 不同也解析到同一ID？
-		 *
 		 * @param source 模块的 ID
 		 * @param importer 引用此模块的模块
 		 * @return {Promise<string|null>} 解析后的 ID
@@ -140,10 +138,11 @@ module.exports = function createInlinePlugin(options) {
 			const params = new URLSearchParams(query);
 			this.addWatchFile(file);
 
+			const info = { id, type, params };
 			let source = new BufferSource(await readFile(file));
 
 			for (const loaderFn of loaders) {
-				const rv = await loaderFn(source, id, type);
+				const rv = await loaderFn(source, info);
 				if (typeof rv === "string") {
 					source = new StringSource(rv);
 				} else if (Buffer.isBuffer(rv)) {

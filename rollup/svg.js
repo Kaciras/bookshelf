@@ -39,6 +39,7 @@ function reactivePlugin(options) {
 
 /*
  * 用两种不同的配置，对非内联的 SVG 不修改 width 和 height 属性。
+ * 另外必须禁用内置插件中的 removeViewBox 不然布局会出错。
  */
 
 const builtInPlugins = extendDefaultPlugins([
@@ -59,11 +60,11 @@ const resourceConfig = {
 	],
 };
 
-module.exports = function (source, id, type) {
-	if (!/\.svg(\?|$)/.test(id)) {
+module.exports = function (source, info) {
+	if (!/\.svg(\?|$)/.test(info.id)) {
 		return;
 	}
-	const config = type === AssetType.Source
+	const config = info.type === AssetType.Source
 		? inlineConfig : resourceConfig;
 	const { data } = optimize(source.string, config);
 	return data.replaceAll('"', "'");
