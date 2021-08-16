@@ -14,38 +14,31 @@ document.getElementsByTagName("main")[0].insertBefore(
 	document.getElementById("bookmarks"),
 );
 
+function requestClearData() {
+	const message = "确定要清空本插件保存的所有数据？\n 该过程不可恢复，并且会同步到所有设备";
+	window.confirm(message) && clearAllData();
+}
+
 const settingEl = document.getElementById("setting");
+
+const settingRight = document.createElement("template");
+settingRight.innerHTML = `
+	<button class="primary">${CheckIcon}确定</button>
+	<button>添加网站</button>
+	<button>导入常用网站</button>
+	<button class="warning">清空存储</button>
+`;
 
 function switchToSettingMode() {
 	settingEl.innerHTML = "";
 
-	const acceptBtn = document.createElement("button");
-	acceptBtn.innerHTML = CheckIcon + "<span>确定</span>";
-	acceptBtn.classList.add("primary");
-	acceptBtn.onclick = switchToNormalMode;
+	const right = settingRight.content.cloneNode(true);
+	right.children[0].onclick = switchToNormalMode;
+	right.children[1].onclick = startAddShortcut;
+	right.children[2].onclick = startImportTopSites;
+	right.children[3].onclick = requestClearData;
 
-	const addBtn = document.createElement("button");
-	addBtn.textContent = "添加网站";
-	addBtn.onclick = startAddShortcut;
-
-	const importBtn = document.createElement("button");
-	importBtn.textContent = "导入常用网站";
-	importBtn.onclick = startImportTopSites;
-
-	const clearBtn = document.createElement("button");
-	clearBtn.textContent = "清空存储";
-	clearBtn.className = "warning";
-	clearBtn.onclick = () => {
-		const accept = window.confirm(
-			"是否确定要清空本页保存的所有数据？\n" +
-			"该过程不可恢复，并且会同步到所有设备。",
-		);
-		if (accept) {
-			clearAllData();
-		}
-	};
-
-	settingEl.append(acceptBtn, addBtn, importBtn, clearBtn);
+	settingEl.append(right);
 	setShortcutEditable(true);
 	document.body.classList.add("editing");
 }
