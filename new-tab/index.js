@@ -23,17 +23,14 @@ function switchToSettingMode() {
 	acceptBtn.innerHTML = CheckIcon + "<span>确定</span>";
 	acceptBtn.classList.add("primary");
 	acceptBtn.onclick = switchToNormalMode;
-	settingEl.append(acceptBtn);
 
 	const addBtn = document.createElement("button");
 	addBtn.textContent = "添加网站";
 	addBtn.onclick = startAddShortcut;
-	settingEl.append(addBtn);
 
 	const importBtn = document.createElement("button");
 	importBtn.textContent = "导入常用网站";
 	importBtn.onclick = startImportTopSites;
-	settingEl.append(importBtn);
 
 	const clearBtn = document.createElement("button");
 	clearBtn.textContent = "清空存储";
@@ -47,8 +44,8 @@ function switchToSettingMode() {
 			clearAllData();
 		}
 	};
-	settingEl.append(clearBtn);
 
+	settingEl.append(acceptBtn, addBtn, importBtn, clearBtn);
 	setShortcutEditable(true);
 	document.body.classList.add("editing");
 }

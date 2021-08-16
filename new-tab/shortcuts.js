@@ -1,6 +1,14 @@
 import { getFaviconUrl, imageUrlToLocal, indexInParent, jump } from "@share";
 import { loadConfig, saveConfig, syncLocalStorage } from "./storage";
 
+/*
+ * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储的限制，
+ * 能同步的数据很少，图标等资源会超出限额所以只能存在本地，当数据同步到新的设备上后需必须新下载图标。
+ * Firefox 自己的标签页也和书签也是这样的。
+ *
+ * 这个限制也导致了如果网站更换了图标，同时新设备同步来了该站点的快捷方式，则显示的图标会不一样。
+ */
+
 const container = document.getElementById("bookmarks");
 const importDialog = document.createElement("top-site-dialog");
 const editDialog = document.createElement("edit-dialog");
@@ -112,14 +120,12 @@ export function setShortcutEditable(value) {
 	for (const el of container.children) el.isEditable = value;
 }
 
-/*
- * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储的限制，
- * 能同步的数据很少，图标等资源会超出限额所以只能存在本地，当数据同步到新的设备上后需必须新下载图标。
- * Firefox 自己的标签页也和书签也是这样的。
+/**
+ * 异步地从网站下载图标，完成后设置元素的图标属性。
  *
- * 这个限制也导致了如果网站更换了图标，同时新设备同步来了该站点的快捷方式，则显示的图标会不一样
+ * @param el 元素
+ * @param key 图标在存储中的键
  */
-
 async function queueDownload(el, key) {
 	let { url, iconUrl } = el;
 	iconUrl = iconUrl ?? await getFaviconUrl(url);
@@ -128,7 +134,7 @@ async function queueDownload(el, key) {
 	localStorage.setItem(key, favicon);
 }
 
-function buildModel({ bookmarks = [] }) {
+function initialize({ bookmarks = [] }) {
 	model = bookmarks;
 	const hosts = new Set();
 
@@ -174,4 +180,4 @@ function cleanIconCache() {
 }
 
 document.body.append(importDialog, editDialog);
-loadConfig("bookmarks").then(buildModel);
+loadConfig("bookmarks").then(initialize);
