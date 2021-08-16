@@ -80,9 +80,15 @@ class SearchBoxElement extends HTMLElement {
 		value ? classList.add("focused") : classList.remove("focused");
 	}
 
+	/*
+	 * 对获取建议的中断分为两个阶段，先是防抖，一旦开始请求则不再受防抖的影响，
+	 * 只有下一次的请求才能中断前面的。
+	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
+	 */
 	async handleInput() {
 		if (this.inputEl.value) {
-			setTimeout(this.updateSuggestions, 500);
+			clearTimeout(this.timer);
+			this.timer = setTimeout(this.updateSuggestions, 500);
 		} else {
 			this.index = null;
 			this.boxEl.classList.remove("suggested");
@@ -117,7 +123,9 @@ class SearchBoxElement extends HTMLElement {
 			this.suggestions.append(el);
 		}
 
-		this.boxEl.classList.add("suggested");
+		if (count > 0) {
+			this.boxEl.classList.add("suggested");
+		}
 	}
 
 	handleKeyUp(event) {
