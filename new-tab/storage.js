@@ -22,6 +22,12 @@ export function loadConfig(keys) {
 	return syncSettings.get(keys);
 }
 
+export function clearAllData() {
+	localStorage.clear();
+	syncSettings.clear();
+	localSettings.clear();
+}
+
 /**
  * 注册存储同步处理函数，用于解决本地跟远程数据一致性问题。
  * 如果有新的远程数据同步了过来，注册的函数将被调用，完成后自动设置同步状态为已同步。

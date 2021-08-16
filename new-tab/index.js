@@ -6,6 +6,7 @@ import "../components/top-site-dialog/index.js";
 import SettingIcon from "@assets/Setting.svg";
 import CheckIcon from "@assets/Check.svg";
 import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";
+import { clearAllData } from "./storage";
 
 // module js 自带 defer 属性，所以没法在 html 里使用自定义元素
 document.getElementsByTagName("main")[0].insertBefore(
@@ -33,6 +34,20 @@ function switchToSettingMode() {
 	importBtn.textContent = "导入常用网站";
 	importBtn.onclick = startImportTopSites;
 	settingEl.append(importBtn);
+
+	const clearBtn = document.createElement("button");
+	clearBtn.textContent = "清空存储";
+	clearBtn.className = "warning";
+	clearBtn.onclick = () => {
+		const accept = window.confirm(
+			"是否确定要清空本页保存的所有数据？\n" +
+			"该过程不可恢复，并且会同步到所有设备。",
+		);
+		if (accept) {
+			clearAllData();
+		}
+	};
+	settingEl.append(clearBtn);
 
 	setShortcutEditable(true);
 	document.body.classList.add("editing");

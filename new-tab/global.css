@@ -54,6 +54,13 @@ button {
 	--bg-active: #0061e0;
 }
 
+.warning {
+	--color: white;
+	--bg: #f55656;
+	--bg-focus: #e64040;
+	--bg-active: #f04d4d;
+}
+
 .plain {
 	background: none;
 	--bg: none;
