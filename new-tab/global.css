@@ -13,8 +13,8 @@ button {
 	font-size: 1rem;
 
 	--bg: #efeff2;
-	--bg-focus: #e1e1e3;
-	--bg-active: #e8e8eb;
+	--bg-focus: #e8e8eb;
+	--bg-active: #e1e1e3;
 
 	border-radius: 4px;
 	cursor: pointer;
@@ -49,16 +49,16 @@ button {
 
 .primary {
 	--color: white;
-	--bg: #0066eb;
-	--bg-focus: #005ac7;
-	--bg-active: #0061e0;
+	--bg: #0061e0;
+	--bg-focus: #0066eb;
+	--bg-active: #005ac7;
 }
 
 .warning {
 	--color: white;
-	--bg: #f55656;
-	--bg-focus: #e64040;
-	--bg-active: #f04d4d;
+	--bg: #f04d4d;
+	--bg-focus: #f55656;
+	--bg-active: #e64040;
 }
 
 .plain {

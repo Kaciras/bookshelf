@@ -3,6 +3,7 @@
 $edit-padding: 15px;
 
 :root {
+	--shortcut-icon-size: 48px;
 	--panel-radius: 8px;
 	--widget-radius: 4px;
 }

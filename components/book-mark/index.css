@@ -30,8 +30,8 @@ a {
 
 #favicon {
 	display: block;
-	width: 48px;
-	height: 48px;
+	width: var(--shortcut-icon-size);
+	height: var(--shortcut-icon-size);
 }
 
 #label {
