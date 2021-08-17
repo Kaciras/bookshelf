@@ -45,6 +45,7 @@ class SearchBoxElement extends HTMLElement {
 		this.suggestions = root.getElementById("suggestions");
 
 		this.quering = new AbortController();
+		this.threshold = 500;
 		this.updateSuggestions = this.updateSuggestions.bind(this);
 
 		/*
@@ -86,12 +87,13 @@ class SearchBoxElement extends HTMLElement {
 	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
 	 */
 	async handleInput() {
-		if (this.inputEl.value) {
+		const { threshold, inputEl, boxEl } = this;
+		if (inputEl.value) {
 			clearTimeout(this.timer);
-			this.timer = setTimeout(this.updateSuggestions, 500);
+			this.timer = setTimeout(this.updateSuggestions, threshold);
 		} else {
 			this.index = null;
-			this.boxEl.classList.remove("suggested");
+			boxEl.classList.remove("suggested");
 		}
 	}
 

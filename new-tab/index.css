@@ -54,17 +54,35 @@ search-box {
 	margin: 0 auto;
 }
 
+label {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	font-size: 0.875rem;
+}
+
+input[type="number"] {
+	width: 120px;
+}
+
 #bookmarks {
 	margin-top: 48px;
 }
 
-#setting {
+aside {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 
 	position: absolute;
 	top: calc($edit-padding * 2);
-	right: calc($edit-padding * 2);
 	z-index: 10;
+}
+
+#setting-left {
+	left: calc($edit-padding * 2);
+}
+
+#setting-right {
+	right: calc($edit-padding * 2);
 }
