@@ -1,5 +1,5 @@
 const { minify } = require("html-minifier-terser");
-const { createFilter } = require("@rollup/pluginutils");
+const MagicString = require("magic-string");
 const { minifyOptions } = require("./html");
 
 // 这 ESTree 匹配个 .innerHtml = `...` 真麻烦啊。
@@ -23,8 +23,6 @@ function getTemplateLiteral(node) {
 	}
 }
 
-const isComponentJS = createFilter("components/*/*.js");
-
 /**
  * 因为组件的 HTML 不如 CSS 那么多所以本项目里都是直接写的字符串。
  * 所以没法复用 html 插件来去掉空白，只能再写一个插件处理。
@@ -33,22 +31,24 @@ module.exports = function templatePlugin() {
 	return {
 		name: "template-html",
 		transform(code, id) {
-			if (!isComponentJS(id)) {
+			if (!id.endsWith(".js")) {
 				return;
 			}
 			const ast = this.parse(code);
-			const literal = ast.body.map(getTemplateLiteral).find(Boolean);
-			if (!literal) {
-				return;
+			const occurs = ast.body.map(getTemplateLiteral).filter(Boolean);
+
+			// Vite 用这个库我就跟着用了，能生成 SourceMap 也挺好。
+			const s = new MagicString(code);
+			for (const literal of occurs) {
+				const start = literal.start + 1;
+				const end = literal.end - 1;
+
+				let html = code.slice(start, end);
+				html = minify(html, minifyOptions);
+				s.overwrite(start, end, html);
 			}
-			const start = literal.start + 1;
-			const end = literal.end - 1;
 
-			const before = code.slice(0, start);
-			const html = code.slice(start, end);
-			const after = code.slice(end);
-
-			return before + minify(html, minifyOptions) + after;
+			return { code: s.toString(), map: s.generateMap() };
 		},
 	};
 };
