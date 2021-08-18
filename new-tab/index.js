@@ -38,7 +38,7 @@ const settingLeft = document.createElement("template");
 settingLeft.innerHTML = `
 	<label>
 		搜索建议防抖（毫秒）
-		<input name="debounce" type="number">
+		<input name="threshold" type="number">
 	</label>
 	<check-box id="ime">启用输入法防抖</check-box>
 `;
@@ -52,7 +52,7 @@ function switchToSettingMode() {
 	// template 中从 HTML 解析的自定义元素没有关联到实现，必须先挂载。
 	settingEl2.append(left);
 
-	const input = settingEl2.querySelector("input[name='debounce']");
+	const input = settingEl2.querySelector("input[name='threshold']");
 	input.value = searchBox.threshold;
 	input.oninput = event => searchBox.threshold = event.target.valueAsNumber;
 
@@ -74,10 +74,7 @@ function switchToSettingMode() {
 
 function exitSettingMode() {
 	switchToNormalMode();
-	return saveConfig({
-		debounce: searchBox.threshold,
-		waitIME: searchBox.waitIME,
-	});
+	return saveConfig(searchBox, ["threshold", "waitIME"]);
 }
 
 function switchToNormalMode() {
@@ -97,6 +94,4 @@ function switchToNormalMode() {
 
 switchToNormalMode();
 
-loadConfig(["debounce", "waitIME"])
-	.isPresent("debounce", v => searchBox.threshold = v)
-	.isPresent("waitIME", v => searchBox.waitIME = v);
+loadConfig(["threshold", "waitIME"]).then(v => Object.assign(searchBox, v));

@@ -1,3 +1,4 @@
+import { dirname } from "./lang";
 import { blobToBase64URL, encodeSVG } from "./codec.js";
 
 /**
@@ -48,11 +49,6 @@ async function* fetchLinks(url, signal) {
 	if (manifestURL) {
 		yield* await fetchManifest(manifestURL, signal);
 	}
-}
-
-function dirname(path) {
-	const i = path.lastIndexOf("/");
-	return i < 0 ? path : path.slice(0, i);
 }
 
 /**

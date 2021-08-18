@@ -1,3 +1,6 @@
+/**
+ * 使用 getter & setter 将 object[name] 绑定到 target[prop]。
+ */
 export function delegate(object, name, target, prop) {
 	Object.defineProperty(object, name, {
 		configurable: true,
@@ -5,6 +8,14 @@ export function delegate(object, name, target, prop) {
 		get: () => target[prop],
 		set: value => { target[prop] = value; },
 	});
+}
+
+/**
+ * 虽然 Node 自带 dirname，但在浏览器里用的话还得自己写一个。
+ */
+export function dirname(path) {
+	const i = path.lastIndexOf("/");
+	return i < 0 ? path : path.slice(0, i);
 }
 
 /**
@@ -16,7 +27,7 @@ export function delegate(object, name, target, prop) {
  * @param n 移动的元素个数
  */
 export function jump(array, i, j, n = 1) {
-	array.splice(j, 0, ...array.splice(i,  n));
+	array.splice(j, 0, ...array.splice(i, n));
 }
 
 /**
