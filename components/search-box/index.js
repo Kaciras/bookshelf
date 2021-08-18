@@ -46,6 +46,7 @@ class SearchBoxElement extends HTMLElement {
 
 		this.quering = new AbortController();
 		this.threshold = 500;
+		this.waitIME = true;
 		this.updateSuggestions = this.updateSuggestions.bind(this);
 
 		/*
@@ -63,6 +64,10 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl.oninput = this.handleInput.bind(this);
 		this.inputEl.onkeyup = this.handleKeyUp.bind(this);
 		this.inputEl.onfocus = () => this.setSuggestVisible(true);
+
+		// 这俩没有 onXXX 格式
+		this.inputEl.addEventListener("compositionstart", () => this.isIMEInput = true);
+		this.inputEl.addEventListener("compositionend", () => this.isIMEInput = false);
 
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
@@ -87,13 +92,16 @@ class SearchBoxElement extends HTMLElement {
 	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
 	 */
 	async handleInput() {
-		const { threshold, inputEl, boxEl } = this;
-		if (inputEl.value) {
+		const { waitIME, isIMEInput, threshold } = this;
+		if (waitIME && isIMEInput) {
+			return;
+		}
+		if (this.inputEl.value) {
 			clearTimeout(this.timer);
 			this.timer = setTimeout(this.updateSuggestions, threshold);
 		} else {
 			this.index = null;
-			boxEl.classList.remove("suggested");
+			this.boxEl.classList.remove("suggested");
 		}
 	}
 

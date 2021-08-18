@@ -10,6 +10,33 @@
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
+export class OptionSource {
+
+	constructor(task) {
+		this.task = task;
+	}
+
+	then(onfulfilled, onrejected) {
+		return this.task.then(onfulfilled, onrejected);
+	}
+
+	catch(onrejected) {
+		return this.task.catch(onrejected);
+	}
+
+	finally(onfinally) {
+		return this.task.finally(onfinally);
+	}
+
+	isPresent(key, callback) {
+		this.task.then(s => {
+			if (key in s)
+				callback(s[key]);
+		});
+		return this;
+	}
+}
+
 export async function saveConfig(items) {
 	const uuid = Math.random();
 	items.uuid = uuid;
@@ -19,7 +46,7 @@ export async function saveConfig(items) {
 }
 
 export function loadConfig(keys) {
-	return syncSettings.get(keys);
+	return new OptionSource(syncSettings.get(keys));
 }
 
 export function clearAllData() {
