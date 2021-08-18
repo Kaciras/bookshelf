@@ -1,6 +1,4 @@
 :host {
-	display: flex;
-	align-items: center;
 	position: relative;
 	cursor: pointer;
 }
@@ -9,18 +7,28 @@
 	position: absolute;
 	z-index: -1;
 	opacity: 0;
+}
 
-	&:checked + #icon {
+/*
+ * 因为没有将元素替换为 HTML 的 API，所以用个 div 包裹了图标
+ * 以便使用 innerHTML，该元素设为 contents 不影响布局。
+ */
+#icon {
+	display: contents;
+	color: #777;
+	font-size: 24px;
+
+	#input:checked + & {
 		color: #0096fa;
 	}
 }
 
-#icon {
-	font-size: 24px;
-	color: #777;
-	display: inline-flex;
+svg {
+	vertical-align: middle;
 }
 
 #label {
+	display: inline-block;
 	margin-left: 4px;
+	vertical-align: middle;
 }

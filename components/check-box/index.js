@@ -6,14 +6,15 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 	<input id="input" type="checkbox">
-	<span id="icon"></span>
+	<div id="icon"></div>
 	<span id="label"><slot></slot></span>
 `;
 
-/**
- *
+/*
+ * 实现自定义的复选框可以参考这个教程：
  * https://developers.google.com/web/fundamentals/web-components/examples/howto-checkbox
  */
+
 class CheckBoxElement extends HTMLElement {
 
 	static get observedAttributes() {
@@ -28,10 +29,8 @@ class CheckBoxElement extends HTMLElement {
 		this.input = root.getElementById("input");
 		this.markEl = root.getElementById("icon");
 
-		this.markEl.innerHTML = Icon;
-
-		this.addEventListener("click", this.handleClick.bind(this));
-		this.addEventListener("keyup", this.handleKeyup.bind(this));
+		this.addEventListener("click", this.handleClick);
+		this.addEventListener("keyup", this.handleKeyup);
 	}
 
 	set checked(value) {
@@ -67,8 +66,7 @@ class CheckBoxElement extends HTMLElement {
 		if (this.input.disabled) {
 			return;
 		}
-		const checked = !this.checked;
-		this.checked = checked;
+		const checked = this.checked = !this.checked;
 		this.dispatchEvent(new CustomEvent("change", { detail: { checked } }));
 	}
 }
