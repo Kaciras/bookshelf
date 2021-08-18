@@ -1,0 +1,26 @@
+:host {
+	display: flex;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+}
+
+#input {
+	position: absolute;
+	z-index: -1;
+	opacity: 0;
+
+	&:checked + #icon {
+		color: #0096fa;
+	}
+}
+
+#icon {
+	font-size: 24px;
+	color: #777;
+	display: inline-flex;
+}
+
+#label {
+	margin-left: 4px;
+}
