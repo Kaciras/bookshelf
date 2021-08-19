@@ -1,9 +1,10 @@
-const { readFile } = require("fs/promises");
-const { basename } = require("path");
-const { createFilter } = require("@rollup/pluginutils");
-const mime = require("mime");
+import {readFile} from "fs/promises";
+import {basename} from "path";
+import {createFilter} from "@rollup/pluginutils";
+import mime from "mime";
+import {encodeSVG} from "../share/codec.js";
 
-const AssetType = {
+export const AssetType = {
 	Source: 0,		// 作为字符串导入。
 	Url: 1,			// 作为 URL 导入，可能会内联为 DataUrl。
 	Resource: 2,	// 作为外部 URL 导入。
@@ -17,21 +18,6 @@ function detectFromQuery(id) {
 	if (srcRE.test(id)) return AssetType.Source;
 	if (urlRE.test(id)) return AssetType.Url;
 	if (resRE.test(id)) return AssetType.Resource;
-}
-
-// https://www.zhangxinxu.com/wordpress/2018/08/css-svg-background-image-base64-encode/
-const encodeMap = {
-	'"': "'",
-	"%": "%25",
-	"#": "%23",
-	"{": "%7B",
-	"}": "%7D",
-	"<": "%3C",
-	">": "%3E",
-};
-
-function encodeSVG(code) {
-	return code.replaceAll(/["%#{}<>]/g, v => encodeMap[v]);
 }
 
 // https://github.com/rollup/plugins/blob/master/packages/url/src/index.js
@@ -96,7 +82,7 @@ function createFilter2(options) {
  * Rollup 似乎没有提供处理资源的接口，只能自己撸一个了。
  * 本插件提供一个通用的规则，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
  */
-module.exports = function createInlinePlugin(options) {
+export default function createInlinePlugin(options) {
 	const { source = {}, url = {}, resource = {}, limit = 4096, loaders = [] } = options;
 
 	const isInline = createFilter2(source);
@@ -158,7 +144,10 @@ module.exports = function createInlinePlugin(options) {
 				if (buffer.length < limit) {
 
 					// 避免再次获取时的转换开销。
-					source.buffer = buffer;
+					Object.defineProperty(source, "buffer", {
+						value: buffer,
+						configurable: false,
+					});
 
 					const mimetype = mime.getType(file);
 					const url = toDataUrl(source, mimetype);
@@ -174,6 +163,4 @@ module.exports = function createInlinePlugin(options) {
 			return `export default "${fileName}"`; // 好像没必要用 JSON.stringify
 		},
 	};
-};
-
-module.exports.AssetType = AssetType;
+}

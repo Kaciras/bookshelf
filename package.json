@@ -13,6 +13,7 @@
 		"theme",
 		"firefox"
 	],
+	"type": "module",
 	"scripts": {
 		"lint": "eslint --fix .",
 		"dev": "rollup -c --watch",

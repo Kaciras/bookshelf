@@ -1,5 +1,4 @@
-// TODO: 跟 Rollup 插件里重复，但那边目前没法用 ESModule 只能分开了。
-const encodeMap = {
+const escapes = {
 	'"': "'",
 	"%": "%25",
 	"#": "%23",
@@ -9,8 +8,13 @@ const encodeMap = {
 	">": "%3E",
 };
 
+/**
+ * SVG 可以使用比 Base64 更高效的 URL 编码。
+ *
+ * @see https://www.zhangxinxu.com/wordpress/2018/08/css-svg-background-image-base64-encode/
+ */
 export function encodeSVG(code) {
-	return code.replaceAll(/["%#{}<>]/g, v => encodeMap[v]);
+	return code.replaceAll(/["%#{}<>]/g, v => escapes[v]);
 }
 
 /**

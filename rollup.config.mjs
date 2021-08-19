@@ -1,14 +1,14 @@
-const alias = require("@rollup/plugin-alias");
-const { visualizer } = require("rollup-plugin-visualizer");
-const { terser } = require("rollup-plugin-terser");
-const webpackConfig = require("./alias.idea");
-const htmlEntry = require("./rollup/html");
-const copy = require("./rollup/copy");
-const postcss = require("./rollup/postcss");
-const svg = require("./rollup/svg");
-const asset = require("./rollup/asset");
-const template = require("./rollup/template");
-const importMeta = require("./rollup/meta");
+import alias from "@rollup/plugin-alias";
+import {visualizer} from "rollup-plugin-visualizer";
+import {terser} from "rollup-plugin-terser";
+import webpackConfig from "./alias.idea.cjs";
+import htmlEntry from "./rollup/html.js";
+import copy from "./rollup/copy.js";
+import postcss from "./rollup/postcss.js";
+import svg from "./rollup/svg.js";
+import asset from "./rollup/asset.js";
+import template from "./rollup/template.js";
+import importMeta from "./rollup/meta.js";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -17,7 +17,7 @@ function webpackAliasToRollup() {
 	return Object.entries(alias).map(e => ({ find: e[0], replacement: e[1] }));
 }
 
-module.exports = {
+export default {
 	input: "new-tab/index.html",
 	output: {
 		format: "esm",

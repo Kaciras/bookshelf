@@ -1,7 +1,7 @@
-const postcss = require("postcss");
-const nested = require("postcss-nested");
-const csso = require("postcss-csso");
-const vars = require("postcss-simple-vars");
+import postcss from "postcss";
+import nested from "postcss-nested";
+import csso from "postcss-csso";
+import vars from "postcss-simple-vars";
 
 const cssLangRE = /\.(css|less|sass|scss|styl|pcss)($|\?)/;
 
@@ -11,9 +11,9 @@ const convertor = postcss([
 	nested(),	// 支持嵌套语法
 ]);
 
-module.exports = function (source, info) {
+export default function (source, info) {
 	if (!cssLangRE.test(info.id)) {
 		return;
 	}
 	return convertor.process(source.string).css;
-};
+}

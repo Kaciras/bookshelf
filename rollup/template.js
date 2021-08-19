@@ -1,6 +1,6 @@
-const { minify } = require("html-minifier-terser");
-const MagicString = require("magic-string");
-const { minifyOptions } = require("./html");
+import {minify} from "html-minifier-terser";
+import MagicString from "magic-string";
+import {minifyOptions} from "./html.js";
 
 // 这 ESTree 匹配个 .innerHtml = `...` 真麻烦啊。
 function getTemplateLiteral(node) {
@@ -27,7 +27,7 @@ function getTemplateLiteral(node) {
  * 因为组件的 HTML 不如 CSS 那么多所以本项目里都是直接写的字符串。
  * 所以没法复用 html 插件来去掉空白，只能再写一个插件处理。
  */
-module.exports = function templatePlugin() {
+export default function templatePlugin() {
 	return {
 		name: "template-html",
 		transform(code, id) {
@@ -51,4 +51,4 @@ module.exports = function templatePlugin() {
 			return { code: s.toString(), map: s.generateMap() };
 		},
 	};
-};
+}

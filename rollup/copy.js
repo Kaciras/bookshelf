@@ -1,6 +1,6 @@
-const { basename, join } = require("path");
-const glob = require("fast-glob");
-const { chunkImport } = require("./html");
+import {basename, join} from "path";
+import glob from "fast-glob";
+import {chunkImport} from "./html.js";
 
 const hostId = "COPY_IMPORTER";
 
@@ -13,7 +13,7 @@ const hostId = "COPY_IMPORTER";
  *
  * @param list 复制项列表，格式参考了 copy-webpack-plugin。
  */
-module.exports = function copyPlugin(list) {
+export default function copyPlugin(list) {
 	const ids = new Set();
 
 	return {
@@ -82,4 +82,4 @@ module.exports = function copyPlugin(list) {
 		 */
 		generateBundle: (_, bundle) => delete bundle[hostId],
 	};
-};
+}

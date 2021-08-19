@@ -1,7 +1,7 @@
-const { resolve, dirname, basename } = require("path");
-const { existsSync } = require("fs");
-const { minify } = require("html-minifier-terser");
-const { parse } = require("node-html-parser");
+import {basename, dirname, resolve} from "path";
+import {existsSync} from "fs";
+import {minify} from "html-minifier-terser";
+import HtmlParser from "node-html-parser";
 
 /**
  * 构造一个 JS 模块，导入所有 ID 。
@@ -10,7 +10,7 @@ const { parse } = require("node-html-parser");
  * @param ids 要导入的 ID 列表
  * @return {string} JS 代码
  */
-function chunkImport(ids) {
+export function chunkImport(ids) {
 	let code = "";
 	for (const id of ids) {
 		code += `import "${id}"\n`;
@@ -18,7 +18,7 @@ function chunkImport(ids) {
 	return code;
 }
 
-const minifyOptions = {
+export const minifyOptions = {
 	collapseBooleanAttributes: true,
 	collapseWhitespace: true,
 	collapseInlineTagWhitespace: true,
@@ -31,7 +31,7 @@ const minifyOptions = {
  * 所有的 <script> 会被打包为一个文件。
  * 同时还会压缩 HTML，这是必须的处理因为要删除空白内容。
  */
-module.exports = function htmlPlugin() {
+export default function htmlPlugin() {
 	const documents = new Map();
 
 	/*
@@ -49,7 +49,7 @@ module.exports = function htmlPlugin() {
 			if (!id.endsWith(".html")) {
 				return;
 			}
-			const document = parse(code);
+			const document = HtmlParser.parse(code);
 			const imports = [];
 
 			// 绝对路径和找不到文件的不处理
@@ -103,7 +103,4 @@ module.exports = function htmlPlugin() {
 			}
 		},
 	};
-};
-
-module.exports.chunkImport = chunkImport;
-module.exports.minifyOptions = minifyOptions;
+}

@@ -1,5 +1,5 @@
-const { optimize } = require("svgo");
-const { AssetType } = require("./asset");
+import {optimize} from "svgo";
+import {AssetType} from "./asset.js";
 
 /**
  * 调整 SVG 的属性，使其能够用容器元素的 CSS 控制：
@@ -65,7 +65,7 @@ const resourceConfig = {
 	],
 };
 
-module.exports = function (source, info) {
+export default function (source, info) {
 	if (!/\.svg(\?|$)/.test(info.id)) {
 		return;
 	}
@@ -73,4 +73,4 @@ module.exports = function (source, info) {
 		? inlineConfig : resourceConfig;
 	const { data } = optimize(source.string, config);
 	return data.replaceAll('"', "'");
-};
+}
