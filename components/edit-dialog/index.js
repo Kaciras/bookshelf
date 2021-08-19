@@ -1,4 +1,5 @@
 import WebsiteIcon from "@assets/Website.svg?url";
+import "../task-button/index.js";
 import { delegate, getFaviconUrl, imageUrlToLocal } from "@share";
 import styles from "./index.css";
 
@@ -18,7 +19,7 @@ template.innerHTML = `
 				<div id="icon-box">
 					<img id="favicon" alt="icon" src>
 				</div>
-				<button id="fetch" type="button">自动获取</button>
+				<task-button id="fetch">自动获取</task-button>
 			</div>
 			<div id="field-group">
 				<label>
@@ -57,7 +58,7 @@ class EditDialogElement extends HTMLElement {
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		this.fetchBtn.onclick = this.fetchFavicon.bind(this);
+		this.fetchBtn.taskFn = this.fetchFavicon.bind(this);
 
 		this.handleActionClick = this.handleActionClick.bind(this);
 		root.getElementById("cancel").onclick = this.handleActionClick;

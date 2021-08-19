@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 }
 
-button {
+button, .button {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
