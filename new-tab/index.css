@@ -3,6 +3,7 @@
 $edit-padding: 15px;
 
 :root {
+	--row-size: 8;
 	--shortcut-icon-size: 48px;
 	--panel-radius: 8px;
 	--widget-radius: 4px;
@@ -65,7 +66,9 @@ input[type="number"] {
 	width: 120px;
 }
 
-#bookmarks {
+#shortcuts {
+	display: grid;
+	grid-template-columns: repeat(var(--row-size), 1fr);
 	margin-top: 48px;
 }
 

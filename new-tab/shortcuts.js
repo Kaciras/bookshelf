@@ -9,7 +9,7 @@ import { loadConfig, saveConfig, syncLocalStorage } from "./storage";
  * 这个限制也导致了如果网站更换了图标，同时新设备同步来了该站点的快捷方式，则显示的图标会不一样。
  */
 
-const container = document.getElementById("bookmarks");
+const container = document.getElementById("shortcuts");
 const importDialog = document.createElement("top-site-dialog");
 const editDialog = document.createElement("edit-dialog");
 
