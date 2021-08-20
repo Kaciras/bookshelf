@@ -78,23 +78,25 @@ class EditDialogElement extends HTMLElement {
 
 	// 把要传递的属性挑出来，以便调用方解构。
 	handleActionClick(event) {
-		this.dialogEl.hide();
-		if (event.target.id === "accept") {
-			const data = {
+		const { resolve, dialogEl, urlInput } = this;
+
+		if (event.target.id !== "accept") {
+			dialogEl.hide();
+			resolve(null);
+		} else if (urlInput.form.reportValidity()) {
+			dialogEl.hide();
+			resolve({
 				label: this.label,
 				favicon: this.favicon,
 				url: this.url,
 				iconUrl: this.iconUrl,
-			};
-			this.resolve(data);
-		} else {
-			this.resolve(null);
+			});
 		}
 	}
 
 	async fetchFavicon() {
-		if (!this.urlInput.checkValidity()) {
-			return alert("地址的格式错误！");
+		if (!this.urlInput.reportValidity()) {
+			return;
 		}
 		this.fetchBtn.innerHTML = loadingHTML;
 		const url = this.urlInput.value;
