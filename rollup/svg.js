@@ -59,10 +59,7 @@ const inlineConfig = {
 };
 
 const resourceConfig = {
-	plugins: [
-		builtInPlugins,
-		reactivePlugin({ size: false }),
-	],
+	plugins: [builtInPlugins],
 };
 
 export default function (source, info) {
