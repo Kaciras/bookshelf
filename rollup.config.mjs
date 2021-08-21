@@ -1,6 +1,6 @@
 import alias from "@rollup/plugin-alias";
-import {visualizer} from "rollup-plugin-visualizer";
-import {terser} from "rollup-plugin-terser";
+import { visualizer } from "rollup-plugin-visualizer";
+import { terser } from "rollup-plugin-terser";
 import webpackConfig from "./alias.idea.cjs";
 import htmlEntry from "./rollup/html.js";
 import copy from "./rollup/copy.js";

@@ -1,6 +1,6 @@
-import {basename, join} from "path";
+import { basename, join } from "path";
 import glob from "fast-glob";
-import {chunkImport} from "./html.js";
+import { chunkImport } from "./html.js";
 
 const hostId = "COPY_IMPORTER";
 

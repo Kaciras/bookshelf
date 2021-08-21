@@ -1,8 +1,8 @@
-import {readFile} from "fs/promises";
-import {basename} from "path";
-import {createFilter} from "@rollup/pluginutils";
+import { readFile } from "fs/promises";
+import { basename } from "path";
+import { createFilter } from "@rollup/pluginutils";
 import mime from "mime";
-import {encodeSVG} from "../share/codec.js";
+import { encodeSVG } from "../share/codec.js";
 
 export const AssetType = {
 	Source: 0,		// 作为字符串导入。
@@ -10,9 +10,9 @@ export const AssetType = {
 	Resource: 2,	// 作为外部 URL 导入。
 };
 
-const srcRE = /([?&])source(?:&|$)/;
-const urlRE = /([?&])url(?:&|$)/;
-const resRE = /([?&])resource(?:&|$)/;
+const srcRE = /[?&]source(?:&|$)/;
+const urlRE = /[?&]url(?:&|$)/;
+const resRE = /[?&]resource(?:&|$)/;
 
 function detectFromQuery(id) {
 	if (srcRE.test(id)) return AssetType.Source;

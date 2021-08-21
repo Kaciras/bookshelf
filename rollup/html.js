@@ -1,6 +1,6 @@
-import {basename, dirname, resolve} from "path";
-import {existsSync} from "fs";
-import {minify} from "html-minifier-terser";
+import { basename, dirname, resolve } from "path";
+import { existsSync } from "fs";
+import { minify } from "html-minifier-terser";
 import HtmlParser from "node-html-parser";
 
 /**

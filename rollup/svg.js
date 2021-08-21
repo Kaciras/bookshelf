@@ -1,5 +1,5 @@
-import {optimize} from "svgo";
-import {AssetType} from "./asset.js";
+import { optimize } from "svgo";
+import { AssetType } from "./asset.js";
 
 /**
  * 调整 SVG 的属性，使其能够用容器元素的 CSS 控制：

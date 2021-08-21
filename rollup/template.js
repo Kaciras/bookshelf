@@ -1,6 +1,6 @@
-import {minify} from "html-minifier-terser";
+import { minify } from "html-minifier-terser";
 import MagicString from "magic-string";
-import {minifyOptions} from "./html.js";
+import { minifyOptions } from "./html.js";
 
 // 这 ESTree 匹配个 .innerHtml = `...` 真麻烦啊。
 function getTemplateLiteral(node) {
