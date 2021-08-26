@@ -1,7 +1,7 @@
-import WebsiteIcon from "@assets/Website.svg?url";
-import "../task-button/index.js";
+import WebsiteIcon from "@assets/Website.svg";
 import { delegate, getFaviconUrl, imageUrlToLocal } from "@share";
-import styles from "./index.css";
+import "./TaskButton.js";
+import styles from "./EditDialog.css";
 
 const defaultData = {
 	iconUrl: null,
@@ -17,7 +17,7 @@ template.innerHTML = `
 		<form>
 			<div id="icon-group">
 				<div id="icon-box">
-					<img id="favicon" alt="icon" src>
+					<img id="favicon" alt="icon">
 				</div>
 				<task-button id="fetch">自动获取</task-button>
 			</div>

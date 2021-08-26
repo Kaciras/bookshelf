@@ -1,6 +1,6 @@
 import Icon from "@assets/CheckBox.svg";
 import IconChecked from "@assets/CheckBoxChecked.svg";
-import styles from "./index.css";
+import styles from "./CheckBox.css";
 
 const template = document.createElement("template");
 template.innerHTML = `

@@ -27,7 +27,7 @@ export default {
 		alias({ entries: webpackAliasToRollup() }),
 		asset({
 			loaders: [postcss, svg],
-			source: { include: ["components/*/*.css", "**/*.svg"] },
+			source: { include: ["components/**/*.css", "**/*.svg"] },
 			url: { include: ["**/*.ico"] },
 		}),
 		copy([

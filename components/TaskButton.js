@@ -1,4 +1,4 @@
-import styles from "./index.css";
+import styles from "./TaskButton.css";
 
 const template = document.createElement("template");
 template.innerHTML = `

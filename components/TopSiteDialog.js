@@ -1,6 +1,6 @@
 import AddIcon from "@assets/Add.svg";
 import CheckIcon from "@assets/Check.svg";
-import styles from "./index.css";
+import styles from "./TopSiteDialog.css";
 
 function adviceTitle(url) {
 	const { hostname } = new URL(url);

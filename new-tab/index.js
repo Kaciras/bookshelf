@@ -1,9 +1,9 @@
-import "../components/dialog-base/index.js";
-import "../components/check-box/index.js";
-import "../components/book-mark/index.js";
-import "../components/edit-dialog/index.js";
-import "../components/search-box/index.js";
-import "../components/top-site-dialog/index.js";
+import "../components/DialogBase.js";
+import "../components/CheckBox.js";
+import "../components/BookMark.js";
+import "../components/EditDialog.js";
+import "../components/TopSiteDialog.js";
+import "../components/SearchBox.js";
 import SettingIcon from "@assets/Setting.svg";
 import CheckIcon from "@assets/Check.svg";
 import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";

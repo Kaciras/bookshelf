@@ -1,5 +1,5 @@
 import xIcon from "@assets/Close.svg";
-import styles from "./index.css";
+import styles from "./DialogBase.css";
 
 /*
  * 不能将自定义元素作为遮罩层，然后对话框放在内部，虽然这样能省个元素，

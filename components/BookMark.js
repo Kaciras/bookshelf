@@ -1,7 +1,7 @@
 import { delegate } from "@share";
 import EditIcon from "@assets/Edit.svg";
 import CloseIcon from "@assets/Close.svg";
-import styles from "./index.css";
+import styles from "./BookMark.css";
 
 const template = document.createElement("template");
 template.innerHTML = `

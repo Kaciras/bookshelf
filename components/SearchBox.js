@@ -1,6 +1,6 @@
 import GoogleIcon from "@assets/search.ico";
 import ArrowIcon from "@assets/ArrowRight.svg";
-import styles from "./index.css";
+import styles from "./SearchBox.css";
 
 // 最多显示 8 个建议，太多反而乱而且显示不下。
 const SUGGEST_LIMIT = 8;
