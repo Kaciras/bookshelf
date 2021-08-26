@@ -42,6 +42,7 @@ class DialogBaseElement extends HTMLElement {
 		this.titleEl = root.querySelector("h1");
 
 		root.querySelector("button").onclick = this.hide.bind(this);
+		root.getElementById("dialog").onkeyup = event => event.key === "Escape" && this.hide();
 		root.getElementById("backdrop").onclick = this.handleBackdropClick.bind(this);
 	}
 

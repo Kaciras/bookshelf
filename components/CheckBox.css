@@ -1,3 +1,4 @@
+/* 没有 focus-visible-within 无法高亮 */
 :host {
 	position: relative;
 	cursor: pointer;

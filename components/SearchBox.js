@@ -17,6 +17,7 @@ template.innerHTML = `
 		<input id="input" placeholder="搜索">
 		<button
 			id="button"
+			tabindex="-1"
 			title="搜索"
 			class="plain"
 			type="button"

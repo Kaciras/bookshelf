@@ -24,7 +24,8 @@ button, .button {
 
 	transition: .15s;
 
-	&:hover, &:focus-visible {
+	&:hover,
+	&:focus-visible {
 		background: var(--bg-focus);
 	}
 

@@ -7,6 +7,7 @@ $edit-padding: 15px;
 	--shortcut-icon-size: 48px;
 	--panel-radius: 8px;
 	--widget-radius: 4px;
+	--block-focus-shadow: 0 0 0 3px #2ea8ff;
 }
 
 /* html 里的属性能被 ShadowDOM 继承 */
