@@ -123,20 +123,20 @@ class SearchBoxElement extends HTMLElement {
 
 		const [, list] = await response.json();
 		const count = Math.min(SUGGEST_LIMIT, list.length);
-		this.suggestions.innerHTML = "";
+		const newItems = new Array(count);
 
 		for (let i = 0; i < count; i++) {
 			const text = list[i];
 
-			const el = document.createElement("li");
+			const el = newItems[i] = document.createElement("li");
 			el.textContent = text;
 			el.onclick = () => location.href = searchAPI + text;
-			this.suggestions.append(el);
 		}
 
 		if (count > 0) {
 			this.boxEl.classList.add("suggested");
 		}
+		this.suggestions.replaceChildren(...newItems);
 	}
 
 	handleKeyUp(event) {

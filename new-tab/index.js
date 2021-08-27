@@ -44,13 +44,10 @@ settingLeft.innerHTML = `
 `;
 
 function switchToSettingMode() {
-	settingEl.innerHTML = "";
-	settingEl2.innerHTML = "";
-
 	const left = settingLeft.content.cloneNode(true);
 
 	// template 中从 HTML 解析的自定义元素没有关联到实现，必须先挂载。
-	settingEl2.append(left);
+	settingEl2.replaceChildren(left);
 
 	const input = settingEl2.querySelector("input[name='threshold']");
 	input.value = searchBox.threshold;
@@ -66,7 +63,7 @@ function switchToSettingMode() {
 	right.children[2].onclick = startImportTopSites;
 	right.children[3].onclick = requestClearData;
 
-	settingEl.append(right);
+	settingEl.replaceChildren(right);
 
 	setShortcutEditable(true);
 	document.body.classList.add("editing");
@@ -78,15 +75,14 @@ function exitSettingMode() {
 }
 
 function switchToNormalMode() {
-	settingEl.innerHTML = "";
-	settingEl2.innerHTML = "";
-
 	const button = document.createElement("button");
 	button.innerHTML = SettingIcon;
 	button.title = "进入设置模式";
 	button.className = "icon";
 	button.onclick = switchToSettingMode;
-	settingEl.append(button);
+
+	settingEl.replaceChildren(button);
+	settingEl2.replaceChildren();
 
 	setShortcutEditable(false);
 	document.body.classList.remove("editing");

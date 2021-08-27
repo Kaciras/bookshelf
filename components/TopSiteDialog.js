@@ -44,17 +44,15 @@ class TopSiteDialogElement extends HTMLElement {
 			newtab: true,
 			includeFavicon: true,
 		});
+		const listItems = new Array(sites.length);
 
-		this.listEl.innerHTML = "";
-
-		for (const site of sites) {
-			let { title, url, favicon } = site;
+		for (let i = 0; i < sites.length; i++) {
+			let { title, url, favicon } = sites[i];
+			const item = listItems[i] = document.createElement("li");
 
 			// 标题可能为空字符串，所以不能用 ??=
 			url = decodeURI(url);
 			title ||= adviceTitle(url);
-
-			const item = document.createElement("li");
 
 			const imgEl = document.createElement("img");
 			imgEl.alt = "favicon";
@@ -89,9 +87,9 @@ class TopSiteDialogElement extends HTMLElement {
 			};
 
 			item.append(imgEl, titleEl, urlEl, button);
-			this.listEl.append(item);
 		}
 
+		this.listEl.replaceChildren(...listItems);
 		this.dialogEl.showModal();
 		return new Promise(resolve => this.resolve = resolve);
 	}
