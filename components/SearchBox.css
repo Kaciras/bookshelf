@@ -18,6 +18,11 @@
 	overflow: hidden;
 
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
+
+	/* 高亮边框跟建议列表有冲突，故仅在没有建议时才显示 */
+	&:focus-within:not(.suggested) {
+		box-shadow: var(--block-focus-shadow);
+	}
 }
 
 img {
@@ -51,6 +56,7 @@ input {
 }
 
 #suggestions {
+	list-style: none;
 	display: none;
 
 	position: absolute;
@@ -63,14 +69,14 @@ input {
 	padding: 0;
 	background: white;
 
-	border-top: solid 1px #ddd;
-	box-shadow: 0 8px 8px rgba(9, 32, 77, 0.12), 0 2px 2px rgba(29, 17, 51, 0.12);
 	border-bottom-left-radius: var(--panel-radius);
 	border-bottom-right-radius: var(--panel-radius);
+
+	border-top: solid 1px #ddd;
+	box-shadow: 0 8px 8px rgba(9, 32, 77, 0.12), 0 2px 2px rgba(29, 17, 51, 0.12);
 }
 
 li {
-	list-style: none;
 	padding: 8px;
 	cursor: pointer;
 

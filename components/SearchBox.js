@@ -35,6 +35,10 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
+	/*
+	 * Firefox 不支持 delegatesFocus，很难处理焦点是否在输入框内的问题。
+	 * https://caniuse.com/?search=delegatesFocus
+	 */
 	constructor() {
 		super();
 		const root = this.attachShadow({ mode: "closed" });
