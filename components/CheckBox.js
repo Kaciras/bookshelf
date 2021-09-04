@@ -1,6 +1,7 @@
 import Icon from "@assets/CheckBox.svg";
 import IconChecked from "@assets/CheckBoxChecked.svg";
 import styles from "./CheckBox.css";
+import { delegate } from "@share";
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -18,7 +19,7 @@ template.innerHTML = `
 class CheckBoxElement extends HTMLElement {
 
 	static get observedAttributes() {
-		return ["checked", "disabled"];
+		return ["checked", "disabled", "name"];
 	}
 
 	constructor() {
@@ -28,6 +29,8 @@ class CheckBoxElement extends HTMLElement {
 
 		this.input = root.getElementById("input");
 		this.markEl = root.getElementById("icon");
+
+		delegate(this, "name", this.input, "name");
 
 		this.addEventListener("click", this.handleClick);
 		this.addEventListener("keyup", this.handleKeyup);
@@ -66,9 +69,11 @@ class CheckBoxElement extends HTMLElement {
 		if (this.input.disabled) {
 			return;
 		}
-		const checked = this.checked = !this.checked;
-		this.dispatchEvent(new CustomEvent("change", { detail: { checked } }));
+		this.checked = !this.checked;
+		this.dispatchEvent(new CustomEvent("input"));
 	}
 }
+
+CheckBoxElement.prototype.type = "checkbox";
 
 customElements.define("check-box", CheckBoxElement);

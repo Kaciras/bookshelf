@@ -11,6 +11,35 @@ export function delegate(object, name, target, prop) {
 }
 
 /**
+ * 将输入组件的值与另一个对象的属性绑定。
+ * 属性名等于输入组件的 name 属性。
+ *
+ * @param input 输入组件，必须有 name 和 type 属性。
+ * @param receiver 要绑定的对象
+ */
+export function bindInput(input, receiver) {
+	const { type, name } = input;
+	let prop;
+
+	switch (type) {
+		case "number":
+			prop = "valueAsNumber";
+			break;
+		case "checkbox":
+			prop = "checked";
+			break;
+		default:
+			prop = "value";
+			break;
+	}
+
+	input[prop] = receiver[name];
+	input.addEventListener("input", event => {
+		receiver[name] = event.target[prop];
+	});
+}
+
+/**
  * 虽然 Node 自带 dirname，但在浏览器里用的话还得自己写一个。
  */
 export function dirname(path) {

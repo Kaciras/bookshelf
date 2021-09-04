@@ -6,6 +6,7 @@ import "../components/TopSiteDialog.js";
 import "../components/SearchBox.js";
 import SettingIcon from "@assets/Setting.svg";
 import CheckIcon from "@assets/Check.svg";
+import { bindInput } from "@share";
 import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";
 import { clearAllData, loadConfig, saveConfig } from "./storage";
 
@@ -44,7 +45,7 @@ settingLeft.innerHTML = `
 		搜索建议防抖（毫秒）
 		<input name="threshold" type="number">
 	</label>
-	<check-box id="ime">输入法防抖</check-box>
+	<check-box name="waitIME">输入法防抖</check-box>
 `;
 
 function switchToSettingMode() {
@@ -53,17 +54,9 @@ function switchToSettingMode() {
 	// template 中从 HTML 解析的自定义元素没有关联到实现，必须先挂载。
 	settingEl2.replaceChildren(left);
 
-	const input = settingEl2.querySelector("input[name='limit']");
-	input.value = searchBox.limit;
-	input.oninput = event => searchBox.limit = event.target.valueAsNumber;
-
-	const input2 = settingEl2.querySelector("input[name='threshold']");
-	input2.value = searchBox.threshold;
-	input2.oninput = event => searchBox.threshold = event.target.valueAsNumber;
-
-	const ime = settingEl2.querySelector("#ime");
-	ime.checked = searchBox.waitIME;
-	ime.addEventListener("change", event => searchBox.waitIME = event.detail.checked);
+	bindInput(settingEl2.querySelector("input[name='threshold']"), searchBox);
+	bindInput(settingEl2.querySelector("input[name='limit']"), searchBox);
+	bindInput(settingEl2.querySelector("check-box[name='waitIME']"), searchBox);
 
 	const right = settingRight.content.cloneNode(true);
 	right.children[0].onclick = exitSettingMode;
