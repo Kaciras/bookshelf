@@ -1,7 +1,7 @@
 import Icon from "@assets/CheckBox.svg";
 import IconChecked from "@assets/CheckBoxChecked.svg";
-import styles from "./CheckBox.css";
 import { delegate } from "@share";
+import styles from "./CheckBox.css";
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -32,8 +32,8 @@ class CheckBoxElement extends HTMLElement {
 
 		delegate(this, "name", this.input, "name");
 
-		this.addEventListener("click", this.handleClick);
 		this.addEventListener("keyup", this.handleKeyup);
+		this.addEventListener("click", this.toggleChecked);
 	}
 
 	set checked(value) {
@@ -54,10 +54,6 @@ class CheckBoxElement extends HTMLElement {
 		}
 	}
 
-	handleClick() {
-		this.toggleChecked();
-	}
-
 	handleKeyup(event) {
 		if (event.key === " ") {
 			event.preventDefault();
@@ -74,6 +70,7 @@ class CheckBoxElement extends HTMLElement {
 	}
 }
 
+// 尽量跟原生的 input 属性保持一致，在一些场合可以减少无聊的判断。
 CheckBoxElement.prototype.type = "checkbox";
 
 customElements.define("check-box", CheckBoxElement);
