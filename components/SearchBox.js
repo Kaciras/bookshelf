@@ -2,9 +2,6 @@ import GoogleIcon from "@assets/search.ico";
 import ArrowIcon from "@assets/ArrowRight.svg";
 import styles from "./SearchBox.css";
 
-// 最多显示 8 个建议，太多反而乱而且显示不下。
-const SUGGEST_LIMIT = 8;
-
 const suggestAPI = "https://www.google.com/complete/search?client=firefox&q=";
 const searchAPI = "https://www.google.com/search?client=firefox-b-d&q=";
 
@@ -49,9 +46,11 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl = root.getElementById("box");
 		this.suggestions = root.getElementById("suggestions");
 
-		this.quering = new AbortController();
+		this.limit = 8;
 		this.threshold = 500;
 		this.waitIME = true;
+
+		this.quering = new AbortController();
 		this.updateSuggestions = this.updateSuggestions.bind(this);
 
 		/*
@@ -124,11 +123,10 @@ class SearchBoxElement extends HTMLElement {
 		if (!response.ok) {
 			return console.error("搜索建议失败：" + response.status);
 		}
-
 		const [, list] = await response.json();
-		const count = Math.min(SUGGEST_LIMIT, list.length);
-		const newItems = new Array(count);
 
+		const count = Math.min(this.limit, list.length);
+		const newItems = new Array(count);
 		for (let i = 0; i < count; i++) {
 			const text = list[i];
 

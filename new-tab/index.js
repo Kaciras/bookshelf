@@ -37,10 +37,14 @@ settingRight.innerHTML = `
 const settingLeft = document.createElement("template");
 settingLeft.innerHTML = `
 	<label>
+		最大建议数量
+		<input name="limit" type="number">
+	</label>
+	<label>
 		搜索建议防抖（毫秒）
 		<input name="threshold" type="number">
 	</label>
-	<check-box id="ime">启用输入法防抖</check-box>
+	<check-box id="ime">输入法防抖</check-box>
 `;
 
 function switchToSettingMode() {
@@ -49,9 +53,13 @@ function switchToSettingMode() {
 	// template 中从 HTML 解析的自定义元素没有关联到实现，必须先挂载。
 	settingEl2.replaceChildren(left);
 
-	const input = settingEl2.querySelector("input[name='threshold']");
-	input.value = searchBox.threshold;
-	input.oninput = event => searchBox.threshold = event.target.valueAsNumber;
+	const input = settingEl2.querySelector("input[name='limit']");
+	input.value = searchBox.limit;
+	input.oninput = event => searchBox.limit = event.target.valueAsNumber;
+
+	const input2 = settingEl2.querySelector("input[name='threshold']");
+	input2.value = searchBox.threshold;
+	input2.oninput = event => searchBox.threshold = event.target.valueAsNumber;
 
 	const ime = settingEl2.querySelector("#ime");
 	ime.checked = searchBox.waitIME;
@@ -71,7 +79,7 @@ function switchToSettingMode() {
 
 function exitSettingMode() {
 	switchToNormalMode();
-	return saveConfig(searchBox, ["threshold", "waitIME"]);
+	return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);
 }
 
 function switchToNormalMode() {
