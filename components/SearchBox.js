@@ -65,13 +65,13 @@ class SearchBoxElement extends HTMLElement {
 			if (event.target !== this) this.setSuggestVisible(false);
 		});
 
+		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
-		this.inputEl.onkeyup = this.handleKeyUp.bind(this);
 		this.inputEl.onfocus = () => this.setSuggestVisible(true);
 
-		// 这俩没有 onXXX 格式
-		this.inputEl.addEventListener("compositionstart", () => this.isIMEInput = true);
-		this.inputEl.addEventListener("compositionend", () => this.isIMEInput = false);
+		// 这俩没有 onXXX 格式，另外 Safari 不支持 isComposing 属性只能用事件。
+		this.inputEl.addEventListener("compositionstart", () => this.isComposing = true);
+		this.inputEl.addEventListener("compositionend", () => this.isComposing = false);
 
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
@@ -96,8 +96,8 @@ class SearchBoxElement extends HTMLElement {
 	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
 	 */
 	async handleInput() {
-		const { waitIME, isIMEInput, threshold } = this;
-		if (waitIME && isIMEInput) {
+		const { waitIME, isComposing, threshold } = this;
+		if (waitIME && isComposing) {
 			return;
 		}
 		if (this.inputEl.value) {
@@ -141,8 +141,13 @@ class SearchBoxElement extends HTMLElement {
 		this.suggestions.replaceChildren(...newItems);
 	}
 
-	handleKeyUp(event) {
+	// 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
+	// Google 的搜索页面也是在 KeyDown 阶段就触发。
+	handleInputKeyDown(event) {
 		if (event.key !== "Enter") {
+			return;
+		}
+		if (this.waitIME && this.isComposing) {
 			return;
 		}
 		event.stopPropagation();
