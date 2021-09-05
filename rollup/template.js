@@ -30,7 +30,7 @@ function getTemplateLiteral(node) {
 export default function templatePlugin() {
 	return {
 		name: "template-html",
-		transform(code, id) {
+		async transform(code, id) {
 			if (!id.endsWith(".js")) {
 				return;
 			}
@@ -44,7 +44,7 @@ export default function templatePlugin() {
 				const end = literal.end - 1;
 
 				let html = code.slice(start, end);
-				html = minify(html, minifyOptions);
+				html = await minify(html, minifyOptions);
 				s.overwrite(start, end, html);
 			}
 

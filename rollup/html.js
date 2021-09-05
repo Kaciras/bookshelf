@@ -98,7 +98,7 @@ export default function htmlPlugin() {
 				}
 
 				let source = document.toString();
-				source = minify(source, minifyOptions);
+				source = await minify(source, minifyOptions);
 				this.emitFile({ type: "asset", fileName: basename(id), source });
 			}
 		},
