@@ -27,30 +27,30 @@ class CheckBoxElement extends HTMLElement {
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
-		this.input = root.getElementById("input");
+		this.inputEl = root.getElementById("input");
 		this.markEl = root.getElementById("icon");
 
-		delegate(this, "name", this.input, "name");
+		delegate(this, "name", this.inputEl, "name");
 
 		this.addEventListener("keyup", this.handleKeyup);
 		this.addEventListener("click", this.toggleChecked);
 	}
 
 	set checked(value) {
-		this.input.checked = Boolean(value);
+		this.inputEl.checked = Boolean(value);
 		this.markEl.innerHTML = value ? IconChecked : Icon;
 	}
 
 	get checked() {
-		return this.input.checked;
+		return this.inputEl.checked;
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
-		const { input } = this;
+		const { inputEl } = this;
 		if (newValue === null) {
-			input.removeAttribute(name);
+			inputEl.removeAttribute(name);
 		} else {
-			input.setAttribute(name, newValue);
+			inputEl.setAttribute(name, newValue);
 		}
 	}
 
@@ -62,7 +62,7 @@ class CheckBoxElement extends HTMLElement {
 	}
 
 	toggleChecked() {
-		if (this.input.disabled) {
+		if (this.inputEl.disabled) {
 			return;
 		}
 		this.checked = !this.checked;

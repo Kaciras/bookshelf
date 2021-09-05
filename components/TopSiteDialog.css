@@ -32,7 +32,10 @@ img {
 	height: 48px;
 }
 
+/** 窗口足够宽，更长的就不显示了 */
 span {
+	white-space: nowrap;
+	overflow: hidden;
 	text-overflow: ellipsis;
 }
 

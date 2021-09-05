@@ -52,13 +52,13 @@ class EditDialogElement extends HTMLElement {
 		this.iconEl = root.getElementById("favicon");
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
-		this.fetchBtn = root.getElementById("fetch");
+		this.fetchButton = root.getElementById("fetch");
 
 		delegate(this, "label", this.nameInput, "value");
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		this.fetchBtn.taskFn = this.fetchFavicon.bind(this);
+		this.fetchButton.taskFn = this.fetchFavicon.bind(this);
 
 		this.handleActionClick = this.handleActionClick.bind(this);
 		root.getElementById("cancel").onclick = this.handleActionClick;
@@ -98,7 +98,7 @@ class EditDialogElement extends HTMLElement {
 		if (!this.urlInput.reportValidity()) {
 			return;
 		}
-		this.fetchBtn.innerHTML = loadingHTML;
+		this.fetchButton.innerHTML = loadingHTML;
 		const url = this.urlInput.value;
 
 		try {
@@ -108,7 +108,7 @@ class EditDialogElement extends HTMLElement {
 		} catch (e) {
 			alert(e.message);
 		} finally {
-			this.fetchBtn.textContent = "自动获取";
+			this.fetchButton.textContent = "自动获取";
 		}
 	}
 }

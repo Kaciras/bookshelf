@@ -17,6 +17,16 @@ template.innerHTML = `
 	</dialog-base>
 `;
 
+const itemTemplate = document.createElement("template");
+itemTemplate.innerHTML = `
+	<li>
+		<img alt="favicon">
+		<span></span>
+		<span class="url"></span>
+		<button title="添加该网站" class="icon">${AddIcon}</button>
+	</li>
+`;
+
 /**
  * browser.topSites 仅支持读取，而新标签页却需要自定义快捷方式，
  * 所以只能从 topSites 导入然后保存到本插件的存储。
@@ -48,32 +58,20 @@ class TopSiteDialogElement extends HTMLElement {
 
 		for (let i = 0; i < sites.length; i++) {
 			let { title, url, favicon } = sites[i];
-			const item = listItems[i] = document.createElement("li");
 
 			// 标题可能为空字符串，所以不能用 ??=
 			url = decodeURI(url);
 			title ||= adviceTitle(url);
 
-			const imgEl = document.createElement("img");
-			imgEl.alt = "favicon";
-			imgEl.src = favicon;
+			const fragment = itemTemplate.content.cloneNode(true);
+			const item = listItems[i] = fragment.firstChild;
 
-			const titleEl = document.createElement("span");
-			titleEl.textContent = title;
-
-			const urlEl = document.createElement("span");
-			urlEl.className = "url";
-			urlEl.textContent = url;
-
-			const button = document.createElement("button");
-			button.className = "icon";
-			button.type = "button";
-			button.title = "添加该网站";
-			button.innerHTML = AddIcon;
-
-			button.onclick = () => {
+			item.children[0].src = favicon;
+			item.children[1].textContent = title;
+			item.children[2].textContent = url;
+			item.children[3].onclick = () => {
 				item.classList.add("added");
-				button.innerHTML = CheckIcon;
+				item.children[3].innerHTML = CheckIcon;
 
 				const init = {
 					bubbles: true,
@@ -85,8 +83,6 @@ class TopSiteDialogElement extends HTMLElement {
 				};
 				this.dispatchEvent(new CustomEvent("add", init));
 			};
-
-			item.append(imgEl, titleEl, urlEl, button);
 		}
 
 		this.listEl.replaceChildren(...listItems);

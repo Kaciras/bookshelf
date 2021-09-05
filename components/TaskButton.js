@@ -24,7 +24,7 @@ class TaskButtonElement extends HTMLElement {
 		this.loadingEl.remove();
 
 		// ShadowDOM 是包裹内部元素的大小，小于整个按钮，所以要监听外层。
-		this.addEventListener("click", this.handleClick.bind(this));
+		this.addEventListener("click", this.handleClick);
 	}
 
 	connectedCallback() {

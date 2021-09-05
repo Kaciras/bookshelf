@@ -44,7 +44,7 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl = root.getElementById("input");
 		this.iconEl = root.getElementById("favicon");
 		this.boxEl = root.getElementById("box");
-		this.suggestions = root.getElementById("suggestions");
+		this.suggestionEl = root.getElementById("suggestions");
 
 		this.limit = 8;
 		this.threshold = 500;
@@ -138,7 +138,7 @@ class SearchBoxElement extends HTMLElement {
 		if (count > 0) {
 			this.boxEl.classList.add("suggested");
 		}
-		this.suggestions.replaceChildren(...newItems);
+		this.suggestionEl.replaceChildren(...newItems);
 	}
 
 	// 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
@@ -177,7 +177,7 @@ class SearchBoxElement extends HTMLElement {
 		}
 
 		event.preventDefault();
-		const { children } = this.suggestions;
+		const { children } = this.suggestionEl;
 		const { index } = this;
 		const { length } = children;
 

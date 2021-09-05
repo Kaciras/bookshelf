@@ -23,20 +23,20 @@ function requestClearData() {
 	window.confirm(message) && clearAllData();
 }
 
-const settingEl2 = document.getElementById("setting-left");
-const settingEl = document.getElementById("setting-right");
+const left = document.getElementById("setting-left");
+const right = document.getElementById("setting-right");
 
-// 因为有内联 SVG 所以不方便写在 HTML 里。
-const settingRight = document.createElement("template");
-settingRight.innerHTML = `
+// 因为有内联 SVG 所以不方便写在 index.html 里。
+const rightTemplate = document.createElement("template");
+rightTemplate.innerHTML = `
 	<button class="primary">${CheckIcon}确定</button>
 	<button>添加网站</button>
 	<button>导入常用网站</button>
 	<button class="warning">清空存储</button>
 `;
 
-const settingLeft = document.createElement("template");
-settingLeft.innerHTML = `
+const leftTemplate = document.createElement("template");
+leftTemplate.innerHTML = `
 	<label>
 		最大建议数量
 		<input name="limit" type="number">
@@ -49,25 +49,21 @@ settingLeft.innerHTML = `
 `;
 
 function switchToSettingMode() {
-	const left = settingLeft.content.cloneNode(true);
-
 	// template 中从 HTML 解析的自定义元素没有关联到实现，必须先挂载。
-	settingEl2.replaceChildren(left);
+	left.replaceChildren(leftTemplate.content.cloneNode(true));
+	right.replaceChildren(rightTemplate.content.cloneNode(true));
 
-	bindInput(settingEl2.querySelector("input[name='threshold']"), searchBox);
-	bindInput(settingEl2.querySelector("input[name='limit']"), searchBox);
-	bindInput(settingEl2.querySelector("check-box[name='waitIME']"), searchBox);
+	setShortcutEditable(true);
+	document.body.classList.add("editing");
 
-	const right = settingRight.content.cloneNode(true);
+	bindInput(left.querySelector("input[name='threshold']"), searchBox);
+	bindInput(left.querySelector("input[name='limit']"), searchBox);
+	bindInput(left.querySelector("check-box[name='waitIME']"), searchBox);
+
 	right.children[0].onclick = exitSettingMode;
 	right.children[1].onclick = startAddShortcut;
 	right.children[2].onclick = startImportTopSites;
 	right.children[3].onclick = requestClearData;
-
-	settingEl.replaceChildren(right);
-
-	setShortcutEditable(true);
-	document.body.classList.add("editing");
 }
 
 function exitSettingMode() {
@@ -82,8 +78,8 @@ function switchToNormalMode() {
 	button.className = "icon";
 	button.onclick = switchToSettingMode;
 
-	settingEl.replaceChildren(button);
-	settingEl2.replaceChildren();
+	left.replaceChildren();
+	right.replaceChildren(button);
 
 	setShortcutEditable(false);
 	document.body.classList.remove("editing");
@@ -91,4 +87,4 @@ function switchToNormalMode() {
 
 switchToNormalMode();
 
-loadConfig(["threshold", "waitIME"]).then(v => Object.assign(searchBox, v));
+loadConfig(["threshold", "waitIME", "limit"]).then(v => Object.assign(searchBox, v));
