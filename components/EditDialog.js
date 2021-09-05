@@ -1,4 +1,4 @@
-import WebsiteIcon from "@assets/Website.svg";
+import WebsiteIcon from "@assets/Website.svg?url";
 import { delegate, getFaviconUrl, imageUrlToLocal } from "@share";
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
