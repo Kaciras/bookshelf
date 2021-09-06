@@ -6,7 +6,6 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
-
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
@@ -30,6 +29,10 @@ export function loadConfig(keys) {
 	return syncSettings.get(keys);
 }
 
+/**
+ * 清除所有保存的数据，因为使用了同步存储所以其它设备也会受到影响。
+ * 其它设备的本地存储虽然不受影响，但在下次启动时也会由 syncLocalStorage 清理。
+ */
 export function clearAllData() {
 	localStorage.clear();
 	syncSettings.clear();

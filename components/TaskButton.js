@@ -9,7 +9,11 @@ template.innerHTML = `
 	</div>
 `;
 
-/*
+/**
+ * 拥有繁忙状态的按钮，点击时启动任务并转为繁忙状态，完成后变为原样。
+ * 繁忙状态保持原来的大小，内容变为加载指示器。
+ *
+ * 【实现注意】
  * Custom Element v1 不支持继承其他元素，如果这么做会显示不出 ShadowDOM。
  */
 class TaskButtonElement extends HTMLElement {
@@ -23,7 +27,10 @@ class TaskButtonElement extends HTMLElement {
 		this.loadingEl = root.querySelector(".dot-flashing");
 		this.loadingEl.remove();
 
-		// ShadowDOM 是包裹内部元素的大小，小于整个按钮，所以要监听外层。
+		/*
+		 * ShadowRoot 是包裹内部元素的大小，小于整个按钮，所以要监听外层。
+		 * 宿主元素和 ShadowRoot 的关系就像 html 与 body 一样。
+		 */
 		this.addEventListener("click", this.handleClick);
 	}
 

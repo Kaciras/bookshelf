@@ -86,8 +86,7 @@ class SearchBoxElement extends HTMLElement {
 	 */
 
 	setSuggestVisible(value) {
-		const { classList } = this.boxEl;
-		value ? classList.add("focused") : classList.remove("focused");
+		this.boxEl.classList.toggle("focused", value);
 	}
 
 	/*

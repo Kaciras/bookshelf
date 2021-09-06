@@ -2,6 +2,12 @@ import AddIcon from "@assets/Add.svg";
 import CheckIcon from "@assets/Check.svg";
 import styles from "./TopSiteDialog.css";
 
+/**
+ * 如果 TopSite 没有自带标题则尝试使用域名。
+ *
+ * @param url TopSite 的 URL
+ * @return {string} 用作标题的域名
+ */
 function adviceTitle(url) {
 	const { hostname } = new URL(url);
 	const parts = hostname.split(".");
@@ -28,6 +34,9 @@ itemTemplate.innerHTML = `
 `;
 
 /**
+ * 导入对话框，能够读取浏览器原生的新标签页里的快捷方式，并将其添加到本插件中。
+ *
+ * 【获取数据的 API】
  * browser.topSites 仅支持读取，而新标签页却需要自定义快捷方式，
  * 所以只能从 topSites 导入然后保存到本插件的存储。
  */

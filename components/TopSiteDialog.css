@@ -13,13 +13,16 @@ li {
 	list-style: none;
 	display: grid;
 	column-gap: 12px;
-	grid-template-areas: "img title button" "img url button";
 	grid-template-columns: auto 1fr auto;
+
+	grid-template-areas:
+			"img title button"
+			"img  url  button";
 
 	margin: 12px 20px;
 	padding: 12px;
 	border: solid 1px #ddd;
-	border-radius: 8px;
+	border-radius: var(--panel-radius);
 }
 
 .added {

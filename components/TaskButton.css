@@ -1,43 +1,46 @@
 @import "/global.css";
 
+$size: 10px;
+$time: 0.8s;
+
 /*
  * Tree dots loading animation, copied from:
  * https://github.com/nzbin/three-dots
  */
 .dot-flashing {
-	$animation-time: 0.8s;
+
+	/* 颜色属性使用 CSS 变量以便外部能够修改 */
 	--color: #004bff;
 
 	&::before, &::after {
 		content: "";
 		display: inline-block;
-
-		width: 10px;
-		height: 10px;
+		width: $size;
+		height: $size;
 
 		border-radius: 100%;
 		background-color: var(--color);
 	}
 
 	&::before {
-		animation: dotFlashing $animation-time infinite alternate;
+		animation: dotFlashing $time infinite alternate;
 	}
 
 	&::after {
-		animation: dotFlashing $animation-time $animation-time infinite alternate;
+		animation: dotFlashing $time $time infinite alternate;
 	}
 }
 
 .middle {
 	display: inline-block;
 	margin: 0 5px;
-	width: 10px;
-	height: 10px;
+	width: $size;
+	height: $size;
 
 	border-radius: 100%;
 	background-color: var(--color);
 
-	animation: dotFlashing $animation-time calc($animation-time / 2) infinite linear alternate;
+	animation: dotFlashing $time calc($time / 2) infinite linear alternate;
 }
 
 @keyframes dotFlashing {

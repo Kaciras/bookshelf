@@ -66,6 +66,9 @@ function switchToSettingMode() {
 	right.children[3].onclick = requestClearData;
 }
 
+/**
+ * 退出设置模式时除了切换到通常模式，还要把设置保存下来。
+ */
 function exitSettingMode() {
 	switchToNormalMode();
 	return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);

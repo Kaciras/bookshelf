@@ -31,6 +31,8 @@ template.innerHTML = `
 `;
 
 /**
+ * 搜索框下面的快捷方式，样式跟 Firefox 的一样除了右上角的修改按钮。
+ *
  * 因为该元素仅通过 JS 创建，所以就不写 observedAttributes 了。
  */
 class BookMarkElement extends HTMLElement {
@@ -71,7 +73,7 @@ class BookMarkElement extends HTMLElement {
 	}
 
 	set isEditable(value) {
-		value ? this.classList.add("editable") : this.classList.remove("editable");
+		this.classList.toggle("editable", value);
 	}
 }
 

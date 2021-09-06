@@ -10,7 +10,7 @@ $edit-padding: 15px;
 	--block-focus-shadow: 0 0 0 3px #2ea8ff;
 }
 
-/* html 里的属性能被 ShadowDOM 继承 */
+/* html 里的属性能被 ShadowDOM 继承，body 就不行 */
 html {
 	color: #333;
 	background: #f9f9fb;
@@ -73,6 +73,7 @@ input[type="number"] {
 	margin-top: 48px;
 }
 
+/* 左右上角的两片控件区域 */
 aside {
 	display: flex;
 	flex-direction: column;
