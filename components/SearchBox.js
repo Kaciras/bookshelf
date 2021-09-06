@@ -69,10 +69,6 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl.oninput = this.handleInput.bind(this);
 		this.inputEl.onfocus = () => this.setSuggestVisible(true);
 
-		// 这俩没有 onXXX 格式，另外 Safari 不支持 isComposing 属性只能用事件。
-		this.inputEl.addEventListener("compositionstart", () => this.isComposing = true);
-		this.inputEl.addEventListener("compositionend", () => this.isComposing = false);
-
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
 	}
@@ -94,9 +90,9 @@ class SearchBoxElement extends HTMLElement {
 	 * 只有下一次的请求才能中断前面的。
 	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
 	 */
-	async handleInput() {
-		const { waitIME, isComposing, threshold } = this;
-		if (waitIME && isComposing) {
+	async handleInput(event) {
+		const { waitIME, threshold } = this;
+		if (waitIME && event.isComposing) {
 			return;
 		}
 		if (this.inputEl.value) {
@@ -146,7 +142,7 @@ class SearchBoxElement extends HTMLElement {
 		if (event.key !== "Enter") {
 			return;
 		}
-		if (this.waitIME && this.isComposing) {
+		if (this.waitIME && event.isComposing) {
 			return;
 		}
 		event.stopPropagation();
