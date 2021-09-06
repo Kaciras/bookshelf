@@ -11,7 +11,7 @@ template.innerHTML = `
 
 /**
  * 拥有繁忙状态的按钮，点击时启动任务并转为繁忙状态，完成后变为原样。
- * 繁忙状态保持原来的大小，内容变为加载指示器。
+ * 繁忙状态保持原来的大小，内容变为加载指示器，点击繁忙状态的按钮会取消当前任务。
  *
  * 【实现注意】
  * Custom Element v1 不支持继承其他元素，如果这么做会显示不出 ShadowDOM。
@@ -27,6 +27,9 @@ class TaskButtonElement extends HTMLElement {
 		this.loadingEl = root.querySelector(".dot-flashing");
 		this.loadingEl.remove();
 
+		this.running = false;
+		this.controller = new AbortController();
+
 		/*
 		 * ShadowRoot 是包裹内部元素的大小，小于整个按钮，所以要监听外层。
 		 * 宿主元素和 ShadowRoot 的关系就像 html 与 body 一样。
@@ -39,20 +42,36 @@ class TaskButtonElement extends HTMLElement {
 	}
 
 	async handleClick() {
-		const { slotEl, loadingEl, taskFn } = this;
+		const { running, taskFn } = this;
 
-		if (!taskFn) {
-			return;
+		// 没有设置任务回调则与普通按钮一样
+		if (!taskFn) return;
+
+		if (!running) {
+			this.startTask();
+		} else {
+			this.controller.abort();
+			this.switchToNormal();
 		}
-		const { width, height } = this.getBoundingClientRect();
-		this.style.width = width + "px";
-		this.style.height = height + "px";
-		slotEl.replaceWith(loadingEl);
+	}
 
-		taskFn().finally(() => {
-			loadingEl.replaceWith(slotEl);
-			this.removeAttribute("style");
-		});
+	startTask() {
+		const { slotEl, loadingEl, taskFn, style } = this;
+		this.running = true;
+
+		const { width, height } = this.getBoundingClientRect();
+		style.width = width + "px";
+		style.height = height + "px";
+
+		const { signal } = this.controller = new AbortController();
+		slotEl.replaceWith(loadingEl);
+		taskFn(signal).finally(this.switchToNormal.bind(this));
+	}
+
+	switchToNormal() {
+		this.removeAttribute("style");
+		this.running = false;
+		this.loadingEl.replaceWith(this.slotEl);
 	}
 }
 
