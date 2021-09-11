@@ -130,9 +130,7 @@ class SearchBoxElement extends HTMLElement {
 			el.onclick = () => location.href = searchAPI + text;
 		}
 
-		if (count > 0) {
-			this.boxEl.classList.add("suggested");
-		}
+		this.boxEl.classList.toggle("suggested", count > 0);
 		this.suggestionEl.replaceChildren(...newItems);
 	}
 
