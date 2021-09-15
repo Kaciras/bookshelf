@@ -79,8 +79,8 @@ function createFilter2(options) {
 }
 
 /**
- * Rollup 似乎没有提供处理资源的接口，只能自己撸一个了。
- * 本插件提供一个通用的规则，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
+ * Rollup 似乎没有提供处理资源的规范，只能自己撸一个了。
+ * 本插件提供一个通用的接口，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
  */
 export default function createInlinePlugin(options) {
 	const { source = {}, url = {}, resource = {}, limit = 4096, loaders = [] } = options;

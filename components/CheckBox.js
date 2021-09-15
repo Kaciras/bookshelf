@@ -54,6 +54,10 @@ class CheckBoxElement extends HTMLElement {
 		}
 	}
 
+	/**
+	 * 即便内部的 input 能捕获焦点，但被聚焦对象仍会变为整个组件。
+	 * 所以需要自行处理键盘切换值的问题。
+	 */
 	handleKeyup(event) {
 		if (event.key === " ") {
 			event.preventDefault();
@@ -61,6 +65,10 @@ class CheckBoxElement extends HTMLElement {
 		}
 	}
 
+	/**
+	 * 输入组件的 input 事件基本上只用 target 这个属性，
+	 * 所以直接分发以 input 为名的 CustomEvent 也是可以的。
+	 */
 	toggleChecked() {
 		if (this.inputEl.disabled) {
 			return;

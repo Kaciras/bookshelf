@@ -51,7 +51,7 @@ class SearchBoxElement extends HTMLElement {
 		this.waitIME = true;
 
 		this.quering = new AbortController();
-		this.updateSuggestions = this.updateSuggestions.bind(this);
+		this.suggest = this.suggest.bind(this);
 
 		/*
 		 * 实现点击搜索框外时关闭建议列表的功能。
@@ -97,28 +97,15 @@ class SearchBoxElement extends HTMLElement {
 		}
 		if (this.inputEl.value) {
 			clearTimeout(this.timer);
-			this.timer = setTimeout(this.updateSuggestions, threshold);
+			this.timer = setTimeout(this.suggest, threshold);
 		} else {
 			this.index = null;
 			this.boxEl.classList.remove("suggested");
 		}
 	}
 
-	async updateSuggestions() {
-		const searchTerms = this.inputEl.value;
-
-		this.quering.abort();
-		this.quering = new AbortController();
-
-		// 禁止发送 Cookies 避免跟踪
-		const response = await fetch(suggestAPI + searchTerms, {
-			credentials: "omit",
-			signal: this.quering.signal,
-		});
-		if (!response.ok) {
-			return console.error("搜索建议失败：" + response.status);
-		}
-		const [, list] = await response.json();
+	async suggest() {
+		const list = await this.fetchSuggestions(this.inputEl.value);
 
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
@@ -130,8 +117,23 @@ class SearchBoxElement extends HTMLElement {
 			el.onclick = () => location.href = searchAPI + text;
 		}
 
-		this.boxEl.classList.toggle("suggested", count > 0);
 		this.suggestionEl.replaceChildren(...newItems);
+		this.boxEl.classList.toggle("suggested", count > 0);
+	}
+
+	async fetchSuggestions(searchTerms) {
+		this.quering.abort();
+		this.quering = new AbortController();
+
+		// 禁止发送 Cookies 避免跟踪
+		const response = await fetch(suggestAPI + searchTerms, {
+			credentials: "omit",
+			signal: this.quering.signal,
+		});
+		if (!response.ok) {
+			return console.error("搜索建议失败：" + response.status);
+		}
+		return (await response.json())[1];
 	}
 
 	// 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。

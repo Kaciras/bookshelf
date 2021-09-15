@@ -6,33 +6,33 @@ import { AssetType } from "./asset.js";
  * 1）宽高设为 1em 以便外层用 font-size 控制。
  * 2）将 fill 和 stroke 改为 currentColor 以便用 color 控制。
  */
-function reactivePlugin(options) {
+function reactive(ast, params) {
+	const { type, name, attributes } = ast;
 
-	function process(ast, params) {
-		const { type, name, attributes } = ast;
+	if (type === "element" && name === "svg") {
 		const { color, size, overrides } = params;
 		const { fill, stroke } = attributes;
 
-		if (type === "element" && name === "svg") {
-			if (color) {
-				if (stroke && stroke !== "none") {
-					attributes.stroke = "currentColor";
-				}
-				if (fill && fill !== "none") {
-					attributes.fill = "currentColor";
-				}
+		if (color) {
+			if (stroke && stroke !== "none") {
+				attributes.stroke = "currentColor";
 			}
-			if (size) {
-				attributes.width = attributes.height = "1em";
+			if (fill && fill !== "none") {
+				attributes.fill = "currentColor";
 			}
-			Object.assign(attributes, overrides);
 		}
+		if (size) {
+			attributes.width = attributes.height = "1em";
+		}
+		Object.assign(attributes, overrides);
 	}
+}
 
+function reactivePlugin(options) {
 	return {
 		name: "reactiveSVGAttribute",
 		type: "perItem",
-		fn: process,
+		fn: reactive,
 		params: { color: true, size: true, ...options },
 	};
 }
