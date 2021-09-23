@@ -3,6 +3,7 @@
 $edit-padding: 15px;
 
 :root {
+	--search-box-width: 720px;
 	--row-size: 8;
 	--shortcut-icon-size: 48px;
 	--panel-radius: 8px;
@@ -52,7 +53,7 @@ main {
 }
 
 search-box {
-	width: 720px;
+	width: var(--search-box-width);
 	margin: 0 auto;
 }
 

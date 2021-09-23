@@ -48,8 +48,4 @@ button {
 	right: 0;
 	padding: 12px;
 	border-radius: 0;
-
-	& > svg {
-		font-size: 28px;
-	}
 }

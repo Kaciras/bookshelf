@@ -29,7 +29,10 @@ const right = document.getElementById("setting-right");
 // 因为有内联 SVG 所以不方便写在 index.html 里。
 const rightTemplate = document.createElement("template");
 rightTemplate.innerHTML = `
-	<button class="primary">${CheckIcon}确定</button>
+	<button class="primary">
+		${CheckIcon}
+		<span>确定</span>
+	</button>
 	<button>添加网站</button>
 	<button>导入常用网站</button>
 	<button class="warning">清空存储</button>
@@ -66,14 +69,6 @@ function switchToSettingMode() {
 	right.children[3].onclick = requestClearData;
 }
 
-/**
- * 退出设置模式时除了切换到通常模式，还要把设置保存下来。
- */
-function exitSettingMode() {
-	switchToNormalMode();
-	return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);
-}
-
 function switchToNormalMode() {
 	const button = document.createElement("button");
 	button.innerHTML = SettingIcon;
@@ -88,6 +83,13 @@ function switchToNormalMode() {
 	document.body.classList.remove("editing");
 }
 
-switchToNormalMode();
+/**
+ * 退出设置模式时除了切换到通常模式，还要把设置保存下来。
+ */
+function exitSettingMode() {
+	switchToNormalMode();
+	return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);
+}
 
 loadConfig(["threshold", "waitIME", "limit"]).then(v => Object.assign(searchBox, v));
+switchToNormalMode();
