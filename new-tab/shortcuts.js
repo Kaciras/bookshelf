@@ -13,11 +13,11 @@ const container = document.getElementById("shortcuts");
 const importDialog = document.createElement("top-site-dialog");
 const editDialog = document.createElement("edit-dialog");
 
-let model;			// 数据模型
+let shortcuts;		// 数据模型
 let dragEl = null;	// 当前被拖动的元素
 
 function persistDataModel() {
-	return saveConfig({ bookmarks: model });
+	return saveConfig({ shortcuts });
 }
 
 function iconKey(shortcut) {
@@ -34,7 +34,7 @@ async function handleEdit(event) {
 		Object.assign(el, data);
 
 		localStorage.setItem(iconKey(el), favicon);
-		model[i] = newValue;
+		shortcuts[i] = newValue;
 		cleanIconCache();
 		await persistDataModel();
 	}
@@ -43,7 +43,7 @@ async function handleEdit(event) {
 async function handleRemove(event) {
 	const i = indexInParent(event.target);
 	event.target.remove();
-	model.splice(i, 1);
+	shortcuts.splice(i, 1);
 	cleanIconCache();
 	await persistDataModel();
 }
@@ -67,7 +67,7 @@ const DragSortHandlers = {
 		const i = indexInParent(dragEl);
 		const j = indexInParent(target);
 
-		jump(model, i, j);
+		jump(shortcuts, i, j);
 
 		if (i < j) {
 			target.after(dragEl);
@@ -99,7 +99,7 @@ function add(request) {
 	localStorage.setItem(iconKey(request), favicon);
 	appendElement(request);
 
-	model.push({ label, iconUrl, url });
+	shortcuts.push({ label, iconUrl, url });
 	return persistDataModel();
 }
 
@@ -134,15 +134,16 @@ async function queueDownload(el, key) {
 	localStorage.setItem(key, favicon);
 }
 
-function initialize({ bookmarks = [] }) {
-	model = bookmarks;
-	const hosts = new Set();
+function initialize(saved) {
+	shortcuts = saved.bookmarks;
 
 	if (import.meta.dev) {
-		console.debug("Shortcuts model:", bookmarks);
+		console.debug("Shortcuts model:", shortcuts);
 	}
 
-	for (const shortcut of bookmarks) {
+	const hosts = new Set();
+
+	for (const shortcut of shortcuts) {
 		const key = iconKey(shortcut);
 		const el = appendElement(shortcut);
 
@@ -152,7 +153,7 @@ function initialize({ bookmarks = [] }) {
 		if (favicon !== null) {
 			el.favicon = favicon;
 		} else {
-			queueDownload(el, key).then(/* 忽略警告 */);
+			queueDownload(el, key);
 		}
 	}
 
@@ -166,7 +167,7 @@ function initialize({ bookmarks = [] }) {
  * 所以不能仅靠被修改的对象来确定是否清理，只能全部扫描一遍。
  */
 function cleanIconCache() {
-	const inUse = new Set(model.map(iconKey));
+	const inUse = new Set(shortcuts.map(iconKey));
 	const toRemove = [];
 
 	for (let i = 0; i < localStorage.length; i++) {
@@ -180,4 +181,4 @@ function cleanIconCache() {
 }
 
 document.body.append(importDialog, editDialog);
-loadConfig("bookmarks").then(initialize);
+loadConfig("shortcuts").then(initialize);
