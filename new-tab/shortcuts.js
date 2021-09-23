@@ -16,10 +16,21 @@ const editDialog = document.createElement("edit-dialog");
 let shortcuts;		// 数据模型
 let dragEl = null;	// 当前被拖动的元素
 
+/**
+ * 保存数据模型，在每次修改 shortcuts 后都要调用。
+ *
+ * @return {Promise<void>} 等待保存完成
+ */
 function persistDataModel() {
 	return saveConfig({ shortcuts });
 }
 
+/**
+ * 获取快捷方式对应的图标，使用域名作为键。
+ *
+ * @param shortcut 快捷方式
+ * @return {string} 对应的图标 DataURL
+ */
 function iconKey(shortcut) {
 	return "FI." + new URL(shortcut.url).host;
 }
@@ -48,7 +59,11 @@ async function handleRemove(event) {
 	await persistDataModel();
 }
 
-// 把这仨方法打包放在对象里，排版上更紧凑。
+/**
+ * 拖拽排序的几个事件，把它们方法打包放在对象里排版上更紧凑。
+ *
+ * 无法支持从浏览器的书签拖到页面，因为浏览器会直接打开书签页面。
+ */
 const DragSortHandlers = {
 	ondragstart(event) {
 		dragEl = event.currentTarget;

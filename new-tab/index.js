@@ -26,7 +26,7 @@ function requestClearData() {
 const left = document.getElementById("setting-left");
 const right = document.getElementById("setting-right");
 
-// 因为有内联 SVG 所以不方便写在 index.html 里。
+// 因为有内联 SVG 所以没法写在 index.html 里。
 const rightTemplate = document.createElement("template");
 rightTemplate.innerHTML = `
 	<button class="primary">
@@ -42,11 +42,11 @@ const leftTemplate = document.createElement("template");
 leftTemplate.innerHTML = `
 	<label>
 		最大建议数量
-		<input name="limit" type="number">
+		<input name="limit" type="number" min="0">
 	</label>
 	<label>
 		搜索建议防抖（毫秒）
-		<input name="threshold" type="number">
+		<input name="threshold" type="number" min="0">
 	</label>
 	<check-box name="waitIME">输入法防抖</check-box>
 `;
