@@ -62,6 +62,10 @@ const DragSortHandlers = {
 	},
 	ondragenter(event) {
 		const { target } = event;
+
+		if (!dragEl) {
+			return; // 拖拽元素不是快捷方式
+		}
 		dragEl.isDragging = true;
 
 		const i = indexInParent(dragEl);
@@ -135,7 +139,7 @@ async function queueDownload(el, key) {
 }
 
 function initialize(saved) {
-	shortcuts = saved.bookmarks;
+	shortcuts = saved.bookmarks ?? [];
 
 	if (import.meta.dev) {
 		console.debug("Shortcuts model:", shortcuts);
