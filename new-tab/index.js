@@ -19,7 +19,7 @@ document.getElementsByTagName("main")[0].insertBefore(
 );
 
 function requestClearData() {
-	const message = "确定要清空本插件保存的所有数据？\n 该过程不可撤销，并且会同步到所有设备";
+	const message = "确定要清空本插件保存的所有数据？\n该过程不可撤销，并且会同步到所有设备";
 	window.confirm(message) && clearAllData();
 }
 

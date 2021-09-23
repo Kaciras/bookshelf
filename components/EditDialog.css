@@ -15,8 +15,8 @@ form {
 #icon-group {
 	grid-area: icon;
 	display: flex;
-	gap: 10px;
 	flex-direction: column;
+	gap: 12px;
 	align-items: center;
 }
 

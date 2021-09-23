@@ -60,7 +60,7 @@ search-box {
 label {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: 5px;
 	font-size: 0.875rem;
 }
 
@@ -70,7 +70,7 @@ input[type="number"] {
 
 #shortcuts {
 	display: grid;
-	grid-template-columns: repeat(var(--row-size), 1fr);
+	grid-template-columns: repeat(var(--row-size), 120px);
 	margin-top: 48px;
 }
 
