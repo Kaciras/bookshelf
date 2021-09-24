@@ -76,7 +76,10 @@ class DialogBaseElement extends HTMLElement {
 	}
 
 	handleBackdropClick() {
-		this.dispatchEvent(new CustomEvent("backdrop-click"));
+		const event = new CustomEvent("backdrop-click", {
+			cancelable: true,
+		});
+		this.dispatchEvent(event) && this.hide();
 	}
 }
 

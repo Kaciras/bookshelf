@@ -35,21 +35,34 @@ function iconKey(shortcut) {
 	return "FI." + new URL(shortcut.url).host;
 }
 
-async function handleEdit(event) {
+/**
+ * 快捷方式右上角的编辑按钮被点击时调用。
+ *
+ * 【注意】
+ * 这里用索引来记录当前编辑的对象，需要保证编辑时 shortcuts 里的顺序不变。
+ *
+ * @param event BookMark 元素的 edit 事件
+ */
+function handleEdit(event) {
 	const el = event.target;
-	const i = indexInParent(el);
-
-	const data = await editDialog.show(el);
-	if (data) {
-		const { favicon, ...newValue } = data;
-		Object.assign(el, data);
-
-		localStorage.setItem(iconKey(el), favicon);
-		shortcuts[i] = newValue;
-		cleanIconCache();
-		await persistDataModel();
-	}
+	editDialog.index = indexInParent(el);
+	editDialog.show(el);
 }
+
+editDialog.addEventListener("change", event => {
+	const { target, detail } = event;
+	const { index } = target;
+	const { favicon, ...newValue } = detail;
+
+	const el = container.children[index];
+	Object.assign(el, detail);
+
+	shortcuts[index] = newValue;
+	localStorage.setItem(iconKey(el), favicon);
+
+	cleanIconCache();
+	return persistDataModel();
+});
 
 async function handleRemove(event) {
 	const i = indexInParent(event.target);

@@ -47,15 +47,8 @@ class TopSiteDialogElement extends HTMLElement {
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
-		this.dialogEl = root.querySelector("dialog-base");
 		this.listEl = root.getElementById("top-sites");
-
-		// 自定义的事件没法用 onXXX 啊……
-		this.dialogEl.addEventListener("backdrop-click", () => {
-			this.resolve();
-			this.dialogEl.hide();
-		});
-		this.dialogEl.addEventListener("close", () => this.resolve());
+		this.dialogEl = root.querySelector("dialog-base");
 	}
 
 	async show() {
@@ -96,7 +89,6 @@ class TopSiteDialogElement extends HTMLElement {
 
 		this.listEl.replaceChildren(...listItems);
 		this.dialogEl.showModal();
-		return new Promise(resolve => this.resolve = resolve);
 	}
 }
 

@@ -10,6 +10,13 @@ const defaultData = {
 	favicon: WebsiteIcon,
 };
 
+function pick(source, target) {
+	target.url = source.url;
+	target.favicon = source.favicon;
+	target.label = source.label;
+	target.iconUrl = source.iconUrl;
+}
+
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
@@ -67,30 +74,21 @@ class EditDialogElement extends HTMLElement {
 
 	// 不要使用 Object.assign 因为参数可能含有额外的字段。
 	show(data = defaultData) {
-		this.url = data.url;
-		this.favicon = data.favicon;
-		this.label = data.label;
-		this.iconUrl = data.iconUrl;
-
+		pick(data, this);
 		this.dialogEl.showModal();
-		return new Promise(resolve => this.resolve = resolve);
 	}
 
 	// 把要传递的属性挑出来，以便调用方解构。
 	handleActionClick(event) {
-		const { resolve, dialogEl, urlInput } = this;
+		const { dialogEl, urlInput } = this;
 
 		if (event.target.id !== "accept") {
 			dialogEl.hide();
-			resolve(null);
 		} else if (urlInput.form.reportValidity()) {
 			dialogEl.hide();
-			resolve({
-				label: this.label,
-				favicon: this.favicon,
-				url: this.url,
-				iconUrl: this.iconUrl,
-			});
+			const detail = {};
+			pick(this, detail);
+			this.dispatchEvent(new CustomEvent("change", { detail }));
 		}
 	}
 
