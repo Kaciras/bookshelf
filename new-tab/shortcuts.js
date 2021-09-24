@@ -145,16 +145,18 @@ export function setShortcutEditable(value) {
  * @param el 元素
  * @param key 图标在存储中的键
  */
-async function queueDownload(el, key) {
+async function queueDownloadFavicon(el, key) {
 	let { url, iconUrl } = el;
+
 	iconUrl = iconUrl ?? await getFaviconUrl(url);
 	const favicon = await imageUrlToLocal(iconUrl);
+
 	el.favicon = favicon;
 	localStorage.setItem(key, favicon);
 }
 
 function initialize(saved) {
-	shortcuts = saved.bookmarks ?? [];
+	shortcuts = saved.shortcuts ?? [];
 
 	if (import.meta.dev) {
 		console.debug("Shortcuts model:", shortcuts);
@@ -172,7 +174,7 @@ function initialize(saved) {
 		if (favicon !== null) {
 			el.favicon = favicon;
 		} else {
-			queueDownload(el, key);
+			queueDownloadFavicon(el, key);
 		}
 	}
 
