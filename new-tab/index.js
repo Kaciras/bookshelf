@@ -13,7 +13,7 @@ import { clearAllData, loadConfig, saveConfig } from "./storage";
 const searchBox = document.createElement("search-box");
 
 // module js 自带 defer 属性，所以没法在 html 里使用自定义元素
-document.getElementsByTagName("main")[0].insertBefore(
+document.body.insertBefore(
 	searchBox,
 	document.getElementById("shortcuts"),
 );

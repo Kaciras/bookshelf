@@ -1,6 +1,7 @@
 @import "/global.css";
 
 $edit-padding: 15px;
+$shortcut-width: 120px;
 
 :root {
 	--search-box-width: 720px;
@@ -19,6 +20,7 @@ html {
 
 body {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 
@@ -48,13 +50,8 @@ body {
 	}
 }
 
-main {
-	margin: auto;
-}
-
 search-box {
 	width: var(--search-box-width);
-	margin: 0 auto;
 }
 
 label {
@@ -70,7 +67,8 @@ input[type="number"] {
 
 #shortcuts {
 	display: grid;
-	grid-template-columns: repeat(var(--row-size), 120px);
+	grid-template-columns: repeat(auto-fit, $shortcut-width);
+	max-width: calc(var(--row-size) * $shortcut-width);
 	margin-top: 48px;
 }
 
