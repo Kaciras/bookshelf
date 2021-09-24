@@ -26,6 +26,15 @@ export const minifyOptions = {
 	removeAttributeQuotes: true,
 };
 
+// 绝对路径和找不到文件的不处理
+function check(ctx, url) {
+	if (url.charCodeAt(0) === 0x2F) {
+		return false;
+	}
+	const file = resolve(dirname(ctx), url);
+	return existsSync(file);
+}
+
 /**
  * 支持 HTML 文件作为 Rollup 的 input，自动提取并处理其中的资源。
  * 所有的 <script> 会被打包为一个文件。
@@ -45,6 +54,7 @@ export default function htmlPlugin() {
 
 	return {
 		name: "html-entry",
+
 		transform(code, id) {
 			if (!id.endsWith(".html")) {
 				return;
@@ -52,19 +62,10 @@ export default function htmlPlugin() {
 			const document = HtmlParser.parse(code);
 			const imports = [];
 
-			// 绝对路径和找不到文件的不处理
-			function check(url) {
-				if (url.charCodeAt(0) === 0x2F) {
-					return false;
-				}
-				const file = resolve(dirname(id), url);
-				return existsSync(file);
-			}
-
 			const scripts = document.querySelectorAll("script");
 			for (const script of scripts) {
 				const src = script.getAttribute("src");
-				if (check(src)) {
+				if (check(id, src)) {
 					script.remove();
 					imports.push(src);
 				}
@@ -73,7 +74,7 @@ export default function htmlPlugin() {
 			const links = document.querySelectorAll("link");
 			for (const link of links) {
 				const href = link.getAttribute("href");
-				if (check(href)) {
+				if (check(id, href)) {
 					imports.push(href + "?resource");
 				}
 			}

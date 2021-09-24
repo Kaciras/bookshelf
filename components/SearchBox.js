@@ -76,7 +76,6 @@ class SearchBoxElement extends HTMLElement {
 
 	/**
 	 * 涉及自定义元素边界之外的操作一律要放在 connectedCallback() 里。
-	 * 只有 ShadowDOM 相关的才能放在构造函数中。
 	 *
 	 * @see https://stackoverflow.com/a/59970158
 	 */
@@ -194,7 +193,7 @@ class SearchBoxElement extends HTMLElement {
 		const { index } = this;
 		const { length } = children;
 
-		if (Number.isInteger(index)) {
+		if (index !== null) {
 			children[index].classList.remove("active");
 			this.index = (index + diff + length) % length;
 		} else {
