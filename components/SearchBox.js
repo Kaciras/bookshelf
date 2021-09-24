@@ -46,24 +46,13 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
 
+		this.quering = new AbortController();
 		this.limit = 8;
 		this.threshold = 500;
 		this.waitIME = true;
 
-		this.quering = new AbortController();
+		this.handleWindowClick = this.handleWindowClick.bind(this);
 		this.suggest = this.suggest.bind(this);
-
-		/*
-		 * 实现点击搜索框外时关闭建议列表的功能。
-		 *
-		 * 无论是 blur 事件还是 :focus 伪类的触发都先于 click 事件，导致点击建议项时无法跳转，
-		 * 因为此时建议列表已经关闭了。
-		 *
-		 * 所以换了种思路，监听全局 click 并排除本元素内触发的，我看 Edge 也是这么做的。
-		 */
-		window.addEventListener("click", event => {
-			if (event.target !== this) this.setSuggestVisible(false);
-		});
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
@@ -71,6 +60,35 @@ class SearchBoxElement extends HTMLElement {
 
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
+	}
+
+	/**
+	 * 实现点击搜索框外时关闭建议列表的功能。
+	 *
+	 * 无论是 blur 事件还是 :focus 伪类的触发都先于 click 事件，导致点击建议项时无法跳转，
+	 * 因为此时建议列表已经关闭了。
+	 *
+	 * 所以换了种思路，监听全局 click 并排除本元素内触发的，我看 Edge 也是这么做的。
+	 */
+	handleWindowClick(event) {
+		if (event.target !== this) this.setSuggestVisible(false);
+	}
+
+	/**
+	 * 涉及自定义元素边界之外的操作一律要放在 connectedCallback() 里。
+	 * 只有 ShadowDOM 相关的才能放在构造函数中。
+	 *
+	 * @see https://stackoverflow.com/a/59970158
+	 */
+	connectedCallback() {
+		window.addEventListener("click", this.handleWindowClick);
+	}
+
+	/**
+	 * 虽然搜索框不会销毁，但还是符合有增有删的原则。
+	 */
+	disconnectedCallback() {
+		window.removeEventListener("click", this.handleWindowClick);
 	}
 
 	/*
