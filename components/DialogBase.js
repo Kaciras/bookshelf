@@ -41,10 +41,8 @@ class DialogBaseElement extends HTMLElement {
 
 		this.titleEl = root.querySelector("h1");
 
+		root.getElementById("dialog").onkeyup = this.handleKeyUp.bind(this);
 		root.querySelector("button").onclick = this.hide.bind(this);
-		root.getElementById("dialog").onkeyup = event => {
-			event.key === "Escape" && this.hide();
-		};
 		root.getElementById("backdrop").onclick = this.handleBackdropClick.bind(this);
 	}
 
@@ -57,13 +55,14 @@ class DialogBaseElement extends HTMLElement {
 		this.setAttribute("aria-labelledby", value);
 	}
 
-	attributeChangedCallback(name, old, value) {
-		this.name = value;
-	}
-
 	// 在构造方法里设置 DOM 属性会报错。
 	connectedCallback() {
 		this.setAttribute("role", "dialog");
+		this.setAttribute("aria-modal", "true");
+	}
+
+	attributeChangedCallback(name, old, value) {
+		this.name = value;
 	}
 
 	showModal() {
@@ -73,6 +72,10 @@ class DialogBaseElement extends HTMLElement {
 	hide() {
 		this.dispatchEvent(new CustomEvent("close"));
 		this.classList.remove("open");
+	}
+
+	handleKeyUp(event) {
+		event.key === "Escape" && this.hide();
 	}
 
 	handleBackdropClick() {

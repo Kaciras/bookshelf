@@ -35,6 +35,32 @@ function iconKey(shortcut) {
 	return "FI." + new URL(shortcut.url).host;
 }
 
+function appendElement(props) {
+	const el = document.createElement("book-mark");
+	Object.assign(el, DragSortHandlers);
+
+	el.addEventListener("edit", handleEdit);
+	el.addEventListener("remove", handleRemove);
+
+	el.url = props.url;
+	el.favicon = props.favicon;
+	el.label = props.label;
+	el.iconUrl = props.iconUrl;
+
+	container.append(el);
+	return el;
+}
+
+function add(request) {
+	const { label, iconUrl, favicon, url } = request;
+
+	localStorage.setItem(iconKey(request), favicon);
+	appendElement(request);
+
+	shortcuts.push({ label, iconUrl, url });
+	return persistDataModel();
+}
+
 /**
  * 快捷方式右上角的编辑按钮被点击时调用。
  *
@@ -49,6 +75,14 @@ function handleEdit(event) {
 	editDialog.show(el);
 }
 
+function handleRemove(event) {
+	const i = indexInParent(event.target);
+	event.target.remove();
+	shortcuts.splice(i, 1);
+
+	return persistDataModel().then(cleanIconCache);
+}
+
 editDialog.addEventListener("change", event => {
 	const { target, detail } = event;
 	const { index } = target;
@@ -60,17 +94,10 @@ editDialog.addEventListener("change", event => {
 	shortcuts[index] = newValue;
 	localStorage.setItem(iconKey(el), favicon);
 
-	cleanIconCache();
-	return persistDataModel();
+	return persistDataModel().then(cleanIconCache);
 });
 
-async function handleRemove(event) {
-	const i = indexInParent(event.target);
-	event.target.remove();
-	shortcuts.splice(i, 1);
-	cleanIconCache();
-	await persistDataModel();
-}
+importDialog.addEventListener("add", event => add(event.detail));
 
 /**
  * 拖拽排序的几个事件，把它们方法打包放在对象里排版上更紧凑。
@@ -108,34 +135,6 @@ const DragSortHandlers = {
 		}
 	},
 };
-
-function appendElement(props) {
-	const el = document.createElement("book-mark");
-	Object.assign(el, DragSortHandlers);
-
-	el.addEventListener("edit", handleEdit);
-	el.addEventListener("remove", handleRemove);
-
-	el.url = props.url;
-	el.favicon = props.favicon;
-	el.label = props.label;
-	el.iconUrl = props.iconUrl;
-
-	container.append(el);
-	return el;
-}
-
-function add(request) {
-	const { label, iconUrl, favicon, url } = request;
-
-	localStorage.setItem(iconKey(request), favicon);
-	appendElement(request);
-
-	shortcuts.push({ label, iconUrl, url });
-	return persistDataModel();
-}
-
-importDialog.addEventListener("add", event => add(event.detail));
 
 export async function startAddShortcut() {
 	const data = await editDialog.show();
