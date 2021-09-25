@@ -18,6 +18,9 @@ template.innerHTML = `
  */
 class TaskButtonElement extends HTMLElement {
 
+	controller = new AbortController();
+	running = false;
+
 	constructor() {
 		super();
 		const root = this.attachShadow({ mode: "closed" });
@@ -26,9 +29,6 @@ class TaskButtonElement extends HTMLElement {
 		this.slotEl = root.querySelector("slot");
 		this.loadingEl = root.querySelector(".dot-flashing");
 		this.loadingEl.remove();
-
-		this.running = false;
-		this.controller = new AbortController();
 
 		/*
 		 * ShadowRoot 是包裹内部元素的大小，小于整个按钮，所以要监听外层。
