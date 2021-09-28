@@ -1,3 +1,4 @@
+import WebsiteIcon from "@assets/Website.svg?url";
 import AddIcon from "@assets/Add.svg";
 import CheckIcon from "@assets/Check.svg";
 import styles from "./TopSiteDialog.css";
@@ -52,14 +53,18 @@ class TopSiteDialogElement extends HTMLElement {
 	}
 
 	async show() {
-		const sites = await browser.topSites.get({
-			newtab: true,
-			includeFavicon: true,
-		});
+		// Firefox 有更多选项而 Edge 没有且不能有参数
+		const sites = browser.topSites.get.length === 0
+			? await browser.topSites.get({
+				newtab: true,
+				includeFavicon: true,
+			})
+			: await browser.topSites.get();
+
 		const listItems = new Array(sites.length);
 
 		for (let i = 0; i < sites.length; i++) {
-			let { title, url, favicon } = sites[i];
+			let { title, url, favicon = WebsiteIcon } = sites[i];
 
 			// 标题可能为空字符串，所以不能用 ??=
 			url = decodeURI(url);
