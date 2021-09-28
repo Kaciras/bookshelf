@@ -27,7 +27,9 @@ template.innerHTML = `
 `;
 
 /**
- * 这里不使用 Search API 因为它不支持查询建议。
+ * 搜索框，高仿 Firefox 内置样式，不过不会像它一样傻逼把输入重定向到地址栏。
+ *
+ * 这里不使用 Search API 因为不支持获取建议。
  * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/search
  */
 class SearchBoxElement extends HTMLElement {
@@ -65,12 +67,12 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	/**
-	 * 实现点击搜索框外时关闭建议列表的功能。
+	 * 实现点击搜索框外时隐藏建议列表的功能。
 	 *
 	 * 无论是 blur 事件还是 :focus 伪类的触发都先于 click 事件，导致点击建议项时无法跳转，
-	 * 因为此时建议列表已经关闭了。
+	 * 因为此时列表已经隐藏了。
 	 *
-	 * 所以换了种思路，监听全局 click 并排除本元素内触发的，我看 Edge 也是这么做的。
+	 * 所以换了种思路，监听全局 click，我看 Edge 也是这么做的。
 	 */
 	handleWindowClick(event) {
 		if (event.target !== this) this.setSuggestVisible(false);
@@ -94,8 +96,8 @@ class SearchBoxElement extends HTMLElement {
 
 	/*
 	 * 建议列表的显示由两个类控制：
-	 * 1）suggested 表示列表拥有项目，在获取建议后设置，当输入框为空时删除。
-	 * 2）focused 表示聚焦，在失去焦点时删除。
+	 * 1）suggested 表示列表不为空，在获取建议后设置，输入框为空时删除。
+	 * 2）focused	表示聚焦，在失去焦点时删除。
 	 *
 	 * 这两个类分别表示两个独立的条件，仅当同时存在建议列表才会显示。
 	 */
@@ -107,6 +109,7 @@ class SearchBoxElement extends HTMLElement {
 	/*
 	 * 对获取建议的中断分为两个阶段，先是防抖，一旦开始请求则不再受防抖的影响，
 	 * 只有下一次的请求才能中断前面的。
+	 *
 	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
 	 */
 	async handleInput(event) {

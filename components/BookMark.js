@@ -31,9 +31,10 @@ template.innerHTML = `
 `;
 
 /**
- * 搜索框下面的快捷方式，样式跟 Firefox 的一样除了右上角的修改按钮。
+ * 搜索框下方的快捷方式，因为 shortcut 是一个单词不符合规范所以用 book-mark。
+ * 这里的样式做得跟 Firefox 一样，除了右上角的修改按钮。
  *
- * 因为该元素仅通过 JS 创建，所以就不写 observedAttributes 了。
+ * 因为该元素仅通过 JS 创建，就不写 observedAttributes 了。
  */
 class BookMarkElement extends HTMLElement {
 
@@ -55,7 +56,7 @@ class BookMarkElement extends HTMLElement {
 	}
 
 	/**
-	 * 是否处于被拖动中，为 true 时将隐藏图标和标题。
+	 * 是否处于被拖动中，为 true 时将隐藏图标和标题，变为白板。
 	 */
 	get isDragging() {
 		return this.linkEl.className === "blank";

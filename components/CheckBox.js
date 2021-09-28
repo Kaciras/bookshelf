@@ -8,14 +8,15 @@ template.innerHTML = `
 	<style>${styles}</style>
 	<input id="input" type="checkbox">
 	<div id="icon"></div>
-	<span id="label"><slot></slot></span>
+	<label for="input"><slot></slot></label>
 `;
 
-/*
- * 实现自定义的复选框可以参考这个教程：
+/**
+ * 包含标签的复选框，因为浏览器自带的不能改颜色所以就自己实现了。
+ *
+ * 实现参考了 Google 的教程：
  * https://developers.google.com/web/fundamentals/web-components/examples/howto-checkbox
  */
-
 class CheckBoxElement extends HTMLElement {
 
 	static get observedAttributes() {
@@ -78,7 +79,7 @@ class CheckBoxElement extends HTMLElement {
 	}
 }
 
-// 尽量跟原生的 input 属性保持一致，在一些场合可以减少无聊的判断。
+// 跟原生的 input 属性保持一致，在一些场合能减少无聊的判断。
 CheckBoxElement.prototype.type = "checkbox";
 
 customElements.define("check-box", CheckBoxElement);

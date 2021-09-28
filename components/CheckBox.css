@@ -28,8 +28,10 @@ svg {
 	vertical-align: middle;
 }
 
-#label {
-	display: inline-block;
+label {
+	/* 标签自带鼠标设置，得改一下 */
+	cursor: pointer;
+
 	margin-left: 4px;
 	vertical-align: middle;
 }

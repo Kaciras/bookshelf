@@ -74,7 +74,7 @@ async function fetchManifest(url, signal) {
 }
 
 /**
- * 获取 URL 所指定的页面的图标（favicon），自动选择最佳的。
+ * 获取 URL 所指定的页面的图标（favicon），自动选择最佳的一个。
  *
  * 图标链接从页面中提取，或使用通用的约定，本函数没有验证返回的 URL 是否有效。
  *
@@ -91,10 +91,10 @@ export async function getFaviconUrl(url, signal) {
 
 		if (type === "image/svg+xml") {
 			best = link;
-			break; // 如果有 SVG 格式则选中
+			break; // 有 SVG 格式则选中
 		}
 
-		// 有 link 则不使用默认的 /favicon.ico
+		// 没有的话先选一个
 		if (!best) {
 			best = link;
 			continue;
@@ -106,14 +106,14 @@ export async function getFaviconUrl(url, signal) {
 		}
 		const width = parseInt(match[1]);
 
-		// 尺寸至少为 48 的图中选择最小的
+		// 在尺寸至少为 48 的图中选择最小的
 		if (width >= 48 && width < size) {
 			best = link;
 			size = width;
 		}
 	}
 
-	// 若是没有在 link 里指定，则尝试默认的 /favicon.ico
+	// 若是没有在 link 里指定，则返回默认的 /favicon.ico
 	return best?.href || new URL("/favicon.ico", url).toString();
 }
 

@@ -27,6 +27,8 @@ template.innerHTML = `
 
 /**
  * 因为 Firefox 不支持 dialog 元素，所以自己搞了，顺便加个关闭按钮。
+ *
+ * @see https://caniuse.com/dialog
  */
 class DialogBaseElement extends HTMLElement {
 
@@ -62,7 +64,7 @@ class DialogBaseElement extends HTMLElement {
 	}
 
 	attributeChangedCallback(name, old, value) {
-		this.name = value;
+		this[name] = value;
 	}
 
 	showModal() {
