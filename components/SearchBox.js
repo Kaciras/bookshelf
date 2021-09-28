@@ -141,6 +141,8 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async fetchSuggestions(searchTerms) {
+		searchTerms = encodeURIComponent(searchTerms);
+
 		this.quering.abort();
 		this.quering = new AbortController();
 
