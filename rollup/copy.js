@@ -1,6 +1,6 @@
 import { basename, join } from "path";
 import glob from "fast-glob";
-import { chunkImport } from "./html.js";
+import { dummyImportEntry } from "./html.js";
 
 const hostId = "COPY_IMPORTER";
 
@@ -69,7 +69,7 @@ export default function copyPlugin(list) {
 				return null;
 			}
 			return {
-				code: chunkImport(ids),
+				code: dummyImportEntry(ids),
 				moduleSideEffects: "no-treeshake",
 			};
 		},

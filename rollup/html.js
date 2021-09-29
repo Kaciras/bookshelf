@@ -1,4 +1,4 @@
-import { basename, dirname, resolve } from "path";
+import { dirname, relative, resolve } from "path";
 import { existsSync } from "fs";
 import { minify } from "html-minifier-terser";
 import HtmlParser from "node-html-parser";
@@ -10,7 +10,7 @@ import HtmlParser from "node-html-parser";
  * @param ids 要导入的 ID 列表
  * @return {string} JS 代码
  */
-export function chunkImport(ids) {
+export function dummyImportEntry(ids) {
 	let code = "";
 	for (const id of ids) {
 		code += `import "${id}"\n`;
@@ -27,11 +27,11 @@ export const minifyOptions = {
 };
 
 // 绝对路径和找不到文件的不处理
-function check(ctx, url) {
+function check(importer, url) {
 	if (url.charCodeAt(0) === 0x2F) {
 		return false;
 	}
-	const file = resolve(dirname(ctx), url);
+	const file = resolve(dirname(importer), url);
 	return existsSync(file);
 }
 
@@ -80,27 +80,33 @@ export default function htmlPlugin() {
 			}
 
 			documents.set(id, document);
-			return chunkImport(imports);
+			return dummyImportEntry(imports);
 		},
 
 		async generateBundle(_, bundle) {
 			for (const [id, document] of documents) {
-				const head = document.querySelector("head");
 
+				// chunk 可能不存在吗？
 				const chunk = Object.values(bundle).find(
 					(chunk) =>
 						chunk.type === "chunk" &&
 						chunk.isEntry &&
 						chunk.facadeModuleId === id,
 				);
-				if (chunk) {
-					const el = `<script type="module" src="${chunk.fileName}"></script>`;
-					head.insertAdjacentHTML("beforeend", el);
-				}
 
-				let source = document.toString();
-				source = await minify(source, minifyOptions);
-				this.emitFile({ type: "asset", fileName: basename(id), source });
+				const el = `<script type="module" src="${chunk.fileName}"></script>`;
+				const head = document.querySelector("head");
+				head.insertAdjacentHTML("beforeend", el);
+
+				const fileName = chunk.name
+					? chunk.name + ".html"
+					: relative(process.cwd(), id);
+
+				this.emitFile({
+					type: "asset",
+					fileName,
+					source: await minify(document.toString(), minifyOptions),
+				});
 			}
 		},
 	};

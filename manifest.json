@@ -8,8 +8,8 @@
 		"url": "https://github.com/Kaciras/browser-theme"
 	},
 	"icons": {
-		"48": "Star.svg",
-		"96": "Star.svg"
+		"48": "./assets/Star.svg",
+		"96": "./assets/Star.svg"
 	},
 	"applications": {
 		"gecko": {
@@ -23,6 +23,6 @@
 		"<all_urls>"
 	],
 	"chrome_url_overrides" : {
-		"newtab": "index.html"
+		"newtab": "./new-tab/index.html"
 	}
 }

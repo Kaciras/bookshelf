@@ -78,6 +78,12 @@ function createFilter2(options) {
 	return createFilter(include, exclude);
 }
 
+const referenceMap = new Map();
+
+export function getRefId(id) {
+	return referenceMap.get(id);
+}
+
 /**
  * Rollup 似乎没有提供处理资源的规范，只能自己撸一个了。
  * 本插件提供一个通用的接口，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
@@ -111,8 +117,12 @@ export default function createInlinePlugin(options) {
 				return null;
 			}
 			const [file, query] = source.split("?", 2);
-			const { id } = await this.resolve(file, importer, { skipSelf: true });
-			return id + "?" + query;
+			const resolved = await this.resolve(file, importer, { skipSelf: true });
+
+			if (resolved) {
+				return resolved.id + "?" + query;
+			}
+			throw new Error(`Couldn't resolve ${file} from ${importer}`);
 		},
 
 		async load(id) {
@@ -128,7 +138,7 @@ export default function createInlinePlugin(options) {
 			let source = new BufferSource(await readFile(file));
 
 			for (const loaderFn of loaders) {
-				const rv = await loaderFn(source, info);
+				const rv = await loaderFn.call(this, source, info);
 				if (typeof rv === "string") {
 					source = new StringSource(rv);
 				} else if (Buffer.isBuffer(rv)) {
@@ -155,11 +165,12 @@ export default function createInlinePlugin(options) {
 				}
 			}
 			const fileName = params.get("filename") || basename(file);
-			this.emitFile({
+			const refId = this.emitFile({
 				type: "asset",
 				fileName,
 				source: source.data,
 			});
+			referenceMap.set(id, refId);
 			return `export default "${fileName}"`; // 好像没必要用 JSON.stringify
 		},
 	};

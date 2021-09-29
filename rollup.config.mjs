@@ -3,6 +3,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { terser } from "rollup-plugin-terser";
 import webpackConfig from "./alias.idea.cjs";
 import htmlEntry from "./rollup/html.js";
+import manifest from "./rollup/manifest.js";
 import copy from "./rollup/copy.js";
 import postcss from "./rollup/postcss.js";
 import svg from "./rollup/svg.js";
@@ -18,7 +19,7 @@ function webpackAliasToRollup() {
 }
 
 export default {
-	input: "new-tab/index.html",
+	input: "manifest.json",
 	output: {
 		format: "esm",
 		dir: "dist",
@@ -35,14 +36,15 @@ export default {
 		}),
 		copy([
 			{ from: "new-tab/global.css" },
-			{ from: "manifest.json" },
-			{ from: "assets/Star.svg" },
+			// { from: "manifest.json" },
+			// { from: "assets/Star.svg" },
 			{
 				from: "browser-polyfill.min.js",
 				to: "browser-polyfill.js",
 				context: "node_modules/webextension-polyfill/dist",
 			},
 		]),
+		manifest(),
 		htmlEntry(),
 		template(),
 		importMeta({ dev: !isProduction }),
