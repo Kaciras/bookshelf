@@ -34,13 +34,6 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
-	quering = new AbortController();
-	index = null;
-
-	limit = 8;
-	threshold = 500;
-	waitIME = true;
-
 	/*
 	 * Firefox 不支持 delegatesFocus，很难处理焦点是否在输入框内的问题。
 	 * https://caniuse.com/?search=delegatesFocus
@@ -54,6 +47,11 @@ class SearchBoxElement extends HTMLElement {
 		this.iconEl = root.getElementById("favicon");
 		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
+
+		this.quering = new AbortController();
+		this.limit = 8;
+		this.threshold = 500;
+		this.waitIME = true;
 
 		this.handleWindowClick = this.handleWindowClick.bind(this);
 		this.suggest = this.suggest.bind(this);
