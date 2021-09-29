@@ -64,6 +64,10 @@ class SearchBoxElement extends HTMLElement {
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
 	}
 
+	get searchTerms(){
+		return encodeURIComponent(this.inputEl.value);
+	}
+
 	/**
 	 * 实现点击搜索框外时隐藏建议列表的功能。
 	 *
@@ -125,7 +129,7 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async suggest() {
-		const list = await this.fetchSuggestions(this.inputEl.value);
+		const list = await this.fetchSuggestions(this.searchTerms);
 
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
@@ -142,8 +146,6 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async fetchSuggestions(searchTerms) {
-		searchTerms = encodeURIComponent(searchTerms);
-
 		this.quering.abort();
 		this.quering = new AbortController();
 
@@ -168,12 +170,12 @@ class SearchBoxElement extends HTMLElement {
 			return;
 		}
 		event.stopPropagation();
-		location.href = searchAPI + this.inputEl.value;
+		location.href = searchAPI + this.searchTerms;
 	}
 
 	// click 只由左键触发，无需检查 event.button
 	handleSearchClick() {
-		location.href = searchAPI + this.inputEl.value;
+		location.href = searchAPI + this.searchTerms;
 	}
 
 	handleKeyDown(event) {

@@ -54,7 +54,7 @@ class TopSiteDialogElement extends HTMLElement {
 
 	async show() {
 		// Firefox 有更多选项而 Edge 没有且不能有参数
-		const sites = browser.topSites.get.length === 0
+		const sites = browser.topSites.get.length > 0
 			? await browser.topSites.get({
 				newtab: true,
 				includeFavicon: true,

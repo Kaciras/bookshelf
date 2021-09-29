@@ -35,70 +35,6 @@ function iconKey(shortcut) {
 	return "FI." + new URL(shortcut.url).host;
 }
 
-function appendElement(props) {
-	const el = document.createElement("book-mark");
-	Object.assign(el, DragSortHandlers);
-
-	el.addEventListener("edit", handleEdit);
-	el.addEventListener("remove", handleRemove);
-
-	el.url = props.url;
-	el.favicon = props.favicon;
-	el.label = props.label;
-	el.iconUrl = props.iconUrl;
-
-	container.append(el);
-	return el;
-}
-
-function add(request) {
-	const { label, iconUrl, favicon, url } = request;
-
-	localStorage.setItem(iconKey(request), favicon);
-	appendElement(request);
-
-	shortcuts.push({ label, iconUrl, url });
-	return persistDataModel();
-}
-
-/**
- * 快捷方式右上角的编辑按钮被点击时调用。
- *
- * 【注意】
- * 这里用索引来记录当前编辑的对象，需要保证编辑时 shortcuts 里的顺序不变。
- *
- * @param event BookMark 元素的 edit 事件
- */
-function handleEdit(event) {
-	const el = event.target;
-	editDialog.index = indexInParent(el);
-	editDialog.show(el);
-}
-
-function handleRemove(event) {
-	const i = indexInParent(event.target);
-	event.target.remove();
-	shortcuts.splice(i, 1);
-
-	return persistDataModel().then(cleanIconCache);
-}
-
-editDialog.addEventListener("change", event => {
-	const { target, detail } = event;
-	const { index } = target;
-	const { favicon, ...newValue } = detail;
-
-	const el = container.children[index];
-	Object.assign(el, detail);
-
-	shortcuts[index] = newValue;
-	localStorage.setItem(iconKey(el), favicon);
-
-	return persistDataModel().then(cleanIconCache);
-});
-
-importDialog.addEventListener("add", event => add(event.detail));
-
 /**
  * 拖拽排序的几个事件，把它们方法打包放在对象里排版上更紧凑。
  *
@@ -136,11 +72,83 @@ const DragSortHandlers = {
 	},
 };
 
-export async function startAddShortcut() {
-	const data = await editDialog.show();
-	if (data) {
-		return add(editDialog);
+function appendElement(props) {
+	const el = document.createElement("book-mark");
+	Object.assign(el, DragSortHandlers);
+
+	el.addEventListener("edit", handleEdit);
+	el.addEventListener("remove", handleRemove);
+
+	el.url = props.url;
+	el.favicon = props.favicon;
+	el.label = props.label;
+	el.iconUrl = props.iconUrl;
+
+	container.append(el);
+	return el;
+}
+
+function add(request) {
+	const { label, iconUrl, favicon, url } = request;
+
+	localStorage.setItem(iconKey(request), favicon);
+	const el = appendElement(request);
+	el.isEditable = container.editable;
+
+	shortcuts.push({ label, iconUrl, url });
+	return persistDataModel();
+}
+
+function update(index, request) {
+	const { favicon, ...newValue } = request;
+
+	const el = container.children[index];
+	Object.assign(el, request);
+
+	shortcuts[index] = newValue;
+	localStorage.setItem(iconKey(el), favicon);
+
+	return persistDataModel().then(cleanIconCache);
+
+}
+
+/**
+ * 快捷方式右上角的编辑按钮被点击时调用。
+ *
+ * 【注意】
+ * 这里用索引来记录当前编辑的对象，需要保证编辑时 shortcuts 里的顺序不变。
+ *
+ * @param event BookMark 元素的 edit 事件
+ */
+function handleEdit(event) {
+	const el = event.target;
+	editDialog.index = indexInParent(el);
+	editDialog.show(el);
+}
+
+function handleRemove(event) {
+	const i = indexInParent(event.target);
+	event.target.remove();
+	shortcuts.splice(i, 1);
+
+	return persistDataModel().then(cleanIconCache);
+}
+
+editDialog.addEventListener("change", event => {
+	const { target, detail } = event;
+	const { index } = target;
+
+	if (index === undefined) {
+		return add(detail);
+	} else {
+		return update(index, detail);
 	}
+});
+
+importDialog.addEventListener("add", event => add(event.detail));
+
+export function startAddShortcut() {
+	editDialog.show();
 }
 
 export function startImportTopSites() {
@@ -148,6 +156,7 @@ export function startImportTopSites() {
 }
 
 export function setShortcutEditable(value) {
+	container.editable = value;
 	for (const el of container.children) el.isEditable = value;
 }
 
