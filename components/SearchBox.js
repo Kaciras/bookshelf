@@ -1,9 +1,35 @@
+import { RotateAbortController } from "@share";
 import GoogleIcon from "@assets/search.ico";
 import ArrowIcon from "@assets/ArrowRight.svg";
 import styles from "./SearchBox.css";
 
-const suggestAPI = "https://www.google.com/complete/search?client=firefox&q=";
-const searchAPI = "https://www.google.com/search?client=firefox-b-d&q=";
+// 目前仅支持一个 Google 搜索，没找到怎么获取浏览器里的搜索引擎配置。
+const engine = {
+
+	suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
+	searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
+
+	async getSuggestions(searchTerms, signal) {
+		searchTerms = encodeURIComponent(searchTerms);
+		const url = this.suggestAPI + searchTerms;
+
+		// 禁止发送 Cookies 避免跟踪
+		const response = await fetch(url, {
+			signal,
+			credentials: "omit",
+		});
+
+		const { status } = response;
+		if (status !== 200) {
+			throw new Error("搜索建议失败：" + status);
+		}
+		return (await response.json())[1];
+	},
+
+	getResultURL(searchTerms) {
+		return this.searchAPI + encodeURIComponent(searchTerms);
+	},
+};
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -48,10 +74,11 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
 
-		this.quering = new AbortController();
+		this.queringAborter = new RotateAbortController();
 		this.limit = 8;
 		this.threshold = 500;
 		this.waitIME = true;
+		this.index = null;
 
 		this.handleWindowClick = this.handleWindowClick.bind(this);
 		this.suggest = this.suggest.bind(this);
@@ -64,8 +91,12 @@ class SearchBoxElement extends HTMLElement {
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
 	}
 
-	get searchTerms(){
-		return encodeURIComponent(this.inputEl.value);
+	get searchTerms() {
+		return this.inputEl.value;
+	}
+
+	set searchTerms(value) {
+		this.inputEl.value = value;
 	}
 
 	/**
@@ -119,7 +150,7 @@ class SearchBoxElement extends HTMLElement {
 		if (waitIME && event.isComposing) {
 			return;
 		}
-		if (this.inputEl.value) {
+		if (this.searchTerms) {
 			clearTimeout(this.timer);
 			this.timer = setTimeout(this.suggest, threshold);
 		} else {
@@ -129,7 +160,8 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async suggest() {
-		const list = await this.fetchSuggestions(this.searchTerms);
+		const signal = this.queringAborter.rotate();
+		const list = await engine.getSuggestions(this.searchTerms, signal);
 
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
@@ -138,26 +170,11 @@ class SearchBoxElement extends HTMLElement {
 
 			const el = newItems[i] = document.createElement("li");
 			el.textContent = text;
-			el.onclick = () => location.href = searchAPI + text;
+			el.onclick = () => location.href = engine.getResultURL(text);
 		}
 
 		this.suggestionEl.replaceChildren(...newItems);
 		this.boxEl.classList.toggle("suggested", count > 0);
-	}
-
-	async fetchSuggestions(searchTerms) {
-		this.quering.abort();
-		this.quering = new AbortController();
-
-		// 禁止发送 Cookies 避免跟踪
-		const response = await fetch(suggestAPI + searchTerms, {
-			credentials: "omit",
-			signal: this.quering.signal,
-		});
-		if (!response.ok) {
-			return console.error("搜索建议失败：" + response.status);
-		}
-		return (await response.json())[1];
 	}
 
 	// 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
@@ -170,12 +187,12 @@ class SearchBoxElement extends HTMLElement {
 			return;
 		}
 		event.stopPropagation();
-		location.href = searchAPI + this.searchTerms;
+		location.href = engine.getResultURL(this.searchTerms);
 	}
 
 	// click 只由左键触发，无需检查 event.button
 	handleSearchClick() {
-		location.href = searchAPI + this.searchTerms;
+		location.href = engine.getResultURL(this.searchTerms);
 	}
 
 	handleKeyDown(event) {
@@ -208,7 +225,7 @@ class SearchBoxElement extends HTMLElement {
 		}
 
 		children[this.index].classList.add("active");
-		this.inputEl.value = children[this.index].textContent;
+		this.searchTerms = children[this.index].textContent;
 	}
 }
 
