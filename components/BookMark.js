@@ -74,7 +74,7 @@ class BookMarkElement extends HTMLElement {
 	}
 
 	set isEditable(value) {
-		this.classList.toggle("editable", value);
+		this.classList.toggle("editable", Boolean(value));
 	}
 }
 

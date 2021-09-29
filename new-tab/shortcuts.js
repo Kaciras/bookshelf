@@ -55,7 +55,8 @@ function add(request) {
 	const { label, iconUrl, favicon, url } = request;
 
 	localStorage.setItem(iconKey(request), favicon);
-	appendElement(request);
+	const el = appendElement(request);
+	el.isEditable = container.editable;
 
 	shortcuts.push({ label, iconUrl, url });
 	return persistDataModel();
@@ -148,6 +149,7 @@ export function startImportTopSites() {
 }
 
 export function setShortcutEditable(value) {
+	container.editable = value;
 	for (const el of container.children) el.isEditable = value;
 }
 
