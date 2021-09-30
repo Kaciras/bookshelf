@@ -38,7 +38,7 @@ function iconKey(shortcut) {
 /**
  * 拖拽排序的几个事件，把它们方法打包放在对象里排版上更紧凑。
  *
- * 无法支持从浏览器的书签拖到页面，因为浏览器会直接打开书签页面。
+ * 无法支持从浏览器的书签拖动导入，因为浏览器会直接打开书签的页面。
  */
 const DragSortHandlers = {
 	ondragstart(event) {

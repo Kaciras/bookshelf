@@ -9,6 +9,9 @@ const engine = {
 	suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
 	searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
 
+	// 【关于转义】
+	// 大多数地方会把空格改成 +，但实测空格也能显示正确的结果。
+
 	async suggest(searchTerms, signal) {
 		searchTerms = encodeURIComponent(searchTerms);
 		const url = this.suggestAPI + searchTerms;
@@ -121,7 +124,8 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	/**
-	 * 虽然搜索框不会销毁，但还是符合有增有删的原则。
+	 * 跟 connectedCallback 配对，在组件从 DOM 移除后调用，在此处做清理。
+	 * 虽然搜索框不会被移除，但还是加上清理代码，符合有增有删的原则。
 	 */
 	disconnectedCallback() {
 		window.removeEventListener("click", this.handleWindowClick);
@@ -160,6 +164,10 @@ class SearchBoxElement extends HTMLElement {
 		}
 	}
 
+	/**
+	 * 从搜索引擎查询当前搜索词的建议，然后更新建议菜单。
+	 * 该方法只能同时运行一个，每次调用都会取消上一次的。
+	 */
 	async suggest() {
 		const { searchTerms, queringAborter } = this;
 		const signal = queringAborter.rotate();
@@ -174,6 +182,7 @@ class SearchBoxElement extends HTMLElement {
 	setSuggestions(list) {
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
+
 		for (let i = 0; i < count; i++) {
 			const text = list[i];
 
@@ -186,8 +195,12 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl.classList.toggle("suggested", count > 0);
 	}
 
-	// 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
-	// Google 的搜索页面也是在 KeyDown 阶段就触发。
+	/**
+	 * 按回车键跳转到搜索页面，同时处理了输入法的问题。
+	 *
+	 * 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
+	 * Google 的搜索页面也是在 KeyDown 阶段就触发。
+	 */
 	handleInputKeyDown(event) {
 		if (event.key !== "Enter") {
 			return;
