@@ -9,7 +9,7 @@ const engine = {
 	suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
 	searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
 
-	async getSuggestions(searchTerms, signal) {
+	async suggest(searchTerms, signal) {
 		searchTerms = encodeURIComponent(searchTerms);
 		const url = this.suggestAPI + searchTerms;
 
@@ -150,8 +150,9 @@ class SearchBoxElement extends HTMLElement {
 		if (waitIME && event.isComposing) {
 			return;
 		}
+		clearTimeout(this.timer);
+
 		if (this.searchTerms) {
-			clearTimeout(this.timer);
 			this.timer = setTimeout(this.suggest, threshold);
 		} else {
 			this.index = null;
@@ -161,7 +162,7 @@ class SearchBoxElement extends HTMLElement {
 
 	async suggest() {
 		const signal = this.queringAborter.rotate();
-		const list = await engine.getSuggestions(this.searchTerms, signal);
+		const list = await engine.suggest(this.searchTerms, signal);
 
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
