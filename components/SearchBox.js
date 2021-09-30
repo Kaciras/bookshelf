@@ -161,9 +161,17 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	async suggest() {
-		const signal = this.queringAborter.rotate();
-		const list = await engine.suggest(this.searchTerms, signal);
+		const { searchTerms, queringAborter } = this;
+		const signal = queringAborter.rotate();
+		try {
+			const list = await engine.suggest(searchTerms, signal);
+			this.setSuggestions(list);
+		} catch (e) {
+			if (e.name !== "AbortError") console.error(e);
+		}
+	}
 
+	setSuggestions(list) {
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
 		for (let i = 0; i < count; i++) {
