@@ -1,4 +1,25 @@
 /**
+ * 专门针对防抖的 AbortController 封装。
+ */
+export class RotateAbortController {
+
+	constructor() {
+		this.value = new AbortController();
+	}
+
+	/**
+	 * 取消当前的操作，并新开始一个。
+	 *
+	 * @return {AbortSignal} 新的信号
+	 */
+	rotate() {
+		this.value.abort();
+		this.value = new AbortController();
+		return this.value.signal;
+	}
+}
+
+/**
  * 使用 getter & setter 将 object[name] 绑定到 target[prop]。
  */
 export function delegate(object, name, target, prop) {

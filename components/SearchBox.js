@@ -1,9 +1,38 @@
+import { RotateAbortController } from "@share";
 import GoogleIcon from "@assets/search.ico";
 import ArrowIcon from "@assets/ArrowRight.svg";
 import styles from "./SearchBox.css";
 
-const suggestAPI = "https://www.google.com/complete/search?client=firefox&q=";
-const searchAPI = "https://www.google.com/search?client=firefox-b-d&q=";
+// 目前仅支持一个 Google 搜索，没找到怎么获取浏览器里的搜索引擎配置。
+const engine = {
+
+	suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
+	searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
+
+	// 【关于转义】
+	// 大多数地方会把空格改成 +，但实测空格也能显示正确的结果。
+
+	async suggest(searchTerms, signal) {
+		searchTerms = encodeURIComponent(searchTerms);
+		const url = this.suggestAPI + searchTerms;
+
+		// 禁止发送 Cookies 避免跟踪
+		const response = await fetch(url, {
+			signal,
+			credentials: "omit",
+		});
+
+		const { status } = response;
+		if (status !== 200) {
+			throw new Error("搜索建议失败：" + status);
+		}
+		return (await response.json())[1];
+	},
+
+	getResultURL(searchTerms) {
+		return this.searchAPI + encodeURIComponent(searchTerms);
+	},
+};
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -34,13 +63,6 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
-	quering = new AbortController();
-	index = null;
-
-	limit = 8;
-	threshold = 500;
-	waitIME = true;
-
 	/*
 	 * Firefox 不支持 delegatesFocus，很难处理焦点是否在输入框内的问题。
 	 * https://caniuse.com/?search=delegatesFocus
@@ -55,6 +77,12 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
 
+		this.queringAborter = new RotateAbortController();
+		this.limit = 8;
+		this.threshold = 500;
+		this.waitIME = true;
+		this.index = null;
+
 		this.handleWindowClick = this.handleWindowClick.bind(this);
 		this.suggest = this.suggest.bind(this);
 
@@ -64,6 +92,14 @@ class SearchBoxElement extends HTMLElement {
 
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
+	}
+
+	get searchTerms() {
+		return this.inputEl.value;
+	}
+
+	set searchTerms(value) {
+		this.inputEl.value = value;
 	}
 
 	/**
@@ -88,7 +124,8 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	/**
-	 * 虽然搜索框不会销毁，但还是符合有增有删的原则。
+	 * 跟 connectedCallback 配对，在组件从 DOM 移除后调用，在此处做清理。
+	 * 虽然搜索框不会被移除，但还是加上清理代码，符合有增有删的原则。
 	 */
 	disconnectedCallback() {
 		window.removeEventListener("click", this.handleWindowClick);
@@ -117,8 +154,9 @@ class SearchBoxElement extends HTMLElement {
 		if (waitIME && event.isComposing) {
 			return;
 		}
-		if (this.inputEl.value) {
-			clearTimeout(this.timer);
+		clearTimeout(this.timer);
+
+		if (this.searchTerms) {
 			this.timer = setTimeout(this.suggest, threshold);
 		} else {
 			this.index = null;
@@ -126,42 +164,43 @@ class SearchBoxElement extends HTMLElement {
 		}
 	}
 
+	/**
+	 * 从搜索引擎查询当前搜索词的建议，然后更新建议菜单。
+	 * 该方法只能同时运行一个，每次调用都会取消上一次的。
+	 */
 	async suggest() {
-		const list = await this.fetchSuggestions(this.inputEl.value);
+		const { searchTerms, queringAborter } = this;
+		const signal = queringAborter.rotate();
+		try {
+			const list = await engine.suggest(searchTerms, signal);
+			this.setSuggestions(list);
+		} catch (e) {
+			if (e.name !== "AbortError") console.error(e);
+		}
+	}
 
+	setSuggestions(list) {
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
+
 		for (let i = 0; i < count; i++) {
 			const text = list[i];
 
 			const el = newItems[i] = document.createElement("li");
 			el.textContent = text;
-			el.onclick = () => location.href = searchAPI + text;
+			el.onclick = () => location.href = engine.getResultURL(text);
 		}
 
 		this.suggestionEl.replaceChildren(...newItems);
 		this.boxEl.classList.toggle("suggested", count > 0);
 	}
 
-	async fetchSuggestions(searchTerms) {
-		searchTerms = encodeURIComponent(searchTerms);
-
-		this.quering.abort();
-		this.quering = new AbortController();
-
-		// 禁止发送 Cookies 避免跟踪
-		const response = await fetch(suggestAPI + searchTerms, {
-			credentials: "omit",
-			signal: this.quering.signal,
-		});
-		if (!response.ok) {
-			return console.error("搜索建议失败：" + response.status);
-		}
-		return (await response.json())[1];
-	}
-
-	// 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
-	// Google 的搜索页面也是在 KeyDown 阶段就触发。
+	/**
+	 * 按回车键跳转到搜索页面，同时处理了输入法的问题。
+	 *
+	 * 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
+	 * Google 的搜索页面也是在 KeyDown 阶段就触发。
+	 */
 	handleInputKeyDown(event) {
 		if (event.key !== "Enter") {
 			return;
@@ -170,12 +209,12 @@ class SearchBoxElement extends HTMLElement {
 			return;
 		}
 		event.stopPropagation();
-		location.href = searchAPI + this.inputEl.value;
+		location.href = engine.getResultURL(this.searchTerms);
 	}
 
 	// click 只由左键触发，无需检查 event.button
 	handleSearchClick() {
-		location.href = searchAPI + this.inputEl.value;
+		location.href = engine.getResultURL(this.searchTerms);
 	}
 
 	handleKeyDown(event) {
@@ -208,7 +247,7 @@ class SearchBoxElement extends HTMLElement {
 		}
 
 		children[this.index].classList.add("active");
-		this.inputEl.value = children[this.index].textContent;
+		this.searchTerms = children[this.index].textContent;
 	}
 }
 
