@@ -2,10 +2,6 @@ import { readFile } from "fs/promises";
 import { dummyImportEntry } from "./html.js";
 import { getRefId } from "./asset.js";
 
-const links = [
-	"icons",
-];
-
 export default function createManifestPlugin() {
 	let selfId;
 	let manifest;
@@ -53,7 +49,7 @@ export default function createManifestPlugin() {
 					chunk.isEntry &&
 					chunk.facadeModuleId === selfId,
 			);
-			manifest.chrome_url_overrides.newtab = chunk.name;
+			manifest.chrome_url_overrides.newtab = "new-tab.html";
 
 			for (const e of files) {
 				const { id } = await this.resolve(e.value, selfId);
