@@ -1,3 +1,4 @@
+import { env } from "node:process";
 import alias from "@rollup/plugin-alias";
 import { visualizer } from "rollup-plugin-visualizer";
 import { terser } from "rollup-plugin-terser";
@@ -11,7 +12,7 @@ import asset from "./rollup/asset.js";
 import template from "./rollup/template.js";
 import importMeta from "./rollup/meta.js";
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = env.NODE_ENV === "production";
 
 function webpackAliasToRollup() {
 	const { alias } = webpackConfig.resolve;

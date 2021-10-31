@@ -1,3 +1,4 @@
+import { cwd } from "node:process";
 import { dirname, relative, resolve } from "path";
 import { existsSync } from "fs";
 import { minify } from "html-minifier-terser";
@@ -100,7 +101,7 @@ export default function htmlPlugin() {
 
 				const fileName = chunk.name
 					? chunk.name + ".html"
-					: relative(process.cwd(), id);
+					: relative(cwd(), id);
 
 				this.emitFile({
 					type: "asset",
