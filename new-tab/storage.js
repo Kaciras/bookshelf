@@ -6,6 +6,8 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
+import { saveFile, selectFile } from "@share";
+
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
@@ -63,14 +65,14 @@ export async function syncLocalStorage(callback) {
 }
 
 export async function exportSettings() {
-	const pageLocal = {};
+	const page = {};
 	for (let i = 0; i < localStorage.length; i++) {
 		const key = localStorage.key(i);
-		pageLocal[key] = localStorage.getItem(key);
+		page[key] = localStorage.getItem(key);
 	}
 
 	const json = JSON.stringify({
-		pageLocal,
+		page,
 		sync: await syncSettings.get(),
 		local: await localSettings.get(),
 	});
@@ -78,32 +80,19 @@ export async function exportSettings() {
 		type: "application/json",
 	});
 
-	const a = document.createElement("a");
-	a.download = "settings.json";
-	a.href = URL.createObjectURL(blob);
-	try {
-		a.click();
-	} finally {
-		URL.revokeObjectURL(a.href);
-	}
+	saveFile(blob, "settings.json");
 }
 
 export async function importSettings() {
-	const input = document.createElement("input");
-	input.type = "file";
-	input.accept = "application/json";
-	input.onchange = async (e) => {
-		const json = await e.target.files[0].text();
-		const s = JSON.parse(json);
+	const [blob] = await selectFile("application/json");
+	const s = JSON.parse(await blob.text());
 
-		await clearAllData();
+	await clearAllData();
 
-		for (const [key, value] of Object.entries(s.pageLocal)) {
-			localStorage.setItem(key, value);
-		}
+	await localSettings.set(s.local);
+	await syncSettings.set(s.sync);
 
-		syncSettings.set(s.sync);
-		localSettings.set(s.local);
-	};
-	input.click();
+	for (const [key, value] of Object.entries(s.page)) {
+		localStorage.setItem(key, value);
+	}
 }
