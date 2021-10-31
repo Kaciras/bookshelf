@@ -8,7 +8,7 @@ import SettingIcon from "@assets/Setting.svg";
 import CheckIcon from "@assets/Check.svg";
 import { bindInput } from "@share";
 import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";
-import { clearAllData, loadConfig, saveConfig } from "./storage";
+import { clearAllData, exportSettings, importSettings, loadConfig, saveConfig } from "./storage";
 
 const searchBox = document.createElement("search-box");
 
@@ -35,6 +35,8 @@ rightTemplate.innerHTML = `
 	</button>
 	<button>添加网站</button>
 	<button>导入常用网站</button>
+	<button>导入数据</button>
+	<button>导出数据</button>
 	<button class="warning">清空存储</button>
 `;
 
@@ -66,7 +68,9 @@ function switchToSettingMode() {
 	right.children[0].onclick = exitSettingMode;
 	right.children[1].onclick = startAddShortcut;
 	right.children[2].onclick = startImportTopSites;
-	right.children[3].onclick = requestClearData;
+	right.children[3].onclick = importSettings;
+	right.children[4].onclick = exportSettings;
+	right.children[5].onclick = requestClearData;
 }
 
 function switchToNormalMode() {

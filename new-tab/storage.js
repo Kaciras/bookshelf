@@ -33,10 +33,10 @@ export function loadConfig(keys) {
  * 清除所有保存的数据，因为使用了同步存储所以其它设备也会受到影响。
  * 其它设备的本地存储虽然不受影响，但在下次启动时也会由 syncLocalStorage 清理。
  */
-export function clearAllData() {
+export async function clearAllData() {
 	localStorage.clear();
-	syncSettings.clear();
-	localSettings.clear();
+	await syncSettings.clear();
+	await localSettings.clear();
 }
 
 /**
@@ -60,4 +60,50 @@ export async function syncLocalStorage(callback) {
 	await callback();
 	await localSettings.set({ uuid: synced.uuid });
 	console.info("已更新本地存储，与同步的数据一致");
+}
+
+export async function exportSettings() {
+	const pageLocal = {};
+	for (let i = 0; i < localStorage.length; i++) {
+		const key = localStorage.key(i);
+		pageLocal[key] = localStorage.getItem(key);
+	}
+
+	const json = JSON.stringify({
+		pageLocal,
+		sync: await syncSettings.get(),
+		local: await localSettings.get(),
+	});
+	const blob = new Blob([json], {
+		type: "application/json",
+	});
+
+	const a = document.createElement("a");
+	a.download = "settings.json";
+	a.href = URL.createObjectURL(blob);
+	try {
+		a.click();
+	} finally {
+		URL.revokeObjectURL(a.href);
+	}
+}
+
+export async function importSettings() {
+	const input = document.createElement("input");
+	input.type = "file";
+	input.accept = "application/json";
+	input.onchange = async (e) => {
+		const json = await e.target.files[0].text();
+		const s = JSON.parse(json);
+
+		await clearAllData();
+
+		for (const [key, value] of Object.entries(s.pageLocal)) {
+			localStorage.setItem(key, value);
+		}
+
+		syncSettings.set(s.sync);
+		localSettings.set(s.local);
+	};
+	input.click();
 }
