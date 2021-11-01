@@ -32,7 +32,7 @@ function persistDataModel() {
  * @return {string} 对应的图标 DataURL
  */
 function iconKey(shortcut) {
-	return "FI." + new URL(shortcut.url).host;
+	return "icon:" + new URL(shortcut.url).host;
 }
 
 /**
@@ -214,7 +214,7 @@ function cleanIconCache() {
 
 	for (let i = 0; i < localStorage.length; i++) {
 		const key = localStorage.key(i);
-		if (key.startsWith("FI.") && !inUse.has(key)) {
+		if (key.startsWith("icon:") && !inUse.has(key)) {
 			toRemove.push(key);
 		}
 	}
