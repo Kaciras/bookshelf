@@ -80,7 +80,7 @@ export async function exportSettings() {
 		type: "application/json",
 	});
 
-	saveFile(blob, "settings.json");
+	saveFile(blob, "newtab-settings.json");
 }
 
 export async function importSettings() {
@@ -95,4 +95,6 @@ export async function importSettings() {
 	for (const [key, value] of Object.entries(s.page)) {
 		localStorage.setItem(key, value);
 	}
+
+	window.alert("数据导入成功，刷新页面后生效。");
 }

@@ -50,7 +50,7 @@ export default function copyPlugin(list) {
 		/**
 		 * 虚拟模块无法被默认的解析器解析，需要自己处理下。
 		 */
-		async resolveId(source, importer) {
+		resolveId(source, importer) {
 			if (source === hostId) {
 				return hostId;
 			}

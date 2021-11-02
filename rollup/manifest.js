@@ -3,7 +3,7 @@ import { dummyImportEntry } from "./html.js";
 import { getRefId } from "./asset.js";
 
 /**
- * 浏览器插件清单，
+ * 浏览器扩展的清单插件，将清单文件作为构建的入口点。
  *
  * @param filename 清单文件名
  */
@@ -17,7 +17,11 @@ export default function createManifestPlugin(filename) {
 
 		async buildStart() {
 			const marked = filename + "?manifest";
-			this.emitFile({ type: "chunk", id: marked });
+			this.emitFile({
+				type: "chunk",
+				id: marked,
+				fileName: "manifest.json",
+			});
 			selfId = (await this.resolve(marked)).id;
 		},
 
@@ -67,8 +71,6 @@ export default function createManifestPlugin(filename) {
 		},
 
 		async generateBundle(_, bundle) {
-			delete bundle["manifest.js"];
-
 			manifest.chrome_url_overrides.newtab = "new-tab.html";
 
 			for (const { host, key, value } of files) {
@@ -76,11 +78,7 @@ export default function createManifestPlugin(filename) {
 				host[key] = this.getFileName(getRefId(id));
 			}
 
-			this.emitFile({
-				type: "asset",
-				fileName: "manifest.json",
-				source: JSON.stringify(manifest),
-			});
+			bundle["manifest.json"].code = JSON.stringify(manifest);
 		},
 	};
 }
