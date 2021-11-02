@@ -2,6 +2,11 @@ import { readFile } from "fs/promises";
 import { dummyImportEntry } from "./html.js";
 import { getRefId } from "./asset.js";
 
+/**
+ * 浏览器插件清单，
+ *
+ * @param filename 清单文件名
+ */
 export default function createManifestPlugin(filename) {
 	let selfId;
 	let manifest;
@@ -11,18 +16,33 @@ export default function createManifestPlugin(filename) {
 		name: "browser-extension-manifest",
 
 		async buildStart() {
-			this.emitFile({ type: "chunk", id: filename });
-			selfId = (await this.resolve(filename)).id;
+			const marked = filename + "?manifest";
+			this.emitFile({ type: "chunk", id: marked });
+			selfId = (await this.resolve(marked)).id;
+		},
+
+		/**
+		 * 因为清单的加载方式跟普通的 JSON 不同，所以要做个标记来区分。
+		 */
+		async resolveId(source) {
+			if (!source.endsWith("?manifest")) {
+				return null;
+			}
+			const file = source.slice(0, source.length - "?manifest".length);
+			const resolved = this.resolve(file, undefined, { skipSelf: true });
+			return (await resolved).id + "?manifest";
 		},
 
 		async load(id) {
-			if (id !== selfId) {
+			if (!id.endsWith("?manifest")) {
 				return null;
 			}
+			id = id.slice(0, id.length - "?manifest".length);
 			manifest = JSON.parse(await readFile(id, "utf8"));
-			const { icons = [] } = manifest;
 
+			const { icons = [] } = manifest;
 			const ids = [];
+
 			for (const size of Object.keys(icons)) {
 				const aid = icons[size] + "?resource";
 				ids.push(aid);
