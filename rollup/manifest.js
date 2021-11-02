@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import { dummyImportEntry } from "./html.js";
 import { getRefId } from "./asset.js";
 
-export default function createManifestPlugin() {
+export default function createManifestPlugin(filename) {
 	let selfId;
 	let manifest;
 	const files = [];
@@ -10,31 +10,35 @@ export default function createManifestPlugin() {
 	return {
 		name: "browser-extension-manifest",
 
+		async buildStart() {
+			this.emitFile({ type: "chunk", id: filename });
+			selfId = (await this.resolve(filename)).id;
+		},
+
 		async load(id) {
-			if (!id.endsWith("manifest.json")) {
+			if (id !== selfId) {
 				return null;
 			}
-			selfId = id;
 			manifest = JSON.parse(await readFile(id, "utf8"));
-			const ids = [];
+			const { icons = [] } = manifest;
 
-			for (const size of Object.keys(manifest.icons)) {
-				const aid = manifest.icons[size] + "?resource";
+			const ids = [];
+			for (const size of Object.keys(icons)) {
+				const aid = icons[size] + "?resource";
 				ids.push(aid);
-				files.push({
-					host: manifest.icons,
-					key: size,
-					value: aid,
-				});
+				files.push({ host: icons, key: size, value: aid });
 			}
 
-			const html = manifest.chrome_url_overrides.newtab;
-			this.emitFile({
-				type: "chunk",
-				id: html,
-				importer: id,
-				name: "new-tab",
-			});
+			const { newtab } = manifest.chrome_url_overrides;
+			if (newtab) {
+				this.emitFile({
+					type: "chunk",
+					fileName: "new-tab.js",
+					importer: id,
+					id: newtab,
+					name: "new-tab",
+				});
+			}
 
 			return {
 				code: dummyImportEntry(ids),
@@ -43,20 +47,15 @@ export default function createManifestPlugin() {
 		},
 
 		async generateBundle(_, bundle) {
-			const chunk = Object.values(bundle).find(
-				(chunk) =>
-					chunk.type === "chunk" &&
-					chunk.isEntry &&
-					chunk.facadeModuleId === selfId,
-			);
+			delete bundle["manifest.js"];
+
 			manifest.chrome_url_overrides.newtab = "new-tab.html";
 
-			for (const e of files) {
-				const { id } = await this.resolve(e.value, selfId);
-				e.host[e.key] = this.getFileName(getRefId(id));
+			for (const { host, key, value } of files) {
+				const { id } = await this.resolve(value, selfId);
+				host[key] = this.getFileName(getRefId(id));
 			}
 
-			delete bundle["manifest.js"];
 			this.emitFile({
 				type: "asset",
 				fileName: "manifest.json",

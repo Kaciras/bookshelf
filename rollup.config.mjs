@@ -20,7 +20,6 @@ function webpackAliasToRollup() {
 }
 
 export default {
-	input: "manifest.json",
 	output: {
 		format: "esm",
 		dir: "dist",
@@ -43,7 +42,7 @@ export default {
 				context: "node_modules/webextension-polyfill/dist",
 			},
 		]),
-		manifest(),
+		manifest("manifest.json"),
 		htmlEntry(),
 		template(),
 		importMeta({ dev: !isProduction }),
