@@ -80,16 +80,31 @@ function createFilter2(options) {
 
 const referenceMap = new Map();
 
+/**
+ * 获取资源文件的名字，Vite 里就是这么做的。
+ * https://github.com/vitejs/vite/blob/7977e92e0610cfcb814b45af8432bab1054863d2/packages/vite/src/node/plugins/asset.ts#L183
+ *
+ * @param id 资源 ID
+ * @return {string} 输出的文件名
+ */
 export function getRefId(id) {
 	return referenceMap.get(id);
 }
+
+const defaultOptions = {
+	source: {},
+	url: {},
+	resource: {},
+	limit: 4096,
+	loaders: [],
+};
 
 /**
  * Rollup 似乎没有提供处理资源的规范，只能自己撸一个了。
  * 本插件提供一个通用的接口，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
  */
 export default function createInlinePlugin(options) {
-	const { source = {}, url = {}, resource = {}, limit = 4096, loaders = [] } = options;
+	const { source , url , resource , limit , loaders  } = { ...defaultOptions, ...options };
 
 	const isInline = createFilter2(source);
 	const isUrl = createFilter2(url);

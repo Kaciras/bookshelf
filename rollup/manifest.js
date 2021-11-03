@@ -3,9 +3,10 @@ import { dummyImportEntry } from "./html.js";
 import { getRefId } from "./asset.js";
 
 /**
- * 浏览器扩展的清单插件，将清单文件作为构建的入口点。
+ * 浏览器扩展的清单插件，将清单文件作为构建的入口点，处理其中的资源，并生成 manifest.json。
  *
  * @param filename 清单文件名
+ * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json
  */
 export default function createManifestPlugin(filename) {
 	let selfId;
