@@ -1,7 +1,6 @@
 @import "/global.css";
 
 :host {
-	display: block;
 	position: relative;
 }
 
@@ -18,11 +17,6 @@
 	overflow: hidden;
 
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
-
-	/* 高亮边框跟建议列表有冲突，故仅在没有建议时才显示 */
-	&:focus-within:not(.suggested) {
-		box-shadow: var(--block-focus-shadow);
-	}
 }
 
 img {
@@ -46,12 +40,30 @@ input {
 	border-radius: 0;
 }
 
-#box.suggested.focused {
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
+/*
+ * 建议列表的显示由两个变量控制，仅当同时存在建议列表才会显示：
+ * 1）suggested 	类表示列表不为空，在获取建议后设置，输入框为空时删除。
+ * 2）:focus-within	此元素的聚焦状态，在失去焦点时删除。
+ *
+ * 【纯 CSS 实现？】
+ * 使用 #suggestions:empty 也可以判断是否为空，但由于建议列表在输入框后面，
+ * 没法让输入框匹配到该状态以去掉圆角和高亮。
+ * 如果把列移放到输入框前面，就不符合直觉，因为视觉上建议列表是在下方的。
+ */
+#box:focus-within {
 
-	& + #suggestions {
-		display: block;
+	&.suggested {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+
+		& + #suggestions {
+			display: block;
+		}
+	}
+
+	/* 高亮跟建议列表有冲突，故仅在没有建议时才显示 */
+	&:not(.suggested) {
+		box-shadow: var(--block-focus-shadow);
 	}
 }
 

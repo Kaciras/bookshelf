@@ -63,13 +63,9 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
-	/*
-	 * Firefox 不支持 delegatesFocus，很难处理焦点是否在输入框内的问题。
-	 * https://caniuse.com/?search=delegatesFocus
-	 */
 	constructor() {
 		super();
-		const root = this.attachShadow({ mode: "closed" });
+		const root = this.attachShadow({ mode: "closed", delegatesFocus: true });
 		root.append(template.content.cloneNode(true));
 
 		this.inputEl = root.getElementById("input");
@@ -83,13 +79,10 @@ class SearchBoxElement extends HTMLElement {
 		this.waitIME = true;
 		this.index = null;
 
-		this.handleWindowClick = this.handleWindowClick.bind(this);
 		this.suggest = this.suggest.bind(this);
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
-		this.inputEl.onfocus = () => this.setSuggestVisible(true);
-
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
 	}
@@ -100,47 +93,6 @@ class SearchBoxElement extends HTMLElement {
 
 	set searchTerms(value) {
 		this.inputEl.value = value;
-	}
-
-	/**
-	 * 实现点击搜索框外时隐藏建议列表的功能。
-	 *
-	 * 无论是 blur 事件还是 :focus 伪类的触发都先于 click 事件，导致点击建议项时无法跳转，
-	 * 因为此时列表已经隐藏了。
-	 *
-	 * 所以换了种思路，监听全局 click，我看 Edge 也是这么做的。
-	 */
-	handleWindowClick(event) {
-		if (event.target !== this) this.setSuggestVisible(false);
-	}
-
-	/**
-	 * 涉及自定义元素边界之外的操作一律要放在 connectedCallback() 里。
-	 *
-	 * @see https://stackoverflow.com/a/59970158
-	 */
-	connectedCallback() {
-		window.addEventListener("click", this.handleWindowClick);
-	}
-
-	/**
-	 * 跟 connectedCallback 配对，在组件从 DOM 移除后调用，在此处做清理。
-	 * 虽然搜索框不会被移除，但还是加上清理代码，符合有增有删的原则。
-	 */
-	disconnectedCallback() {
-		window.removeEventListener("click", this.handleWindowClick);
-	}
-
-	/*
-	 * 建议列表的显示由两个类控制：
-	 * 1）suggested 表示列表不为空，在获取建议后设置，输入框为空时删除。
-	 * 2）focused	表示聚焦，在失去焦点时删除。
-	 *
-	 * 这两个类分别表示两个独立的条件，仅当同时存在建议列表才会显示。
-	 */
-
-	setSuggestVisible(value) {
-		this.boxEl.classList.toggle("focused", value);
 	}
 
 	/*
@@ -228,8 +180,7 @@ class SearchBoxElement extends HTMLElement {
 				diff = -1;
 				break;
 			case "Escape":
-				this.setSuggestVisible(false);
-				return;
+				return this.blur();
 			default:
 				return;
 		}
