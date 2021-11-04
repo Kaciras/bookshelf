@@ -1,4 +1,4 @@
-import { RotateAbortController } from "@share";
+import { DebounceThrottle } from "@share";
 import GoogleIcon from "@assets/search.ico";
 import ArrowIcon from "@assets/ArrowRight.svg";
 import styles from "./SearchBox.css";
@@ -73,13 +73,12 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
 
-		this.queringAborter = new RotateAbortController();
 		this.limit = 8;
 		this.threshold = 500;
 		this.waitIME = true;
 		this.index = null;
 
-		this.suggest = this.suggest.bind(this);
+		this.fetcher = new DebounceThrottle(this.suggest.bind(this));
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
@@ -95,6 +94,14 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl.value = value;
 	}
 
+	get threshold() {
+		return this.fetcher.threshold;
+	}
+
+	set threshold(value) {
+		this.fetcher.threshold = value;
+	}
+
 	/*
 	 * 对获取建议的中断分为两个阶段，先是防抖，一旦开始请求则不再受防抖的影响，
 	 * 只有下一次的请求才能中断前面的。
@@ -103,17 +110,14 @@ class SearchBoxElement extends HTMLElement {
 	 * 【其它实现】
 	 * 若把判断逻辑全部放入回调，代码会更简单一些，但为空时的关闭过程也会被延迟。
 	 */
-	async handleInput(event) {
-		const { waitIME, threshold } = this;
-		if (waitIME && event.isComposing) {
+	handleInput(event) {
+		if (this.waitIME && event.isComposing) {
 			return;
 		}
-		clearTimeout(this.timer);
-
 		if (this.searchTerms) {
-			this.timer = setTimeout(this.suggest, threshold);
+			this.fetcher.reschedule();
 		} else {
-			this.queringAborter.value.abort();
+			this.fetcher.stop();
 			this.index = null;
 			this.boxEl.classList.remove("suggested");
 		}
@@ -123,9 +127,8 @@ class SearchBoxElement extends HTMLElement {
 	 * 从搜索引擎查询当前搜索词的建议，然后更新建议菜单。
 	 * 该方法只能同时运行一个，每次调用都会取消上一次的。
 	 */
-	async suggest() {
-		const { searchTerms, queringAborter } = this;
-		const signal = queringAborter.rotate();
+	async suggest(signal) {
+		const { searchTerms } = this;
 		try {
 			const list = await engine.suggest(searchTerms, signal);
 			this.setSuggestions(list);

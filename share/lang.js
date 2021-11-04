@@ -1,21 +1,38 @@
 /**
- * 专门针对防抖的 AbortController 封装。
+ * 防抖 + 节流的组合体，专门用于搜索建议这种频繁输入 + 网络请求的场景。
+ *
+ * 【区分防抖和节流】
+ * 防抖：延迟事件，如果在期间又被触发则重新计时。
+ * 节流：多次触发只有最后一次生效，之前的全部取消。
  */
-export class RotateAbortController {
+export class DebounceThrottle {
 
-	constructor() {
-		this.value = new AbortController();
+	constructor(handler) {
+		this.handler = handler;
+
+		/** 防抖的延时（毫秒） */
+		this.threshold = 0;
+		this.controller = new AbortController();
+		this.timer = 0;
+
+		this.callback = this.callback.bind(this);
 	}
 
-	/**
-	 * 取消当前的操作，并新开始一个。
-	 *
-	 * @return {AbortSignal} 新的信号
-	 */
-	rotate() {
-		this.value.abort();
-		this.value = new AbortController();
-		return this.value.signal;
+	callback() {
+		this.controller.abort();
+		this.controller = new AbortController();
+		this.handler(this.controller.signal);
+	}
+
+	stop() {
+		clearTimeout(this.timer);
+		this.controller.abort();
+	}
+
+	reschedule() {
+		const { timer, callback, threshold } = this;
+		clearTimeout(timer);
+		this.timer = setTimeout(callback, threshold);
 	}
 }
 
