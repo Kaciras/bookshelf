@@ -63,6 +63,11 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
+	limit = 8;
+
+	waitIME = true;
+	index = null;
+
 	constructor() {
 		super();
 		const root = this.attachShadow({ mode: "closed", delegatesFocus: true });
@@ -73,12 +78,10 @@ class SearchBoxElement extends HTMLElement {
 		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
 
-		this.limit = 8;
-		this.threshold = 500;
-		this.waitIME = true;
-		this.index = null;
-
 		this.fetcher = new DebounceThrottle(this.suggest.bind(this));
+
+		// 设默认值不能写到 class fields 里，有点难看。
+		this.threshold = 500;
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);

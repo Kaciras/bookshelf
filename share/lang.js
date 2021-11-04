@@ -7,14 +7,14 @@
  */
 export class DebounceThrottle {
 
+	/** 防抖的延时（毫秒） */
+	threshold = 0;
+
+	controller = new AbortController();
+	timer = 0;
+
 	constructor(handler) {
 		this.handler = handler;
-
-		/** 防抖的延时（毫秒） */
-		this.threshold = 0;
-		this.controller = new AbortController();
-		this.timer = 0;
-
 		this.callback = this.callback.bind(this);
 	}
 
