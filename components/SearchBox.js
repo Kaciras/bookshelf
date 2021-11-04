@@ -98,8 +98,10 @@ class SearchBoxElement extends HTMLElement {
 	/*
 	 * 对获取建议的中断分为两个阶段，先是防抖，一旦开始请求则不再受防抖的影响，
 	 * 只有下一次的请求才能中断前面的。
-	 *
 	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
+	 *
+	 * 【其它实现】
+	 * 若把判断逻辑全部放入回调，代码会更简单一些，但为空时的关闭过程也会被延迟。
 	 */
 	async handleInput(event) {
 		const { waitIME, threshold } = this;
@@ -111,6 +113,7 @@ class SearchBoxElement extends HTMLElement {
 		if (this.searchTerms) {
 			this.timer = setTimeout(this.suggest, threshold);
 		} else {
+			this.queringAborter.value.abort();
 			this.index = null;
 			this.boxEl.classList.remove("suggested");
 		}
