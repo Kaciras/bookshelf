@@ -1,4 +1,10 @@
-/* 没有 focus-visible-within 无法高亮 */
+/*
+ * 暂时无法做聚焦高亮：
+ * 1）delegatesFocus 不支持 focus-visible。
+ * 2）没有 focus-visible-within 这个伪类。
+ *
+ * https://github.com/WICG/focus-visible/issues/151
+ */
 :host {
 	position: relative;
 	cursor: pointer;
