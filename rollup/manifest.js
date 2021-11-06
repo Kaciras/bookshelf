@@ -28,6 +28,10 @@ export default function createManifestPlugin(filename) {
 
 		/**
 		 * 因为清单的加载方式跟普通的 JSON 不同，所以要做个标记来区分。
+		 *
+		 * <h2>标记的格式</h2>
+		 * 另一种方案是跟 Squoosh 一样写在前面，比如 manifest:../some/file.js?foo=bar
+		 * 这种写法对 TS 很友好，并且更规整，但分隔符用冒号会跟 Windows 的盘符混淆。
 		 */
 		async resolveId(source) {
 			if (!source.endsWith("?manifest")) {

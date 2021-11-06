@@ -13,6 +13,9 @@
 		"theme",
 		"firefox"
 	],
+	"engines": {
+		"node": ">=17"
+	},
 	"type": "module",
 	"scripts": {
 		"lint": "eslint --fix .",
