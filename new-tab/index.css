@@ -1,5 +1,6 @@
 @import "/global.css";
 
+$edit-dash-width: 4px;
 $edit-padding: 15px;
 $shortcut-width: 120px;
 
@@ -39,7 +40,7 @@ body {
 		bottom: 0;
 		right: 0;
 
-		border: dashed 4px transparent;
+		border: dashed $edit-dash-width transparent;
 		transition: .15s;
 		pointer-events: none;
 	}
@@ -82,14 +83,14 @@ aside {
 	gap: 10px;
 
 	position: absolute;
-	top: calc($edit-padding * 2);
+	top: calc($edit-padding * 2 + $edit-dash-width);
 	z-index: 10;
 }
 
 #setting-left {
-	left: calc($edit-padding * 2);
+	left: calc($edit-padding * 2 + $edit-dash-width);
 }
 
 #setting-right {
-	right: calc($edit-padding * 2);
+	right: calc($edit-padding * 2 + $edit-dash-width);
 }
