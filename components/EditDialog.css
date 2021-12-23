@@ -32,6 +32,7 @@ form {
 	display: block;
 	width: var(--shortcut-icon-size);
 	height: var(--shortcut-icon-size);
+	border-radius: 4px;
 }
 
 #field-group {

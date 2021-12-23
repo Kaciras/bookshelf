@@ -33,6 +33,7 @@ img {
 	grid-area: img;
 	width: 48px;
 	height: 48px;
+	border-radius: 4px;
 }
 
 /** 窗口足够宽，更长的就不显示了 */
