@@ -9,8 +9,11 @@ import CheckIcon from "@assets/Check.svg";
 import { bindInput } from "@share";
 import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";
 import { clearAllData, exportSettings, importSettings, loadConfig, saveConfig } from "./storage";
+import { Baidu, Google } from "./search.js";
 
 const searchBox = document.createElement("search-box");
+searchBox.engine = Google;
+searchBox.engines = [Google, Baidu];
 
 // module js 自带 defer 属性，所以没法在 html 里使用自定义元素
 document.body.insertBefore(

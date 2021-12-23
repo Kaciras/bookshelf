@@ -1,45 +1,13 @@
 import { DebounceThrottle } from "@share";
-import GoogleIcon from "@assets/search.ico";
 import ArrowIcon from "@assets/ArrowRight.svg";
 import styles from "./SearchBox.css";
-
-// 目前仅支持一个 Google 搜索，没找到怎么获取浏览器里的搜索引擎配置。
-const engine = {
-
-	suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
-	searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
-
-	// 【关于转义】
-	// 大多数地方会把空格改成 +，但实测空格也能显示正确的结果。
-
-	async suggest(searchTerms, signal) {
-		searchTerms = encodeURIComponent(searchTerms);
-		const url = this.suggestAPI + searchTerms;
-
-		// 禁止发送 Cookies 避免跟踪
-		const response = await fetch(url, {
-			signal,
-			credentials: "omit",
-		});
-
-		const { status } = response;
-		if (status !== 200) {
-			throw new Error("搜索建议失败：" + status);
-		}
-		return (await response.json())[1];
-	},
-
-	getResultURL(searchTerms) {
-		return this.searchAPI + encodeURIComponent(searchTerms);
-	},
-};
 
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 
 	<div id="box">
-		<img alt="icon" src="${GoogleIcon}">
+		<img alt="icon">
 		<input id="input" placeholder="搜索">
 		<button
 			id="button"
@@ -63,10 +31,12 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
-	limit = 8;
+	engines;		// 搜索引擎列表，点击图标或者 Page[Up|Down] 键切换
+	limit = 8;		// 搜索建议最大显示数量
+	api;			// 当前的搜索引擎，是 engine 属性的内部字段
+	waitIME = true;	// 使用输入法时，防止建议未上屏的字符
 
-	waitIME = true;
-	index = null;
+	index = null;	// 被选中建议的索引
 
 	constructor() {
 		super();
@@ -74,19 +44,33 @@ class SearchBoxElement extends HTMLElement {
 		root.append(template.content.cloneNode(true));
 
 		this.inputEl = root.getElementById("input");
-		this.iconEl = root.getElementById("favicon");
+		this.iconEl = root.querySelector("img");
 		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
 
 		this.fetcher = new DebounceThrottle(this.suggest.bind(this));
-
-		// 设默认值不能写到 class fields 里，有点难看。
-		this.threshold = 500;
+		this.fetcher.threshold = 500;
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
+	}
+
+	get engine() {
+		return this.api;
+	}
+
+	/**
+	 * 更改使用的搜索引擎，该项无默认值必须自己设置。
+	 *
+	 * 注意：对于已经显示的建议列表，切换引擎不会刷新建议。
+	 *
+	 * @param value 新的搜索引擎
+	 */
+	set engine(value) {
+		this.api = value;
+		this.iconEl.src = value.favicon;
 	}
 
 	get searchTerms() {
@@ -131,9 +115,9 @@ class SearchBoxElement extends HTMLElement {
 	 * 该方法只能同时运行一个，每次调用都会取消上一次的。
 	 */
 	async suggest(signal) {
-		const { searchTerms } = this;
+		const { api, searchTerms } = this;
 		try {
-			const list = await engine.suggest(searchTerms, signal);
+			const list = await api.suggest(searchTerms, signal);
 			this.setSuggestions(list);
 		} catch (e) {
 			if (e.name !== "AbortError") console.error(e);
@@ -149,7 +133,7 @@ class SearchBoxElement extends HTMLElement {
 
 			const el = newItems[i] = document.createElement("li");
 			el.textContent = text;
-			el.onclick = () => location.href = engine.getResultURL(text);
+			el.onclick = () => location.href = this.api.getResultURL(text);
 		}
 
 		this.suggestionEl.replaceChildren(...newItems);
@@ -170,12 +154,12 @@ class SearchBoxElement extends HTMLElement {
 			return;
 		}
 		event.stopPropagation();
-		location.href = engine.getResultURL(this.searchTerms);
+		location.href = this.api.getResultURL(this.searchTerms);
 	}
 
 	// click 只由左键触发，无需检查 event.button
 	handleSearchClick() {
-		location.href = engine.getResultURL(this.searchTerms);
+		location.href = this.api.getResultURL(this.searchTerms);
 	}
 
 	handleKeyDown(event) {
