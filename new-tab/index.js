@@ -3,23 +3,31 @@ import "../components/CheckBox.js";
 import "../components/BookMark.js";
 import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
+import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
 import SettingIcon from "@assets/Setting.svg";
 import CheckIcon from "@assets/Check.svg";
 import { bindInput } from "@share";
 import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./shortcuts";
 import { clearAllData, exportSettings, importSettings, loadConfig, saveConfig } from "./storage";
-import { Baidu, Google } from "./search.js";
+import { Baidu, DuckDuckGo, Google } from "./search.js";
 
+const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
-searchBox.engine = Google;
-searchBox.engines = [Google, Baidu];
+engineSelect.addEventListener("change", e => searchBox.engine = e.target.engine);
 
-// module js 自带 defer 属性，所以没法在 html 里使用自定义元素
+searchBox.engine = Google;
+
+engineSelect.list = [Google, Baidu, DuckDuckGo];
+engineSelect.engine = Google;
+
+// module js 自带 defer 属性，没法在 html 解析前注册自定义元素，真脑残。
 document.body.insertBefore(
 	searchBox,
 	document.getElementById("shortcuts"),
 );
+
+document.body.append(engineSelect);
 
 function requestClearData() {
 	const message = "确定要清空本插件保存的所有数据？\n该过程不可撤销，并且会同步到所有设备";

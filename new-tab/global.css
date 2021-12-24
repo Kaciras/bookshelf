@@ -23,6 +23,7 @@ button, .button {
 	background: var(--bg);
 
 	transition: .15s;
+	transition-property: color, background-color;
 
 	&:hover,
 	&:focus-visible {

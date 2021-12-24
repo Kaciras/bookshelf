@@ -1,15 +1,18 @@
 import GoogleIcon from "@assets/google.ico";
 import BaiduIcon from "@assets/baidu.ico";
+import DuckDuckGoIcon from "@assets/dax-logo.svg?url";
 
 // 目前没找到怎么获取浏览器里的搜索引擎配置，只能自己再写一遍了。
 
 class OpenSearchEngine {
 
-	favicon;		// 搜索引擎的图标，最好是 48x48 大小。
+	name;			// 搜索引擎的名字
+	favicon;		// 搜索引擎的图标，最好是 32x32 大小。
 	suggestAPI;		// 查询建议的 API，搜索内容将附加在末尾。
 	searchAPI;		// 搜索页面的 URL，搜索内容将附加在末尾。
 
-	constructor(favicon, suggestAPI, searchAPI) {
+	constructor(name, favicon, suggestAPI, searchAPI) {
+		this.name = name;
 		this.favicon = favicon;
 		this.suggestAPI = suggestAPI;
 		this.searchAPI = searchAPI;
@@ -41,12 +44,21 @@ class OpenSearchEngine {
 }
 
 export const Google = new OpenSearchEngine(
+	"Google",
 	GoogleIcon,
 	"https://www.google.com/complete/search?client=firefox&q=",
 	"https://www.google.com/search?client=firefox-b-d&q=",
 );
 
+export const DuckDuckGo = new OpenSearchEngine(
+	"鸭鸭走",
+	DuckDuckGoIcon,
+	"https://ac.duckduckgo.com/ac/?type=list&q=",
+	"https://duckduckgo.com/?t=ffsb&ia=web&q=",
+);
+
 export const Baidu = new OpenSearchEngine(
+	"百度",
 	BaiduIcon,
 	"https://www.baidu.com/su?tn=monline_7_dg&ie=utf-8&action=opensearch&wd=",
 	"https://www.baidu.com/baidu?tn=monline_7_dg&ie=utf-8&wd=",

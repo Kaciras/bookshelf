@@ -1,0 +1,33 @@
+@import "/global.css";
+
+:host {
+	position: absolute;
+	top: 34px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+#container {
+	display: flex;
+	gap: 15px;
+}
+
+img {
+	width: 32px;
+	height: 32px;
+}
+
+button {
+
+	/* 图标可能是方形的，不能搞成圆形按钮 */
+	border-radius: 8px;
+
+	line-height: 0;
+	overflow: hidden;
+	box-shadow: 0 8px 8px rgba(9, 32, 77, 0.12), 0 2px 2px rgba(29, 17, 51, 0.12);
+
+	background: white;
+	&.active {
+		box-shadow: var(--block-focus-shadow);
+	}
+}

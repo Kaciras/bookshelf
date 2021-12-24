@@ -48,7 +48,7 @@ input {
  * 【纯 CSS 实现？】
  * 使用 #suggestions:empty 也可以判断是否为空，但由于建议列表在输入框后面，
  * 没法让输入框匹配到该状态以去掉圆角和高亮。
- * 如果把列移放到输入框前面，就不符合直觉，因为视觉上建议列表是在下方的。
+ * 如果把列表移放到输入框前面，就不符合直觉，因为视觉上建议列表是在下方的。
  */
 #box:focus-within {
 
@@ -56,12 +56,17 @@ input {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
 
-		& + #suggestions {
+		& ~ #suggestions {
 			display: block;
 		}
 	}
 
+	& + #engines {
+		display: flex;
+	}
+
 	/* 高亮跟建议列表有冲突，故仅在没有建议时才显示 */
+
 	&:not(.suggested) {
 		box-shadow: var(--block-focus-shadow);
 	}
@@ -79,7 +84,6 @@ input {
 
 	margin: 0;
 	padding: 0;
-	background: white;
 
 	border-bottom-left-radius: var(--panel-radius);
 	border-bottom-right-radius: var(--panel-radius);
@@ -90,8 +94,11 @@ input {
 
 li {
 	padding: 8px;
+	background: white;
 	cursor: pointer;
+}
 
+#suggestions > li {
 	&.active,
 	&:hover,
 	&:focus-visible {

@@ -31,7 +31,6 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
-	engines;		// 搜索引擎列表，点击图标或者 Page[Up|Down] 键切换
 	limit = 8;		// 搜索建议最大显示数量
 	api;			// 当前的搜索引擎，是 engine 属性的内部字段
 	waitIME = true;	// 使用输入法时，防止建议未上屏的字符
