@@ -12,14 +12,8 @@ import { setShortcutEditable, startAddShortcut, startImportTopSites } from "./sh
 import { clearAllData, exportSettings, importSettings, loadConfig, saveConfig } from "./storage";
 import { Baidu, DuckDuckGo, Google } from "./search.js";
 
-const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
-engineSelect.addEventListener("change", e => searchBox.engine = e.target.engine);
-
 searchBox.engine = Google;
-
-engineSelect.list = [Google, Baidu, DuckDuckGo];
-engineSelect.engine = Google;
 
 // module js 自带 defer 属性，没法在 html 解析前注册自定义元素，真脑残。
 document.body.insertBefore(
@@ -27,6 +21,10 @@ document.body.insertBefore(
 	document.getElementById("shortcuts"),
 );
 
+const engineSelect = document.createElement("engine-select");
+engineSelect.list = [Google, Baidu, DuckDuckGo];
+engineSelect.value = searchBox.engine;
+engineSelect.addEventListener("change", e => searchBox.engine = e.target.engine);
 document.body.append(engineSelect);
 
 function requestClearData() {

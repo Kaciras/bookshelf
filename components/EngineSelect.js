@@ -1,5 +1,8 @@
 import styles from "./EngineSelect.css";
 
+/*
+ * 为了方便地用 replaceChildren 更新内容，只能多套一层。
+ */
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
@@ -19,11 +22,11 @@ class EngineSelectElement extends HTMLElement {
 		this.container = root.getElementById("container");
 	}
 
-	get engine() {
+	get value() {
 		return this.engines[this.selected];
 	}
 
-	set engine(value) {
+	set value(value) {
 		const i = this.engines.indexOf(value);
 		if (i === -1) {
 			throw new Error("值不在选项中");
@@ -64,7 +67,7 @@ class EngineSelectElement extends HTMLElement {
 
 	handleClick(event) {
 		const { engine } = event.currentTarget;
-		this.engine = engine;
+		this.value = engine;
 		this.dispatchEvent(new CustomEvent("change"));
 	}
 }

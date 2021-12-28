@@ -51,7 +51,7 @@ export const Google = new OpenSearchEngine(
 );
 
 export const DuckDuckGo = new OpenSearchEngine(
-	"鸭鸭走",
+	"鸭鸭走~",
 	DuckDuckGoIcon,
 	"https://ac.duckduckgo.com/ac/?type=list&q=",
 	"https://duckduckgo.com/?t=ffsb&ia=web&q=",
