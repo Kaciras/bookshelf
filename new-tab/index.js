@@ -24,8 +24,23 @@ document.body.insertBefore(
 const engineSelect = document.createElement("engine-select");
 engineSelect.list = [Google, Baidu, DuckDuckGo];
 engineSelect.value = searchBox.engine;
-engineSelect.addEventListener("change", e => searchBox.engine = e.target.value);
+engineSelect.addEventListener("input", e => searchBox.engine = e.target.value);
 document.body.append(engineSelect);
+
+searchBox.onkeydown = e => {
+	switch (e.key) {
+		case "PageUp":
+			engineSelect.index += 1;
+			break;
+		case "PageDown":
+			engineSelect.index -= 1;
+			break;
+		default:
+			return;
+	}
+	e.preventDefault();
+	searchBox.engine = engineSelect.value;
+};
 
 function requestClearData() {
 	const message = "确定要清空本插件保存的所有数据？\n该过程不可撤销，并且会同步到所有设备";
