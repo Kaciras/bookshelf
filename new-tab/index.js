@@ -24,7 +24,7 @@ document.body.insertBefore(
 const engineSelect = document.createElement("engine-select");
 engineSelect.list = [Google, Baidu, DuckDuckGo];
 engineSelect.value = searchBox.engine;
-engineSelect.addEventListener("change", e => searchBox.engine = e.target.engine);
+engineSelect.addEventListener("change", e => searchBox.engine = e.target.value);
 document.body.append(engineSelect);
 
 function requestClearData() {
