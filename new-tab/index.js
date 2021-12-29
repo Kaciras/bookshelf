@@ -22,7 +22,9 @@ document.body.insertBefore(
 );
 
 const engineSelect = document.createElement("engine-select");
-engineSelect.list = [Google, Baidu, DuckDuckGo];
+
+// 主用 Google 放中间，次要的百度放前面，按一次 PageDown 即可切换到。
+engineSelect.list = [Baidu, Google, DuckDuckGo];
 engineSelect.value = searchBox.engine;
 engineSelect.addEventListener("input", e => searchBox.engine = e.target.value);
 document.body.append(engineSelect);
