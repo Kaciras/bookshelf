@@ -71,15 +71,16 @@ export async function exportSettings() {
 		page[key] = localStorage.getItem(key);
 	}
 
-	const json = JSON.stringify({
+	const data = {
 		page,
 		sync: await syncSettings.get(),
 		local: await localSettings.get(),
-	});
+	};
+
+	const json = JSON.stringify(data, null, "\t");
 	const blob = new Blob([json], {
 		type: "application/json",
 	});
-
 	saveFile(blob, "newtab-settings.json");
 }
 
