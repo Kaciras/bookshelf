@@ -9,7 +9,7 @@ template.innerHTML = `
 	
 	<a id="link">
 		<div id="icon-box">
-			<img id="favicon" alt="favicon" src="#">
+			<img id="favicon" alt="favicon">
 		</div>
 		<span id="label"></span>
 	</a>

@@ -16,7 +16,7 @@ class EngineSelectElement extends HTMLElement {
 
 	constructor() {
 		super();
-		const root = this.attachShadow({ mode: "open" });
+		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
 		this.container = root.getElementById("container");

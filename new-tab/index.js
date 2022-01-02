@@ -23,8 +23,8 @@ document.body.insertBefore(
 
 const engineSelect = document.createElement("engine-select");
 
-// 主用 Google 放中间，次要的百度放前面，按一次 PageDown 即可切换到。
-engineSelect.list = [Baidu, Google, DuckDuckGo];
+// 主用 Google 放中间，次要的百度放后面，按一次 PageDown 即可切换到。
+engineSelect.list = [DuckDuckGo, Google, Baidu];
 engineSelect.value = searchBox.engine;
 engineSelect.addEventListener("input", e => searchBox.engine = e.target.value);
 document.body.append(engineSelect);
@@ -32,10 +32,10 @@ document.body.append(engineSelect);
 searchBox.onkeydown = e => {
 	switch (e.key) {
 		case "PageUp":
-			engineSelect.index += 1;
+			engineSelect.index -= 1;
 			break;
 		case "PageDown":
-			engineSelect.index -= 1;
+			engineSelect.index += 1;
 			break;
 		default:
 			return;
