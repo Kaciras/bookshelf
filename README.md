@@ -9,6 +9,10 @@
 - Firefox >= 94.0
 - Edge & Chrome >= 89
 
+没有适配移动端，仅适用于宽度大于 1200px 的桌面浏览器。
+
+![Screenshot](https://github.com/Kaciras/browser-theme/raw/master/screenshot.png)
+
 # 使用
 
 ## 恢复方形标签页
