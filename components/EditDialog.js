@@ -46,8 +46,6 @@ template.innerHTML = `
 	</dialog-base>
 `;
 
-const loadingHTML = "<span class='dot-flashing'><div class='middle'></div></span>";
-
 class EditDialogElement extends HTMLElement {
 
 	constructor() {
@@ -96,7 +94,6 @@ class EditDialogElement extends HTMLElement {
 		if (!this.urlInput.reportValidity()) {
 			return;
 		}
-		this.fetchButton.innerHTML = loadingHTML;
 		const url = this.urlInput.value;
 
 		try {
@@ -104,9 +101,7 @@ class EditDialogElement extends HTMLElement {
 			this.iconUrl = href;
 			this.favicon = await imageUrlToLocal(href);
 		} catch (e) {
-			alert(e.message);
-		} finally {
-			this.fetchButton.textContent = "自动获取";
+			window.alert(`图标下载失败：${e.message}`);
 		}
 	}
 }
