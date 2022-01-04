@@ -8,7 +8,11 @@ template.innerHTML = `
 
 	<div id="box">
 		<img alt="icon">
-		<input id="input" placeholder="搜索">
+		<input
+			id="input"
+			enterkeyhint="search"
+			placeholder="搜索"
+		>
 		<button
 			id="button"
 			tabindex="-1"
