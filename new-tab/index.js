@@ -73,10 +73,10 @@ leftTemplate.innerHTML = `
 		<input name="limit" type="number" min="0">
 	</label>
 	<label>
-		搜索建议防抖（毫秒）
+		建议防抖（毫秒）
 		<input name="threshold" type="number" min="0">
 	</label>
-	<check-box name="waitIME">输入法防抖</check-box>
+	<check-box title="未上屏字符不触发建议" name="waitIME">输入法防抖</check-box>
 `;
 
 function switchToSettingMode() {

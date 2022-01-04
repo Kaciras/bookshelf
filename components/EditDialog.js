@@ -74,6 +74,7 @@ class EditDialogElement extends HTMLElement {
 	show(data = defaultData) {
 		pick(data, this);
 		this.dialogEl.showModal();
+		this.nameInput.focus();
 	}
 
 	// 把要传递的属性挑出来，以便调用方解构。
@@ -90,14 +91,14 @@ class EditDialogElement extends HTMLElement {
 		}
 	}
 
-	async fetchFavicon() {
+	async fetchFavicon(signal) {
 		if (!this.urlInput.reportValidity()) {
 			return;
 		}
 		const url = this.urlInput.value;
 
 		try {
-			const href = await getFaviconUrl(url);
+			const href = await getFaviconUrl(url, signal);
 			this.iconUrl = href;
 			this.favicon = await imageUrlToLocal(href);
 		} catch (e) {
