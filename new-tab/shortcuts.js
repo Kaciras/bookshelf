@@ -2,7 +2,7 @@ import { getFaviconUrl, imageUrlToLocal, indexInParent, jump } from "@share";
 import { loadConfig, saveConfig, syncLocalStorage } from "./storage";
 
 /*
- * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储的限制，
+ * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储有限制，
  * 能同步的数据很少，图标等资源会超出限额所以只能存在本地，当数据同步到新的设备上后需必须新下载图标。
  * Firefox 自己的标签页也和书签也是这样的。
  *
@@ -149,6 +149,7 @@ importDialog.addEventListener("add", event => add(event.detail));
 
 export function startAddShortcut() {
 	editDialog.show();
+	editDialog.index = undefined;
 }
 
 export function startImportTopSites() {

@@ -54,6 +54,13 @@ body {
 	}
 }
 
+engine-select {
+	position: absolute;
+	top: 34px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
 search-box {
 	width: var(--search-box-width);
 }

@@ -4,8 +4,8 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 	<slot></slot>
-	<div class='dot-flashing'>
-		<div class='middle'></div>
+	<div class="dot-flashing">
+		<div class="middle"></div>
 	</div>
 `;
 
@@ -60,6 +60,7 @@ class TaskButtonElement extends HTMLElement {
 		const { slotEl, loadingEl, taskFn, style } = this;
 		this.running = true;
 
+		// 固定大小，防止内容切换后影响布局
 		const { width, height } = this.getBoundingClientRect();
 		style.width = width + "px";
 		style.height = height + "px";

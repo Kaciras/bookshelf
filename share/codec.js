@@ -9,7 +9,7 @@ const escapes = {
 };
 
 /**
- * SVG 可以使用比 Base64 更高效的 URL 编码。
+ * SVG 可以使用比 Base64 更高效的 DataURL 编码。
  *
  * @see https://www.zhangxinxu.com/wordpress/2018/08/css-svg-background-image-base64-encode/
  */

@@ -1,12 +1,5 @@
 @import "/global.css";
 
-:host {
-	position: absolute;
-	top: 34px;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
 #container {
 	display: flex;
 	gap: 15px;
