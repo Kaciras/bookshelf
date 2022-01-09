@@ -77,6 +77,16 @@ export function bindInput(input, receiver) {
 	});
 }
 
+export function getImageResolution(url) {
+	const element = document.createElement("img");
+	element.src = url;
+
+	return new Promise((resolve, reject) => {
+		element.onerror = reject;
+		element.onload = () => resolve(element);
+	});
+}
+
 /**
  * 虽然 Node 自带 dirname，但在浏览器里用的话还得自己写一个。
  */

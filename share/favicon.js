@@ -1,5 +1,8 @@
-import { dirname } from "./lang";
+import { dirname, getImageResolution } from "./lang";
 import { blobToBase64URL, encodeSVG } from "./codec.js";
+
+/** 页面里的网站图标元素都是 48x48 像素 */
+const BEST_SIZE = 48;
 
 /**
  * 下载并解析 URL 所指定的网页，从中读取所有的图标信息。
@@ -14,7 +17,7 @@ import { blobToBase64URL, encodeSVG } from "./codec.js";
  * @param url 网页的 URL
  * @param signal 下载过程可以取消
  */
-async function* fetchLinks(url, signal) {
+export async function* fetchIconLinks(url, signal) {
 	const response = await fetch(url, { mode: "no-cors", signal });
 	if (!response.ok) {
 		throw new Error(`Request failed, status = ${response.status}`);
@@ -83,38 +86,46 @@ async function fetchManifest(url, signal) {
  * @return {Promise<string>} 图标的 URL。
  */
 export async function getFaviconUrl(url, signal) {
-	let best;
-	let size = Number.MAX_SAFE_INTEGER;
+	let selected;
+	let selectedSize = Number.MAX_SAFE_INTEGER;
 
-	for await (const link of fetchLinks(url, signal)) {
-		const { sizes, type } = link;
+	for await (const link of fetchIconLinks(url, signal)) {
+		const { sizes, href, type } = link;
+		let size;
 
-		if (type === "image/svg+xml") {
-			best = link;
-			break; // 有 SVG 格式则选中
-		}
+		// 这里下载了图片，因为有缓存所以外部再下载也没啥问题。
+		try {
+			const rs = await getImageResolution(href);
 
-		// 没有的话先选一个
-		if (!best) {
-			best = link;
-			continue;
-		}
+			if (type === "image/svg+xml") {
+				return href; // 有 SVG 格式就直接选它。
+			}
 
-		let match = /(\d+)x(\d+)/.exec(sizes[0]);
-		if (match === null) {
-			continue; // 尺寸未知的不要
-		}
-		const width = parseInt(match[1]);
+			// 获取图片的尺寸，这里假定了图片宽高相等。
+			const match = /(\d+)x(\d+)/.exec(sizes[0]);
+			if (match === null) {
+				size = rs.width;
+			} else {
+				size = parseInt(match[1]);
+			}
 
-		// 在尺寸至少为 48 的图中选择最小的
-		if (width >= 48 && width < size) {
-			best = link;
-			size = width;
+			// 没有就先选一个，否则在尺寸至少为 48 的图中选择最小的
+			if (!selected) {
+				if (size >= BEST_SIZE) {
+					selectedSize = size;
+				}
+				selected = href;
+			} else if (size >= BEST_SIZE && size < selectedSize) {
+				selected = href;
+				selectedSize = size;
+			}
+		} catch (e) {
+			console.warn("图片无效或无法下载，", e);
 		}
 	}
 
-	// 若是没有在 link 里指定，则返回默认的 /favicon.ico
-	return best?.href || new URL("/favicon.ico", url).toString();
+	// 若是没有指定，则返回默认的 /favicon.ico
+	return selected || new URL("/favicon.ico", url).toString();
 }
 
 /**

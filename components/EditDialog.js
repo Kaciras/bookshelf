@@ -102,6 +102,7 @@ class EditDialogElement extends HTMLElement {
 			this.iconUrl = href;
 			this.favicon = await imageUrlToLocal(href);
 		} catch (e) {
+			console.error(e);
 			window.alert(`图标下载失败：${e.message}`);
 		}
 	}
