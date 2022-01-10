@@ -77,9 +77,11 @@ async function fetchManifest(url, signal) {
 }
 
 /**
- * 获取 URL 所指定的页面的图标（favicon），自动选择最佳的一个。
+ * 获取 URL 所指定的页面的图标（favicon），图标链接从页面中提取，或使用通用的约定。
  *
- * 图标链接从页面中提取，或使用通用的约定，本函数没有验证返回的 URL 是否有效。
+ * 如果有多个图标，则自动选择最佳的一个，选择规则见函数内的注释。
+ *
+ * 为了确保图片有效，这里会进行下载，因为有缓存所以外部再下载也没啥问题。
  *
  * @param url 页面的 URL
  * @param signal AbortSignal 取消加载页面
@@ -88,36 +90,44 @@ async function fetchManifest(url, signal) {
 export async function getFaviconUrl(url, signal) {
 	let selected;
 	let selectedSize = Number.MAX_SAFE_INTEGER;
+	let selectedSVG = false;
 
 	for await (const link of fetchIconLinks(url, signal)) {
 		const { sizes, href, type } = link;
 		let size;
+		let actualSize = null;
 
-		// 这里下载了图片，因为有缓存所以外部再下载也没啥问题。
+		if (selectedSVG && type !== "image/svg+xml") {
+			continue; // 如果已经有 SVG 则忽略光栅图。
+		}
+
 		try {
-			const rs = await getImageResolution(href);
-
-			if (type === "image/svg+xml") {
-				return href; // 有 SVG 格式就直接选它。
-			}
-
 			// 获取图片的尺寸，这里假定了图片宽高相等。
 			const match = /(\d+)x(\d+)/.exec(sizes[0]);
-			if (match === null) {
-				size = rs.width;
-			} else {
+			if (match !== null) {
 				size = parseInt(match[1]);
+			} else {
+				actualSize = await getImageResolution(href);
+				size = actualSize.width;
 			}
 
-			// 没有就先选一个，否则在尺寸至少为 48 的图中选择最小的
-			if (!selected) {
+			// 如果已有光栅图，又遇到了 SVG 则选后者。
+			// 没有就先选一个。
+			// 否则在尺寸至少为 48 的图中选择最小的。
+			if (
+				!selectedSVG && type === "image/svg+xml" ||
+				!selected ||
+				size >= BEST_SIZE && size < selectedSize
+			) {
+				// 前面没有下载的话这里补上，确保资源有效。
+				if (!actualSize) {
+					await getImageResolution(href);
+				}
 				if (size >= BEST_SIZE) {
 					selectedSize = size;
 				}
 				selected = href;
-			} else if (size >= BEST_SIZE && size < selectedSize) {
-				selected = href;
-				selectedSize = size;
+				selectedSVG = type === "image/svg+xml";
 			}
 		} catch (e) {
 			console.warn("图片无效或无法下载，", e);
