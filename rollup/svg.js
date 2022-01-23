@@ -68,6 +68,10 @@ export default function (source, info) {
 	}
 	const config = info.type === AssetType.Source
 		? inlineConfig : resourceConfig;
-	const { data } = optimize(source.string, config);
-	return data.replaceAll('"', "'");
+	const result = optimize(source.string, config);
+
+	if ("error" in result) {
+		throw result.modernError;
+	}
+	return result.data.replaceAll('"', "'");
 }
