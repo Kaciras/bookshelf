@@ -2,6 +2,12 @@ import { readFile } from "fs/promises";
 import { dummyImportEntry } from "./html.js";
 import { getRefId } from "./asset.js";
 
+const mark = "?manifest";
+
+function unwrapManifest(id) {
+	return id.endsWith(mark) ? id.slice(0, -mark.length) : null;
+}
+
 /**
  * 浏览器扩展的清单插件，将清单文件作为构建的入口点，处理其中的资源，并生成 manifest.json。
  *
@@ -17,13 +23,13 @@ export default function createManifestPlugin(filename) {
 		name: "browser-extension-manifest",
 
 		async buildStart() {
-			const marked = filename + "?manifest";
+			const wrapped = filename + mark;
 			this.emitFile({
 				type: "chunk",
-				id: marked,
+				id: wrapped,
 				fileName: "manifest.json",
 			});
-			selfId = (await this.resolve(marked)).id;
+			selfId = (await this.resolve(wrapped)).id;
 		},
 
 		/**
@@ -34,38 +40,37 @@ export default function createManifestPlugin(filename) {
 		 * 这种写法对 TS 很友好，并且更规整，但分隔符用冒号会跟 Windows 的盘符混淆。
 		 */
 		async resolveId(source) {
-			if (!source.endsWith("?manifest")) {
+			const file = unwrapManifest(source);
+			if (!file) {
 				return null;
 			}
-			const file = source.slice(0, source.length - "?manifest".length);
 			const resolved = this.resolve(file, undefined, { skipSelf: true });
-			return (await resolved).id + "?manifest";
+			return (await resolved).id + mark;
 		},
 
 		async load(id) {
-			if (!id.endsWith("?manifest")) {
+			id = unwrapManifest(id);
+			if (!id) {
 				return null;
 			}
-			id = id.slice(0, id.length - "?manifest".length);
 			manifest = JSON.parse(await readFile(id, "utf8"));
 
 			const { icons = [] } = manifest;
 			const ids = [];
 
 			for (const size of Object.keys(icons)) {
-				const aid = icons[size] + "?resource";
-				ids.push(aid);
-				files.push({ host: icons, key: size, value: aid });
+				const value = icons[size] + "?resource";
+				ids.push(value);
+				files.push({ host: icons, key: size, value });
 			}
 
 			const { newtab } = manifest.chrome_url_overrides;
 			if (newtab) {
 				this.emitFile({
 					type: "chunk",
+					id: newtab,
 					fileName: "new-tab.js",
 					importer: id,
-					id: newtab,
-					name: "new-tab",
 				});
 			}
 

@@ -2,7 +2,7 @@ import { basename, join } from "path";
 import glob from "fast-glob";
 import { dummyImportEntry } from "./html.js";
 
-const hostId = "COPY_IMPORTER";
+const VID = "COPY_IMPORTER";
 
 /**
  * 复制资源的插件，该插件需要搭配 asset 插件使用。
@@ -44,17 +44,17 @@ export default function copyPlugin(list) {
 					ids.add(file + "?resource&filename=" + fileName);
 				}
 			}
-			this.emitFile({ type: "chunk", fileName: hostId, id: hostId });
+			this.emitFile({ type: "chunk", fileName: VID, id: VID });
 		},
 
 		/**
 		 * 虚拟模块无法被默认的解析器解析，需要自己处理下。
 		 */
 		resolveId(source, importer) {
-			if (source === hostId) {
-				return hostId;
+			if (source === VID) {
+				return VID;
 			}
-			if (importer !== hostId) {
+			if (importer !== VID) {
 				return null;
 			}
 			return this.resolve(source, undefined, { skipSelf: true });
@@ -65,7 +65,7 @@ export default function copyPlugin(list) {
 		 * 同时还禁止了 TreeShake 以避免空模块警告。
 		 */
 		load(id) {
-			if (id !== hostId) {
+			if (id !== VID) {
 				return null;
 			}
 			return {
@@ -80,6 +80,6 @@ export default function copyPlugin(list) {
 		 * @param _ 没用的参数
 		 * @param bundle 输出的入口文件
 		 */
-		generateBundle: (_, bundle) => delete bundle[hostId],
+		generateBundle: (_, bundle) => delete bundle[VID],
 	};
 }
