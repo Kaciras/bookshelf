@@ -17,7 +17,7 @@ function reactive(ast, params) {
 			if (stroke && stroke !== "none") {
 				attributes.stroke = "currentColor";
 			}
-			if (fill && fill !== "none") {
+			if (fill !== "none") {
 				attributes.fill = "currentColor";
 			}
 		}
