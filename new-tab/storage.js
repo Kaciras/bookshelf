@@ -33,10 +33,10 @@ export function loadConfig(keys) {
 
 /**
  * 清除所有保存的数据，因为使用了同步存储所以其它设备也会受到影响。
- * 其它设备的本地存储虽然不受影响，但在下次启动时也会由 syncLocalStorage 清理。
+ * 其它设备的本地存储虽然不受影响，但在下次启动时也会由 syncAddonData 清理。
  */
 export async function clearAllData() {
-	localStorage.clear();
+	await caches.delete("favicon");
 	await syncSettings.clear();
 	await localSettings.clear();
 }
@@ -48,7 +48,7 @@ export async function clearAllData() {
  * @param callback 处理函数
  * @return {Promise<void>} 是否完成整个流程
  */
-export async function syncLocalStorage(callback) {
+export async function syncAddonData(callback) {
 	const [synced, local] = await Promise.all([
 		syncSettings.get("uuid"),
 		localSettings.get("uuid"),

@@ -1,5 +1,4 @@
 import { dirname, getImageResolution } from "./lang";
-import { blobToBase64URL, encodeSVG } from "./codec.js";
 
 /** 页面里的网站图标元素都是 48x48 像素 */
 const BEST_SIZE = 48;
@@ -136,25 +135,4 @@ export async function getFaviconUrl(url, signal) {
 
 	// 若是没有指定，则返回默认的 /favicon.ico
 	return selected || new URL("/favicon.ico", url).toString();
-}
-
-/**
- * 将远程的图片 URL 转换为本地的 DataURL。
- *
- * @param url 原始 URL
- * @return {Promise<string>} DataURL
- */
-export async function imageUrlToLocal(url) {
-	const response = await fetch(url, { mode: "no-cors" });
-	if (!response.ok) {
-		throw new Error(`资源下载失败：${url}`);
-	}
-	const blob = await response.blob();
-
-	if (blob.type === "image/svg+xml") {
-		const code = encodeSVG(await blob.text());
-		return `data:image/svg+xml,${code}`;
-	} else {
-		return await blobToBase64URL(blob);
-	}
 }

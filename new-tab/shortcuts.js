@@ -1,5 +1,6 @@
-import { getFaviconUrl, imageUrlToLocal, indexInParent, jump } from "@share";
-import { loadConfig, saveConfig, syncLocalStorage } from "./storage";
+import WebsiteIcon from "@assets/Website.svg?url";
+import { indexInParent, jump } from "@share";
+import { loadConfig, saveConfig, syncAddonData } from "./storage";
 
 /*
  * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储有限制，
@@ -23,16 +24,6 @@ let dragEl = null;	// 当前被拖动的元素
  */
 function persistDataModel() {
 	return saveConfig({ shortcuts });
-}
-
-/**
- * 获取快捷方式对应的图标，使用域名作为键。
- *
- * @param shortcut 快捷方式
- * @return {string} 对应的图标 DataURL
- */
-function iconKey(shortcut) {
-	return "icon:" + new URL(shortcut.url).host;
 }
 
 /**
@@ -91,7 +82,7 @@ function appendElement(props) {
 function add(request) {
 	const { label, iconUrl, favicon, url } = request;
 
-	localStorage.setItem(iconKey(request), favicon);
+	caches.open("favicon").then(c => c.put(iconUrl, favicon));
 	const el = appendElement(request);
 	el.isEditable = container.editable;
 
@@ -100,16 +91,16 @@ function add(request) {
 }
 
 function update(index, request) {
-	const { favicon, ...newValue } = request;
+	const { iconResponse, ...newValue } = request;
 
 	const el = container.children[index];
-	Object.assign(el, request);
-
+	URL.revokeObjectURL(el.favicon);
+	Object.assign(el, newValue);
 	shortcuts[index] = newValue;
-	localStorage.setItem(iconKey(el), favicon);
+
+	caches.open("favicon").then(c => c.put(newValue.iconUrl, iconResponse));
 
 	return persistDataModel().then(cleanIconCache);
-
 }
 
 /**
@@ -165,16 +156,26 @@ export function setShortcutEditable(value) {
  * 异步地从网站下载图标，完成后设置元素的图标属性。
  *
  * @param el 元素
- * @param key 图标在存储中的键
+ * @param iconUrl 图标的 URL
  */
-async function queueDownloadFavicon(el, key) {
-	let { url, iconUrl } = el;
+async function populateIcon(el, iconUrl) {
+	if (!iconUrl) {
+		return el.favicon = WebsiteIcon;
+	}
 
-	iconUrl = iconUrl ?? await getFaviconUrl(url);
-	const favicon = await imageUrlToLocal(iconUrl);
+	const cache = await caches.open("favicon");
+	let response = await cache.match(iconUrl);
 
-	el.favicon = favicon;
-	localStorage.setItem(key, favicon);
+	if (!response) {
+		response = await fetch(iconUrl);
+		if (!response.ok) {
+			throw new Error("图标下载失败：" + iconUrl);
+		}
+		await cache.put(iconUrl, response.clone());
+	}
+
+	const blob = await response.blob();
+	el.favicon = URL.createObjectURL(blob);
 }
 
 function initialize(saved) {
@@ -184,23 +185,13 @@ function initialize(saved) {
 		console.debug("Shortcuts model:", shortcuts);
 	}
 
-	const hosts = new Set();
-
 	for (const shortcut of shortcuts) {
-		const key = iconKey(shortcut);
+		const { iconUrl } = shortcut;
 		const el = appendElement(shortcut);
-
-		hosts.add(key);
-
-		let favicon = localStorage.getItem(key);
-		if (favicon !== null) {
-			el.favicon = favicon;
-		} else {
-			queueDownloadFavicon(el, key);
-		}
+		populateIcon(el, iconUrl).then();
 	}
 
-	requestIdleCallback(() => syncLocalStorage(cleanIconCache));
+	requestIdleCallback(() => syncAddonData(cleanIconCache));
 }
 
 /**
@@ -209,18 +200,16 @@ function initialize(saved) {
  * 因为可能存在多个快捷方式使用同一图标的情况，
  * 所以不能仅靠被修改的对象来确定是否清理，只能全部扫描一遍。
  */
-function cleanIconCache() {
-	const inUse = new Set(shortcuts.map(iconKey));
-	const toRemove = [];
+async function cleanIconCache() {
+	const inUse = new Set(shortcuts.map(s => s.iconUrl));
 
-	for (let i = 0; i < localStorage.length; i++) {
-		const key = localStorage.key(i);
-		if (key.startsWith("icon:") && !inUse.has(key)) {
-			toRemove.push(key);
-		}
-	}
-	toRemove.forEach(k => localStorage.removeItem(k));
-	console.debug(`删除 ${toRemove.length} 个图标缓存`);
+	const cache = await caches.open("favicon");
+	const tasks = (await cache.keys())
+		.filter(r => !inUse.has(r.url))
+		.map(request => cache.delete(request));
+
+	await Promise.all(tasks);
+	console.debug(`删除了 ${tasks.length} 个图标缓存。`);
 }
 
 document.body.append(importDialog, editDialog);

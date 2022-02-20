@@ -1,13 +1,28 @@
 import WebsiteIcon from "@assets/Website.svg?url";
-import { delegate, getFaviconUrl, imageUrlToLocal } from "@share";
+import { delegate, getFaviconUrl } from "@share";
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
 
 const defaultData = {
-	iconUrl: null,
 	label: "",
 	url: "",
+
+	/**
+	 * 图标的 URL，默认为 null，或是自动获取的。
+	 */
+	iconUrl: null,
+
+	/**
+	 * 图标下载到本地后引用的 URL，也可能是缓存中取出的。
+	 * 该属性是由 iconUrl 生成的。
+	 */
 	favicon: WebsiteIcon,
+
+	/**
+	 * 图标响应，仅当下载了图标后存在。
+	 * 该属性不属于 Shortcut 对象，仅用于保存缓存。
+	 */
+	iconResponse: null,
 };
 
 function pick(source, target) {
@@ -99,8 +114,11 @@ class EditDialogElement extends HTMLElement {
 
 		try {
 			const href = await getFaviconUrl(url, signal);
+			const res = await fetch(href, { mode: "no-cors" });
+
+			this.iconResponse = res.clone();
 			this.iconUrl = href;
-			this.favicon = await imageUrlToLocal(href);
+			this.favicon = URL.createObjectURL(await res.blob());
 		} catch (e) {
 			console.error(e);
 			window.alert(`图标下载失败：${e.message}`);
