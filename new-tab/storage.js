@@ -6,7 +6,7 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
-import { saveFile, selectFile } from "@share";
+import { blobToBase64URL, saveFile, selectFile } from "@share";
 
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
@@ -65,14 +65,16 @@ export async function syncAddonData(callback) {
 }
 
 export async function exportSettings() {
-	const page = {};
-	for (let i = 0; i < localStorage.length; i++) {
-		const key = localStorage.key(i);
-		page[key] = localStorage.getItem(key);
+	const cache = await caches.open("favicon");
+	const favicons = [];
+	for (const res of await cache.matchAll()) {
+		const blob = await res.blob();
+		const body = await blobToBase64URL(blob);
+		favicons.push({ url: res.url, body });
 	}
 
 	const data = {
-		page,
+		favicons,
 		sync: await syncSettings.get(),
 		local: await localSettings.get(),
 	};
@@ -93,8 +95,9 @@ export async function importSettings() {
 	await localSettings.set(s.local);
 	await syncSettings.set(s.sync);
 
-	for (const [key, value] of Object.entries(s.page)) {
-		localStorage.setItem(key, value);
+	const cache = await caches.open("favicon");
+	for (const { url, body } of s.favicons) {
+		await cache.put(url, await fetch(body));
 	}
 
 	window.alert("数据导入成功，刷新页面后生效。");
