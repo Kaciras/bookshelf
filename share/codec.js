@@ -35,6 +35,12 @@ export function blobToBase64URL(blob) {
 	});
 }
 
+/**
+ * 方便的 Hash 函数，接受字节类数据，输出 base64url 字符串。
+ *
+ * @param data {BufferSource} 数据
+ * @return {Promise<string>} Hash 字符串
+ */
 export async function sha256(data) {
 	const digest = await crypto.subtle.digest("SHA-256", data);
 	const bytes = new Uint8Array(digest);

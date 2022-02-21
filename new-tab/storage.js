@@ -67,10 +67,11 @@ export async function syncAddonData(callback) {
 export async function exportSettings() {
 	const cache = await caches.open("favicon");
 	const favicons = [];
-	for (const res of await cache.matchAll()) {
-		const blob = await res.blob();
+	for (const { url } of await cache.keys()) {
+		const res = await cache.match(url);
+		const blob = await (res).blob();
 		const body = await blobToBase64URL(blob);
-		favicons.push({ url: res.url, body });
+		favicons.push({ url, body });
 	}
 
 	const data = {
@@ -83,7 +84,7 @@ export async function exportSettings() {
 	const blob = new Blob([json], {
 		type: "application/json",
 	});
-	saveFile(blob, "newtab-settings.json");
+	saveFile(blob, "newtab-data.json");
 }
 
 export async function importSettings() {

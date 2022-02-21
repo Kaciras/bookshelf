@@ -100,7 +100,12 @@ function update(index, request) {
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, newValue);
-	shortcuts[index] = newValue;
+
+	shortcuts[index] = {
+		label: newValue.label,
+		url: newValue.url,
+		iconUrl: newValue.iconUrl,
+	};
 
 	if (newValue.iconUrl) {
 		caches.open("favicon").then(c => c.put(newValue.iconUrl, iconResponse));
