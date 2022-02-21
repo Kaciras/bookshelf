@@ -9,6 +9,7 @@ const defaultData = {
 
 	/**
 	 * 图标的 URL，默认为 null，或是自动获取的。
+	 * 该属性将被插件同步，不能太长，请勿使用 DataURL。
 	 */
 	iconUrl: null,
 
@@ -26,6 +27,7 @@ const defaultData = {
 };
 
 function pick(source, target) {
+	target.iconResponse = source.iconResponse;
 	target.url = source.url;
 	target.favicon = source.favicon;
 	target.label = source.label;

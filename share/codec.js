@@ -34,3 +34,10 @@ export function blobToBase64URL(blob) {
 		reader.readAsDataURL(blob);
 	});
 }
+
+export async function sha256(data) {
+	const digest = await crypto.subtle.digest("SHA-256", data);
+	const bytes = new Uint8Array(digest);
+	const base64 = btoa(String.fromCharCode(...bytes));
+	return base64.replaceAll("/", "_").replaceAll("+", "-");
+}

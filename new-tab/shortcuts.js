@@ -1,6 +1,7 @@
 import WebsiteIcon from "@assets/Website.svg?url";
 import { indexInParent, jump } from "@share";
 import { loadConfig, saveConfig, syncAddonData } from "./storage";
+import { CACHE_ORIGIN } from "../components/TopSiteDialog.js";
 
 /*
  * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储有限制，
@@ -80,9 +81,12 @@ function appendElement(props) {
 }
 
 function add(request) {
-	const { label, iconUrl, favicon, url } = request;
+	const { iconResponse, label, iconUrl, url } = request;
 
-	caches.open("favicon").then(c => c.put(iconUrl, favicon));
+	if (iconUrl) {
+		caches.open("favicon").then(c => c.put(iconUrl, iconResponse));
+	}
+
 	const el = appendElement(request);
 	el.isEditable = container.editable;
 
@@ -98,7 +102,9 @@ function update(index, request) {
 	Object.assign(el, newValue);
 	shortcuts[index] = newValue;
 
-	caches.open("favicon").then(c => c.put(newValue.iconUrl, iconResponse));
+	if (newValue.iconUrl) {
+		caches.open("favicon").then(c => c.put(newValue.iconUrl, iconResponse));
+	}
 
 	return persistDataModel().then(cleanIconCache);
 }
@@ -167,15 +173,18 @@ async function populateIcon(el, iconUrl) {
 	let response = await cache.match(iconUrl);
 
 	if (!response) {
-		response = await fetch(iconUrl);
+		// 手动设置的图标没法下载，只能回退到默认值。
+		if (iconUrl.startsWith(CACHE_ORIGIN)) {
+			return el.favicon = WebsiteIcon;
+		}
+		response = await fetch(iconUrl, { mode: "no-cors" });
 		if (!response.ok) {
 			throw new Error("图标下载失败：" + iconUrl);
 		}
 		await cache.put(iconUrl, response.clone());
 	}
 
-	const blob = await response.blob();
-	el.favicon = URL.createObjectURL(blob);
+	el.favicon = URL.createObjectURL(await response.blob());
 }
 
 function initialize(saved) {
@@ -188,7 +197,7 @@ function initialize(saved) {
 	for (const shortcut of shortcuts) {
 		const { iconUrl } = shortcut;
 		const el = appendElement(shortcut);
-		populateIcon(el, iconUrl).then();
+		populateIcon(el, iconUrl);
 	}
 
 	requestIdleCallback(() => syncAddonData(cleanIconCache));

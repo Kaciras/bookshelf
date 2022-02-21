@@ -1,7 +1,13 @@
 import WebsiteIcon from "@assets/Website.svg?url";
 import AddIcon from "@assets/Add.svg";
 import CheckIcon from "@assets/Check.svg";
+import { sha256 } from "@share";
 import styles from "./TopSiteDialog.css";
+
+/**
+ * 因为 CacheStorage 的 key 必须是 HTTP URL，所以用它作为键的前缀。
+ */
+export const CACHE_ORIGIN = "https://internal-cache/";
 
 /**
  * 如果 TopSite 没有自带标题则尝试使用域名。
@@ -76,16 +82,26 @@ class TopSiteDialogElement extends HTMLElement {
 			item.children[0].src = favicon;
 			item.children[1].textContent = title;
 			item.children[2].textContent = url;
-			item.children[3].onclick = () => {
+			item.children[3].onclick = async () => {
 				item.classList.add("added");
 				item.children[3].innerHTML = CheckIcon;
+
+				/*
+				 * 此处的图标是从浏览器 API 获取的，无法对应到网站上，
+				 * 所以只能构造一个伪 iconUrl 作为缓存键。
+				 */
+				const response = await fetch(favicon);
+				const data = await response.clone().arrayBuffer();
+				const hash = (await sha256(data)).slice(0, 20);
 
 				const init = {
 					bubbles: true,
 					detail: {
+						iconUrl: CACHE_ORIGIN + hash,
 						url,
 						label: title,
 						favicon,
+						iconResponse: response,
 					},
 				};
 				this.dispatchEvent(new CustomEvent("add", init));
