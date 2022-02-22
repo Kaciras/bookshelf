@@ -32,13 +32,13 @@ function persistDataModel() {
  *
  * 无法支持从浏览器的书签拖动导入，因为浏览器会直接打开书签的页面。
  */
-const DragSortHandlers = {
+const dragSortHandlers = {
 	ondragstart(event) {
 		dragEl = event.currentTarget;
 		dragEl.ondragenter = null;
 	},
 	ondragend() {
-		dragEl.ondragenter = DragSortHandlers.ondragenter;
+		dragEl.ondragenter = dragSortHandlers.ondragenter;
 		dragEl.isDragging = false;
 		dragEl = null;
 		return persistDataModel();
@@ -66,10 +66,6 @@ const DragSortHandlers = {
 
 function appendElement(props) {
 	const el = document.createElement("book-mark");
-	Object.assign(el, DragSortHandlers);
-
-	el.addEventListener("edit", handleEdit);
-	el.addEventListener("remove", handleRemove);
 
 	el.url = props.url;
 	el.favicon = props.favicon;
@@ -77,7 +73,7 @@ function appendElement(props) {
 	el.iconUrl = props.iconUrl;
 
 	container.append(el);
-	return el;
+	return Object.assign(el, dragSortHandlers);
 }
 
 function add(request) {
@@ -136,6 +132,9 @@ function handleRemove(event) {
 	return persistDataModel().then(cleanIconCache);
 }
 
+container.addEventListener("edit", handleEdit);
+container.addEventListener("remove", handleRemove);
+
 editDialog.addEventListener("change", event => {
 	const { target, detail } = event;
 	const { index } = target;
@@ -167,14 +166,14 @@ export function setShortcutEditable(value) {
  * 异步地从网站下载图标，完成后设置元素的图标属性。
  *
  * @param el 元素
+ * @param cache 图标缓存存储
  * @param iconUrl 图标的 URL
  */
-async function populateIcon(el, iconUrl) {
+async function populateIcon(el, cache, iconUrl) {
 	if (!iconUrl) {
 		return el.favicon = WebsiteIcon;
 	}
 
-	const cache = await caches.open("favicon");
 	let response = await cache.match(iconUrl);
 
 	if (!response) {
@@ -192,17 +191,19 @@ async function populateIcon(el, iconUrl) {
 	el.favicon = URL.createObjectURL(await response.blob());
 }
 
-function initialize(saved) {
+async function mountShortcuts(saved) {
 	shortcuts = saved.shortcuts ?? [];
 
 	if (import.meta.dev) {
 		console.debug("Shortcuts model:", shortcuts);
 	}
 
+	// 在循环外打开缓存，不知道能不能提升点性能。
+	const cache = await caches.open("favicon");
 	for (const shortcut of shortcuts) {
 		const { iconUrl } = shortcut;
 		const el = appendElement(shortcut);
-		populateIcon(el, iconUrl);
+		populateIcon(el, cache, iconUrl);
 	}
 
 	requestIdleCallback(() => syncAddonData(cleanIconCache));
@@ -227,4 +228,4 @@ async function cleanIconCache() {
 }
 
 document.body.append(importDialog, editDialog);
-loadConfig("shortcuts").then(initialize);
+loadConfig("shortcuts").then(mountShortcuts);

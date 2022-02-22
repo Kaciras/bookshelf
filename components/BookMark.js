@@ -51,8 +51,12 @@ class BookMarkElement extends HTMLElement {
 		delegate(this, "url", this.linkEl, "href");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		root.getElementById("edit").onclick = () => this.dispatchEvent(new CustomEvent("edit"));
-		root.getElementById("remove").onclick = () => this.dispatchEvent(new CustomEvent("remove"));
+		root.getElementById("edit").onclick = () => {
+			this.dispatchEvent(new CustomEvent("edit", { bubbles: true }));
+		};
+		root.getElementById("remove").onclick = () => {
+			this.dispatchEvent(new CustomEvent("remove", { bubbles: true }));
+		};
 	}
 
 	/**
