@@ -41,5 +41,6 @@ searchBox.onkeydown = e => {
 	searchBox.engine = engineSelect.value;
 };
 
-loadConfig(["threshold", "waitIME", "limit"]).then(v => Object.assign(searchBox, v));
 switchToNormalMode();
+
+Object.assign(searchBox, await loadConfig(["threshold", "waitIME", "limit"]));
