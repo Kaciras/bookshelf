@@ -1,6 +1,6 @@
 import WebsiteIcon from "@assets/Website.svg?url";
 import { indexInParent, jump } from "@share";
-import { loadConfig, saveConfig, syncAddonData } from "./storage";
+import { loadConfig, saveConfig, syncAddonData } from "./storage.js";
 import { CACHE_ORIGIN } from "../components/TopSiteDialog.js";
 
 /*
