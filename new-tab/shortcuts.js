@@ -1,7 +1,6 @@
 import WebsiteIcon from "@assets/Website.svg?url";
 import { indexInParent, jump } from "@share";
-import { loadConfig, saveConfig, syncAddonData } from "./storage.js";
-import { CACHE_ORIGIN } from "../components/TopSiteDialog.js";
+import { CACHE_ORIGIN, loadConfig, saveConfig, syncAddonData } from "./storage.js";
 
 /*
  * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储有限制，
@@ -12,8 +11,6 @@ import { CACHE_ORIGIN } from "../components/TopSiteDialog.js";
  */
 
 const container = document.getElementById("shortcuts");
-const importDialog = document.createElement("top-site-dialog");
-const editDialog = document.createElement("edit-dialog");
 
 let shortcuts;		// 数据模型
 let dragEl = null;	// 当前被拖动的元素
@@ -76,7 +73,7 @@ function appendElement(props) {
 	return Object.assign(el, dragSortHandlers);
 }
 
-function add(request) {
+export function add(request) {
 	const { iconResponse, label, iconUrl, url } = request;
 
 	if (iconUrl) {
@@ -90,7 +87,7 @@ function add(request) {
 	return persistDataModel();
 }
 
-function update(index, request) {
+export function update(index, request) {
 	const { iconResponse, ...newValue } = request;
 
 	const el = container.children[index];
@@ -110,51 +107,12 @@ function update(index, request) {
 	return persistDataModel().then(cleanIconCache);
 }
 
-/**
- * 快捷方式右上角的编辑按钮被点击时调用。
- *
- * 【注意】
- * 这里用索引来记录当前编辑的对象，需要保证编辑时 shortcuts 里的顺序不变。
- *
- * @param event BookMark 元素的 edit 事件
- */
-function handleEdit(event) {
-	const el = event.target;
-	editDialog.index = indexInParent(el);
-	editDialog.show(el);
-}
-
-function handleRemove(event) {
+export function remove(event) {
 	const i = indexInParent(event.target);
 	event.target.remove();
 	shortcuts.splice(i, 1);
 
 	return persistDataModel().then(cleanIconCache);
-}
-
-container.addEventListener("edit", handleEdit);
-container.addEventListener("remove", handleRemove);
-
-editDialog.addEventListener("change", event => {
-	const { target, detail } = event;
-	const { index } = target;
-
-	if (index === undefined) {
-		return add(detail);
-	} else {
-		return update(index, detail);
-	}
-});
-
-importDialog.addEventListener("add", event => add(event.detail));
-
-export function startAddShortcut() {
-	editDialog.show();
-	editDialog.index = undefined;
-}
-
-export function startImportTopSites() {
-	importDialog.show();
 }
 
 export function setShortcutEditable(value) {
@@ -227,5 +185,4 @@ async function cleanIconCache() {
 	console.debug(`删除了 ${tasks.length} 个图标缓存。`);
 }
 
-document.body.append(importDialog, editDialog);
 loadConfig("shortcuts").then(mountShortcuts);

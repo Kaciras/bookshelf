@@ -1,13 +1,10 @@
-import "../components/DialogBase.js";
-import "../components/CheckBox.js";
 import "../components/BookMark.js";
-import "../components/EditDialog.js";
-import "../components/TopSiteDialog.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
+import SettingIcon from "@assets/Setting.svg";
 import { loadConfig } from "./storage.js";
 import { Baidu, DuckDuckGo, Google } from "./search.js";
-import { switchToNormalMode } from "./settings.js";
+import { setShortcutEditable } from "./shortcuts.js";
 
 const searchBox = document.createElement("search-box");
 searchBox.engine = Google;
@@ -40,6 +37,22 @@ searchBox.onkeydown = e => {
 	e.preventDefault();
 	searchBox.engine = engineSelect.value;
 };
+
+function switchToNormalMode() {
+	const button = document.createElement("button");
+	button.innerHTML = SettingIcon;
+	button.title = "进入设置模式";
+	button.className = "icon";
+	button.onclick = () => import("./settings.js")
+		.then(module => module.switchToSettingMode())
+		.then(switchToNormalMode);
+
+	document.getElementById("setting-left").replaceChildren();
+	document.getElementById("setting-right").replaceChildren(button);
+
+	setShortcutEditable(false);
+	document.body.classList.remove("editing");
+}
 
 switchToNormalMode();
 

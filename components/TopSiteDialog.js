@@ -2,12 +2,8 @@ import WebsiteIcon from "@assets/Website.svg?url";
 import AddIcon from "@assets/Add.svg";
 import CheckIcon from "@assets/Check.svg";
 import { sha256 } from "@share";
+import { CACHE_ORIGIN } from "../new-tab/storage.js";
 import styles from "./TopSiteDialog.css";
-
-/**
- * 因为 CacheStorage 的 key 必须是 HTTP URL，所以用它作为键的前缀。
- */
-export const CACHE_ORIGIN = "https://internal-cache/";
 
 /**
  * 如果 TopSite 没有自带标题则尝试使用域名。

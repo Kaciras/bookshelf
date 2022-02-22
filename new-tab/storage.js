@@ -11,6 +11,11 @@ import { blobToBase64URL, saveFile, selectFile } from "@share";
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
+/**
+ * 因为 CacheStorage 的 key 必须是 HTTP URL，所以用它作为键的前缀。
+ */
+export const CACHE_ORIGIN = "https://internal-cache/";
+
 export async function saveConfig(object, keys) {
 	const uuid = Math.random();
 	const items = { uuid };
