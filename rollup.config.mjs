@@ -20,6 +20,9 @@ function webpackAliasToRollup() {
 }
 
 export default {
+	// 以 WebApp 为目标推荐设为 false，避免生成 facade 模块。
+	preserveEntrySignatures: false,
+
 	output: {
 		format: "esm",
 		dir: "dist",
