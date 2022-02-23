@@ -73,11 +73,15 @@ function appendElement(props) {
 	return Object.assign(el, dragSortHandlers);
 }
 
+function cacheFavicon(url, response) {
+	caches.open("favicon").then(c => c.put(url, response));
+}
+
 export function add(request) {
 	const { iconResponse, label, iconUrl, url } = request;
 
 	if (iconUrl) {
-		caches.open("favicon").then(c => c.put(iconUrl, iconResponse));
+		cacheFavicon(iconUrl, iconResponse);
 	}
 
 	const el = appendElement(request);
@@ -94,14 +98,11 @@ export function update(index, request) {
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, newValue);
 
-	shortcuts[index] = {
-		label: newValue.label,
-		url: newValue.url,
-		iconUrl: newValue.iconUrl,
-	};
+	const { label, iconUrl, url } = newValue;
+	shortcuts[index] = { label, iconUrl, url };
 
-	if (newValue.iconUrl) {
-		caches.open("favicon").then(c => c.put(newValue.iconUrl, iconResponse));
+	if (iconUrl) {
+		cacheFavicon(iconUrl, iconResponse);
 	}
 
 	return persistDataModel().then(cleanIconCache);
@@ -127,13 +128,12 @@ export function setShortcutEditable(value) {
  * @param cache 图标缓存存储
  * @param iconUrl 图标的 URL
  */
-async function populateIcon(el, cache, iconUrl) {
+async function populateFavicon(el, cache, iconUrl) {
 	if (!iconUrl) {
 		return el.favicon = WebsiteIcon;
 	}
 
 	let response = await cache.match(iconUrl);
-
 	if (!response) {
 		// 手动设置的图标没法下载，只能回退到默认值。
 		if (iconUrl.startsWith(CACHE_ORIGIN)) {
@@ -149,8 +149,8 @@ async function populateIcon(el, cache, iconUrl) {
 	el.favicon = URL.createObjectURL(await response.blob());
 }
 
-async function mountShortcuts(saved) {
-	shortcuts = saved.shortcuts ?? [];
+async function mountShortcuts({ shortcuts }) {
+	shortcuts ??= [];
 
 	if (import.meta.dev) {
 		console.debug("Shortcuts model:", shortcuts);
@@ -161,7 +161,7 @@ async function mountShortcuts(saved) {
 	for (const shortcut of shortcuts) {
 		const { iconUrl } = shortcut;
 		const el = appendElement(shortcut);
-		populateIcon(el, cache, iconUrl);
+		populateFavicon(el, cache, iconUrl);
 	}
 
 	requestIdleCallback(() => syncAddonData(cleanIconCache));

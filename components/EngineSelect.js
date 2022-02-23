@@ -65,6 +65,7 @@ class EngineSelectElement extends HTMLElement {
 	render(value) {
 		const buttons = value.map(engine => {
 			const img = document.createElement("img");
+			img.alt = engine.name;
 			img.src = engine.favicon;
 
 			const button = document.createElement("button");
