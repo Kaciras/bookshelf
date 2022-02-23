@@ -9,10 +9,7 @@ import styles from "./DialogBase.css";
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-
-	<div id="backdrop"></div>
-
-	<div id="dialog">
+	<dialog>
 		<h1></h1>
 		<button
 			class="plain"
@@ -22,7 +19,7 @@ template.innerHTML = `
 			${xIcon}
 		</button>
 		<slot></slot>
-	</div>
+	</dialog>
 `;
 
 /**
@@ -41,11 +38,11 @@ class DialogBaseElement extends HTMLElement {
 		const root = this.attachShadow({ mode: "closed" });
 		root.append(template.content.cloneNode(true));
 
+		this.dialogEl = root.querySelector("dialog");
 		this.titleEl = root.querySelector("h1");
 
-		root.getElementById("dialog").onkeyup = this.handleKeyUp.bind(this);
 		root.querySelector("button").onclick = this.hide.bind(this);
-		root.getElementById("backdrop").onclick = this.handleBackdropClick.bind(this);
+		this.dialogEl.onclick = this.handleBackdropClick.bind(this);
 	}
 
 	get name() {
@@ -68,23 +65,25 @@ class DialogBaseElement extends HTMLElement {
 	}
 
 	showModal() {
-		this.classList.add("open");
+		this.dialogEl.showModal();
 	}
 
 	hide() {
 		this.dispatchEvent(new CustomEvent("close"));
-		this.classList.remove("open");
+		this.dialogEl.close();
 	}
 
-	handleKeyUp(event) {
-		event.key === "Escape" && this.hide();
-	}
-
-	handleBackdropClick() {
-		const event = new CustomEvent("backdrop-click", {
-			cancelable: true,
-		});
-		this.dispatchEvent(event) && this.hide();
+	/**
+	 * dialog 元素好像没法简单地区分点击遮罩，只能判断鼠标位置。
+	 *
+	 * https://stackoverflow.com/a/64578435
+	 */
+	handleBackdropClick(event) {
+		const rect = this.dialogEl.getBoundingClientRect();
+		if (event.clientY < rect.top || event.clientY > rect.bottom ||
+			event.clientX < rect.left || event.clientX > rect.right) {
+			this.hide();
+		}
 	}
 }
 

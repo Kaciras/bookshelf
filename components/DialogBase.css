@@ -1,40 +1,18 @@
 @import "/global.css";
 
-:host {
-	display: none;
-	justify-content: center;
-	align-items: center;
-
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	z-index: 100;
-}
-
-:host(.open) {
-	display: flex;
-}
-
-#backdrop {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-
-	background: rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(2px);
-}
-
-#dialog {
+dialog {
 	position: relative;
+	padding: 0;
 	overflow: hidden;
 
 	background: white;
 	box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.2);
+	border: none;
 	border-radius: var(--panel-radius);
+
+	&::backdrop {
+		backdrop-filter: blur(2px);
+	}
 }
 
 h1 {
