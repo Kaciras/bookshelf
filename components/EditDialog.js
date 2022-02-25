@@ -99,9 +99,9 @@ class EditDialogElement extends HTMLElement {
 		const { dialogEl, urlInput } = this;
 
 		if (event.target.id !== "accept") {
-			dialogEl.hide();
+			dialogEl.close();
 		} else if (urlInput.form.reportValidity()) {
-			dialogEl.hide();
+			dialogEl.close();
 			const detail = {};
 			pick(this, detail);
 			this.dispatchEvent(new CustomEvent("change", { detail }));

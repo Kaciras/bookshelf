@@ -34,7 +34,7 @@ class DialogBaseElement extends HTMLElement {
 		this.dialogEl = root.querySelector("dialog");
 		this.titleEl = root.querySelector("h1");
 
-		root.querySelector("button").onclick = this.hide.bind(this);
+		root.querySelector("button").onclick = this.close.bind(this);
 		this.dialogEl.onclick = this.handleClick.bind(this);
 	}
 
@@ -61,8 +61,7 @@ class DialogBaseElement extends HTMLElement {
 		this.dialogEl.showModal();
 	}
 
-	hide() {
-		this.dispatchEvent(new CustomEvent("close"));
+	close() {
 		this.dialogEl.close();
 	}
 
@@ -77,7 +76,7 @@ class DialogBaseElement extends HTMLElement {
 
 		if (clientY < rect.top || clientY > rect.bottom ||
 			clientX < rect.left || clientX > rect.right) {
-			this.hide();
+			this.close();
 		}
 	}
 }
