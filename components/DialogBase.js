@@ -1,11 +1,6 @@
 import xIcon from "@assets/Close.svg";
 import styles from "./DialogBase.css";
 
-/*
- * 不能将自定义元素作为遮罩层，然后对话框放在内部，虽然这样能省个元素，
- * 但 ShadowDOM 会屏蔽细节，将内部元素事件的 target 属性全改为自定义元素自身，
- * 这会导致无法判断点击的是对话框还是遮罩层。
- */
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
@@ -23,9 +18,7 @@ template.innerHTML = `
 `;
 
 /**
- * 因为 Firefox 不支持 dialog 元素，所以自己搞了，顺便加个关闭按钮。
- *
- * @see https://caniuse.com/dialog
+ * 简单封装下 <dialog>，加上了标题、个关闭按钮以及点击遮罩关闭的功能。
  */
 class DialogBaseElement extends HTMLElement {
 
@@ -42,7 +35,7 @@ class DialogBaseElement extends HTMLElement {
 		this.titleEl = root.querySelector("h1");
 
 		root.querySelector("button").onclick = this.hide.bind(this);
-		this.dialogEl.onclick = this.handleBackdropClick.bind(this);
+		this.dialogEl.onclick = this.handleClick.bind(this);
 	}
 
 	get name() {
@@ -78,10 +71,12 @@ class DialogBaseElement extends HTMLElement {
 	 *
 	 * https://stackoverflow.com/a/64578435
 	 */
-	handleBackdropClick(event) {
+	handleClick(event) {
 		const rect = this.dialogEl.getBoundingClientRect();
-		if (event.clientY < rect.top || event.clientY > rect.bottom ||
-			event.clientX < rect.left || event.clientX > rect.right) {
+		const { clientX, clientY } = event;
+
+		if (clientY < rect.top || clientY > rect.bottom ||
+			clientX < rect.left || clientX > rect.right) {
 			this.hide();
 		}
 	}

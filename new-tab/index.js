@@ -6,16 +6,13 @@ import { loadConfig } from "./storage.js";
 import { Baidu, DuckDuckGo, Google } from "./search.js";
 import { setShortcutEditable } from "./shortcuts.js";
 
+const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
+
 searchBox.engine = Google;
 
-// module js 自带 defer 属性，没法在 html 解析前注册自定义元素，真脑残。
-document.body.insertBefore(
-	searchBox,
-	document.getElementById("shortcuts"),
-);
-
-const engineSelect = document.createElement("engine-select");
+document.getElementById("engine-select").replaceWith(engineSelect);
+document.getElementById("search-box").replaceWith(searchBox);
 
 // 主用 Google 放中间，次要的百度放后面，按一次 PageDown 即可切换到。
 engineSelect.list = [DuckDuckGo, Google, Baidu];
