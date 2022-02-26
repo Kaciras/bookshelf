@@ -1,5 +1,7 @@
 @import "/global.css";
 
+/* 已经有 PageUp、PageDown 切换引擎了，不再设置高亮效果 */
+
 #container {
 	display: flex;
 	gap: 15px;
@@ -11,7 +13,6 @@ img {
 }
 
 button {
-
 	/* 图标可能是方形的，不能搞成圆形按钮 */
 	border-radius: 8px;
 

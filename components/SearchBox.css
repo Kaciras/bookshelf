@@ -15,7 +15,7 @@
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
 }
 
-// Chromium 浏览器会加一个高亮，这里去掉。
+/* Chromium 浏览器会加一个高亮，这里去掉 */
 :host(:focus-visible) {
 	outline: none;
 }

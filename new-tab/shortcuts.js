@@ -73,6 +73,12 @@ function appendElement(props) {
 	return Object.assign(el, dragSortHandlers);
 }
 
+/**
+ * 缓存一个网站图标响应，该函数是异步的虽然没必要返回 Promise。
+ *
+ * @param url 缓存的键，是一个 URL，可能与响应的 URL 不同。
+ * @param response 响应对象
+ */
 function cacheFavicon(url, response) {
 	caches.open("favicon").then(c => c.put(url, response));
 }
@@ -105,7 +111,7 @@ export function update(index, request) {
 		cacheFavicon(iconUrl, iconResponse);
 	}
 
-	return persistDataModel().then(cleanIconCache);
+	return persistDataModel().then(evictCache);
 }
 
 export function remove(event) {
@@ -113,7 +119,7 @@ export function remove(event) {
 	event.target.remove();
 	shortcuts.splice(i, 1);
 
-	return persistDataModel().then(cleanIconCache);
+	return persistDataModel().then(evictCache);
 }
 
 export function setShortcutEditable(value) {
@@ -164,7 +170,7 @@ async function mountShortcuts({ shortcuts }) {
 		populateFavicon(el, cache, iconUrl);
 	}
 
-	requestIdleCallback(() => syncAddonData(cleanIconCache));
+	requestIdleCallback(() => syncAddonData(evictCache));
 }
 
 /**
@@ -173,7 +179,7 @@ async function mountShortcuts({ shortcuts }) {
  * 因为可能存在多个快捷方式使用同一图标的情况，
  * 所以不能仅靠被修改的对象来确定是否清理，只能全部扫描一遍。
  */
-async function cleanIconCache() {
+async function evictCache() {
 	const inUse = new Set(shortcuts.map(s => s.iconUrl));
 
 	const cache = await caches.open("favicon");
