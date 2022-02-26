@@ -6,23 +6,21 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 
-	<div id="box">
-		<img alt="icon">
-		<input
-			id="input"
-			enterkeyhint="search"
-			placeholder="搜索"
-		>
-		<button
-			id="button"
-			tabindex="-1"
-			title="搜索"
-			class="plain"
-			type="button"
-		>
-			${ArrowIcon}
-		</button>
-	</div>
+	<img alt="icon">
+	<input
+		id="input"
+		enterkeyhint="search"
+		placeholder="搜索"
+	>
+	<button
+		id="button"
+		tabindex="-1"
+		title="搜索"
+		class="plain"
+		type="button"
+	>
+		${ArrowIcon}
+	</button>
 
 	<ul id="suggestions"></ul>
 `;
@@ -48,7 +46,6 @@ class SearchBoxElement extends HTMLElement {
 
 		this.inputEl = root.getElementById("input");
 		this.iconEl = root.querySelector("img");
-		this.boxEl = root.getElementById("box");
 		this.suggestionEl = root.getElementById("suggestions");
 
 		this.fetcher = new DebounceThrottle(this.suggest.bind(this));
@@ -109,7 +106,7 @@ class SearchBoxElement extends HTMLElement {
 		} else {
 			this.fetcher.stop();
 			this.index = null;
-			this.boxEl.classList.remove("suggested");
+			this.classList.remove("suggested");
 		}
 	}
 
@@ -140,7 +137,7 @@ class SearchBoxElement extends HTMLElement {
 		}
 
 		this.suggestionEl.replaceChildren(...newItems);
-		this.boxEl.classList.toggle("suggested", count > 0);
+		this.classList.toggle("suggested", count > 0);
 	}
 
 	/**
