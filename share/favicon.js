@@ -1,4 +1,5 @@
-import { dirname, getImageResolution } from "./lang";
+import { dirname } from "./lang.js";
+import { getImageResolution } from "./dom.js";
 
 /** 页面里的网站图标元素都是 48x48 像素 */
 const BEST_SIZE = 48;
