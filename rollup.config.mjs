@@ -26,6 +26,7 @@ export default {
 	output: {
 		format: "esm",
 		dir: "dist",
+		chunkFileNames: "[name].js",
 
 		// 新选项能提升输出代码的性能，但我没怎么感觉到。
 		generatedCode: "es2015",
