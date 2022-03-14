@@ -36,9 +36,11 @@ export default {
 	plugins: [
 		alias({ entries: webpackAliasToRollup() }),
 		replace({
-			"import.meta.env.dev": `${!isProduction}`,
-			window: "1",
 			preventAssignment: true,
+
+			// 不能直接替换 window，因为有其他地方调用。
+			"typeof window": "'object'",
+			"import.meta.env.dev": `${!isProduction}`,
 		}),
 		asset({
 			loaders: [postcss, svg],
