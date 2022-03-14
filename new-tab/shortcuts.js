@@ -131,13 +131,13 @@ export function setShortcutEditable(value) {
  * 异步地从网站下载图标，完成后设置元素的图标属性。
  *
  * @param el 元素
- * @param cache 图标缓存存储
  * @param iconUrl 图标的 URL
  */
-async function populateFavicon(el, cache, iconUrl) {
+async function populateFavicon(el, iconUrl) {
 	if (!iconUrl) {
 		return el.favicon = WebsiteIcon;
 	}
+	const cache = await caches.open("favicon");
 
 	let response = await cache.match(iconUrl);
 	if (!response) {
@@ -155,7 +155,16 @@ async function populateFavicon(el, cache, iconUrl) {
 	el.favicon = URL.createObjectURL(await response.blob());
 }
 
-async function mountShortcuts({ shortcuts }) {
+/**
+ * 挂载快捷方式组件，同时也会在空闲时清理下过期的数据。
+ *
+ * <h2>caches.open() 的影响</h2>
+ * 在该函数中调用 caches.open() 会阻塞很久，然后 cache.match() 则很快返回，
+ * 导致可见的布局移动，推测打开缓存区需要执行 IO 操作。
+ *
+ * @param shortcuts 快捷方式对象数组
+ */
+function mountShortcuts({ shortcuts }) {
 	shortcuts ??= [];
 
 	if (import.meta.dev) {
@@ -163,11 +172,10 @@ async function mountShortcuts({ shortcuts }) {
 	}
 
 	// 在循环外打开缓存，不知道能不能提升点性能。
-	const cache = await caches.open("favicon");
 	for (const shortcut of shortcuts) {
 		const { iconUrl } = shortcut;
 		const el = appendElement(shortcut);
-		populateFavicon(el, cache, iconUrl);
+		populateFavicon(el, iconUrl);
 	}
 
 	requestIdleCallback(() => syncAddonData(evictCache));
