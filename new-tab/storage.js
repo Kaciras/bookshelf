@@ -6,7 +6,7 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
-import { blobToBase64URL, saveFile, selectFile } from "@share";
+import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities";
 
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;

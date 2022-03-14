@@ -2,7 +2,10 @@ import { env } from "node:process";
 import alias from "@rollup/plugin-alias";
 import { visualizer } from "rollup-plugin-visualizer";
 import { terser } from "rollup-plugin-terser";
+import replace from '@rollup/plugin-replace';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import webpackConfig from "./alias.idea.cjs";
+import nodeBuiltins from "./rollup/builtin.js";
 import htmlEntry from "./rollup/html.js";
 import manifest from "./rollup/manifest.js";
 import copy from "./rollup/copy.js";
@@ -33,10 +36,16 @@ export default {
 	},
 	plugins: [
 		alias({ entries: webpackAliasToRollup() }),
+		nodeBuiltins,
 		asset({
 			loaders: [postcss, svg],
 			source: { include: ["components/**/*.css", "**/*.svg"] },
 			url: { include: ["**/*.ico"] },
+		}),
+		nodeResolve(),
+		replace({
+			"typeof window": "'object'",
+			preventAssignment: true,
 		}),
 		copy([
 			{ from: "new-tab/global.css" },

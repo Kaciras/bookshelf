@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import { basename } from "path";
 import { createFilter } from "@rollup/pluginutils";
 import mime from "mime";
-import { encodeSVG } from "../share/codec.js";
+import { svgToUrl } from "@kaciras/utilities";
 
 export const AssetType = {
 	Source: 0,		// 作为字符串导入。
@@ -24,7 +24,7 @@ function detectFromQuery(id) {
 function toDataUrl(source, mimetype) {
 	const isSVG = mimetype === "image/svg+xml";
 	const code = isSVG
-		? encodeSVG(source.string)
+		? svgToUrl(source.string)
 		: source.buffer.toString("base64");
 	const encoding = isSVG ? "" : ";base64";
 	return `data:${mimetype}${encoding},${code}`;
@@ -104,7 +104,7 @@ const defaultOptions = {
  * 本插件提供一个通用的接口，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
  */
 export default function createInlinePlugin(options) {
-	const { source , url , resource , limit , loaders  } = { ...defaultOptions, ...options };
+	const { source, url, resource, limit, loaders } = { ...defaultOptions, ...options };
 
 	const isInline = createFilter2(source);
 	const isUrl = createFilter2(url);
