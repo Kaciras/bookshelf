@@ -28,9 +28,13 @@ const builtins = new Set([
  */
 export default {
 	name: "node-builtin",
-	resolveId: id => builtins.has(id) && {
-		id,
-		external: true,
-		moduleSideEffects: false,
+
+	// 返回 false 代表外部依赖，这里写法有点怪。
+	resolveId(id) {
+		if (builtins.has(id)) return {
+			id,
+			external: true,
+			moduleSideEffects: false,
+		};
 	},
 };
