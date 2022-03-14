@@ -6,14 +6,13 @@ import replace from '@rollup/plugin-replace';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import webpackConfig from "./alias.idea.cjs";
 import nodeBuiltins from "./rollup/builtin.js";
+import asset from "./rollup/asset.js";
 import htmlEntry from "./rollup/html.js";
 import manifest from "./rollup/manifest.js";
 import copy from "./rollup/copy.js";
 import postcss from "./rollup/postcss.js";
 import svg from "./rollup/svg.js";
-import asset from "./rollup/asset.js";
 import template from "./rollup/template.js";
-import importMeta from "./rollup/meta.js";
 
 const isProduction = env.NODE_ENV === "production";
 
@@ -36,17 +35,18 @@ export default {
 	},
 	plugins: [
 		alias({ entries: webpackAliasToRollup() }),
-		nodeBuiltins,
+		replace({
+			"import.meta.env.dev": `${!isProduction}`,
+			window: "1",
+			preventAssignment: true,
+		}),
 		asset({
 			loaders: [postcss, svg],
 			source: { include: ["components/**/*.css", "**/*.svg"] },
 			url: { include: ["**/*.ico"] },
 		}),
+		nodeBuiltins,
 		nodeResolve(),
-		replace({
-			"typeof window": "'object'",
-			preventAssignment: true,
-		}),
 		copy([
 			{ from: "new-tab/global.css" },
 			{
@@ -58,7 +58,6 @@ export default {
 		manifest("manifest.json"),
 		htmlEntry(),
 		template(),
-		importMeta({ dev: !isProduction }),
 		isProduction && terser(),
 		isProduction && visualizer(),
 	],

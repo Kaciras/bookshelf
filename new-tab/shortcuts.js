@@ -167,7 +167,7 @@ async function populateFavicon(el, iconUrl) {
 function mountShortcuts({ shortcuts }) {
 	shortcuts ??= [];
 
-	if (import.meta.dev) {
+	if (import.meta.env.dev) {
 		console.debug("Shortcuts model:", shortcuts);
 	}
 
