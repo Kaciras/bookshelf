@@ -31,10 +31,12 @@ export default {
 
 	// 返回 false 代表外部依赖，这里写法有点怪。
 	resolveId(id) {
-		if (builtins.has(id)) return {
-			id,
-			external: true,
-			moduleSideEffects: false,
-		};
+		if (id.startsWith("node:") || builtins.has(id)) {
+			return {
+				id,
+				external: true,
+				moduleSideEffects: false,
+			};
+		}
 	},
 };
