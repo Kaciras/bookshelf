@@ -162,16 +162,16 @@ async function populateFavicon(el, iconUrl) {
  * 在该函数中调用 caches.open() 会阻塞很久，然后 cache.match() 则很快返回，
  * 导致可见的布局移动，推测打开缓存区需要执行 IO 操作。
  *
- * @param shortcuts 快捷方式对象数组
+ * @param saved 保存的数据
  */
-function mountShortcuts({ shortcuts }) {
-	shortcuts ??= [];
+function mountShortcuts(saved) {
+	// 注意！shortcuts 是外层变量，不要在参数上用解构！
+	shortcuts = saved.shortcuts ?? [];
 
 	if (import.meta.env.dev) {
 		console.debug("Shortcuts model:", shortcuts);
 	}
 
-	// 在循环外打开缓存，不知道能不能提升点性能。
 	for (const shortcut of shortcuts) {
 		const { iconUrl } = shortcut;
 		const el = appendElement(shortcut);
