@@ -54,6 +54,7 @@ export default function createManifestPlugin(filename) {
 				return null;
 			}
 			manifest = JSON.parse(await readFile(id, "utf8"));
+			this.addWatchFile(id);
 
 			const { icons = [] } = manifest;
 			const ids = [];
