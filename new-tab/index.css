@@ -15,8 +15,11 @@ $shortcut-width: 120px;
 
 /* html 里的属性能被 ShadowDOM 继承，body 就不行 */
 html {
-	color: #333;
 	background: #f9f9fb;
+	color: #333;
+
+	/* noinspection CssInvalidPropertyValue */
+	image-rendering: -webkit-optimize-contrast;
 }
 
 body {
