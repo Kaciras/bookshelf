@@ -48,9 +48,6 @@ export default function htmlPlugin() {
 	 * Rollup 的构建分为两个阶段：Build 和 Output Generation。
 	 * Build 加载并独立地处理每个模块，该阶段完成后应用已经可用。
 	 * Output Generation 打包模块、执行后期优化以及生成文件。
-	 *
-	 * 开发模式下可能仅执行 Build 过程以避免打包开销，比如 Vite 就是这么做的。
-	 * 编写插件时要注意 URL 的处理，确保没有 Output Generation 应用也能运行。
 	 */
 
 	return {

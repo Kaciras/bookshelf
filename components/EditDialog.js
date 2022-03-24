@@ -43,21 +43,42 @@ template.innerHTML = `
 				<div id="icon-box">
 					<img id="favicon" alt="icon">
 				</div>
-				<task-button id="fetch">自动获取</task-button>
+				<task-button id="fetch">
+					自动获取
+				</task-button>
 			</div>
 			<div id="field-group">
 				<label>
 					名字（标题）
-					<input name="name" placeholder="某某小站" required>
+					<input 
+						name="name" 
+						placeholder="某某小站" 
+						required
+					>
 				</label>
 				<label>
 					地址（URL）
-					<input name="url" type="url" required>
+					<input 
+						name="url" 
+						type="url"
+						required
+					>
 				</label>
 			</div>
 			<div id="actions">
-				<button id="cancel" type="button">取消</button>
-				<button id="accept" class="primary" type="button">确定</button>
+				<button 
+					id="cancel" 
+					type="button"
+				>
+					取消
+				</button>
+				<button 
+					id="accept" 
+					class="primary" 
+					type="button"
+				>
+					确定
+				</button>
 			</div>
 		</form>
 	</dialog-base>

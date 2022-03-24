@@ -30,6 +30,7 @@ export default function copyPlugin(list) {
 				const { from, context } = entry;
 				return glob(context ? `${context}/${from}` : from);
 			}));
+
 			for (let i = 0; i < list.length; i++) {
 				const { to, toDirectory } = list[i];
 				const files = groups[i];
@@ -44,6 +45,7 @@ export default function copyPlugin(list) {
 					ids.add(file + "?resource&filename=" + fileName);
 				}
 			}
+
 			this.emitFile({ type: "chunk", fileName: VID, id: VID });
 		},
 

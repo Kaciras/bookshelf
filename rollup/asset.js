@@ -32,7 +32,11 @@ function toDataUrl(source, mimetype) {
 
 /**
  * 本模块的 loader 跟一样 Webpack 用 StringSource 和 BufferSource
- * 分别包装字符串和 Buffer 两种类型的结果，提供一致的接口：
+ * 分别包装字符串和 Buffer 两种类型的结果，并避免转换开销。
+ *
+ * data   - 原始数据
+ * string - 字符串表示
+ * buffer - 字节表示
  */
 class StringSource {
 
@@ -180,12 +184,11 @@ export default function createInlinePlugin(options) {
 				}
 			}
 			const fileName = params.get("filename") || basename(file);
-			const refId = this.emitFile({
+			referenceMap.set(id, this.emitFile({
 				type: "asset",
 				fileName,
 				source: source.data,
-			});
-			referenceMap.set(id, refId);
+			}));
 			return `export default "${fileName}"`; // 好像没必要用 JSON.stringify
 		},
 	};

@@ -24,22 +24,28 @@ function getTemplateLiteral(node) {
 }
 
 /**
+ * 压缩 JS 文件内的 HTML 的插件，仅支持 `.innerHtml = "..."` 语句。
+ *
  * 因为组件的 HTML 不如 CSS 那么多所以本项目里都是直接写的字符串。
  * 所以没法复用 html 插件来去掉空白，只能再写一个插件处理。
  */
-export default function templatePlugin() {
+export default function inlineTemplatePlugin() {
 	return {
-		name: "template-html",
+		name: "inline-html-template",
+
 		async transform(code, id) {
 			if (!id.endsWith(".js")) {
 				return;
 			}
+			const s = new MagicString(code);
 			const ast = this.parse(code);
-			const occurs = ast.body.map(getTemplateLiteral).filter(Boolean);
 
 			// Vite 用这个库我就跟着用了，能生成 SourceMap 也挺好。
-			const s = new MagicString(code);
-			for (const literal of occurs) {
+			for (const node of ast.body) {
+				const literal = getTemplateLiteral(node);
+				if (!literal) {
+					continue;
+				}
 				const start = literal.start + 1;
 				const end = literal.end - 1;
 
