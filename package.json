@@ -24,7 +24,7 @@
 	},
 	"dependencies": {
 		"@kaciras/utilities": "^0.1.0",
-		"webextension-polyfill": "^0.8.0"
+		"webextension-polyfill": "^0.9.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.3.0",
@@ -33,7 +33,7 @@
 		"@rollup/plugin-replace": "^4.0.0",
 		"@rollup/pluginutils": "^4.2.0",
 		"@types/firefox-webext-browser": "^94.0.1",
-		"eslint": "^8.11.0",
+		"eslint": "^8.12.0",
 		"fast-glob": "^3.2.11",
 		"html-minifier-terser": "^7.0.0-alpha.2",
 		"magic-string": "^0.26.1",
