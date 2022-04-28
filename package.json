@@ -33,7 +33,7 @@
 		"@rollup/plugin-replace": "^4.0.0",
 		"@rollup/pluginutils": "^4.2.1",
 		"@types/firefox-webext-browser": "^94.0.1",
-		"eslint": "^8.13.0",
+		"eslint": "^8.14.0",
 		"fast-glob": "^3.2.11",
 		"html-minifier-terser": "^7.0.0-alpha.2",
 		"magic-string": "^0.26.1",
