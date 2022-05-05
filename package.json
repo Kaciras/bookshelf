@@ -36,6 +36,7 @@
 		"eslint": "^8.14.0",
 		"fast-glob": "^3.2.11",
 		"html-minifier-terser": "^7.0.0-alpha.2",
+		"is-builtin-module": "^3.1.0",
 		"magic-string": "^0.26.1",
 		"mime": "^3.0.0",
 		"node-html-parser": "^5.3.3",

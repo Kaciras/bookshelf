@@ -1,21 +1,4 @@
-import { builtinModules } from "module";
-
-const builtins = new Set([
-	...builtinModules,
-	"wasi",
-	"assert/strict",
-	"diagnostics_channel",
-	"dns/promises",
-	"fs/promises",
-	"path/posix",
-	"path/win32",
-	"readline/promises",
-	"stream/consumers",
-	"stream/promises",
-	"stream/web",
-	"util/types",
-	"timers/promises",
-]);
+import isBuiltin from "is-builtin-module";
 
 /**
  * 解析 Node 的内置模块，使其作为外部依赖并能够被摇树优化。
@@ -31,12 +14,10 @@ export default {
 
 	// 返回 false 代表外部依赖，这里写法有点怪。
 	resolveId(id) {
-		if (id.startsWith("node:") || builtins.has(id)) {
-			return {
-				id,
-				external: true,
-				moduleSideEffects: false,
-			};
-		}
+		if (isBuiltin(id)) return {
+			id,
+			external: true,
+			moduleSideEffects: false,
+		};
 	},
 };
