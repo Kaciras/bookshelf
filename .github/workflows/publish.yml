@@ -19,10 +19,11 @@ jobs:
 
       - run: pnpm run build
 
-      - run: zip dist.zip dist/*
+      - run: zip addon.zip *
+        working-directory: dist
 
       - name: Browser Platform Publish
         uses: PlasmoHQ/bpp@v2
         with:
-          artifact: dist.zip
+          artifact: dist/addon.zip
           keys: ${{ secrets.BPP_KEYS }}
