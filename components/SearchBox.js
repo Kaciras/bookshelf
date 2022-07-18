@@ -173,7 +173,9 @@ class SearchBoxElement extends HTMLElement {
 				diff = -1;
 				break;
 			case "Escape":
-				return this.blur();
+				this.searchTerms = "";
+				this.handleInput(event);
+				return;
 			default:
 				return;
 		}
