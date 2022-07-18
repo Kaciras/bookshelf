@@ -1,5 +1,5 @@
 import { DebounceThrottle } from "@share";
-import ArrowIcon from "@assets/ArrowRight.svg";
+import SearchIcon from "@assets/Search.svg";
 import styles from "./SearchBox.css";
 
 const template = document.createElement("template");
@@ -19,7 +19,7 @@ template.innerHTML = `
 		class="plain"
 		type="button"
 	>
-		${ArrowIcon}
+		${SearchIcon}
 	</button>
 
 	<ul id="suggestions"></ul>
