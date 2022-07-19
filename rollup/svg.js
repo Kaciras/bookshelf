@@ -53,6 +53,12 @@ const builtInPlugins = {
 
 const inlineConfig = {
 	plugins: [
+		{
+			name: "removeAttrs",
+			params: {
+				attrs: "class",
+			},
+		},
 		builtInPlugins,
 		reactivePlugin(),
 	],

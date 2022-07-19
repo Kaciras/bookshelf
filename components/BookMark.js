@@ -1,6 +1,6 @@
 import { delegate } from "@share";
-import EditIcon from "@assets/Edit.svg";
-import CloseIcon from "@assets/Close.svg";
+import EditIcon from "@tabler/icons/edit.svg";
+import CloseIcon from "@tabler/icons/x.svg";
 import styles from "./BookMark.css";
 
 const template = document.createElement("template");

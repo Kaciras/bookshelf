@@ -1,5 +1,5 @@
-import Icon from "@assets/CheckBox.svg";
-import IconChecked from "@assets/CheckBoxChecked.svg";
+import Icon from "@material-design-icons/svg/filled/check_box_outline_blank.svg";
+import IconChecked from "@material-design-icons/svg/filled/check_box.svg";
 import { delegate } from "@share";
 import styles from "./CheckBox.css";
 

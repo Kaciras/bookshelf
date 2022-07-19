@@ -1,5 +1,5 @@
 import { DebounceThrottle } from "@share";
-import SearchIcon from "@assets/Search.svg";
+import SearchIcon from "@tabler/icons/search.svg";
 import styles from "./SearchBox.css";
 
 const template = document.createElement("template");

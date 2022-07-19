@@ -2,7 +2,7 @@ import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
-import CheckIcon from "@assets/Check.svg";
+import CheckIcon from "@tabler/icons/check.svg";
 import { bindInput, indexInParent } from "@share";
 import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
@@ -65,7 +65,7 @@ rightTemplate.innerHTML = `
 		<span>确定</span>
 	</button>
 	<button>添加网站</button>
-	<button>导入常用网站</button>
+	<button>添加常用网站</button>
 	<button>导入数据</button>
 	<button>导出数据</button>
 	<button class="warning">清空存储</button>
@@ -74,7 +74,7 @@ rightTemplate.innerHTML = `
 const leftTemplate = document.createElement("template");
 leftTemplate.innerHTML = `
 	<label>
-		最大建议数量
+		最多建议
 		<input name="limit" type="number" min="0">
 	</label>
 	<label>

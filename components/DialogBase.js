@@ -1,4 +1,4 @@
-import xIcon from "@assets/Close.svg";
+import xIcon from "@tabler/icons/x.svg";
 import styles from "./DialogBase.css";
 
 const template = document.createElement("template");

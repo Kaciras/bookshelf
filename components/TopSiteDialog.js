@@ -1,6 +1,6 @@
 import WebsiteIcon from "@assets/Website.svg?url";
-import AddIcon from "@assets/Add.svg";
-import CheckIcon from "@assets/Check.svg";
+import AddIcon from "@tabler/icons/plus.svg";
+import CheckIcon from "@tabler/icons/check.svg";
 import { sha256 } from "@kaciras/utilities";
 import { CACHE_ORIGIN } from "../new-tab/storage.js";
 import styles from "./TopSiteDialog.css";

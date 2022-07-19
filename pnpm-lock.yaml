@@ -3,10 +3,12 @@ lockfileVersion: 5.4
 specifiers:
   '@kaciras/eslint-config-core': ^2.4.1
   '@kaciras/utilities': ^0.3.2
+  '@material-design-icons/svg': ^0.11.5
   '@rollup/plugin-alias': ^3.1.9
   '@rollup/plugin-node-resolve': ^13.3.0
   '@rollup/plugin-replace': ^4.0.0
   '@rollup/pluginutils': ^4.2.1
+  '@tabler/icons': ^1.76.0
   '@types/firefox-webext-browser': ^94.0.1
   eslint: ^8.20.0
   fast-glob: ^3.2.11
@@ -27,6 +29,8 @@ specifiers:
 
 dependencies:
   '@kaciras/utilities': 0.3.2
+  '@material-design-icons/svg': 0.11.5
+  '@tabler/icons': 1.76.0
   webextension-polyfill: 0.9.0
 
 devDependencies:
@@ -167,6 +171,10 @@ packages:
     resolution: {integrity: sha512-WOgSHpPIYwiNivQwJvafhIyy04369Gw2IFctnx5TTnLBm+7AtPzDk1IIrFoqkxH0a7jwYKMEiSoI5UV7CWaaOg==}
     dev: false
 
+  /@material-design-icons/svg/0.11.5:
+    resolution: {integrity: sha512-RXx0WWC7ei7xYGOBaJogJN5eXzK+wZEfiVlcwwgJf8ge/BEt/DehnYqbKi7hViBjMXdilHP7mujV1W45M9FFIA==}
+    dev: false
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -242,6 +250,18 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
+
+  /@tabler/icons/1.76.0:
+    resolution: {integrity: sha512-MEN8cWpnYoY0BcPgrtwnkA+U3y5uP6haMqsX1jq5xbej9KZK9EnWc+J2Xi3X3y5HUtTsSeQry+qEOxCzrxw9EQ==}
+    peerDependencies:
+      react: ^16.x || 17.x || 18.x
+      react-dom: ^16.x || 17.x || 18.x
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dev: false
 
   /@trysound/sax/0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}

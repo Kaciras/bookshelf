@@ -24,6 +24,8 @@
 	},
 	"dependencies": {
 		"@kaciras/utilities": "^0.3.2",
+		"@material-design-icons/svg": "^0.11.5",
+		"@tabler/icons": "^1.76.0",
 		"webextension-polyfill": "^0.9.0"
 	},
 	"devDependencies": {

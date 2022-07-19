@@ -1,7 +1,7 @@
 import "../components/BookMark.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
-import SettingIcon from "@assets/Setting.svg";
+import SettingIcon from "@tabler/icons/settings.svg";
 import { loadConfig } from "./storage.js";
 import { Baidu, DuckDuckGo, Google } from "./search.js";
 import { setShortcutEditable } from "./shortcuts.js";
