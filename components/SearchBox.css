@@ -96,3 +96,49 @@ li {
 		background: rgba(0, 0, 0, 0.04);
 	}
 }
+
+#spinner {
+	$diameter: 24px;
+
+	display: none;
+	position: relative;
+	width: 52px;
+	background: white;
+
+	&.loading {
+		display: block;
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+		box-sizing: border-box;
+
+		width: $diameter;
+		height: $diameter;
+		top: 50%;
+		left: 50%;
+		margin-top: calc(-$diameter / 2);
+		margin-left: calc(-$diameter / 2);
+
+		border-radius: 50%;
+		border: 3px solid #ddd;
+		border-top-color: #2ea8ff;  /* Firefox 有 BUG 不能用变量 */
+		animation: spinner .6s linear infinite;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 12px;
+		bottom: 12px;
+		right: 0;
+		border-left: 1px solid #dadce0;
+	}
+}
+
+@keyframes spinner {
+	to {
+		transform: rotate(360deg);
+	}
+}

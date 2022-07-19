@@ -12,6 +12,7 @@ template.innerHTML = `
 		enterkeyhint="search"
 		placeholder="搜索"
 	>
+	<div id="spinner"></div>
 	<button
 		id="button"
 		tabindex="-1"
@@ -46,6 +47,7 @@ class SearchBoxElement extends HTMLElement {
 
 		this.inputEl = root.getElementById("input");
 		this.iconEl = root.querySelector("img");
+		this.loadingEl = root.getElementById("spinner");
 		this.suggestionEl = root.getElementById("suggestions");
 
 		this.fetcher = new DebounceThrottle(this.suggest.bind(this));
@@ -115,12 +117,17 @@ class SearchBoxElement extends HTMLElement {
 	 * 该方法只能同时运行一个，每次调用都会取消上一次的。
 	 */
 	async suggest(signal) {
-		const { api, searchTerms } = this;
+		const { api, searchTerms, loadingEl } = this;
+		loadingEl.classList.add("loading");
 		try {
 			const list = await api.suggest(searchTerms, signal);
 			this.setSuggestions(list);
 		} catch (e) {
-			if (e.name !== "AbortError") console.error(e);
+			if (e.name !== "AbortError") {
+				console.error(e);
+			}
+		} finally {
+			loadingEl.classList.remove("loading");
 		}
 	}
 
@@ -162,6 +169,7 @@ class SearchBoxElement extends HTMLElement {
 		location.href = this.api.getResultURL(this.searchTerms);
 	}
 
+	// Input Method does not trigger this event.
 	handleKeyDown(event) {
 		let diff;
 
