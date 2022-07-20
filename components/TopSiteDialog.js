@@ -63,10 +63,17 @@ class TopSiteDialogElement extends HTMLElement {
 			})
 			: await browser.topSites.get();
 
+		if (import.meta.env.dev) {
+			console.debug("topSites.get return:", sites);
+		}
+
 		const listItems = new Array(sites.length);
 
 		for (let i = 0; i < sites.length; i++) {
-			let { title, url, favicon = WebsiteIcon } = sites[i];
+			let { title, url, favicon } = sites[i];
+
+			// Can't use default value of destructuring as it only caused by undefined.
+			favicon ??= WebsiteIcon;
 
 			// 标题可能为空字符串，所以不能用 ??=
 			url = decodeURI(url);
