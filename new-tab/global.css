@@ -4,6 +4,7 @@
 
 button, .button {
 	display: inline-flex;
+	gap: 5px;
 	justify-content: center;
 	align-items: center;
 
@@ -35,17 +36,12 @@ button, .button {
 	}
 
 	/* 用于内容只有一个图标的按钮 */
-
 	&.icon {
 		padding: 8px;
 	}
 
 	& > svg {
 		font-size: var(--icon-size, 24px);
-	}
-
-	& > svg + span {
-		margin: 0 5px;
 	}
 }
 

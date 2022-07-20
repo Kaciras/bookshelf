@@ -1,8 +1,13 @@
+import CheckIcon from "@tabler/icons/check.svg";
+import DownloadIcon from "@tabler/icons/download.svg";
+import UploadIcon from "@tabler/icons/upload.svg";
+import TrashIcon from "@tabler/icons/trash.svg";
+import StarIcon from "@tabler/icons/star.svg";
+import DevicesIcon from "@material-design-icons/svg/outlined/important_devices.svg";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
-import CheckIcon from "@tabler/icons/check.svg";
 import { bindInput, indexInParent } from "@share";
 import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
@@ -61,14 +66,23 @@ function requestClearData() {
 const rightTemplate = document.createElement("template");
 rightTemplate.innerHTML = `
 	<button class="primary">
-		${CheckIcon}
-		<span>确定</span>
+		${CheckIcon}确定
 	</button>
-	<button>添加网站</button>
-	<button>添加常用网站</button>
-	<button>导入数据</button>
-	<button>导出数据</button>
-	<button class="warning">清空存储</button>
+	<button>
+		${StarIcon}添加链接
+	</button>
+	<button>
+		${DevicesIcon}常用网站
+	</button>
+	<button>
+		${UploadIcon}导入数据
+	</button>
+	<button>
+		${DownloadIcon}导出数据
+	</button>
+	<button class="warning">
+		${TrashIcon}清空数据
+	</button>
 `;
 
 const leftTemplate = document.createElement("template");
