@@ -118,7 +118,7 @@ class SearchBoxElement extends HTMLElement {
 	 */
 	async suggest(signal) {
 		const { api, searchTerms, loadingEl } = this;
-		loadingEl.classList.add("loading");
+		loadingEl.classList.add("active");
 		try {
 			const list = await api.suggest(searchTerms, signal);
 			this.setSuggestions(list);
@@ -127,7 +127,7 @@ class SearchBoxElement extends HTMLElement {
 				console.error(e);
 			}
 		} finally {
-			loadingEl.classList.remove("loading");
+			loadingEl.classList.remove("active");
 		}
 	}
 

@@ -27,6 +27,12 @@ export function bindInput(input, receiver) {
 	});
 }
 
+/**
+ * Download the image by url and return its width & height.
+ *
+ * @param url The url of the image.
+ * @returns {Promise<{width: number, height: number}>}
+ */
 export function getImageResolution(url) {
 	const element = document.createElement("img");
 	element.src = url;
@@ -38,10 +44,11 @@ export function getImageResolution(url) {
 }
 
 /**
- * 获取元素在其父元素的所有子元素中的位置。
+ * Gets the element's index among all children of its parent.
+ * Throw an error if the element does not have a parent.
  *
- * @param el DOM 元素
- * @return {number} 位置，如果没有父元素则出错。
+ * @param el The DOM element.
+ * @return {number} The index.
  */
 export function indexInParent(el) {
 	return Array.prototype.indexOf.call(el.parentNode.children, el);
