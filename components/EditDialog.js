@@ -1,4 +1,7 @@
 import WebsiteIcon from "@assets/Website.svg?url";
+import CheckIcon from "@tabler/icons/check.svg";
+import xIcon from "@tabler/icons/x.svg";
+import DownCircleIcon from "@tabler/icons/arrow-down-circle.svg";
 import { delegate, getFaviconUrl } from "@share";
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
@@ -44,6 +47,7 @@ template.innerHTML = `
 					<img id="favicon" alt="icon">
 				</div>
 				<task-button id="fetch">
+					${DownCircleIcon}
 					自动获取
 				</task-button>
 			</div>
@@ -51,8 +55,7 @@ template.innerHTML = `
 				<label>
 					名字（标题）
 					<input 
-						name="name" 
-						placeholder="某某小站" 
+						name="name"
 						required
 					>
 				</label>
@@ -70,6 +73,7 @@ template.innerHTML = `
 					id="cancel" 
 					type="button"
 				>
+					${xIcon}
 					取消
 				</button>
 				<button 
@@ -77,6 +81,7 @@ template.innerHTML = `
 					class="primary" 
 					type="button"
 				>
+					${CheckIcon}
 					确定
 				</button>
 			</div>
