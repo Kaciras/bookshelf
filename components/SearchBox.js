@@ -123,12 +123,13 @@ class SearchBoxElement extends HTMLElement {
 			const list = await api.suggest(searchTerms, signal);
 			this.setSuggestions(list);
 		} catch (e) {
-			if (e.name !== "AbortError") {
-				console.error(e);
+			if (e.name === "AbortError") {
+				return;
 			}
-		} finally {
-			loadingEl.classList.remove("active");
+			console.error(e);
 		}
+		// Hide loading indicator only if finished (not aborted).
+		loadingEl.classList.remove("active");
 	}
 
 	setSuggestions(list) {
