@@ -50,7 +50,7 @@ export default {
 		nodeBuiltins,
 		nodeResolve(),
 		copy([
-			{ from: "new-tab/global.css" },
+			{ from: "global.css", context: "new-tab" },
 			{
 				from: "browser-polyfill.min.js",
 				to: "browser-polyfill.js",

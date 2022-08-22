@@ -1,4 +1,4 @@
-import { basename, join } from "path";
+import { join, relative } from "path";
 import glob from "fast-glob";
 import { dummyImportEntry } from "./html.js";
 
@@ -32,16 +32,17 @@ export default function copyPlugin(list) {
 			}));
 
 			for (let i = 0; i < list.length; i++) {
-				const { to, toDirectory } = list[i];
+				const { to, context, toDirectory } = list[i];
 				const files = groups[i];
 
 				for (const file of files) {
-					let fileName = basename(file);
+					let fileName = relative(context, file);
 					if (toDirectory) {
 						fileName = join(to, fileName);
 					} else if (to) {
 						fileName = to;
 					}
+					fileName = encodeURIComponent(fileName);
 					ids.add(file + "?resource&filename=" + fileName);
 				}
 			}
