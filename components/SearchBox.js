@@ -1,4 +1,4 @@
-import { DebounceThrottle } from "@share";
+import { DebounceThrottle, i18n } from "@share";
 import SearchIcon from "@tabler/icons/search.svg";
 import styles from "./SearchBox.css";
 
@@ -10,13 +10,13 @@ template.innerHTML = `
 	<input
 		id="input"
 		enterkeyhint="search"
-		placeholder="搜索"
+		placeholder='${i18n("Search")}'
 	>
 	<div id="spinner"></div>
 	<button
 		id="button"
 		tabindex="-1"
-		title="搜索"
+		title='${i18n("Search")}'
 		class="plain"
 		type="button"
 	>

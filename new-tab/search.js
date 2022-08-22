@@ -1,6 +1,7 @@
 import GoogleIcon from "@assets/google.ico";
 import BaiduIcon from "@assets/baidu.ico";
 import DuckDuckGoIcon from "@assets/dax-logo.svg?url";
+import { i18n } from "@share";
 
 // 目前没找到怎么获取浏览器里的搜索引擎配置，只能自己再写一遍了。
 
@@ -33,7 +34,7 @@ class OpenSearchEngine {
 
 		const { status } = response;
 		if (status !== 200) {
-			throw new Error("搜索建议失败：" + status);
+			throw new Error("Failed to fetch suggestion: " + status);
 		}
 		return (await response.json())[1];
 	}
@@ -51,14 +52,14 @@ export const Google = new OpenSearchEngine(
 );
 
 export const DuckDuckGo = new OpenSearchEngine(
-	"鸭鸭走~",
+	i18n("DuckDuckGo"),
 	DuckDuckGoIcon,
 	"https://ac.duckduckgo.com/ac/?type=list&q=",
 	"https://duckduckgo.com/?t=ffsb&ia=web&q=",
 );
 
 export const Baidu = new OpenSearchEngine(
-	"百度",
+	i18n("Baidu"),
 	BaiduIcon,
 	"https://www.baidu.com/su?tn=monline_7_dg&ie=utf-8&action=opensearch&wd=",
 	"https://www.baidu.com/baidu?tn=monline_7_dg&ie=utf-8&wd=",

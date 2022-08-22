@@ -1,0 +1,83 @@
+{
+	"NewTab": {
+		"message": "新标签页"
+	},
+	"Accept": {
+		"message": "确定"
+	},
+	"Cancel": {
+		"message": "取消"
+	},
+	"Close": {
+		"message": "关闭"
+	},
+	"Edit": {
+		"message": "编辑"
+	},
+	"Delete": {
+		"message": "删除"
+	},
+	"DuckDuckGo": {
+		"message": "鸭鸭走~"
+	},
+	"Baidu": {
+		"message": "百度搜索"
+	},
+	"AfterImportSuccess": {
+		"message": "数据导入成功，刷新页面后生效。"
+	},
+	"Search": {
+		"message": "搜索"
+	},
+	"ConfirmClearData": {
+		"message": "确定要清空本插件保存的所有数据？\n该过程不可撤销，并且会同步到所有设备！"
+	},
+	"AddShortcut": {
+		"message": "添加链接"
+	},
+	"TopSites": {
+		"message": "常用网站"
+	},
+	"ImportData": {
+		"message": "导入数据"
+	},
+	"ExportData": {
+		"message": "导出数据"
+	},
+	"ClearData": {
+		"message": "清空数据"
+	},
+	"MaxSuggestions": {
+		"message": "最多建议数量"
+	},
+	"Debounce": {
+		"message": "建议防抖（毫秒）"
+	},
+	"IMEDebounce": {
+		"message": "输入法防抖"
+	},
+	"IMEDebounceTitle": {
+		"message": "未上屏字符不触发建议"
+	},
+	"SettingMode": {
+		"message": "进入设置模式"
+	},
+	"TopSiteDialog": {
+		"message": "导入常用网站"
+	},
+	"AddToShortcut": {
+		"message": "添加到快捷方式"
+	},
+	"EditShortcutDialog": {
+		"message": "编辑快捷方式"
+	},
+	"ShortcutName": {
+		"message": "名字（标题）"
+	},
+	"ShortcutURL": {
+		"message": "地址（URL）"
+	},
+	"DownloadFavicon": {
+		"message": "自动获取"
+	}
+}

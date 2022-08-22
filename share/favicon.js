@@ -130,7 +130,7 @@ export async function getFaviconUrl(url, signal) {
 				selectedSVG = type === "image/svg+xml";
 			}
 		} catch (e) {
-			console.warn("图片无效或无法下载，", e);
+			console.warn("Cannot load favicon", e);
 		}
 	}
 

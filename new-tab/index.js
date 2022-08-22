@@ -2,6 +2,7 @@ import "../components/BookMark.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
 import SettingIcon from "@tabler/icons/settings.svg";
+import { i18n } from "@share";
 import { loadConfig } from "./storage.js";
 import { Baidu, DuckDuckGo, Google } from "./search.js";
 import { setShortcutEditable } from "./shortcuts.js";
@@ -38,7 +39,7 @@ searchBox.onkeydown = e => {
 function switchToNormalMode() {
 	const button = document.createElement("button");
 	button.innerHTML = SettingIcon;
-	button.title = "进入设置模式";
+	button.title = i18n("SettingMode");
 	button.className = "icon";
 	button.onclick = () => import("./settings.js")
 		.then(module => module.switchToSettingMode())

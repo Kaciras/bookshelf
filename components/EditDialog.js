@@ -2,7 +2,7 @@ import WebsiteIcon from "@assets/Website.svg?url";
 import CheckIcon from "@tabler/icons/check.svg";
 import xIcon from "@tabler/icons/x.svg";
 import DownCircleIcon from "@tabler/icons/arrow-down-circle.svg";
-import { delegate, getFaviconUrl } from "@share";
+import { delegate, getFaviconUrl, i18n } from "@share";
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
 
@@ -40,7 +40,7 @@ function pick(source, target) {
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	<dialog-base name="编辑快捷方式">
+	<dialog-base name='${i18n("EditShortcutDialog")}'>
 		<form>
 			<div id="icon-group">
 				<div id="icon-box">
@@ -48,19 +48,19 @@ template.innerHTML = `
 				</div>
 				<task-button id="fetch">
 					${DownCircleIcon}
-					自动获取
+					${i18n("DownloadFavicon")}
 				</task-button>
 			</div>
 			<div id="field-group">
 				<label>
-					名字（标题）
+					${i18n("ShortcutName")}
 					<input 
 						name="name"
 						required
 					>
 				</label>
 				<label>
-					地址（URL）
+					${i18n("ShortcutURL")}
 					<input 
 						name="url" 
 						type="url"
@@ -74,7 +74,7 @@ template.innerHTML = `
 					type="button"
 				>
 					${xIcon}
-					取消
+					${i18n("Cancel")}
 				</button>
 				<button 
 					id="accept" 
@@ -82,7 +82,7 @@ template.innerHTML = `
 					type="button"
 				>
 					${CheckIcon}
-					确定
+					${i18n("Accept")}
 				</button>
 			</div>
 		</form>
@@ -149,7 +149,7 @@ class EditDialogElement extends HTMLElement {
 			this.favicon = URL.createObjectURL(await res.blob());
 		} catch (e) {
 			console.error(e);
-			window.alert(`图标下载失败：${e.message}`);
+			window.alert(`Favicon download failed: ${e.message}`);
 		}
 	}
 }

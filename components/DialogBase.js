@@ -1,4 +1,5 @@
 import xIcon from "@tabler/icons/x.svg";
+import { i18n } from "@share";
 import styles from "./DialogBase.css";
 
 const template = document.createElement("template");
@@ -8,7 +9,7 @@ template.innerHTML = `
 		<h1></h1>
 		<button
 			class="plain"
-			title="关闭"
+			title='${i18n("Close")}'
 			type="button"
 		 >
 			${xIcon}

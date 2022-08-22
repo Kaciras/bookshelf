@@ -52,6 +52,12 @@ export default {
 		copy([
 			{ from: "global.css", context: "new-tab" },
 			{
+				from: "**/*",
+				context: "locales",
+				to: "_locales",
+				toDirectory: true
+			},
+			{
 				from: "browser-polyfill.min.js",
 				to: "browser-polyfill.js",
 				context: "node_modules/webextension-polyfill/dist",

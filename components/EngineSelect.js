@@ -58,7 +58,7 @@ class EngineSelectElement extends HTMLElement {
 		if (i > -1) {
 			this.index = i;
 		} else {
-			throw new Error(`${value.name} 不在列表中`);
+			throw new Error(`Unknown search engine: ${value.name}`);
 		}
 	}
 

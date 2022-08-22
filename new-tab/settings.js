@@ -8,12 +8,11 @@ import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
-import { bindInput, indexInParent } from "@share";
+import { bindInput, i18n, indexInParent } from "@share";
 import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 
 const container = document.getElementById("shortcuts");
-
 const importDialog = document.createElement("top-site-dialog");
 const editDialog = document.createElement("edit-dialog");
 
@@ -58,44 +57,45 @@ export function startImportTopSites() {
 }
 
 function requestClearData() {
-	const message = "确定要清空本插件保存的所有数据？\n该过程不可撤销，并且会同步到所有设备！";
-	window.confirm(message) && clearAllData();
+	window.confirm(i18n("ConfirmClearData")) && clearAllData();
 }
 
 // 因为有内联 SVG 所以没法写在 index.html 里。
 const rightTemplate = document.createElement("template");
 rightTemplate.innerHTML = `
 	<button class="primary">
-		${CheckIcon}确定
+		${CheckIcon}${i18n("Accept")}
 	</button>
 	<button>
-		${StarIcon}添加链接
+		${StarIcon}${i18n("AddShortcut")}
 	</button>
 	<button>
-		${DevicesIcon}常用网站
+		${DevicesIcon}${i18n("TopSites")}
 	</button>
 	<button>
-		${UploadIcon}导入数据
+		${UploadIcon}${i18n("ImportData")}
 	</button>
 	<button>
-		${DownloadIcon}导出数据
+		${DownloadIcon}${i18n("ExportData")}
 	</button>
 	<button class="warning">
-		${TrashIcon}清空数据
+		${TrashIcon}${i18n("ClearData")}
 	</button>
 `;
 
 const leftTemplate = document.createElement("template");
 leftTemplate.innerHTML = `
 	<label>
-		最多建议
+		${i18n("MaxSuggestions")}
 		<input name="limit" type="number" min="0">
 	</label>
 	<label>
-		建议防抖（毫秒）
+		${i18n("Debounce")}
 		<input name="threshold" type="number" min="0">
 	</label>
-	<check-box title="未上屏字符不触发建议" name="waitIME">输入法防抖</check-box>
+	<check-box title='${i18n("IMEDebounceTitle")}' name="waitIME">
+		${i18n("IMEDebounce")}
+	</check-box>
 `;
 
 /**

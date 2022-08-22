@@ -1,6 +1,6 @@
 import WebsiteIcon from "@assets/Website.svg?url";
 import { indexInParent, jump } from "@share";
-import { CACHE_ORIGIN, loadConfig, saveConfig, syncAddonData } from "./storage.js";
+import { CACHE_ORIGIN, checkSync, loadConfig, saveConfig } from "./storage.js";
 
 /*
  * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储有限制，
@@ -147,7 +147,7 @@ async function populateFavicon(el, iconUrl) {
 		}
 		response = await fetch(iconUrl, { mode: "no-cors" });
 		if (!response.ok) {
-			throw new Error("图标下载失败：" + iconUrl);
+			throw new Error("Download failed: " + iconUrl);
 		}
 		await cache.put(iconUrl, response.clone());
 	}
@@ -178,7 +178,7 @@ function mountShortcuts(saved) {
 		populateFavicon(el, iconUrl);
 	}
 
-	requestIdleCallback(() => syncAddonData(evictCache));
+	requestIdleCallback(() => checkSync(evictCache));
 }
 
 /**
@@ -196,7 +196,7 @@ async function evictCache() {
 		.map(request => cache.delete(request));
 
 	await Promise.all(tasks);
-	console.debug(`删除了 ${tasks.length} 个图标缓存。`);
+	console.debug(`Deleted ${tasks.length} expired favicon。`);
 }
 
 loadConfig("shortcuts").then(mountShortcuts);

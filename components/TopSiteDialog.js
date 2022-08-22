@@ -2,6 +2,7 @@ import WebsiteIcon from "@assets/Website.svg?url";
 import AddIcon from "@tabler/icons/plus.svg";
 import CheckIcon from "@tabler/icons/check.svg";
 import { sha256 } from "@kaciras/utilities";
+import { i18n } from "@share";
 import { CACHE_ORIGIN } from "../new-tab/storage.js";
 import styles from "./TopSiteDialog.css";
 
@@ -21,7 +22,7 @@ function adviceTitle(url) {
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	<dialog-base name="导入常用网站">
+	<dialog-base name='${i18n("TopSiteDialog")}'>
 		<ul id="top-sites"></ul>
 	</dialog-base>
 `;
@@ -32,7 +33,7 @@ itemTemplate.innerHTML = `
 		<img alt="favicon">
 		<span></span>
 		<span class="url"></span>
-		<button title="添加该网站" class="icon">${AddIcon}</button>
+		<button title='${i18n("AddToShortcut")}' class="icon">${AddIcon}</button>
 	</li>
 `;
 

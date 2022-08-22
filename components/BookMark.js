@@ -1,4 +1,4 @@
-import { delegate } from "@share";
+import { delegate, i18n } from "@share";
 import EditIcon from "@tabler/icons/edit.svg";
 import CloseIcon from "@tabler/icons/x.svg";
 import styles from "./BookMark.css";
@@ -17,14 +17,14 @@ template.innerHTML = `
 	<button
 		type="button"
 		id="edit"
-		title="编辑"
+		title='${i18n("Edit")}'
 	>
 		${EditIcon}
 	</button>
 	<button 
 		type="button"
 		id="remove"
-		title="删除"
+		title='${i18n("Delete")}'
 	>
 		${CloseIcon}
 	</button>

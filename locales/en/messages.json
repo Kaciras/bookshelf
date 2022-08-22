@@ -1,0 +1,83 @@
+{
+	"NewTab": {
+		"message": "New tab"
+	},
+	"Accept": {
+		"message": "Accept"
+	},
+	"Cancel": {
+		"message": "Cancel"
+	},
+	"Close": {
+		"message": "Close"
+	},
+	"Edit": {
+		"message": "Edit"
+	},
+	"Delete": {
+		"message": "Delete"
+	},
+	"DuckDuckGo": {
+		"message": "DuckDuckGo"
+	},
+	"Baidu": {
+		"message": "Baidu"
+	},
+	"AfterImportSuccess": {
+		"message": "Data imported, refresh to see changes."
+	},
+	"Search": {
+		"message": "Search"
+	},
+	"ConfirmClearData": {
+		"message": "Are you sure clear all data?\nThis operation is irreversible and syncs to all devices!"
+	},
+	"AddShortcut": {
+		"message": "Add Shortcut"
+	},
+	"TopSites": {
+		"message": "Top Sites"
+	},
+	"ImportData": {
+		"message": "Import Data"
+	},
+	"ExportData": {
+		"message": "Export Data"
+	},
+	"ClearData": {
+		"message": "Clear Data"
+	},
+	"MaxSuggestions": {
+		"message": "Max suggestions"
+	},
+	"Debounce": {
+		"message": "Debounce (ms)"
+	},
+	"IMEDebounce": {
+		"message": "Wait for IME"
+	},
+	"IMEDebounceTitle": {
+		"message": "未上屏字符不触发建议"
+	},
+	"SettingMode": {
+		"message": "Enable setting mode"
+	},
+	"TopSiteDialog": {
+		"message": "Add from top sites"
+	},
+	"AddToShortcut": {
+		"message": "Add to shortcut"
+	},
+	"EditShortcutDialog": {
+		"message": "Edit shortcut"
+	},
+	"ShortcutName": {
+		"message": "Title"
+	},
+	"ShortcutURL": {
+		"message": "URL"
+	},
+	"DownloadFavicon": {
+		"message": "Download"
+	}
+}

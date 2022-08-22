@@ -6,6 +6,7 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
+import { i18n } from "@share";
 import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities";
 
 const localSettings = browser.storage.local;
@@ -50,23 +51,19 @@ export async function clearAllData() {
  * 注册存储同步处理函数，用于解决本地跟远程数据一致性问题。
  * 如果有新的远程数据同步了过来，注册的函数将被调用，完成后自动设置同步状态为已同步。
  *
- * @param callback 处理函数
- * @return {Promise<void>} 是否完成整个流程
+ * @param callback The function will be called if new data is synced.
  */
-export async function syncAddonData(callback) {
+export async function checkSync(callback) {
 	const [synced, local] = await Promise.all([
 		syncSettings.get("uuid"),
 		localSettings.get("uuid"),
 	]);
-	if (!local.uuid) {
-		return; // 跳过第一次同步
-	}
-	if (synced.uuid === local.uuid) {
+	if (!local.uuid || synced.uuid === local.uuid) {
 		return;
 	}
 	await callback();
 	await localSettings.set({ uuid: synced.uuid });
-	console.info("已更新本地存储，与同步的数据一致");
+	console.info("Local storage updated with synced data.");
 }
 
 export async function exportSettings() {
@@ -106,5 +103,5 @@ export async function importSettings() {
 		await cache.put(url, await fetch(body));
 	}
 
-	window.alert("数据导入成功，刷新页面后生效。");
+	window.alert(i18n("AfterImportSuccess"));
 }
