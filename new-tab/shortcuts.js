@@ -196,7 +196,7 @@ async function evictCache() {
 		.map(request => cache.delete(request));
 
 	await Promise.all(tasks);
-	console.debug(`Deleted ${tasks.length} expired favicon。`);
+	console.debug(`Deleted ${tasks.length} expired favicons。`);
 }
 
 loadConfig("shortcuts").then(mountShortcuts);

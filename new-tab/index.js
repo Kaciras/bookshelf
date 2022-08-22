@@ -10,6 +10,7 @@ import { setShortcutEditable } from "./shortcuts.js";
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
 
+document.title = i18n("NewTab");
 searchBox.engine = Google;
 
 document.getElementById("engine-select").replaceWith(engineSelect);

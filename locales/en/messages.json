@@ -1,6 +1,6 @@
 {
 	"NewTab": {
-		"message": "New tab"
+		"message": "New Tab"
 	},
 	"Accept": {
 		"message": "Accept"
@@ -57,7 +57,7 @@
 		"message": "Wait for IME"
 	},
 	"IMEDebounceTitle": {
-		"message": "未上屏字符不触发建议"
+		"message": "Do not fetch suggestion on compositing"
 	},
 	"SettingMode": {
 		"message": "Enable setting mode"

@@ -33,7 +33,12 @@ itemTemplate.innerHTML = `
 		<img alt='favicon'>
 		<span></span>
 		<span class='url'></span>
-		<button title='${i18n("AddToShortcut")}' class='icon'>${AddIcon}</button>
+		<button
+			class='icon'
+			title='${i18n("AddToShortcut")}'
+		 >
+			${AddIcon}
+		</button>
 	</li>
 `;
 
