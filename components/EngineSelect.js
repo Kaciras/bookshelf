@@ -6,7 +6,7 @@ import styles from "./EngineSelect.css";
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	<div id="container"></div>
+	<div id='container'></div>
 `;
 
 class EngineSelectElement extends HTMLElement {

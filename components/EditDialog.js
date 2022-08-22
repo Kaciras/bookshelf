@@ -42,44 +42,44 @@ template.innerHTML = `
 	<style>${styles}</style>
 	<dialog-base name='${i18n("EditShortcutDialog")}'>
 		<form>
-			<div id="icon-group">
-				<div id="icon-box">
-					<img id="favicon" alt="icon">
+			<div id='icon-group'>
+				<div id='icon-box'>
+					<img id='favicon' alt='icon'>
 				</div>
-				<task-button id="fetch">
+				<task-button id='fetch'>
 					${DownCircleIcon}
 					${i18n("DownloadFavicon")}
 				</task-button>
 			</div>
-			<div id="field-group">
+			<div id='field-group'>
 				<label>
 					${i18n("ShortcutName")}
 					<input 
-						name="name"
+						name='name'
 						required
 					>
 				</label>
 				<label>
 					${i18n("ShortcutURL")}
 					<input 
-						name="url" 
-						type="url"
+						name='url' 
+						type='url'
 						required
 					>
 				</label>
 			</div>
-			<div id="actions">
+			<div id='actions'>
 				<button 
-					id="cancel" 
-					type="button"
+					id='cancel' 
+					type='button'
 				>
 					${xIcon}
 					${i18n("Cancel")}
 				</button>
 				<button 
-					id="accept" 
-					class="primary" 
-					type="button"
+					id='accept' 
+					class='primary' 
+					type='button'
 				>
 					${CheckIcon}
 					${i18n("Accept")}

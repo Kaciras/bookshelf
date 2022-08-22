@@ -23,17 +23,17 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 	<dialog-base name='${i18n("TopSiteDialog")}'>
-		<ul id="top-sites"></ul>
+		<ul id='top-sites'></ul>
 	</dialog-base>
 `;
 
 const itemTemplate = document.createElement("template");
 itemTemplate.innerHTML = `
 	<li>
-		<img alt="favicon">
+		<img alt='favicon'>
 		<span></span>
-		<span class="url"></span>
-		<button title='${i18n("AddToShortcut")}' class="icon">${AddIcon}</button>
+		<span class='url'></span>
+		<button title='${i18n("AddToShortcut")}' class='icon'>${AddIcon}</button>
 	</li>
 `;
 

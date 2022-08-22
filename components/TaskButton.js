@@ -4,8 +4,8 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 	<slot></slot>
-	<div class="dot-flashing">
-		<div class="middle"></div>
+	<div class='dot-flashing'>
+		<div class='middle'></div>
 	</div>
 `;
 

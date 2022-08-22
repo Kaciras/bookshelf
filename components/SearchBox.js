@@ -6,24 +6,24 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 
-	<img alt="icon">
+	<img alt='icon'>
 	<input
-		id="input"
-		enterkeyhint="search"
+		id='input'
+		enterkeyhint='search'
 		placeholder='${i18n("Search")}'
 	>
-	<div id="spinner"></div>
+	<div id='spinner'></div>
 	<button
-		id="button"
-		tabindex="-1"
+		id='button'
+		tabindex='-1'
 		title='${i18n("Search")}'
-		class="plain"
-		type="button"
+		class='plain'
+		type='button'
 	>
 		${SearchIcon}
 	</button>
 
-	<ul id="suggestions"></ul>
+	<ul id='suggestions'></ul>
 `;
 
 /**

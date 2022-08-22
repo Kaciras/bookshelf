@@ -92,7 +92,7 @@ export default function htmlPlugin() {
 						chunk.facadeModuleId === id,
 				);
 
-				const el = `<script type="module" src="${chunk.fileName}"></script>`;
+				const el = `<script type='module' src='${chunk.fileName}'></script>`;
 				const head = document.querySelector("head");
 				head.insertAdjacentHTML("beforeend", el);
 

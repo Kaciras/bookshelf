@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang='zh-Hans'>
 <head>
-	<meta charset="UTF-8">
+	<meta charset='UTF-8'>
 	<title></title>
-	<script defer src="browser-polyfill.js"></script>
-	<link rel="icon" href="./Star.svg">
-	<link rel="stylesheet" href="./index.css">
-	<script type="module" src="./index.js"></script>
+	<script defer src='browser-polyfill.js'></script>
+	<link rel='icon' href='./Star.svg'>
+	<link rel='stylesheet' href='./index.css'>
+	<script type='module' src='./index.js'></script>
 </head>
 <body>
 <!--
 	module js 自带 defer 属性，没法在 html 解析前注册自定义元素，
 	这样就只能先用 template 元素占位，之后再去 JS 里替换，真脑残。
 -->
-<template id="engine-select"></template>
-<template id="search-box"></template>
-<section id="shortcuts"></section>
-<aside id="setting-left"></aside>
-<aside id="setting-right"></aside>
+<template id='engine-select'></template>
+<template id='search-box'></template>
+<section id='shortcuts'></section>
+<aside id='setting-left'></aside>
+<aside id='setting-right'></aside>
 </body>
 </html>

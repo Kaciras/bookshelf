@@ -7,23 +7,23 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 	
-	<a id="link">
-		<div id="icon-box">
-			<img id="favicon" alt="favicon">
+	<a id='link'>
+		<div id='icon-box'>
+			<img id='favicon' alt='favicon'>
 		</div>
-		<span id="label"></span>
+		<span id='label'></span>
 	</a>
 	
 	<button
-		type="button"
-		id="edit"
+		type='button'
+		id='edit'
 		title='${i18n("Edit")}'
 	>
 		${EditIcon}
 	</button>
 	<button 
-		type="button"
-		id="remove"
+		type='button'
+		id='remove'
 		title='${i18n("Delete")}'
 	>
 		${CloseIcon}

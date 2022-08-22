@@ -6,9 +6,9 @@ import styles from "./CheckBox.css";
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	<input id="input" type="checkbox">
-	<div id="icon"></div>
-	<label for="input"><slot></slot></label>
+	<input id='input' type='checkbox'>
+	<div id='icon'></div>
+	<label for='input'><slot></slot></label>
 `;
 
 /**

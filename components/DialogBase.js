@@ -8,9 +8,9 @@ template.innerHTML = `
 	<dialog>
 		<h1></h1>
 		<button
-			class="plain"
+			class='plain'
 			title='${i18n("Close")}'
-			type="button"
+			type='button'
 		 >
 			${xIcon}
 		</button>

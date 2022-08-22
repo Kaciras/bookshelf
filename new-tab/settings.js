@@ -63,7 +63,7 @@ function requestClearData() {
 // 因为有内联 SVG 所以没法写在 index.html 里。
 const rightTemplate = document.createElement("template");
 rightTemplate.innerHTML = `
-	<button class="primary">
+	<button class='primary'>
 		${CheckIcon}${i18n("Accept")}
 	</button>
 	<button>
@@ -78,7 +78,7 @@ rightTemplate.innerHTML = `
 	<button>
 		${DownloadIcon}${i18n("ExportData")}
 	</button>
-	<button class="warning">
+	<button class='warning'>
 		${TrashIcon}${i18n("ClearData")}
 	</button>
 `;
@@ -87,13 +87,13 @@ const leftTemplate = document.createElement("template");
 leftTemplate.innerHTML = `
 	<label>
 		${i18n("MaxSuggestions")}
-		<input name="limit" type="number" min="0">
+		<input name='limit' type='number' min='0'>
 	</label>
 	<label>
 		${i18n("Debounce")}
-		<input name="threshold" type="number" min="0">
+		<input name='threshold' type='number' min='0'>
 	</label>
-	<check-box title='${i18n("IMEDebounceTitle")}' name="waitIME">
+	<check-box title='${i18n("IMEDebounceTitle")}' name='waitIME'>
 		${i18n("IMEDebounce")}
 	</check-box>
 `;
