@@ -24,13 +24,13 @@
 	},
 	"dependencies": {
 		"@kaciras/utilities": "^0.3.2",
-		"@material-design-icons/svg": "^0.12.0",
-		"@tabler/icons": "^1.91.0"
+		"@material-design-icons/svg": "^0.12.1",
+		"@tabler/icons": "^1.93.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.4.1",
 		"@rollup/plugin-alias": "^3.1.9",
-		"@rollup/plugin-node-resolve": "^13.3.0",
+		"@rollup/plugin-node-resolve": "^14.0.0",
 		"@rollup/plugin-replace": "^4.0.0",
 		"@rollup/pluginutils": "^4.2.1",
 		"@types/firefox-webext-browser": "^94.0.1",
@@ -38,16 +38,16 @@
 		"fast-glob": "^3.2.11",
 		"html-minifier-terser": "7.0.0",
 		"is-builtin-module": "^3.2.0",
-		"magic-string": "^0.26.2",
+		"magic-string": "^0.26.3",
 		"mime": "^3.0.0",
-		"node-html-parser": "5.4.2-0",
+		"node-html-parser": "5.4.2",
 		"postcss": "^8.4.16",
 		"postcss-csso": "^6.0.1",
 		"postcss-nested": "^5.0.6",
-		"postcss-simple-vars": "^6.0.3",
-		"rollup": "^2.78.1",
+		"postcss-simple-vars": "^7.0.0",
+		"rollup": "^2.79.0",
 		"rollup-plugin-terser": "^7.0.2",
-		"rollup-plugin-visualizer": "^5.8.0",
+		"rollup-plugin-visualizer": "^5.8.1",
 		"svgo": "^2.8.0"
 	}
 }
