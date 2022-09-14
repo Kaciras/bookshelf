@@ -25,22 +25,22 @@
 	"dependencies": {
 		"@kaciras/utilities": "^0.3.2",
 		"@material-design-icons/svg": "^0.12.1",
-		"@tabler/icons": "^1.93.0"
+		"@tabler/icons": "^1.96.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.4.1",
 		"@rollup/plugin-alias": "^3.1.9",
-		"@rollup/plugin-node-resolve": "^14.0.0",
+		"@rollup/plugin-node-resolve": "^14.1.0",
 		"@rollup/plugin-replace": "^4.0.0",
 		"@rollup/pluginutils": "^4.2.1",
 		"@types/firefox-webext-browser": "^94.0.1",
-		"eslint": "^8.23.0",
-		"fast-glob": "^3.2.11",
+		"eslint": "^8.23.1",
+		"fast-glob": "^3.2.12",
 		"html-minifier-terser": "7.0.0",
 		"is-builtin-module": "^3.2.0",
 		"magic-string": "^0.26.3",
 		"mime": "^3.0.0",
-		"node-html-parser": "5.4.2",
+		"node-html-parser": "6.0.0",
 		"postcss": "^8.4.16",
 		"postcss-csso": "^6.0.1",
 		"postcss-nested": "^5.0.6",
