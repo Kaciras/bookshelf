@@ -3,6 +3,7 @@ import alias from "@rollup/plugin-alias";
 import { visualizer } from "rollup-plugin-visualizer";
 import { terser } from "rollup-plugin-terser";
 import replace from '@rollup/plugin-replace';
+import zip from 'rollup-plugin-zip'
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import webpackConfig from "./alias.idea.cjs";
 import nodeBuiltins from "./rollup/builtin.js";
@@ -64,7 +65,9 @@ export default {
 		manifest("manifest.json"),
 		htmlEntry(),
 		template(),
+
 		isProduction && terser(),
+		isProduction && zip(),
 		isProduction && visualizer(),
 	],
 };

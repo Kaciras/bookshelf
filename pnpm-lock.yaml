@@ -24,6 +24,7 @@ specifiers:
   rollup: ^2.79.0
   rollup-plugin-terser: ^7.0.2
   rollup-plugin-visualizer: ^5.8.1
+  rollup-plugin-zip: ^1.0.3
   svgo: ^2.8.0
 
 dependencies:
@@ -52,6 +53,7 @@ devDependencies:
   rollup: 2.79.0
   rollup-plugin-terser: 7.0.2_rollup@2.79.0
   rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
+  rollup-plugin-zip: 1.0.3_rollup@2.79.0
   svgo: 2.8.0
 
 packages:
@@ -374,6 +376,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       fill-range: 7.0.1
+    dev: true
+
+  /buffer-crc32/0.2.13:
+    resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
     dev: true
 
   /buffer-from/1.1.2:
@@ -1372,6 +1378,15 @@ packages:
       yargs: 17.5.1
     dev: true
 
+  /rollup-plugin-zip/1.0.3_rollup@2.79.0:
+    resolution: {integrity: sha512-HTF9I4VjJnDVXd37P/POZPi8p5Luq4mP7A3Lbaxk3wPxRg8DXbxLHDlWxP9X3I1wYYgbT+xHuw8WEwb8RKwpQw==}
+    peerDependencies:
+      rollup: '>=2.0.2'
+    dependencies:
+      rollup: 2.79.0
+      yazl: 2.5.1
+    dev: true
+
   /rollup/2.79.0:
     resolution: {integrity: sha512-x4KsrCgwQ7ZJPcFA/SUu6QVcYlO7uRLfLAy0DSA4NS2eG8japdbpM50ToH7z4iObodRYOJ0soneF0iaQRJ6zhA==}
     engines: {node: '>=10.0.0'}
@@ -1604,6 +1619,12 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
+    dev: true
+
+  /yazl/2.5.1:
+    resolution: {integrity: sha512-phENi2PLiHnHb6QBVot+dJnaAZ0xosj7p3fWl+znIjBDlnMI2PsZCJZ306BPTFOaHf5qdDEI8x5qFrSOBN5vrw==}
+    dependencies:
+      buffer-crc32: 0.2.13
     dev: true
 
   /yocto-queue/0.1.0:
