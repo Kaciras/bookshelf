@@ -20,7 +20,6 @@ document.getElementById("search-box").replaceWith(searchBox);
 engineSelect.list = [DuckDuckGo, Google, Baidu];
 engineSelect.value = searchBox.engine;
 engineSelect.addEventListener("input", e => searchBox.engine = e.target.value);
-document.body.append(engineSelect);
 
 searchBox.onkeydown = e => {
 	switch (e.key) {
