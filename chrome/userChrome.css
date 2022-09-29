@@ -1,5 +1,6 @@
 /*
  * https://www.userchrome.org/
+ * Copy this stylesheet to <profile>/chrome folder to restore old tab style.
  */
 
 :root {
@@ -11,14 +12,6 @@
 
 .tabbrowser-tab {
 	padding-inline: 0 !important;
-}
-
-/*
- * 这里没使用变量 --tab-border-radius: 0 !important;
- * 因为它也影响新建按钮，该按钮保留圆角更好看些。
- */
-.tab-background {
-	border-radius: 0 !important;
 }
 
 .tab-background[multiselected="true"],

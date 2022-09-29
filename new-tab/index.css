@@ -25,7 +25,6 @@ html {
 body {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 
 	position: relative;
@@ -35,7 +34,7 @@ body {
 	/* Edge 的 body 字体大小只有 75% */
 	font-size: 1rem;
 
-	&::after {
+	&::before {
 		content: "";
 		position: absolute;
 		left: 0;
@@ -48,7 +47,7 @@ body {
 		pointer-events: none;
 	}
 
-	&.editing::after {
+	&.editing::before {
 		left: $edit-padding;
 		top: $edit-padding;
 		bottom: $edit-padding;
@@ -58,13 +57,12 @@ body {
 }
 
 engine-select {
-	position: absolute;
-	top: 34px;
-	left: 50%;
-	transform: translateX(-50%);
+	display: block;
+	margin-top: 34px;
 }
 
 search-box {
+	margin-top: 126px;
 	width: var(--search-box-width);
 }
 
@@ -81,9 +79,9 @@ input[type="number"] {
 
 #shortcuts {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, $shortcut-width);
 	max-width: calc(var(--row-size) * $shortcut-width);
-	margin-top: 48px;
+	margin: 48px 0;
+	grid-template-columns: repeat(auto-fit, $shortcut-width);
 }
 
 /* 左右上角的两片控件区域 */
