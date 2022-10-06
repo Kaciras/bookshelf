@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@kaciras/eslint-config-core': ^2.4.1
   '@kaciras/utilities': ^0.3.2
-  '@material-design-icons/svg': ^0.12.1
+  '@material-design-icons/svg': ^0.13.0
   '@rollup/plugin-alias': ^3.1.9
   '@rollup/plugin-node-resolve': ^14.1.0
   '@rollup/plugin-replace': ^4.0.0
@@ -14,10 +14,10 @@ specifiers:
   fast-glob: ^3.2.12
   html-minifier-terser: 7.0.0
   is-builtin-module: ^3.2.0
-  magic-string: ^0.26.4
+  magic-string: ^0.26.6
   mime: ^3.0.0
   node-html-parser: 6.1.1
-  postcss: ^8.4.16
+  postcss: ^8.4.17
   postcss-csso: ^6.0.1
   postcss-nested: ^5.0.6
   postcss-simple-vars: ^7.0.0
@@ -29,7 +29,7 @@ specifiers:
 
 dependencies:
   '@kaciras/utilities': 0.3.2
-  '@material-design-icons/svg': 0.12.1
+  '@material-design-icons/svg': 0.13.0
   '@tabler/icons': 1.101.0
 
 devDependencies:
@@ -43,13 +43,13 @@ devDependencies:
   fast-glob: 3.2.12
   html-minifier-terser: 7.0.0
   is-builtin-module: 3.2.0
-  magic-string: 0.26.4
+  magic-string: 0.26.6
   mime: 3.0.0
   node-html-parser: 6.1.1
-  postcss: 8.4.16
-  postcss-csso: 6.0.1_postcss@8.4.16
-  postcss-nested: 5.0.6_postcss@8.4.16
-  postcss-simple-vars: 7.0.0_postcss@8.4.16
+  postcss: 8.4.17
+  postcss-csso: 6.0.1_postcss@8.4.17
+  postcss-nested: 5.0.6_postcss@8.4.17
+  postcss-simple-vars: 7.0.0_postcss@8.4.17
   rollup: 2.79.1
   rollup-plugin-terser: 7.0.2_rollup@2.79.1
   rollup-plugin-visualizer: 5.8.2_rollup@2.79.1
@@ -180,8 +180,8 @@ packages:
     resolution: {integrity: sha512-WOgSHpPIYwiNivQwJvafhIyy04369Gw2IFctnx5TTnLBm+7AtPzDk1IIrFoqkxH0a7jwYKMEiSoI5UV7CWaaOg==}
     dev: false
 
-  /@material-design-icons/svg/0.12.1:
-    resolution: {integrity: sha512-kq9mWbPCDHIUNH6N2+kTQwZ+xf3t5OxtpqikrBLw3vCJjz5oinJWPOG/iW5iK8aLp79iwLOMrGahpYhEQZSs2Q==}
+  /@material-design-icons/svg/0.13.0:
+    resolution: {integrity: sha512-L0ZsxX/E3292lG4495bj6UJ2ypPBSLeI5c6Jl2lUI5Ge7dCrU5n4jZFjRCdK9OvUaFJyZ0mZobmbV0v6SdtTRg==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -1092,8 +1092,8 @@ packages:
       sourcemap-codec: 1.4.8
     dev: true
 
-  /magic-string/0.26.4:
-    resolution: {integrity: sha512-e5uXtVJ22aEpK9u1+eQf0fSxHeqwyV19K+uGnlROCxUhzwRip9tBsaMViK/0vC3viyPd5Gtucp3UmEp/Q2cPTQ==}
+  /magic-string/0.26.6:
+    resolution: {integrity: sha512-6d+3bFybzyQFJYSoRsl9ZC0wheze8M1LrQC7tNMRqXR4izUTDOLMd9BtSuExK9iAukFh+s5K0WAhc/dlQ+HKYA==}
     engines: {node: '>=12'}
     dependencies:
       sourcemap-codec: 1.4.8
@@ -1265,23 +1265,23 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
-  /postcss-csso/6.0.1_postcss@8.4.16:
+  /postcss-csso/6.0.1_postcss@8.4.17:
     resolution: {integrity: sha512-ZV4yEziMrx6CEiqabGLrDva0pMD7Fbw7yP+LzJvaynM4OJgTssGN6dHiMsJMJdpmNaLJltXVLsrb/5sxbFa8sA==}
     engines: {node: ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
     peerDependencies:
       postcss: ^8.0.0
     dependencies:
       csso: 5.0.5
-      postcss: 8.4.16
+      postcss: 8.4.17
     dev: true
 
-  /postcss-nested/5.0.6_postcss@8.4.16:
+  /postcss-nested/5.0.6_postcss@8.4.17:
     resolution: {integrity: sha512-rKqm2Fk0KbA8Vt3AdGN0FB9OBOMDVajMG6ZCf/GoHgdxUJ4sBFp0A/uMIRm+MJUdo33YXEtjqIz8u7DAp8B7DA==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
-      postcss: 8.4.16
+      postcss: 8.4.17
       postcss-selector-parser: 6.0.10
     dev: true
 
@@ -1293,17 +1293,17 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
-  /postcss-simple-vars/7.0.0_postcss@8.4.16:
+  /postcss-simple-vars/7.0.0_postcss@8.4.17:
     resolution: {integrity: sha512-SPSkKQK7mKjD/tqcTbZkDi3KP+C/cTGXnKQmSt3AisJtnZE6ZxHEUoOGRfpV0B5dW1Y36EETfRHx10WLHpXThA==}
     engines: {node: '>=14.0'}
     peerDependencies:
       postcss: ^8.2.1
     dependencies:
-      postcss: 8.4.16
+      postcss: 8.4.17
     dev: true
 
-  /postcss/8.4.16:
-    resolution: {integrity: sha512-ipHE1XBvKzm5xI7hiHCZJCSugxvsdq2mPnsq5+UF+VHCjiBvtDrlxJfMBToWaP9D5XlgNmcFGqoHmUn0EYEaRQ==}
+  /postcss/8.4.17:
+    resolution: {integrity: sha512-UNxNOLQydcOFi41yHNMcKRZ39NeXlr8AxGuZJsdub8vIb12fHzcq37DTU/QtbI6WLxNg2gF9Z+8qtRwTj1UI1Q==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.4
