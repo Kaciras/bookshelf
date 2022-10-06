@@ -2,9 +2,9 @@ import { env } from "node:process";
 import alias from "@rollup/plugin-alias";
 import { visualizer } from "rollup-plugin-visualizer";
 import { terser } from "rollup-plugin-terser";
-import replace from '@rollup/plugin-replace';
-import zip from 'rollup-plugin-zip'
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import replace from "@rollup/plugin-replace";
+import zip from "rollup-plugin-zip";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import webpackConfig from "./alias.idea.cjs";
 import nodeBuiltins from "./rollup/builtin.js";
 import asset from "./rollup/asset.js";
@@ -23,23 +23,19 @@ function webpackAliasToRollup() {
 }
 
 export default {
-	// 以 WebApp 为目标推荐设为 false，避免生成 facade 模块。
+	// Avoid generate the "facade" entry chunk.
 	preserveEntrySignatures: false,
 
 	output: {
+		generatedCode: "es2015",
 		format: "esm",
 		dir: "dist",
 		chunkFileNames: "[name].js",
-
-		// 新选项能提升输出代码的性能，但我没怎么感觉到。
-		generatedCode: "es2015",
 	},
 	plugins: [
 		alias({ entries: webpackAliasToRollup() }),
 		replace({
 			preventAssignment: true,
-
-			// 不能直接替换 window，因为有其他地方调用。
 			"typeof window": "'object'",
 			"import.meta.env.dev": `${!isProduction}`,
 		}),
@@ -53,13 +49,13 @@ export default {
 		copy([
 			{
 				from: "global.css",
-				context: "new-tab"
+				context: "new-tab",
 			},
 			{
 				from: "**/*",
 				context: "locales",
 				to: "_locales",
-				toDirectory: true
+				toDirectory: true,
 			},
 		]),
 		manifest("manifest.json"),
