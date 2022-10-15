@@ -21,7 +21,7 @@ li {
 
 	margin: 12px 20px;
 	padding: 12px;
-	border: solid 1px #ddd;
+	border: solid 1px var(--color-split-line);
 	border-radius: var(--panel-radius);
 }
 
@@ -56,5 +56,9 @@ button {
 
 .url {
 	font-size: 14px;
-	color: #767779;
+	color: #747577;
+
+	@media (prefers-color-scheme: dark) {
+		color: #a5a6a9;
+	}
 }

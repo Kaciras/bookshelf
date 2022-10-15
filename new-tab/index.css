@@ -10,16 +10,36 @@ $shortcut-width: 120px;
 	--shortcut-icon-size: 48px;
 	--panel-radius: 8px;
 	--widget-radius: 4px;
+	--color-split-line: #bfbfbf;
 	--block-focus-shadow: 0 0 0 3px #2ea8ff;
 }
 
 /* html 里的属性能被 ShadowDOM 继承，body 就不行 */
 html {
 	background: #f9f9fb;
-	color: #333;
+	color: var(--color-text);
 
 	/* noinspection CssInvalidPropertyValue */
 	image-rendering: -webkit-optimize-contrast;
+
+	--color-background: white;
+	--color-text-background: white;
+	--color-hl-background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-split-line: #686868;
+		--block-focus-shadow: 0 0 0 3px #2997e6;
+	}
+	html {
+		background: #3b3b3b;
+
+		--color-text: #eee;
+		--color-background: #3b3b3b;
+		--color-text-background: #2b2b2b;
+		--color-hl-background: #555;
+	}
 }
 
 body {

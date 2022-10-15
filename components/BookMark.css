@@ -24,8 +24,9 @@ a {
 #icon-box {
 	margin: 0 4px;
 	padding: 16px;
+
 	border-radius: var(--panel-radius);
-	background: white;
+	background: var(--color-hl-background);
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.2);
 
 	a:focus-visible > & {

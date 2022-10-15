@@ -1,5 +1,5 @@
 import GoogleIcon from "@assets/google.ico";
-import BaiduIcon from "@assets/baidu.ico";
+import BaiduIcon from "@assets/baidu.svg?url";
 import DuckDuckGoIcon from "@assets/dax-logo.svg?url";
 import { i18n } from "@share";
 

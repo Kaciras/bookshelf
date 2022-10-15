@@ -8,7 +8,8 @@
 	height: 52px;
 	font-family: arial, sans-serif;
 
-	background: white;
+	background: var(--color-text-background);
+
 	border: none;
 	border-radius: var(--panel-radius);
 
@@ -37,6 +38,10 @@
 	& > #suggestions {
 		display: block;
 	}
+
+	& > #button {
+		border-bottom-right-radius: 0;
+	}
 }
 
 /* 高亮跟建议列表有冲突，故仅在没有建议时才显示 */
@@ -62,7 +67,7 @@ input {
 
 #button {
 	padding: 14px;
-	border-radius: 0;
+	border-radius: 0 var(--panel-radius) var(--panel-radius) 0;
 }
 
 #suggestions {
@@ -74,15 +79,16 @@ input {
 	left: 0;
 	width: 100%;
 	z-index: 10;
+	overflow: hidden;
 
 	margin: 0;
 	padding: 0;
-	background: white;
+	background: var(--color-text-background);
 
 	border-bottom-left-radius: var(--panel-radius);
 	border-bottom-right-radius: var(--panel-radius);
 
-	border-top: solid 1px #ddd;
+	border-top: solid 1px var(--color-split-line);
 	box-shadow: 0 8px 8px rgba(9, 32, 77, 0.12), 0 2px 2px rgba(29, 17, 51, 0.12);
 }
 
@@ -93,7 +99,7 @@ li {
 	&.active,
 	&:hover,
 	&:focus-visible {
-		background: rgba(0, 0, 0, 0.04);
+		background: rgba(195, 195, 195, 0.17);
 	}
 }
 
@@ -103,7 +109,6 @@ li {
 	display: none;
 	position: relative;
 	width: 52px;
-	background: white;
 
 	&.active {
 		display: block;
@@ -123,7 +128,7 @@ li {
 
 		border-radius: 50%;
 		border: 3px solid #ddd;
-		border-top-color: #2ea8ff;  /* Firefox 有 BUG 不能用变量 */
+		border-top-color: #2ea8ff; /* Firefox 有 BUG 不能用变量 */
 		animation: spinner .6s linear infinite;
 	}
 

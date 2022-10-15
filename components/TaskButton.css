@@ -10,7 +10,7 @@ $time: 0.8s;
 .dot-flashing {
 
 	/* 颜色属性使用 CSS 变量以便外部能够修改 */
-	--color: #004bff;
+	--color: #0765e0;
 
 	&::before, &::after {
 		content: "";

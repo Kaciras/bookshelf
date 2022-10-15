@@ -14,8 +14,14 @@ button, .button {
 	font-size: 1rem;
 
 	--bg: #efeff2;
-	--bg-focus: #e8e8eb;
+	--bg-focus: #e7e7e9;
 	--bg-active: #e1e1e3;
+
+	@media (prefers-color-scheme: dark) {
+		--bg: #555;
+		--bg-focus: #5e5e5e;
+		--bg-active: #525252;
+	}
 
 	border-radius: 4px;
 	cursor: pointer;
@@ -45,23 +51,28 @@ button, .button {
 	}
 }
 
+input {
+	color: var(--color-text);
+	background: var(--color-text-background);
+}
+
 .primary {
 	--color: white;
-	--bg: #0061e0;
-	--bg-focus: #0066eb;
-	--bg-active: #005ac7;
+	--bg: #0566e6;
+	--bg-focus: #0e70f0;
+	--bg-active: #0462d4;
 }
 
 .warning {
 	--color: white;
-	--bg: #f04d4d;
-	--bg-focus: #f55656;
-	--bg-active: #e64040;
+	--bg: #de4747;
+	--bg-focus: #eb5252;
+	--bg-active: #d93d3d;
 }
 
 .plain {
 	background: none;
 	--bg: none;
-	--bg-focus: rgba(0, 0, 0, 0.04);
-	--bg-active: rgba(0, 0, 0, 0.06);
+	--bg-focus: rgba(186, 186, 186, 0.18);
+	--bg-active: rgba(186, 186, 186, 0.24);
 }

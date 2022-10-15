@@ -42,7 +42,7 @@ export default {
 		asset({
 			loaders: [postcss, svg],
 			source: { include: ["components/**/*.css", "**/*.svg"] },
-			url: { include: ["**/*.ico"] },
+			url: { include: ["**/*.{ico,png,jpg}"] },
 		}),
 		nodeBuiltins,
 		nodeResolve(),
