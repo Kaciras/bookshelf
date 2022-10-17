@@ -40,7 +40,7 @@ const dragSortHandlers = {
 		return persistDataModel();
 	},
 	ondragenter(event) {
-		const { target } = event;
+		const { currentTarget } = event;
 
 		if (!dragEl) {
 			return; // 拖拽元素不是快捷方式
@@ -48,14 +48,11 @@ const dragSortHandlers = {
 		dragEl.isDragging = true;
 
 		const i = indexInParent(dragEl);
-		const j = indexInParent(target);
-
-		jump(shortcuts, i, j);
-
+		const j = indexInParent(currentTarget);
 		if (i < j) {
-			target.after(dragEl);
+			currentTarget.after(dragEl);
 		} else {
-			target.before(dragEl);
+			currentTarget.before(dragEl);
 		}
 	},
 };

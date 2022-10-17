@@ -113,7 +113,7 @@ class EditDialogElement extends HTMLElement {
 	handleActionClick(event) {
 		const { dialogEl, urlInput } = this;
 
-		if (event.target.id !== "accept") {
+		if (event.currentTarget.id !== "accept") {
 			dialogEl.close();
 		} else if (urlInput.form.reportValidity()) {
 			dialogEl.close();
