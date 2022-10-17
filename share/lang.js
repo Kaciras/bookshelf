@@ -55,15 +55,3 @@ export function dirname(path) {
 	const i = path.lastIndexOf("/");
 	return i < 0 ? path : path.slice(0, i);
 }
-
-/**
- * 插队，先将数组中的元素移除，然后插入到指定位置。
- *
- * @param array 数组
- * @param i 原位置
- * @param j 新位置
- * @param n 移动的元素个数
- */
-export function jump(array, i, j, n = 1) {
-	array.splice(j, 0, ...array.splice(i, n));
-}

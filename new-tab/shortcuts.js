@@ -1,4 +1,4 @@
-import { indexInParent, jump } from "@share";
+import { indexInParent } from "@share";
 import { checkSync, iconCache, loadConfig, saveConfig } from "./storage.js";
 
 /*
@@ -11,7 +11,6 @@ import { checkSync, iconCache, loadConfig, saveConfig } from "./storage.js";
 
 const container = document.getElementById("shortcuts");
 
-let shortcuts;		// 数据模型
 let dragEl = null;	// 当前被拖动的元素
 
 /**
@@ -20,6 +19,13 @@ let dragEl = null;	// 当前被拖动的元素
  * @return {Promise<void>} 等待保存完成
  */
 function persistDataModel() {
+	const { children } = container;
+	const shortcuts = new Array(children.length);
+
+	for (let i = 0; i < shortcuts.length; i++) {
+		const { label, iconUrl, url } = children[i];
+		shortcuts[i] = { label, iconUrl, url };
+	}
 	return saveConfig({ shortcuts });
 }
 
@@ -70,15 +76,9 @@ function appendElement(props) {
 }
 
 export async function add(request) {
-	const { label, icon, url, favicon } = request;
+	request.iconUrl = await iconCache.save(request.icon);
 
-	const iconUrl = await iconCache.save(icon);
-
-	const model = { label, iconUrl, url };
-	shortcuts.push(model);
-
-	model.favicon = favicon;
-	const el = appendElement(model);
+	const el = appendElement(request);
 	el.isEditable = container.editable;
 
 	return persistDataModel();
@@ -86,25 +86,17 @@ export async function add(request) {
 
 export async function update(index, request) {
 	const { icon, ...newValue } = request;
-
-	const iconUrl = await iconCache.save(icon);
-	newValue.iconUrl = iconUrl;
+	newValue.iconUrl = await iconCache.save(icon);
 
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, newValue);
 
-	const { label, url } = newValue;
-	shortcuts[index] = { label, iconUrl, url };
-
 	return persistDataModel().then(evictCache);
 }
 
 export function remove(event) {
-	const i = indexInParent(event.target);
 	event.target.remove();
-	shortcuts.splice(i, 1);
-
 	return persistDataModel().then(evictCache);
 }
 
@@ -122,10 +114,7 @@ export function setShortcutEditable(value) {
  *
  * @param saved 保存的数据
  */
-function mountShortcuts(saved) {
-	// 注意！shortcuts 是外层变量，不要在参数上用解构！
-	shortcuts = saved.shortcuts ?? [];
-
+function mountShortcuts({ shortcuts = [] }) {
 	if (import.meta.env.dev) {
 		console.debug("Shortcuts model:", shortcuts);
 	}
@@ -148,7 +137,8 @@ function mountShortcuts(saved) {
  * 所以不能仅靠被修改的对象来确定是否清理，只能全部扫描一遍。
  */
 function evictCache() {
-	return iconCache.evict(new Set(shortcuts.map(s => s.iconUrl)));
+	const keys = Array.from(container.children).map(s => s.iconUrl);
+	return iconCache.evict(new Set(keys));
 }
 
 loadConfig("shortcuts").then(mountShortcuts);
