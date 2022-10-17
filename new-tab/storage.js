@@ -6,8 +6,11 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
+import defaultFavicon from "@assets/Website.svg?url";
 import { i18n } from "@share";
-import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities";
+import { blobToBase64URL, saveFile, selectFile, sha256 } from "@kaciras/utilities";
+
+export { defaultFavicon };
 
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
@@ -105,3 +108,59 @@ export async function importSettings() {
 
 	window.alert(i18n("AfterImportSuccess"));
 }
+
+export const iconCache = {
+
+	async save(dataUrlOrResp) {
+		if (dataUrlOrResp === defaultFavicon) {
+			return null;
+		}
+		const cache = await caches.open("favicon");
+		let url;
+		let response;
+
+		if (typeof dataUrlOrResp !== "string") {
+			url = dataUrlOrResp.url;
+			response = dataUrlOrResp;
+		} else {
+			response = await fetch(dataUrlOrResp);
+			const data = await response.clone().arrayBuffer();
+			const hash = (await sha256(data)).slice(0, 20);
+			url = CACHE_ORIGIN + hash;
+		}
+
+		return cache.put(url, response).then(() => url);
+	},
+
+	async load(urlKey) {
+		if (!urlKey) {
+			return defaultFavicon;
+		}
+		const cache = await caches.open("favicon");
+
+		let response = await cache.match(urlKey);
+		if (!response) {
+			// 手动设置的图标没法下载，只能回退到默认值。
+			if (urlKey.startsWith(CACHE_ORIGIN)) {
+				return defaultFavicon;
+			}
+			response = await fetch(urlKey, { mode: "no-cors" });
+			if (!response.ok) {
+				throw new Error("Download failed: " + urlKey);
+			}
+			await cache.put(urlKey, response.clone());
+		}
+
+		return URL.createObjectURL(await response.blob());
+	},
+
+	async evict(used) {
+		const cache = await caches.open("favicon");
+		const tasks = (await cache.keys())
+			.filter(r => !used.has(r.url))
+			.map(request => cache.delete(request));
+
+		await Promise.all(tasks);
+		console.debug(`Deleted ${tasks.length} expired favicons。`);
+	},
+};

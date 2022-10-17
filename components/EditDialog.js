@@ -1,8 +1,8 @@
-import WebsiteIcon from "@assets/Website.svg?url";
 import CheckIcon from "@tabler/icons/check.svg";
 import xIcon from "@tabler/icons/x.svg";
 import DownCircleIcon from "@tabler/icons/arrow-down-circle.svg";
 import { delegate, getFaviconUrl, i18n } from "@share";
+import { defaultFavicon } from "../new-tab/storage.js";
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
 
@@ -11,30 +11,19 @@ const defaultData = {
 	url: "",
 
 	/**
-	 * 图标的 URL，默认为 null，或是自动获取的。
-	 * 该属性将被插件同步，不能太长，请勿使用 DataURL。
-	 */
-	iconUrl: null,
-
-	/**
 	 * 图标下载到本地后引用的 URL，也可能是缓存中取出的。
 	 * 该属性是由 iconUrl 生成的。
 	 */
-	favicon: WebsiteIcon,
+	icon: defaultFavicon,
 
-	/**
-	 * 图标响应，仅当下载了图标后存在。
-	 * 该属性不属于 Shortcut 对象，仅用于保存缓存。
-	 */
-	iconResponse: null,
+	favicon: defaultFavicon,
 };
 
 function pick(source, target) {
-	target.iconResponse = source.iconResponse;
-	target.url = source.url;
-	target.favicon = source.favicon;
 	target.label = source.label;
-	target.iconUrl = source.iconUrl;
+	target.url = source.url;
+	target.icon = source.icon;
+	target.favicon = source.favicon;
 }
 
 const template = document.createElement("template");
@@ -144,8 +133,8 @@ class EditDialogElement extends HTMLElement {
 			const href = await getFaviconUrl(url, signal);
 			const res = await fetch(href, { mode: "no-cors" });
 
-			this.iconResponse = res.clone();
-			this.iconUrl = href;
+			URL.revokeObjectURL(this.favicon);
+			this.icon = res.clone();
 			this.favicon = URL.createObjectURL(await res.blob());
 		} catch (e) {
 			console.error(e);

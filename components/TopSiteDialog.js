@@ -1,9 +1,7 @@
-import WebsiteIcon from "@assets/Website.svg?url";
 import AddIcon from "@tabler/icons/plus.svg";
 import CheckIcon from "@tabler/icons/check.svg";
-import { sha256 } from "@kaciras/utilities";
 import { i18n } from "@share";
-import { CACHE_ORIGIN } from "../new-tab/storage.js";
+import { defaultFavicon } from "../new-tab/storage.js";
 import styles from "./TopSiteDialog.css";
 
 /**
@@ -79,7 +77,7 @@ class TopSiteDialogElement extends HTMLElement {
 			let { title, url, favicon } = sites[i];
 
 			// Can't use default value of destructuring as it only caused by undefined.
-			favicon ??= WebsiteIcon;
+			favicon ??= defaultFavicon;
 
 			// 标题可能为空字符串，所以不能用 ??=
 			url = decodeURI(url);
@@ -95,22 +93,13 @@ class TopSiteDialogElement extends HTMLElement {
 				item.classList.add("added");
 				item.children[3].innerHTML = CheckIcon;
 
-				/*
-				 * 此处的图标是从浏览器 API 获取的，无法对应到网站上，
-				 * 所以只能构造一个伪 iconUrl 作为缓存键。
-				 */
-				const response = await fetch(favicon);
-				const data = await response.clone().arrayBuffer();
-				const hash = (await sha256(data)).slice(0, 20);
-
 				const init = {
 					bubbles: true,
 					detail: {
-						iconUrl: CACHE_ORIGIN + hash,
+						icon: favicon,
 						url,
 						label: title,
 						favicon,
-						iconResponse: response,
 					},
 				};
 				this.dispatchEvent(new CustomEvent("add", init));
