@@ -90,19 +90,19 @@ class TopSiteDialogElement extends HTMLElement {
 			item.children[1].textContent = title;
 			item.children[2].textContent = url;
 			item.children[3].onclick = async () => {
-				item.classList.add("added");
-				item.children[3].innerHTML = CheckIcon;
-
-				const init = {
+				const event = new CustomEvent("add", {
 					bubbles: true,
 					detail: {
-						icon: favicon,
-						url,
 						label: title,
+						url,
 						favicon,
+						icon: favicon,
 					},
-				};
-				this.dispatchEvent(new CustomEvent("add", init));
+				});
+				if (this.dispatchEvent(event)) {
+					item.classList.add("added");
+					item.children[3].innerHTML = CheckIcon;
+				}
 			};
 		}
 
