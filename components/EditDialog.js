@@ -9,13 +9,6 @@ import styles from "./EditDialog.css";
 const defaultData = {
 	label: "",
 	url: "",
-
-	/**
-	 * 图标下载到本地后引用的 URL，也可能是缓存中取出的。
-	 * 该属性是由 iconUrl 生成的。
-	 */
-	icon: defaultFavicon,
-
 	favicon: defaultFavicon,
 };
 
@@ -130,12 +123,7 @@ class EditDialogElement extends HTMLElement {
 		const url = this.urlInput.value;
 
 		try {
-			const href = await getFaviconUrl(url, signal);
-			const res = await fetch(href, { mode: "no-cors" });
-
-			URL.revokeObjectURL(this.favicon);
-			this.icon = res.clone();
-			this.favicon = URL.createObjectURL(await res.blob());
+			this.favicon = await getFaviconUrl(url, signal);
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

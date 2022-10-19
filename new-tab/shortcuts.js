@@ -65,7 +65,6 @@ const dragSortHandlers = {
 
 function appendElement(props) {
 	const el = document.createElement("book-mark");
-
 	el.url = props.url;
 	el.favicon = props.favicon;
 	el.label = props.label;
@@ -76,7 +75,7 @@ function appendElement(props) {
 }
 
 export async function add(request) {
-	request.iconUrl = await iconCache.save(request.icon);
+	request.iconUrl = await iconCache.save(request.favicon);
 
 	const el = appendElement(request);
 	el.isEditable = container.editable;
@@ -85,12 +84,11 @@ export async function add(request) {
 }
 
 export async function update(index, request) {
-	const { icon, ...newValue } = request;
-	newValue.iconUrl = await iconCache.save(icon);
+	request.iconUrl = await iconCache.save(request.favicon);
 
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
-	Object.assign(el, newValue);
+	Object.assign(el, request);
 
 	return persistDataModel().then(evictCache);
 }

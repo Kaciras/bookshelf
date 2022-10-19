@@ -96,7 +96,6 @@ class TopSiteDialogElement extends HTMLElement {
 						label: title,
 						url,
 						favicon,
-						icon: favicon,
 					},
 				});
 				if (this.dispatchEvent(event)) {
