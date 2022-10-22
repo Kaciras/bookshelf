@@ -21,6 +21,7 @@ specifiers:
   postcss-csso: ^6.0.1
   postcss-nested: ^6.0.0
   postcss-simple-vars: ^7.0.0
+  postcss-variable-compress: ^1.2.0
   rollup: ^3.2.3
   rollup-plugin-terser: ^7.0.2
   rollup-plugin-visualizer: ^5.8.3
@@ -50,6 +51,7 @@ devDependencies:
   postcss-csso: 6.0.1_postcss@8.4.18
   postcss-nested: 6.0.0_postcss@8.4.18
   postcss-simple-vars: 7.0.0_postcss@8.4.18
+  postcss-variable-compress: 1.2.0_postcss@8.4.18
   rollup: 3.2.3
   rollup-plugin-terser: 7.0.2_rollup@3.2.3
   rollup-plugin-visualizer: 5.8.3_rollup@3.2.3
@@ -1295,6 +1297,15 @@ packages:
     engines: {node: '>=14.0'}
     peerDependencies:
       postcss: ^8.2.1
+    dependencies:
+      postcss: 8.4.18
+    dev: true
+
+  /postcss-variable-compress/1.2.0_postcss@8.4.18:
+    resolution: {integrity: sha512-bnYeLF4FLGwmF2zG9qUCUgazl8coACrkBgEsF1j/IY4S0vIsh66/PmqXNWE27XxkaFWBDUggxY9Gu97hG8Y5Cw==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      postcss: ^8.2.8
     dependencies:
       postcss: 8.4.18
     dev: true

@@ -1,7 +1,9 @@
+import { env } from "node:process";
 import postcss from "postcss";
 import nested from "postcss-nested";
 import csso from "postcss-csso";
 import vars from "postcss-simple-vars";
+import varCompress from "postcss-variable-compress";
 
 /*
  * 【关于 import 的处理】
@@ -11,11 +13,17 @@ import vars from "postcss-simple-vars";
 
 const cssLangRE = /\.(css|pcss)($|\?)/;
 
-const convertor = postcss([
-	vars(),		// 局部变量还是预处理方便些
-	csso(),		// 压缩结果
-	nested(),	// 支持嵌套语法
-]);
+const plugins = [
+	vars(),		// Support SCSS-style variables.
+	csso(),		// Compress output.
+	nested(),	// Support nesting.
+];
+
+if (env.NODE_ENV === "production") {
+	plugins.push(varCompress()); // Minimum variable names
+}
+
+const convertor = postcss(plugins);
 
 export default function (source, info) {
 	if (!cssLangRE.test(info.id)) {
