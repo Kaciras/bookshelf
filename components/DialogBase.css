@@ -6,8 +6,8 @@ dialog {
 	overflow: hidden;
 
 	color: inherit;
-	background: var(--color-background);
-	box-shadow: 0 0 4px  rgba(12, 12, 13, 0.2);
+	background: var(--color-bg-2);
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 	border: none;
 	border-radius: var(--panel-radius);
 

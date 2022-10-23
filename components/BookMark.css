@@ -10,7 +10,7 @@
 }
 
 :host(:hover) {
-	background: rgba(0, 0, 0, 0.05);
+	background: rgba(150, 150, 150, 0.13);
 }
 
 a {
@@ -26,7 +26,7 @@ a {
 	padding: 16px;
 
 	border-radius: var(--panel-radius);
-	background: var(--color-hl-background);
+	background: var(--color-bg-3);
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.2);
 
 	a:focus-visible > & {
@@ -65,11 +65,10 @@ button {
 	top: -15px;
 	padding: 4px;
 
-	border: solid 1px #a0a0a0;
-	border-radius: 100%;
+	border-radius: 50%;
 	opacity: 0;
-	background: white;
-	transform: scale(0.5);
+	color: white;
+	background: #0b6ae6;
 
 	:host(.editable) > & {
 		display: inline-flex;
@@ -78,7 +77,6 @@ button {
 	:host(:hover) > &,
 	:host(:focus-within) > & {
 		opacity: 1;
-		transform: scale(1);
 	}
 }
 
@@ -88,6 +86,12 @@ button {
 
 #remove {
 	right: -15px;
-	color: red;
-	border-color: red;
+	color: black;
+	background: #b0b0b4;
+
+	&:hover {
+		color: white;
+		background: #ea4a4a;
+
+	}
 }

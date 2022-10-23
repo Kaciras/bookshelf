@@ -8,7 +8,7 @@
 	height: 52px;
 	font-family: arial, sans-serif;
 
-	background: var(--color-text-background);
+	background: var(--color-bg-2t);
 
 	border: none;
 	border-radius: var(--panel-radius);
@@ -59,6 +59,7 @@ input {
 	flex: 1;
 	font-size: 1rem;
 	border: 0;
+	background: none;
 
 	&:focus-visible {
 		outline: none;
@@ -83,7 +84,7 @@ input {
 
 	margin: 0;
 	padding: 0;
-	background: var(--color-text-background);
+	background: var(--color-bg-2t);
 
 	border-bottom-left-radius: var(--panel-radius);
 	border-bottom-right-radius: var(--panel-radius);
@@ -138,7 +139,7 @@ li {
 		top: 12px;
 		bottom: 12px;
 		right: 0;
-		border-left: 1px solid #dadce0;
+		border-left: 1px solid #d2d4d9;
 	}
 }
 

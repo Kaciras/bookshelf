@@ -13,12 +13,12 @@ button, .button {
 	outline: none;
 	font-size: 1rem;
 
-	--bg: #efeff2;
-	--bg-focus: #e7e7e9;
-	--bg-active: #e1e1e3;
+	--bg: #e8e8eb;
+	--bg-focus: #e1e1e3;
+	--bg-active: #dcdcde;
 
 	@media (prefers-color-scheme: dark) {
-		--bg: #555;
+		--bg: #505050;
 		--bg-focus: #5e5e5e;
 		--bg-active: #525252;
 	}
@@ -42,6 +42,7 @@ button, .button {
 	}
 
 	/* 用于内容只有一个图标的按钮 */
+
 	&.icon {
 		padding: 8px;
 	}
@@ -53,14 +54,24 @@ button, .button {
 
 input {
 	color: var(--color-text);
-	background: var(--color-text-background);
+	background: var(--color-bg-3);
+	border-color: transparent;
+
+	&:focus-visible {
+		outline: none;
+		border-color: #1c98ff;
+	}
+
+	&::placeholder {
+		color: var(--color-placeholder);
+	}
 }
 
 .primary {
 	--color: white;
-	--bg: #0566e6;
-	--bg-focus: #0e70f0;
-	--bg-active: #0462d4;
+	--bg: #0e6be6;
+	--bg-focus: #1374f2;
+	--bg-active: #0d66d4;
 }
 
 .warning {
