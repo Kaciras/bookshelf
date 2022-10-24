@@ -1,6 +1,9 @@
 @import "/global.css";
 
 /* 已经有 PageUp、PageDown 切换引擎了，不再设置高亮效果 */
+:host {
+	display: block;
+}
 
 #container {
 	display: flex;

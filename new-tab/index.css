@@ -4,6 +4,9 @@ $edit-dash-width: 4px;
 $edit-padding: 15px;
 $shortcut-width: 120px;
 
+$body-padding: 34px;
+$section-margin: 48px;
+
 :root {
 	--search-box-width: 720px;
 	--row-size: 8;
@@ -52,6 +55,7 @@ body {
 	align-items: center;
 
 	position: relative;
+	padding: $body-padding 0;
 	margin: 0;
 	min-height: 100vh;
 
@@ -81,14 +85,27 @@ body {
 	}
 }
 
-engine-select {
-	display: block;
-	margin-top: 34px;
+#v-center {
+	$top: ($body-padding + $section-margin + 48px);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	margin-top: $section-margin;
+	min-height: calc(100vh - $top * 2);
 }
 
 search-box {
-	margin-top: 126px;
 	width: var(--search-box-width);
+}
+
+#shortcuts {
+	display: grid;
+	max-width: calc(var(--row-size) * $shortcut-width);
+	margin-top: $section-margin;
+	grid-template-columns: repeat(auto-fit, $shortcut-width);
 }
 
 label {
@@ -100,13 +117,6 @@ label {
 
 input[type="number"] {
 	width: 120px;
-}
-
-#shortcuts {
-	display: grid;
-	max-width: calc(var(--row-size) * $shortcut-width);
-	margin: 48px 0;
-	grid-template-columns: repeat(auto-fit, $shortcut-width);
 }
 
 /* 左右上角的两片控件区域 */

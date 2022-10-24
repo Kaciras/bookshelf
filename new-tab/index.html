@@ -8,14 +8,17 @@
 	<script type='module' src='./index.js'></script>
 </head>
 <body>
-<!--
-	module js 自带 defer 属性，没法在 html 解析前注册自定义元素，
-	这样就只能先用 template 元素占位，之后再去 JS 里替换，真脑残。
--->
-<template id='engine-select'></template>
-<template id='search-box'></template>
-<section id='shortcuts'></section>
 <aside id='setting-left'></aside>
 <aside id='setting-right'></aside>
+
+<!--
+	Module JS implies defer，custom elements are not registered
+	until page load. So we use the <template> and replace it in JS.
+-->
+<template id='engine-select'></template>
+<div id='v-center'>
+	<template id='search-box'></template>
+	<section id='shortcuts'></section>
+</div>
 </body>
 </html>
