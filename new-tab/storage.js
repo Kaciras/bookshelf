@@ -15,6 +15,11 @@ export { defaultFavicon };
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
+/**
+ * 因为 CacheStorage 的 key 必须是 HTTP URL，所以用它作为键的前缀。
+ */
+export const CACHE_ORIGIN = "https://internal-cache/";
+
 export async function saveConfig(object, keys) {
 	const uuid = Math.random();
 	const items = { uuid };
@@ -104,54 +109,29 @@ export async function importSettings() {
 	window.alert(i18n("AfterImportSuccess"));
 }
 
-export const CACHE_ORIGIN = "https://internal-cache/";
-
-/**
- * Wrap CacheStorage for favicons, add default value, auto download, and data URL support.
- */
 export const iconCache = {
 
-	/**
-	 * Save a favicon to CacheStorage and download it if the url uses
-	 * HTTP protocol. return a string key for retrieval.
-	 *
-	 * For data size limit, we can not save image sa data url
-	 * to sync storage.
-	 *
-	 * @param url {string} URL of the image.
-	 * @returns {Promise<null|string>} Key used for load the cached image.
-	 */
-	async save(url) {
-		if (url === defaultFavicon) {
+	async save(dataUrlOrResp) {
+		if (dataUrlOrResp === defaultFavicon) {
 			return null;
 		}
-		const response = await fetch(url, { mode: "no-cors" });
-		if (!response.ok) {
-			throw new Error("Download failed: " + url);
-		}
+		const cache = await caches.open("favicon");
+		let url;
+		let response;
 
-		// Cache storage only accepts response with HTTP protocol.
-		if (!/^https?:/.test(url)) {
+		if (typeof dataUrlOrResp !== "string") {
+			url = dataUrlOrResp.url;
+			response = dataUrlOrResp;
+		} else {
+			response = await fetch(dataUrlOrResp);
 			const data = await response.clone().arrayBuffer();
 			const hash = (await sha256(data)).slice(0, 20);
 			url = CACHE_ORIGIN + hash;
 		}
 
-		const cache = await caches.open("favicon");
 		return cache.put(url, response).then(() => url);
 	},
 
-	/**
-	 * Get saved favicon from CacheStorage, if it does not exist:
-	 * - For internal resource, fallback to default.
-	 * - For HTTP resource, download and put it to cache.
-	 *
-	 * The returned URL is created by `URL.createObjectURL`, you should
-	 * dispose it with `URL.revokeObjectURL` if no longer used.
-	 *
-	 * @param urlKey The return value of save()
-	 * @returns {Promise<string>} URL of the image.
-	 */
 	async load(urlKey) {
 		if (!urlKey) {
 			return defaultFavicon;
@@ -160,6 +140,7 @@ export const iconCache = {
 
 		let response = await cache.match(urlKey);
 		if (!response) {
+			// 手动设置的图标没法下载，只能回退到默认值。
 			if (urlKey.startsWith(CACHE_ORIGIN)) {
 				return defaultFavicon;
 			}
@@ -173,11 +154,6 @@ export const iconCache = {
 		return URL.createObjectURL(await response.blob());
 	},
 
-	/**
-	 * Remove unused images from the cache.
-	 *
-	 * @param used {Set<string>} A set of used image keys.
-	 */
 	async evict(used) {
 		const cache = await caches.open("favicon");
 		const tasks = (await cache.keys())
