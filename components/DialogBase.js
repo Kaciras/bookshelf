@@ -37,6 +37,7 @@ class DialogBaseElement extends HTMLElement {
 
 		root.querySelector("button").onclick = this.close.bind(this);
 		this.dialogEl.onclick = this.handleClick.bind(this);
+		this.dialogEl.onmousedown = this.handleMouseDown.bind(this);
 	}
 
 	get name() {
@@ -67,18 +68,28 @@ class DialogBaseElement extends HTMLElement {
 	}
 
 	/**
-	 * dialog 元素好像没法简单地区分点击遮罩，只能判断鼠标位置。
+	 * Detect backdrop clicks and close the dialog.
 	 *
-	 * https://stackoverflow.com/a/64578435
+	 * https://stackoverflow.com/a/70593278/7065321
 	 */
-	handleClick(event) {
-		const rect = this.dialogEl.getBoundingClientRect();
-		const { clientX, clientY } = event;
+	handleMouseDown(event) {
+		this.pressOutside = this.isMouseOutside(event);
+	}
 
-		if (clientY < rect.top || clientY > rect.bottom ||
-			clientX < rect.left || clientX > rect.right) {
+	handleClick(event) {
+		if (event.target !== this.dialogEl) {
+			return;
+		}
+		if (this.pressOutside && this.isMouseOutside(event)) {
 			this.close();
 		}
+	}
+
+	isMouseOutside(event) {
+		const rect = this.dialogEl.getBoundingClientRect();
+		const { clientX, clientY } = event;
+		return clientY < rect.top || clientY > rect.bottom ||
+			clientX < rect.left || clientX > rect.right;
 	}
 }
 
