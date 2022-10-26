@@ -37,7 +37,7 @@ class DialogBaseElement extends HTMLElement {
 
 		root.querySelector("button").onclick = this.close.bind(this);
 		this.dialogEl.onclick = this.handleClick.bind(this);
-		this.dialogEl.onmousedown = this.handleMouseDown.bind(this);
+		this.dialogEl.onpointerdown = this.handlePointerDown.bind(this);
 	}
 
 	get name() {
@@ -72,20 +72,20 @@ class DialogBaseElement extends HTMLElement {
 	 *
 	 * https://stackoverflow.com/a/70593278/7065321
 	 */
-	handleMouseDown(event) {
-		this.pressOutside = this.isMouseOutside(event);
+	handlePointerDown(event) {
+		this.pressOutside = this.isPointerOutside(event);
 	}
 
 	handleClick(event) {
 		if (event.target !== this.dialogEl) {
 			return;
 		}
-		if (this.pressOutside && this.isMouseOutside(event)) {
+		if (this.pressOutside && this.isPointerOutside(event)) {
 			this.close();
 		}
 	}
 
-	isMouseOutside(event) {
+	isPointerOutside(event) {
 		const rect = this.dialogEl.getBoundingClientRect();
 		const { clientX, clientY } = event;
 		return clientY < rect.top || clientY > rect.bottom ||
