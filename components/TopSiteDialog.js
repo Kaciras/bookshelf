@@ -5,10 +5,15 @@ import { defaultFavicon } from "../new-tab/storage.js";
 import styles from "./TopSiteDialog.css";
 
 /**
- * 如果 TopSite 没有自带标题则尝试使用域名。
+ * Use second level domain for title if it's not present.
+ * If the domain has only 1 level, just return it.
  *
- * @param url TopSite 的 URL
- * @return {string} 用作标题的域名
+ * e.g.
+ * "www.example.com" -> "example",
+ * "localhost" -> "localhost"
+ *
+ * @param url The URL of the site
+ * @return {string} SLD of TLD if the domain has only 1 level.
  */
 function adviceTitle(url) {
 	const { hostname } = new URL(url);
@@ -59,7 +64,7 @@ class TopSiteDialogElement extends HTMLElement {
 	}
 
 	async show() {
-		// Firefox 有更多选项而 Edge 没有且不能有参数
+		// Firefox has an options parameter but Edge has not.
 		const sites = browser.topSites.get.length > 0
 			? await browser.topSites.get({
 				newtab: true,
@@ -78,9 +83,9 @@ class TopSiteDialogElement extends HTMLElement {
 
 			// Can't use default value of destructuring as it only caused by undefined.
 			favicon ??= defaultFavicon;
-
-			// 标题可能为空字符串，所以不能用 ??=
 			url = decodeURI(url);
+
+			// Title may be empty, so use ||= instead of ??=
 			title ||= adviceTitle(url);
 
 			const fragment = itemTemplate.content.cloneNode(true);
@@ -96,7 +101,7 @@ class TopSiteDialogElement extends HTMLElement {
 						label: title,
 						url,
 						favicon,
-						icon: favicon,
+						iconUrl: favicon,
 					},
 				});
 				if (this.dispatchEvent(event)) {

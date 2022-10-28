@@ -75,18 +75,18 @@ function appendElement(props) {
 	return Object.assign(el, dragSortHandlers);
 }
 
-export async function add(request) {
-	request.iconUrl = await iconCache.save(request.icon);
+export async function add(props) {
+	props.iconUrl = await iconCache.save(props.iconUrl);
 
-	const el = appendElement(request);
+	const el = appendElement(props);
 	el.isEditable = container.editable;
 
 	return persistDataModel();
 }
 
-export async function update(index, request) {
-	const { icon, ...newValue } = request;
-	newValue.iconUrl = await iconCache.save(icon);
+export async function update(index, props) {
+	const { iconUrl, ...newValue } = props;
+	newValue.iconUrl = await iconCache.save(iconUrl);
 
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
