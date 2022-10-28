@@ -67,8 +67,13 @@ button {
 
 	border-radius: 50%;
 	opacity: 0;
-	color: white;
-	background: #0b6ae6;
+	color: inherit;
+	background: #dbdbdb;
+
+	@media (prefers-color-scheme: dark) {
+		color: white;
+		background: #505050;
+	}
 
 	:host(.editable) > & {
 		display: inline-flex;
@@ -81,17 +86,19 @@ button {
 }
 
 #edit {
-	right: 20px
+	right: 20px;
+
+	&:hover {
+		color: white;
+		background: #0e6be6;
+	}
 }
 
 #remove {
 	right: -15px;
-	color: black;
-	background: #b0b0b4;
 
 	&:hover {
 		color: white;
-		background: #ea4a4a;
-
+		background: #de4747;
 	}
 }
