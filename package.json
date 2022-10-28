@@ -1,5 +1,5 @@
 {
-	"name": "browser-theme",
+	"name": "firefox-theme",
 	"version": "1.9.0",
 	"description": "My browser theme addon",
 	"license": "MIT",
@@ -9,13 +9,10 @@
 		"url": "https://github.com/Kaciras/browser-theme"
 	},
 	"keywords": [
+		"browser",
 		"addon",
-		"theme",
-		"firefox"
+		"newtab"
 	],
-	"engines": {
-		"node": ">=18"
-	},
 	"type": "module",
 	"scripts": {
 		"lint": "eslint --fix .",
@@ -25,16 +22,16 @@
 	"dependencies": {
 		"@kaciras/utilities": "^0.3.2",
 		"@material-design-icons/svg": "^0.13.0",
-		"@tabler/icons": "^1.105.0"
+		"@tabler/icons": "^1.108.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.4.1",
-		"@rollup/plugin-alias": "^4.0.0",
-		"@rollup/plugin-node-resolve": "^15.0.0",
-		"@rollup/plugin-replace": "^5.0.0",
-		"@rollup/pluginutils": "^5.0.1",
+		"@rollup/plugin-alias": "^4.0.2",
+		"@rollup/plugin-node-resolve": "^15.0.1",
+		"@rollup/plugin-replace": "^5.0.1",
+		"@rollup/pluginutils": "^5.0.2",
 		"@types/firefox-webext-browser": "^94.0.1",
-		"eslint": "^8.24.0",
+		"eslint": "^8.26.0",
 		"fast-glob": "^3.2.12",
 		"html-minifier-terser": "7.0.0",
 		"is-builtin-module": "^3.2.0",
@@ -50,6 +47,6 @@
 		"rollup-plugin-terser": "^7.0.2",
 		"rollup-plugin-visualizer": "^5.8.3",
 		"rollup-plugin-zip": "^1.0.3",
-		"svgo": "^2.8.0"
+		"svgo": "^3.0.0"
 	}
 }
