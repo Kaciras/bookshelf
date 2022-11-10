@@ -1,7 +1,7 @@
 import { env } from "node:process";
 import alias from "@rollup/plugin-alias";
 import { visualizer } from "rollup-plugin-visualizer";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
 import zip from "rollup-plugin-zip";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
