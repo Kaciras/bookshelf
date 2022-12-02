@@ -1,4 +1,4 @@
-import { DebounceThrottle, i18n } from "@share";
+import { Debounced, i18n } from "@share";
 import SearchIcon from "@tabler/icons/search.svg";
 import styles from "./SearchBox.css";
 
@@ -27,18 +27,20 @@ template.innerHTML = `
 `;
 
 /**
- * 搜索框，高仿 Firefox 内置样式，不过不会像它一样傻逼把输入重定向到地址栏。
+ * Search box in center of the page.
  *
- * 这里不使用 Search API 因为不支持获取建议。
+ * SearchBox does not have a default engine, you muse set one before entering search terms.
+ *
+ * We do not use the Search API, because it does not support get suggestions.
  * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/search
  */
 class SearchBoxElement extends HTMLElement {
 
-	limit = 8;		// 搜索建议最大显示数量
-	api;			// 当前的搜索引擎，是 engine 属性的内部字段
-	waitIME = true;	// 使用输入法时，防止建议未上屏的字符
+	limit = 8;		// Maximum number of suggestions.
+	api;			// Backend of the engine property.
+	waitIME = true;	// Don't show suggestions for uncompleted IME input.
 
-	index = null;	// 被选中建议的索引
+	index = null;	// The index of the selected suggestion.
 
 	constructor() {
 		super();
@@ -50,7 +52,7 @@ class SearchBoxElement extends HTMLElement {
 		this.loadingEl = root.getElementById("spinner");
 		this.suggestionEl = root.getElementById("suggestions");
 
-		this.fetcher = new DebounceThrottle(this.suggest.bind(this));
+		this.fetcher = new Debounced(this.suggest.bind(this));
 		this.fetcher.threshold = 500;
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
@@ -59,16 +61,17 @@ class SearchBoxElement extends HTMLElement {
 		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
 	}
 
+	/**
+	 * Get currently used search engine.
+	 */
 	get engine() {
 		return this.api;
 	}
 
 	/**
-	 * 更改使用的搜索引擎，该项无默认值必须自己设置。
+	 * Change the search engine to use.
 	 *
-	 * 注意：对于已经显示的建议列表，切换引擎不会刷新建议。
-	 *
-	 * @param value 新的搜索引擎
+	 * @param value The new search engine
 	 */
 	set engine(value) {
 		this.api = value;
@@ -95,9 +98,6 @@ class SearchBoxElement extends HTMLElement {
 	 * 对获取建议的中断分为两个阶段，先是防抖，一旦开始请求则不再受防抖的影响，
 	 * 只有下一次的请求才能中断前面的。
 	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
-	 *
-	 * 【其它实现】
-	 * 若把判断逻辑全部放入回调，代码会更简单一些，但为空时的关闭过程也会被延迟。
 	 */
 	handleInput(event) {
 		if (this.waitIME && event.isComposing) {
@@ -113,8 +113,9 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	/**
-	 * 从搜索引擎查询当前搜索词的建议，然后更新建议菜单。
-	 * 该方法只能同时运行一个，每次调用都会取消上一次的。
+	 * Fetch suggestions from search engine, and update the suggestion list.
+	 *
+	 * Call this method will abort the previous.
 	 */
 	async suggest(signal) {
 		const { api, searchTerms, loadingEl } = this;
@@ -165,7 +166,6 @@ class SearchBoxElement extends HTMLElement {
 		location.href = this.api.getResultURL(this.searchTerms);
 	}
 
-	// click 只由左键触发，无需检查 event.button
 	handleSearchClick() {
 		location.href = this.api.getResultURL(this.searchTerms);
 	}

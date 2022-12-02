@@ -1,25 +1,33 @@
 /**
- * 防抖 + 节流的组合体，专门用于搜索建议这种频繁输入 + 网络请求的场景。
+ * Class-style debounce wrapper for functions. you can stop the schedule
+ * or trigger it immediately which function-style wrapper can not.
  *
- * 【区分防抖和节流】
- * 防抖：延迟事件，如果在期间又被触发则重新计时。
- * 节流：多次触发只有最后一次生效，之前的全部取消。
+ * Useful for search suggestion (frequent input + network).
+ *
+ * <h2>debounce vs throttle<h2>
+ * Throttling will delay executing a function. It will reduce
+ * the notifications of an event that fires multiple times.
+ *
+ * Debouncing will bunch a series of sequential calls to a function into
+ * a single call to that function. It ensures that one notification is
+ * made for an event that fires multiple times.
  */
-export class DebounceThrottle {
+export class Debounced {
 
-	/** 防抖的延时（毫秒） */
-	threshold = 0;
+	/** Debounce delay in millisecond */
+	threshold;
 
 	controller = new AbortController();
 	timer = 0;
 
-	constructor(handler) {
+	constructor(handler, threshold = 0) {
 		this.handler = handler;
-		this.callback = this.callback.bind(this);
+		this.threshold = threshold;
+		this.run = this.run.bind(this);
 	}
 
-	callback() {
-		this.controller.abort();
+	run() {
+		this.stop();
 		this.controller = new AbortController();
 		this.handler(this.controller.signal);
 	}
@@ -30,14 +38,14 @@ export class DebounceThrottle {
 	}
 
 	reschedule() {
-		const { timer, callback, threshold } = this;
+		const { timer, run, threshold } = this;
 		clearTimeout(timer);
-		this.timer = setTimeout(callback, threshold);
+		this.timer = setTimeout(run, threshold);
 	}
 }
 
 /**
- * 使用 getter & setter 将 object[name] 绑定到 target[prop]。
+ * Two-way bind between object[name] and target[prop]。
  */
 export function delegate(object, name, target, prop) {
 	Object.defineProperty(object, name, {
@@ -49,7 +57,7 @@ export function delegate(object, name, target, prop) {
 }
 
 /**
- * 虽然 Node 自带 dirname，但在浏览器里用的话还得自己写一个。
+ * returns the directory name of a path.
  */
 export function dirname(path) {
 	const i = path.lastIndexOf("/");
