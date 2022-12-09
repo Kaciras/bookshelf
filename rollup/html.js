@@ -10,9 +10,11 @@ import HtmlParser from "node-html-parser";
  * @param ids {Iterable<string>} ID list to import.
  * @return {string} JavaScript code.
  */
-export function dummyImportEntry(ids) {
-	return Array.prototype.reduce
-		.call(ids, (code, id) => code + `import "${id}"\n`, "");
+export function jsImports(ids) {
+	let code = "";
+	for (const id of ids)
+		code += `import "${id}"\n`;
+	return code;
 }
 
 export const minifyOptions = {
