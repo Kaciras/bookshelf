@@ -5,18 +5,14 @@ import { minify } from "html-minifier-terser";
 import HtmlParser from "node-html-parser";
 
 /**
- * 构造一个 JS 模块，导入所有 ID 。
- * 没有用 reduce 因为参数是 Iterable，当然写成 [].reduce.call() 也行但不好看。
+ * Create a JavaScript code contains imports of IDs;
  *
- * @param ids 要导入的 ID 列表
- * @return {string} JS 代码
+ * @param ids {Iterable<string>} ID list to import.
+ * @return {string} JavaScript code.
  */
 export function dummyImportEntry(ids) {
-	let code = "";
-	for (const id of ids) {
-		code += `import "${id}"\n`;
-	}
-	return code;
+	return Array.prototype.reduce
+		.call(ids, (code, id) => code + `import "${id}"\n`, "");
 }
 
 export const minifyOptions = {
@@ -27,13 +23,9 @@ export const minifyOptions = {
 	removeAttributeQuotes: true,
 };
 
-// 绝对路径和找不到文件的不处理
+// Only process existing files with relative paths.
 function check(importer, url) {
-	if (url.charCodeAt(0) === 0x2F) {
-		return false;
-	}
-	const file = resolve(dirname(importer), url);
-	return existsSync(file);
+	return url.charCodeAt(0) !== 0x2F && existsSync(resolve(dirname(importer), url));
 }
 
 /**
@@ -43,12 +35,6 @@ function check(importer, url) {
  */
 export default function htmlPlugin() {
 	const documents = new Map();
-
-	/*
-	 * Rollup 的构建分为两个阶段：Build 和 Output Generation。
-	 * Build 加载并独立地处理每个模块，该阶段完成后应用已经可用。
-	 * Output Generation 打包模块、执行后期优化以及生成文件。
-	 */
 
 	return {
 		name: "html-entry",

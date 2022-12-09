@@ -2,9 +2,9 @@ import { optimize } from "svgo";
 import { AssetType } from "./asset.js";
 
 /**
- * 调整 SVG 的属性，使其能够用容器元素的 CSS 控制：
- * 1）宽高设为 1em 以便外层用 font-size 控制。
- * 2）将 fill 和 stroke 改为 currentColor 以便用 color 控制。
+ * Replace some attributes with reactive value:
+ * 1) set width & height to "1em".
+ * 2) set fill and stroke to "currentColor" if it's not transparent。
  */
 function reactivePlugin(options = {}) {
 	const { color = true, size = true } = options;
@@ -33,11 +33,6 @@ function reactivePlugin(options = {}) {
 		fn: () => ({ element: { enter } }),
 	};
 }
-
-/*
- * 用两种不同的配置，对非内联的 SVG 不修改 width 和 height 属性。
- * 另外必须禁用内置插件中的 removeViewBox 不然布局会出错。
- */
 
 const builtInPlugins = {
 	name: "preset-default",
@@ -73,5 +68,5 @@ export default function (source, info) {
 		? inlineConfig : resourceConfig;
 
 	return optimize(source.string, config).data
-		.replaceAll('"', "'");
+		.replaceAll('"', "'"); // Avoid escapes
 }

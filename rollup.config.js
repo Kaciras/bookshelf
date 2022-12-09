@@ -28,7 +28,6 @@ export default {
 
 	output: {
 		generatedCode: "es2015",
-		format: "esm",
 		dir: "dist",
 		chunkFileNames: "[name].js",
 	},

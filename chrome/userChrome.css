@@ -1,6 +1,7 @@
 /*
  * https://www.userchrome.org/
- * Copy this stylesheet to <profile>/chrome folder to restore the old tab style.
+
+ * Copy this file to <profile>/chrome folder to restore the legacy firefox tab style.
  */
 
 :root {

@@ -46,11 +46,10 @@ itemTemplate.innerHTML = `
 `;
 
 /**
- * 导入对话框，能够读取浏览器原生的新标签页里的快捷方式，并将其添加到本插件中。
+ * Add shortcuts from browser builtin navigation page.
  *
- * 【获取数据的 API】
- * browser.topSites 仅支持读取，而新标签页却需要自定义快捷方式，
- * 所以只能从 topSites 导入然后保存到本插件的存储。
+ * <h2>API Note</h2>
+ * browser.topSites is readonly，so we need implement our shortcut storage，
  */
 class TopSiteDialogElement extends HTMLElement {
 

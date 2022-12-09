@@ -20,7 +20,7 @@ const plugins = [
 ];
 
 if (env.NODE_ENV === "production") {
-	plugins.push(varCompress()); // Minimum variable names
+	plugins.push(varCompress()); // Minimum variable names.
 }
 
 const convertor = postcss(plugins);

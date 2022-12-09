@@ -1,21 +1,16 @@
 import { dirname } from "./lang.js";
 import { getImageResolution } from "./dom.js";
 
-/** 页面里的网站图标元素都是 48x48 像素 */
+/** Favicons are 48x48 in our page */
 const BEST_SIZE = 48;
 
 /**
- * 下载并解析 URL 所指定的网页，从中读取所有的图标信息。
+ * This function gets favicons of the page from the following sources:
+ * 1）<link> elements in the <head>.
+ * 2）icons property in PWA manifest。
  *
- * 本函数从以下来源获取图标：
- * 1）页面 <head> 中的所有表示图标的 <link> 元素。
- * 2）manifest.json 的 icons 字段。
- *
- * Firefox 的实现挺复杂而且用得 C艹：
- * https://github.com/mozilla/gecko-dev/blob/master/toolkit/components/places/FaviconHelpers.cpp
- *
- * @param url 网页的 URL
- * @param signal 下载过程可以取消
+ * @param url The URL of the page.
+ * @param signal The fetching is abortable.
  */
 export async function* fetchIconLinks(url, signal) {
 	const response = await fetch(url, { mode: "no-cors", signal });
@@ -26,8 +21,8 @@ export async function* fetchIconLinks(url, signal) {
 	const doc = parser.parseFromString(await response.text(), "text/html");
 	const links = doc.head.getElementsByTagName("link");
 
-	// 不能直接 .href 因为它会转成以本页面为基础的 URL。
 	function resolveUrl(link) {
+		// Don't use .href as it returns absolute URL based on our page。
 		return new URL(link.getAttribute("href"), url).toString();
 	}
 
@@ -55,10 +50,10 @@ export async function* fetchIconLinks(url, signal) {
 }
 
 /**
- * 支持 PWA 的网站都有一个清单，里面也有好多图标。
+ * PWA manifest may contain HD favicons, add them to candidate list.
  *
- * @param url Manifest.json 的完整 URL
- * @param signal 取消信号
+ * @param url The URL of the manifest.json.
+ * @param signal Abort signal.
  * @see https://developer.mozilla.org/zh-CN/docs/Web/Manifest#icons
  */
 async function fetchManifest(url, signal) {
@@ -77,15 +72,15 @@ async function fetchManifest(url, signal) {
 }
 
 /**
- * 获取 URL 所指定的页面的图标（favicon），图标链接从页面中提取，或使用通用的约定。
+ * Extract the best favicon of specified page. see the comments in
+ * the function for the strategy.
  *
- * 如果有多个图标，则自动选择最佳的一个，选择规则见函数内的注释。
+ * In order to get the real size, favicons may be downloaded.
+ * Because browser have cache, download them again will not produce additional traffic.
  *
- * 为了确保图片有效，这里会进行下载，因为有缓存所以外部再下载也没啥问题。
- *
- * @param url 页面的 URL
- * @param signal AbortSignal 取消加载页面
- * @return {Promise<string>} 图标的 URL。
+ * @param url The URL of the page
+ * @param signal The fetching is abortable.
+ * @return {Promise<string>} URL of the favicon, may not exist.
  */
 export async function getFaviconUrl(url, signal) {
 	let selected;
@@ -98,11 +93,11 @@ export async function getFaviconUrl(url, signal) {
 		let actualSize = null;
 
 		if (selectedSVG && type !== "image/svg+xml") {
-			continue; // 如果已经有 SVG 则忽略光栅图。
+			continue; // Ignore raster image if there are SVG。
 		}
 
 		try {
-			// 获取图片的尺寸，这里假定了图片宽高相等。
+			// Assume the image has same width and height.
 			const match = /(\d+)x(\d+)/.exec(sizes[0]);
 			if (match !== null) {
 				size = parseInt(match[1]);
@@ -111,15 +106,17 @@ export async function getFaviconUrl(url, signal) {
 				size = actualSize.width;
 			}
 
-			// 如果已有光栅图，又遇到了 SVG 则选后者。
-			// 没有就先选一个。
-			// 否则在尺寸至少为 48 的图中选择最小的。
+			/*
+			 * 1) SVG is better than raster image.
+			 * 2) Choose one first.
+			 * 3) Choose the smallest among larger than BEST_SIZE.
+			 */
 			if (
 				!selectedSVG && type === "image/svg+xml" ||
 				!selected ||
 				size >= BEST_SIZE && size < selectedSize
 			) {
-				// 前面没有下载的话这里补上，确保资源有效。
+				// Ensure the file is available。
 				if (!actualSize) {
 					await getImageResolution(href);
 				}
@@ -134,6 +131,6 @@ export async function getFaviconUrl(url, signal) {
 		}
 	}
 
-	// 若是没有指定，则返回默认的 /favicon.ico
+	// If no links in page, return /favicon.ico
 	return selected || new URL("/favicon.ico", url).toString();
 }

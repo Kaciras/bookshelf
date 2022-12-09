@@ -1,9 +1,9 @@
 /**
- * 将输入组件的值与另一个对象的属性绑定。
- * 属性名等于输入组件的 name 属性，监听使用 input 事件。
+ * Bind the value of the input to a property of the object。
+ * Property name is equals to input's name.
  *
- * @param input 输入组件，必须有 name 和 type 属性。
- * @param receiver 要绑定的对象
+ * @param input The input element, must have a name attribute。
+ * @param receiver The object to bind to.
  */
 export function bindInput(input, receiver) {
 	const { type, name } = input;

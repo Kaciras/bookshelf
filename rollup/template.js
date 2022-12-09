@@ -2,7 +2,7 @@ import { minify } from "html-minifier-terser";
 import MagicString from "magic-string";
 import { minifyOptions } from "./html.js";
 
-// 这 ESTree 匹配个 .innerHtml = `...` 真麻烦啊。
+// Finding an innerHtml=`...` is so troublesome with ESTree.
 function getTemplateLiteral(node) {
 	if (node.type !== "ExpressionStatement") return;
 
@@ -24,10 +24,7 @@ function getTemplateLiteral(node) {
 }
 
 /**
- * 压缩 JS 文件内的 HTML 的插件，仅支持 `.innerHtml = "..."` 语句。
- *
- * 因为组件的 HTML 不如 CSS 那么多所以本项目里都是直接写的字符串。
- * 所以没法复用 html 插件来去掉空白，只能再写一个插件处理。
+ * Compress inlined HTML at `.innerHtml = "<HTML>"`。
  */
 export default function inlineTemplatePlugin() {
 	return {
@@ -40,7 +37,6 @@ export default function inlineTemplatePlugin() {
 			const s = new MagicString(code);
 			const ast = this.parse(code);
 
-			// Vite 用这个库我就跟着用了，能生成 SourceMap 也挺好。
 			for (const node of ast.body) {
 				const literal = getTemplateLiteral(node);
 				if (!literal) {

@@ -9,9 +9,9 @@ function unwrapManifest(id) {
 }
 
 /**
- * 浏览器扩展的清单插件，将清单文件作为构建的入口点，处理其中的资源，并生成 manifest.json。
+ * Add a web extension manifest to build, and resolves chunks from.
  *
- * @param filename 清单文件名
+ * @param filename Manifest file name.
  * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json
  */
 export default function createManifestPlugin(filename) {
@@ -22,6 +22,14 @@ export default function createManifestPlugin(filename) {
 	return {
 		name: "browser-extension-manifest",
 
+		/**
+		 * Manifest are handled differently from normal SON,
+		 * so we append "?manifest" to it's ID to distinguish them.
+		 *
+		 * <h2>Other format</h2>
+		 * One solution is prefix，for example "manifest:../some/file.json"
+		 * It friendly with TS, but confused with the absolute path on Windows.
+		 */
 		async buildStart() {
 			const wrapped = filename + mark;
 			this.emitFile({
@@ -32,13 +40,6 @@ export default function createManifestPlugin(filename) {
 			selfId = (await this.resolve(wrapped)).id;
 		},
 
-		/**
-		 * 因为清单的加载方式跟普通的 JSON 不同，所以要做个标记来区分。
-		 *
-		 * <h2>标记的格式</h2>
-		 * 另一种方案是跟 Squoosh 一样写在前面，比如 manifest:../some/file.js?foo=bar
-		 * 这种写法对 TS 很友好，并且更规整，但分隔符用冒号会跟 Windows 的盘符混淆。
-		 */
 		async resolveId(source) {
 			const file = unwrapManifest(source);
 			if (!file) {

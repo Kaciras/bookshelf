@@ -94,11 +94,6 @@ class SearchBoxElement extends HTMLElement {
 		this.fetcher.threshold = value;
 	}
 
-	/*
-	 * 对获取建议的中断分为两个阶段，先是防抖，一旦开始请求则不再受防抖的影响，
-	 * 只有下一次的请求才能中断前面的。
-	 * 这样的设计使得输入中途也能显示建议，并尽可能地减少了请求，与其他平台一致。
-	 */
 	handleInput(event) {
 		if (this.waitIME && event.isComposing) {
 			return;
@@ -150,10 +145,10 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	/**
-	 * 按回车键跳转到搜索页面，同时处理了输入法的问题。
+	 * Press the Enter key to jump to the search page, and deal with the IME。
 	 *
-	 * 由于 compositionend 先于 KeyUp 所以只能用 KeyDown 确保能获取输入状态。
-	 * Google 的搜索页面也是在 KeyDown 阶段就触发。
+	 * Since compositionend precedes KeyUp, only KeyDown can be used
+	 * to ensure `isComposing` is set. Google search also uses the KeyDown event.
 	 */
 	handleInputKeyDown(event) {
 		if (event.key !== "Enter") {

@@ -10,14 +10,21 @@ template.innerHTML = `
 `;
 
 /**
- * 拥有繁忙状态的按钮，点击时启动任务并转为繁忙状态，完成后变为原样。
- * 繁忙状态保持原来的大小，内容变为加载指示器，点击繁忙状态的按钮会取消当前任务。
+ * A button with a busy state, click it starts the task and turns
+ * to a busy state, and changes back the task done.
  *
- * 【实现注意】
- * Firefox 仅支持的 Custom Element v1 不能够继承 HTMLElement 以外的元素，
- * 如果这么做会显示不出 ShadowDOM。
+ * When busy, clicking the button will abort the current task with AbortSignal.
+ *
+ * <h2>Why not extends HTMLButtonElement</h2>
+ * Firefox doesn't support extends elements other than HTMLElement.
+ * If you do this, the ShadowDOM will not be displayed.
  */
 class TaskButtonElement extends HTMLElement {
+
+	/**
+	 * Click handler returns a Promise for long running task.
+	 */
+	taskFn;
 
 	running = false;
 	controller = new AbortController();
@@ -31,10 +38,6 @@ class TaskButtonElement extends HTMLElement {
 		this.loadingEl = root.querySelector(".dot-flashing");
 		this.loadingEl.remove();
 
-		/*
-		 * ShadowRoot 是内部元素的大小（不含 :host），小于整个按钮，所以要监听外层。
-		 * 宿主元素和 ShadowRoot 的关系就像 html 与 body 一样。
-		 */
 		this.addEventListener("click", this.handleClick);
 	}
 
@@ -45,7 +48,7 @@ class TaskButtonElement extends HTMLElement {
 	async handleClick() {
 		const { running, taskFn } = this;
 
-		// 没有设置任务回调则与普通按钮一样
+		// Just like a normal button if no taskFn.
 		if (!taskFn) return;
 
 		if (!running) {
@@ -60,7 +63,7 @@ class TaskButtonElement extends HTMLElement {
 		const { slotEl, loadingEl, taskFn, style } = this;
 		this.running = true;
 
-		// 固定大小，防止内容切换后影响布局
+		// Prevent size changing after content switching.
 		const { width, height } = this.getBoundingClientRect();
 		style.width = width + "px";
 		style.height = height + "px";
