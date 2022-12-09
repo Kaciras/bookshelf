@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import { basename } from "path";
 import { createFilter } from "@rollup/pluginutils";
 import mime from "mime";
-import { svgToUrl } from "@kaciras/utilities";
+import { svgToUrl } from "@kaciras/utilities/node";
 
 export const AssetType = {
 	Source: 0,		// 作为字符串导入。

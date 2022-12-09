@@ -8,7 +8,7 @@
  */
 import defaultFavicon from "@assets/Website.svg?url";
 import { i18n } from "@share";
-import { blobToBase64URL, saveFile, selectFile, sha256 } from "@kaciras/utilities";
+import { blobToBase64URL, saveFile, selectFile, sha256 } from "@kaciras/utilities/browser";
 
 export { defaultFavicon };
 
