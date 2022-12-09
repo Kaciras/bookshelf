@@ -26,6 +26,8 @@ export default {
 	// Avoid generate the "facade" entry chunk.
 	preserveEntrySignatures: false,
 
+	input: "manifest.json?webext",
+
 	output: {
 		generatedCode: "es2015",
 		dir: "dist",
@@ -57,7 +59,7 @@ export default {
 				toDirectory: true,
 			},
 		]),
-		manifest("manifest.json"),
+		manifest(),
 		htmlEntry(),
 		template(),
 
