@@ -1,5 +1,5 @@
 import xIcon from "@tabler/icons/x.svg";
-import { i18n } from "@share";
+import { i18n } from "../share/index.js";
 import styles from "./DialogBase.css";
 
 const template = document.createElement("template");

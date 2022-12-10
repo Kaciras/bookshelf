@@ -1,6 +1,6 @@
 import AddIcon from "@tabler/icons/plus.svg";
 import CheckIcon from "@tabler/icons/check.svg";
-import { i18n } from "@share";
+import { i18n } from "../share/index.js";
 import { defaultFavicon } from "../new-tab/storage.js";
 import styles from "./TopSiteDialog.css";
 

@@ -1,11 +1,9 @@
 import { env } from "node:process";
-import alias from "@rollup/plugin-alias";
 import { visualizer } from "rollup-plugin-visualizer";
 import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
 import zip from "rollup-plugin-zip";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import webpackConfig from "./alias.idea.cjs";
 import nodeBuiltins from "./rollup/builtin.js";
 import asset from "./rollup/asset.js";
 import htmlEntry from "./rollup/html.js";
@@ -16,11 +14,6 @@ import svg from "./rollup/svg.js";
 import template from "./rollup/template.js";
 
 const isProduction = env.NODE_ENV === "production";
-
-function webpackAliasToRollup() {
-	const { alias } = webpackConfig.resolve;
-	return Object.entries(alias).map(e => ({ find: e[0], replacement: e[1] }));
-}
 
 function minifyJson(source, info) {
 	if (/\.json(\?|$)/.test(info.id)) {
@@ -40,7 +33,6 @@ export default {
 		chunkFileNames: "[name].js",
 	},
 	plugins: [
-		alias({ entries: webpackAliasToRollup() }),
 		replace({
 			preventAssignment: true,
 			"typeof window": "'object'",

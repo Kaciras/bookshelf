@@ -1,4 +1,4 @@
-import { indexInParent } from "@share";
+import { indexInParent } from "../share/index.js";
 import { checkSync, iconCache, loadConfig, saveConfig } from "./storage.js";
 
 /*

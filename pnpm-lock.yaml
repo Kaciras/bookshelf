@@ -4,7 +4,6 @@ specifiers:
   '@kaciras/eslint-config-core': ^2.5.0
   '@kaciras/utilities': ^0.5.1
   '@material-design-icons/svg': ^0.14.2
-  '@rollup/plugin-alias': ^4.0.2
   '@rollup/plugin-node-resolve': ^15.0.1
   '@rollup/plugin-replace': ^5.0.1
   '@rollup/plugin-terser': ^0.2.0
@@ -35,7 +34,6 @@ dependencies:
 
 devDependencies:
   '@kaciras/eslint-config-core': 2.5.0_eslint@8.29.0
-  '@rollup/plugin-alias': 4.0.2_rollup@3.7.0
   '@rollup/plugin-node-resolve': 15.0.1_rollup@3.7.0
   '@rollup/plugin-replace': 5.0.1_rollup@3.7.0
   '@rollup/plugin-terser': 0.2.0_rollup@3.7.0
@@ -180,19 +178,6 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
-    dev: true
-
-  /@rollup/plugin-alias/4.0.2_rollup@3.7.0:
-    resolution: {integrity: sha512-1hv7dBOZZwo3SEupxn4UA2N0EDThqSSS+wI1St1TNTBtOZvUchyIClyHcnDcjjrReTPZ47Faedrhblv4n+T5UQ==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      rollup: 3.7.0
-      slash: 4.0.0
     dev: true
 
   /@rollup/plugin-node-resolve/15.0.1_rollup@3.7.0:
@@ -1296,11 +1281,6 @@ packages:
   /shebang-regex/3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
-    dev: true
-
-  /slash/4.0.0:
-    resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}
-    engines: {node: '>=12'}
     dev: true
 
   /smob/0.0.6:

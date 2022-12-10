@@ -6,8 +6,8 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
-import defaultFavicon from "@assets/Website.svg?url";
-import { i18n } from "@share";
+import defaultFavicon from "../assets/Website.svg?url";
+import { i18n } from "../share/index.js";
 import { blobToBase64URL, saveFile, selectFile, sha256 } from "@kaciras/utilities/browser";
 
 export { defaultFavicon };

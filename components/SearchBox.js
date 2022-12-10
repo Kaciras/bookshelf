@@ -1,4 +1,4 @@
-import { Debounced, i18n } from "@share";
+import { Debounced, i18n } from "../share/index.js";
 import SearchIcon from "@tabler/icons/search.svg";
 import styles from "./SearchBox.css";
 

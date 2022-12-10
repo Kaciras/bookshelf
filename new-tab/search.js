@@ -1,7 +1,7 @@
-import GoogleIcon from "@assets/google.ico";
-import BaiduIcon from "@assets/baidu.svg?url";
-import DuckDuckGoIcon from "@assets/dax-logo.svg?url";
-import { i18n } from "@share";
+import GoogleIcon from "../assets/google.ico";
+import BaiduIcon from "../assets/baidu.svg?url";
+import DuckDuckGoIcon from "../assets/dax-logo.svg?url";
+import { i18n } from "../share/index.js";
 
 // 目前没找到怎么获取浏览器里的搜索引擎配置，只能自己再写一遍了。
 

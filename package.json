@@ -26,7 +26,6 @@
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.5.0",
-		"@rollup/plugin-alias": "^4.0.2",
 		"@rollup/plugin-node-resolve": "^15.0.1",
 		"@rollup/plugin-replace": "^5.0.1",
 		"@rollup/plugin-terser": "^0.2.0",

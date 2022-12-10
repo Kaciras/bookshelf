@@ -1,4 +1,4 @@
-import { delegate, i18n } from "@share";
+import { delegate, i18n } from "../share/index.js";
 import EditIcon from "@tabler/icons/edit.svg";
 import CloseIcon from "@tabler/icons/x.svg";
 import styles from "./BookMark.css";

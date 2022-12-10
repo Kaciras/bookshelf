@@ -8,7 +8,7 @@ import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
-import { bindInput, i18n, indexInParent } from "@share";
+import { bindInput, i18n, indexInParent } from "../share/index.js";
 import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 

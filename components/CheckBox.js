@@ -1,6 +1,6 @@
 import Icon from "@material-design-icons/svg/filled/check_box_outline_blank.svg";
 import IconChecked from "@material-design-icons/svg/filled/check_box.svg";
-import { delegate } from "@share";
+import { delegate } from "../share/index.js";
 import styles from "./CheckBox.css";
 
 const template = document.createElement("template");
