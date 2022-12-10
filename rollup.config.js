@@ -22,6 +22,12 @@ function webpackAliasToRollup() {
 	return Object.entries(alias).map(e => ({ find: e[0], replacement: e[1] }));
 }
 
+function minifyJson(source, info) {
+	if (/\.json(\?|$)/.test(info.id)) {
+		return JSON.stringify(JSON.parse(source.data));
+	}
+}
+
 export default {
 	// Avoid generate the "facade" entry chunk.
 	preserveEntrySignatures: false,
@@ -41,7 +47,7 @@ export default {
 			"import.meta.env.dev": `${!isProduction}`,
 		}),
 		asset({
-			loaders: [postcss, svg],
+			loaders: [postcss, svg, minifyJson],
 			source: { include: ["components/**/*.css", "**/*.svg"] },
 			url: { include: ["**/*.{ico,png,jpg}"] },
 		}),
