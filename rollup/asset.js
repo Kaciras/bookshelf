@@ -108,7 +108,10 @@ const defaultOptions = {
  * 本插件提供一个通用的接口，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
  */
 export default function createInlinePlugin(options) {
-	const { source, url, resource, limit, loaders } = { ...defaultOptions, ...options };
+	options = { ...defaultOptions, ...options };
+
+	const { source, url, resource, limit } = options;
+	const loaders = options.loaders.filter(Boolean);
 
 	const isInline = createFilter2(source);
 	const isUrl = createFilter2(url);

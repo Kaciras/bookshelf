@@ -39,9 +39,17 @@ export default {
 			"import.meta.env.dev": `${!isProduction}`,
 		}),
 		asset({
-			loaders: [postcss, svg, minifyJson],
-			source: { include: ["components/**/*.css", "**/*.svg"] },
-			url: { include: ["**/*.{ico,png,jpg}"] },
+			loaders: [
+				postcss, 
+				svg, 
+				isProduction && minifyJson,
+			],
+			source: { 
+				include: ["components/**/*.css", "**/*.svg"],
+			},
+			url: { 
+				include: ["**/*.{ico,png,jpg}"],
+			},
 		}),
 		nodeBuiltins,
 		nodeResolve(),
