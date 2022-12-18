@@ -22,28 +22,28 @@
 	"dependencies": {
 		"@kaciras/utilities": "^0.5.1",
 		"@material-design-icons/svg": "^0.14.2",
-		"@tabler/icons": "^1.116.1"
+		"@tabler/icons": "^1.117.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.5.0",
 		"@rollup/plugin-node-resolve": "^15.0.1",
-		"@rollup/plugin-replace": "^5.0.1",
+		"@rollup/plugin-replace": "^5.0.2",
 		"@rollup/plugin-terser": "^0.2.0",
 		"@rollup/pluginutils": "^5.0.2",
 		"@types/firefox-webext-browser": "^94.0.1",
-		"eslint": "^8.29.0",
+		"eslint": "^8.30.0",
 		"fast-glob": "^3.2.12",
 		"html-minifier-terser": "7.1.0",
 		"is-builtin-module": "^3.2.0",
 		"magic-string": "^0.27.0",
 		"mime": "^3.0.0",
 		"node-html-parser": "6.1.4",
-		"postcss": "^8.4.19",
+		"postcss": "^8.4.20",
 		"postcss-csso": "^6.0.1",
 		"postcss-nested": "^6.0.0",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^2.0.1",
-		"rollup": "^3.7.0",
+		"rollup": "^3.7.5",
 		"rollup-plugin-visualizer": "^5.8.3",
 		"rollup-plugin-zip": "^1.0.3",
 		"svgo": "^3.0.2"
