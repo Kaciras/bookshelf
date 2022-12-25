@@ -4,7 +4,6 @@ import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
 import zip from "rollup-plugin-zip";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import nodeBuiltins from "./rollup/builtin.js";
 import asset from "./rollup/asset.js";
 import htmlEntry from "./rollup/html.js";
 import manifest from "./rollup/manifest.js";
@@ -51,7 +50,7 @@ export default {
 				include: ["**/*.{ico,png,jpg}"],
 			},
 		}),
-		nodeBuiltins,
+
 		nodeResolve(),
 		copy([
 			{
