@@ -19,7 +19,8 @@ template.innerHTML = `
 `;
 
 /**
- * 简单封装下 <dialog>，加上了标题、个关闭按钮以及点击遮罩关闭的功能。
+ * Simple wrapper of <dialog>, add a title, a close button and
+ * support click the backdrop to close.
  */
 class DialogBaseElement extends HTMLElement {
 
@@ -49,7 +50,7 @@ class DialogBaseElement extends HTMLElement {
 		this.setAttribute("aria-labelledby", value);
 	}
 
-	// 在构造方法里设置 DOM 属性会报错。
+	// setAttribute() cannot be called in constructor.
 	connectedCallback() {
 		this.setAttribute("role", "dialog");
 		this.setAttribute("aria-modal", "true");

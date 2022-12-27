@@ -125,7 +125,6 @@ export function switchToSettingMode() {
 	right.children[4].onclick = exportSettings;
 	right.children[5].onclick = requestClearData;
 
-	// 退出设置模式时除了切换到通常模式，还要把设置保存下来。
 	return new Promise(resolve => right.children[0].onclick = () => {
 		const searchBox = document.querySelector("search-box");
 		resolve();

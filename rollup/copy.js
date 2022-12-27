@@ -1,6 +1,6 @@
 import { join, relative } from "path";
 import glob from "fast-glob";
-import { dummyImportEntry } from "./html.js";
+import { jsImports } from "./html.js";
 
 const VID = "COPY_IMPORTER";
 
@@ -72,7 +72,7 @@ export default function copyPlugin(list) {
 				return null;
 			}
 			return {
-				code: dummyImportEntry(ids),
+				code: jsImports(ids),
 				moduleSideEffects: "no-treeshake",
 			};
 		},

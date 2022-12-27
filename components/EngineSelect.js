@@ -1,8 +1,5 @@
 import styles from "./EngineSelect.css";
 
-/*
- * 为了方便地用 replaceChildren 更新内容，只能多套一层。
- */
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
@@ -35,9 +32,6 @@ class EngineSelectElement extends HTMLElement {
 		return this.selected;
 	}
 
-	/**
-	 * 设置选中引擎的索引，如果新值超出了列表的范围，则会自动取模。
-	 */
 	set index(value) {
 		const old = this.container.children[this.selected];
 
@@ -81,7 +75,6 @@ class EngineSelectElement extends HTMLElement {
 		this.container.replaceChildren(...buttons);
 	}
 
-	// 这里使用 input 事件，比 change 更能体现仅用户输入才触发的特点。
 	handleClick(event) {
 		const { engine } = event.currentTarget;
 		this.value = engine;

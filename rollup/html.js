@@ -31,9 +31,10 @@ function check(importer, url) {
 }
 
 /**
- * 支持 HTML 文件作为 Rollup 的 input，自动提取并处理其中的资源。
- * 所有的 <script> 会被打包为一个文件。
- * 同时还会压缩 HTML，这是必须的处理因为要删除空白内容。
+ * A Rollup plugin which process HTML files, resolves <script src="..."> that
+ * references your JavaScript source code.
+ *
+ * It also minify the output HTML and removes whitespace-only text node between element tags.
  */
 export default function htmlPlugin() {
 	const documents = new Map();
@@ -66,13 +67,12 @@ export default function htmlPlugin() {
 			}
 
 			documents.set(id, document);
-			return dummyImportEntry(imports);
+			return { code: jsImports(imports), moduleSideEffects: "no-treeshake" };
 		},
 
 		async generateBundle(_, bundle) {
 			for (const [id, document] of documents) {
 
-				// chunk 可能不存在吗？
 				const chunk = Object.values(bundle).find(
 					(chunk) =>
 						chunk.type === "chunk" &&

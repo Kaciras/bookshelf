@@ -20,7 +20,6 @@ a {
 	text-decoration: none;
 }
 
-/* 要实现图片和外框不同圆角，只能多套一层 */
 #icon-box {
 	margin: 0 4px;
 	padding: 16px;

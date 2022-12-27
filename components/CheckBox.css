@@ -1,7 +1,7 @@
 /*
- * 暂时无法做聚焦高亮：
- * 1）delegatesFocus 不支持 focus-visible。
- * 2）没有 focus-visible-within 这个伪类。
+ * Unable to add focus highlighting.
+ * 1）delegatesFocus doesn't work with focus-visible。
+ * 2）No :focus-visible-within pseudo-class。
  *
  * https://github.com/WICG/focus-visible/issues/151
  */
@@ -17,8 +17,7 @@
 }
 
 /*
- * 因为没有将元素替换为 HTML 的 API，所以用个 div 包裹了图标
- * 以便使用 innerHTML，该元素设为 contents 不影响布局。
+ * Provide style for the icon.
  */
 #icon {
 	display: contents;
@@ -35,9 +34,7 @@ svg {
 }
 
 label {
-	/* 标签自带鼠标设置，得改一下 */
-	cursor: pointer;
-
 	margin-left: 4px;
 	vertical-align: middle;
+	cursor: inherit;
 }

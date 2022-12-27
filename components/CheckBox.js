@@ -12,9 +12,10 @@ template.innerHTML = `
 `;
 
 /**
- * 包含标签的复选框，因为浏览器自带的不能改颜色所以就自己实现了。
+ * A checkbox with label. We don't use the <input> element
+ * because it's hard to customize.
  *
- * 实现参考了 Google 的教程：
+ * Tutorial of how to write a check-box:
  * https://developers.google.com/web/fundamentals/web-components/examples/howto-checkbox
  */
 class CheckBoxElement extends HTMLElement {
@@ -55,10 +56,6 @@ class CheckBoxElement extends HTMLElement {
 		}
 	}
 
-	/**
-	 * 即便内部的 input 能捕获焦点，但被聚焦对象仍会变为整个组件。
-	 * 所以需要自行处理键盘切换值的问题。
-	 */
 	handleKeyup(event) {
 		if (event.key === " ") {
 			event.preventDefault();
@@ -67,8 +64,8 @@ class CheckBoxElement extends HTMLElement {
 	}
 
 	/**
-	 * 输入组件的 input 事件基本上只用 target 这个属性，
-	 * 所以直接分发以 input 为名的 CustomEvent 也是可以的。
+	 * We only use `event.target` to get the value,
+	 * so no need to set `event.detail`.
 	 */
 	toggleChecked() {
 		if (this.inputEl.disabled) {
@@ -79,7 +76,7 @@ class CheckBoxElement extends HTMLElement {
 	}
 }
 
-// 跟原生的 input 属性保持一致，在一些场合能减少无聊的判断。
+// Simulation <input type="checkbox"> for compatibility.
 CheckBoxElement.prototype.type = "checkbox";
 
 customElements.define("check-box", CheckBoxElement);

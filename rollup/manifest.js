@@ -1,6 +1,6 @@
 import { basename } from "path";
-import { readFile } from "fs/promises";
-import { dummyImportEntry } from "./html.js";
+import { readFileSync } from "fs";
+import { jsImports } from "./html.js";
 import { getRefId } from "./asset.js";
 
 const mark = "?webext";
@@ -17,7 +17,7 @@ function unwrapManifest(id) {
 export default function createManifestPlugin() {
 	let selfId;
 	let manifest;
-	const files = [];
+	const resources = [];
 
 	return {
 		name: "webext-manifest",
@@ -39,12 +39,13 @@ export default function createManifestPlugin() {
 			return selfId = (await resolved).id + mark;
 		},
 
-		async load(id) {
+		// Since we added a mark to the id, we need to load it by ourselves.
+		load(id) {
 			id = unwrapManifest(id);
 			if (!id) {
 				return null;
 			}
-			manifest = JSON.parse(await readFile(id, "utf8"));
+			manifest = JSON.parse(readFileSync(id, "utf8"));
 			this.addWatchFile(id);
 
 			const { icons = [] } = manifest;
@@ -53,7 +54,7 @@ export default function createManifestPlugin() {
 			for (const size of Object.keys(icons)) {
 				const value = icons[size] + "?resource";
 				ids.push(value);
-				files.push({ host: icons, key: size, value });
+				resources.push({ host: icons, key: size, value });
 			}
 
 			const { newtab } = manifest.chrome_url_overrides;
@@ -67,22 +68,23 @@ export default function createManifestPlugin() {
 			}
 
 			return {
-				code: dummyImportEntry(ids),
+				code: jsImports(ids),
 				moduleSideEffects: "no-treeshake",
 			};
 		},
 
 		async generateBundle(_, bundle) {
-			const chunk = Object.values(bundle).find(chunk =>
-				chunk.type === "chunk" &&
-				chunk.isEntry &&
-				chunk.facadeModuleId === selfId,
+			const chunk = Object.values(bundle).find(
+				(chunk) =>
+					chunk.type === "chunk" &&
+					chunk.isEntry &&
+					chunk.facadeModuleId === selfId,
 			);
 
 			if (chunk) {
 				manifest.chrome_url_overrides.newtab = "new-tab.html";
 
-				for (const { host, key, value } of files) {
+				for (const { host, key, value } of resources) {
 					const { id } = await this.resolve(value, selfId);
 					host[key] = this.getFileName(getRefId(id));
 				}

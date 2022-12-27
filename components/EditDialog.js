@@ -96,14 +96,12 @@ class EditDialogElement extends HTMLElement {
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
 
-	// 不要使用 Object.assign 因为参数可能含有额外的字段。
 	show(data = defaultData) {
 		pick(data, this);
 		this.dialogEl.showModal();
 		this.nameInput.focus();
 	}
 
-	// 把要传递的属性挑出来，以便调用方解构。
 	handleActionClick(event) {
 		const { dialogEl, urlInput } = this;
 

@@ -31,10 +31,10 @@ template.innerHTML = `
 `;
 
 /**
- * 搜索框下方的快捷方式，因为 shortcut 是一个单词不符合规范所以用 book-mark。
- * 这里的样式做得跟 Firefox 一样，除了右上角的修改按钮。
+ * Shortcut tile under the search box. The style is the same as that of Firefox,
+ * except for buttons in the upper right corner。
  *
- * 因为该元素仅通过 JS 创建，就不写 observedAttributes 了。
+ * Since this element is only created via JS, observedAttributes is not needed.
  */
 class BookMarkElement extends HTMLElement {
 
@@ -60,7 +60,7 @@ class BookMarkElement extends HTMLElement {
 	}
 
 	/**
-	 * 是否处于被拖动中，为 true 时将隐藏图标和标题，变为白板。
+	 * Is being dragged, set this property to true will hide the content。
 	 */
 	get isDragging() {
 		return this.linkEl.className === "blank";
@@ -71,7 +71,7 @@ class BookMarkElement extends HTMLElement {
 	}
 
 	/**
-	 * 是否显示右上角的编辑和删除按钮，默认不显示以免误碰。
+	 * Whether to display controls in the upper right corner.
 	 */
 	get isEditable() {
 		return this.classList.contains("editable");

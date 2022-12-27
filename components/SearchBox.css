@@ -16,14 +16,14 @@
 	box-shadow: 0 3px 8px rgba(9, 32, 77, 0.12), 0 0 2px rgba(29, 17, 51, 0.12);
 }
 
-/* Chromium 浏览器会加一个高亮，这里去掉 */
+/* For Chromium-based browsers */
 :host(:focus-visible) {
 	outline: none;
 }
 
 /*
  * 建议列表的显示由两个变量控制，仅当同时存在建议列表才会显示：
- * 1）suggested 	类表示列表不为空，在获取建议后设置，输入框为空时删除。
+ * 1）.suggested 	类表示列表不为空，在获取建议后设置，输入框为空时删除。
  * 2）:focus-within	此元素的聚焦状态，在失去焦点时删除。
  *
  * 【纯 CSS 实现？】

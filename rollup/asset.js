@@ -5,9 +5,9 @@ import mime from "mime";
 import { svgToUrl } from "@kaciras/utilities/node";
 
 export const AssetType = {
-	Source: 0,		// 作为字符串导入。
-	Url: 1,			// 作为 URL 导入，可能会内联为 DataUrl。
-	Resource: 2,	// 作为外部 URL 导入。
+	Source: 0,		// Imported as string.
+	Url: 1,			// Converted into import, or inlined as base64 data URL.
+	Resource: 2,	// Converted into import。
 };
 
 const srcRE = /[?&]source(?:&|$)/;
@@ -20,7 +20,7 @@ function detectFromQuery(id) {
 	if (resRE.test(id)) return AssetType.Resource;
 }
 
-// https://github.com/rollup/plugins/blob/master/packages/url/src/index.js
+// https://github.com/rollup/plugins/blob/7b6255774053ef170d9302cbbd8f99d5a58485ed/packages/url/src/index.js#L60
 function toDataUrl(source, mimetype) {
 	const isSVG = mimetype === "image/svg+xml";
 	const code = isSVG
@@ -31,12 +31,11 @@ function toDataUrl(source, mimetype) {
 }
 
 /**
- * 跟 Webpack 一样用 StringSource 和 BufferSource
- * 分别包装字符串和 Buffer 两种类型的结果，避免转换开销。
+ * Wrap string and buffer into the same API to reduce the number of `if` statements.
  *
- * data   - 原始数据
- * string - 字符串表示
- * buffer - 字节表示
+ * data   - The raw object, string or buffer.
+ * string - The string value, or `data.toString()` if data is a Buffer.
+ * buffer - The buffer value, or `Buffer.from(data)` if data is a string.
  */
 class StringSource {
 
@@ -69,10 +68,8 @@ class BufferSource {
 }
 
 /**
- * rollup/pluginutils 的 createFilter 在空参数时默认为全部通过，
- * 这跟常识不符，一般没有指定的话都是全部拦截的。
- *
- * @param options 包含 include 和 exclude 的对象
+ * Like the createFilter in rollup/pluginutils,
+ * but does not match if not provide an include pattern.
  */
 function createFilter2(options) {
 	const { include, exclude } = options;
@@ -85,11 +82,12 @@ function createFilter2(options) {
 const referenceMap = new Map();
 
 /**
- * 获取资源文件的名字，Vite 里就是这么做的。
- * https://github.com/vitejs/vite/blob/7977e92e0610cfcb814b45af8432bab1054863d2/packages/vite/src/node/plugins/asset.ts#L183
+ * Get emitted asset file's `referenceId` by its module id.
  *
- * @param id 资源 ID
- * @return {string} 输出的文件名
+ * https://github.com/vitejs/vite/blob/f114acea76e5ae238a54b2dedb288cb0e819f86e/packages/vite/src/node/plugins/asset.ts#L249
+ *
+ * @param id The resolved module id.
+ * @return {string} The referenceId, can be used with this.getFileName().
  */
 export function getRefId(id) {
 	return referenceMap.get(id);
@@ -104,10 +102,10 @@ const defaultOptions = {
 };
 
 /**
- * Rollup 似乎没有提供处理资源的规范，只能自己撸一个了。
- * 本插件提供一个通用的接口，将资源分为三类，其它插件可以通过设置 URL 参数来让模块本本插件处理。
+ * The transform hook in Rollup accepts only JS code. We need a mechanism
+ * for binary data, like Webpack's loader.
  */
-export default function createInlinePlugin(options) {
+export default function staticAssetPlugin(options) {
 	options = { ...defaultOptions, ...options };
 
 	const { source, url, resource, limit } = options;
@@ -124,16 +122,8 @@ export default function createInlinePlugin(options) {
 	}
 
 	return {
-		name: "asset-module",
+		name: "static-asset",
 
-		/**
-		 * 默认的 ID 解析器将 ID 视为相对路径，无法处理带 URL 参数的情况。
-		 * 这里先调用默认链解析文件路径，然后再把参数加回结果。
-		 *
-		 * @param source 模块的 ID
-		 * @param importer 引用此模块的模块
-		 * @return {Promise<string|null>} 解析后的 ID
-		 */
 		async resolveId(source, importer) {
 			if (!detectFromQuery(source)) {
 				return null;
@@ -175,7 +165,7 @@ export default function createInlinePlugin(options) {
 				const { buffer } = source;
 				if (buffer.length < limit) {
 
-					// 避免再次获取时的转换开销。
+					// Avoid decoding when use it again.
 					Object.defineProperty(source, "buffer", {
 						value: buffer,
 						configurable: false,
@@ -192,7 +182,7 @@ export default function createInlinePlugin(options) {
 				fileName,
 				source: source.data,
 			}));
-			return `export default "${fileName}"`; // 好像没必要用 JSON.stringify
+			return `export default "${fileName}"`;
 		},
 	};
 }

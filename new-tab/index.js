@@ -16,7 +16,6 @@ searchBox.engine = Google;
 document.getElementById("engine-select").replaceWith(engineSelect);
 document.getElementById("search-box").replaceWith(searchBox);
 
-// 主用 Google 放中间，次要的百度放后面，按一次 PageDown 即可切换到。
 engineSelect.list = [DuckDuckGo, Google, Baidu];
 engineSelect.value = searchBox.engine;
 engineSelect.addEventListener("input", e => {
