@@ -11,13 +11,9 @@ const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
 
 document.title = i18n("NewTab");
-// searchBox.engine = Google;
-
 document.getElementById("engine-select").replaceWith(engineSelect);
 document.getElementById("search-box").replaceWith(searchBox);
 
-// engineSelect.list = [DuckDuckGo, Google, Baidu];
-// engineSelect.value = searchBox.engine;
 engineSelect.addEventListener("input", e => {
 	searchBox.focus();
 	searchBox.engine = e.target.value;
@@ -38,11 +34,10 @@ searchBox.onkeydown = e => {
 	searchBox.engine = engineSelect.value;
 };
 
-export function setSearchEngines(config) {
-	const { defaultIndex, engines } = config;
+export function setSearchEngines({ defaultIndex, engines }) {
 	engineSelect.list = engines.map(e => Object.assign(Object.create(OpenSearchEngine.prototype), e));
 	engineSelect.index = defaultIndex;
-	searchBox.engine = engineSelect.list[defaultIndex];
+	searchBox.engine = engineSelect.value;
 }
 
 function switchToNormalMode() {

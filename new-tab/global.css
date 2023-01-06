@@ -52,10 +52,16 @@ button, .button {
 	}
 }
 
-input {
+input, textarea {
+	display: block;
+	padding: 6px;
+	font-size: 1rem;
+
+	border-radius: 4px;
+	border: solid 1px var(--color-split-line);
+
 	color: var(--color-text);
 	background: var(--color-bg-3);
-	border-color: transparent;
 
 	&:focus-visible {
 		outline: none;

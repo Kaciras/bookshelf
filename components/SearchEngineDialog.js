@@ -76,6 +76,13 @@ itemTemplate.innerHTML = `
 
 const kData = Symbol();
 
+const defaultData = {
+	name: "New Search",
+	favicon: SearchIconURL,
+	searchAPI: null,
+	suggestAPI: null,
+};
+
 class SearchEngineDialogElement extends HTMLElement {
 
 	defaultIndex;
@@ -105,14 +112,12 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.defaultEl.oninput = this.changeDefault.bind(this);
 		this.iconEl.parentElement.onclick = this.changeIcon.bind(this);
 
-		this.addEl.onclick = () => this.AddTab({
-			name: "New Search",
-			favicon: SearchIconURL,
-			searchAPI: null,
-			suggestAPI: null,
-		});
+		this.addEl.onclick = () => this.AddTab(defaultData);
 
 		this.handleActionClick = this.handleActionClick.bind(this);
+		this.handleRemove = this.handleRemove.bind(this);
+		this.handleTabChange = this.handleTabChange.bind(this);
+
 		root.getElementById("cancel").onclick = this.handleActionClick;
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
@@ -129,14 +134,14 @@ class SearchEngineDialogElement extends HTMLElement {
 	AddTab(engine) {
 		const li = itemTemplate.content.cloneNode(true).firstChild;
 		li[kData] = structuredClone(engine);
-		li.querySelector("span").textContent = engine.name;
 		li.querySelector("img").src = engine.favicon;
+		li.querySelector("span").textContent = engine.name;
 
 		this.listEl.insertBefore(li, this.addEl);
 		this.switchTab(li);
 
-		li.onclick = this.handleTabChange.bind(this);
-		li.querySelector("button").onclick = this.handleRemove.bind(this);
+		li.onclick = this.handleTabChange;
+		li.querySelector("button").onclick = this.handleRemove;
 	}
 
 	handleTabChange(event) {
@@ -182,28 +187,31 @@ class SearchEngineDialogElement extends HTMLElement {
 	}
 
 	switchTab(li) {
-		this.iconEl.src = li[kData].favicon;
-		this.nameEl.value = li[kData].name;
-		this.defaultEl.checked = this.defaultIndex === indexInParent(li);
-		this.searchEl.value = li[kData].searchAPI;
-		this.suggestEl.value = li[kData].suggestAPI;
-
 		this.current?.classList.remove("active");
 		this.current = li;
 		li.classList.add("active");
+
+		const data = li[kData];
+		this.defaultEl.checked = this.defaultIndex === indexInParent(li);
+		this.iconEl.src = data.favicon;
+		this.nameEl.value = data.name;
+		this.searchEl.value = data.searchAPI;
+		this.suggestEl.value = data.suggestAPI;
 	}
 
 	handleActionClick(event) {
-		this.dialogEl.close();
+		const { listEl, defaultIndex, dialogEl } = this;
+		dialogEl.close();
 
-		if (event.currentTarget.id === "accept") {
-			const { listEl, defaultIndex } = this;
-			const engines = Array.from(listEl.children)
-				.slice(0, -1)
-				.map(el => el[kData]);
-			const detail = { engines, defaultIndex };
-			this.dispatchEvent(new CustomEvent("change", { detail }));
+		if (event.currentTarget.id === "cancel") {
+			return;
 		}
+
+		const engines = Array.from(listEl.children)
+			.slice(0, -1)
+			.map(el => el[kData]);
+		const detail = { engines, defaultIndex };
+		this.dispatchEvent(new CustomEvent("change", { detail }));
 	}
 }
 

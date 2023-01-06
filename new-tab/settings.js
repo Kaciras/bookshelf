@@ -17,7 +17,6 @@ import { setSearchEngines } from "./index.js";
 
 const container = document.getElementById("shortcuts");
 const engineSelect = document.querySelector("engine-select");
-const searchBox = document.querySelector("search-box");
 
 const importDialog = document.createElement("top-site-dialog");
 const editDialog = document.createElement("edit-dialog");

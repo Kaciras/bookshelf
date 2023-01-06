@@ -5,13 +5,12 @@ import { jsImports } from "./html.js";
 const VID = "COPY_IMPORTER";
 
 /**
- * 复制资源的插件，该插件需要搭配 asset 插件使用。
+ * Copy files and folders, with glob support. This plugin needs to be used with
+ * the asset plugin.
  *
- * 与 rollup-plugin-copy 相比有些区别：
- * 1）将复制的文件加入监视。
- * 2）复制的文件将作为资源由 asset 插件处理。
- *
- * @param list 复制项列表，格式参考了 copy-webpack-plugin。
+ * Compare with rollup-plugin-copy.
+ * 1）This plugin add imports for files, let the asset plugin process them.
+ * 2）This plugin add files to watch.
  */
 export default function copyPlugin(list) {
 	const ids = new Set();
@@ -20,10 +19,10 @@ export default function copyPlugin(list) {
 		name: "copy",
 
 		/**
-		 * 在构建开始时找到所有要复制的文件，将它们加入 ID 集合。
-		 * 然后插入一个虚拟模块用于引用被复制的文件。
+		 * Find files to copy and add them to the ID set.
 		 *
-		 * 所有资源的 ID 中会加入 resource 参数，使其能够被 asset 插件处理。
+		 * The "resource" parameter will be added to the ID of all files
+		 * so that they can be processed by the asset plugin。
 		 */
 		async buildStart() {
 			const groups = await Promise.all(list.map(entry => {
@@ -51,7 +50,8 @@ export default function copyPlugin(list) {
 		},
 
 		/**
-		 * 虚拟模块无法被默认的解析器解析，需要自己处理下。
+		 * Skip resolving of our virtual chunk, and resolve copied
+		 * file without importer.
 		 */
 		resolveId(source, importer) {
 			if (source === VID) {
@@ -64,8 +64,8 @@ export default function copyPlugin(list) {
 		},
 
 		/**
-		 * 将待复制的文件的 ID 转换为虚拟模块里的 import 语句。
-		 * 同时还禁止了 TreeShake 以避免空模块警告。
+		 * The virtual chunk contains only imports of each file.
+		 * Also disabling tree-shake to avoid empty chunk warning.
 		 */
 		load(id) {
 			if (id !== VID) {
@@ -78,10 +78,7 @@ export default function copyPlugin(list) {
 		},
 
 		/**
-		 * 默认每个 chunk 都生成一个文件，所以要从构建的输出中删除虚拟模块。
-		 *
-		 * @param _ 没用的参数
-		 * @param bundle 输出的入口文件
+		 * The virtual chunk should not be included in the output.
 		 */
 		generateBundle: (_, bundle) => delete bundle[VID],
 	};

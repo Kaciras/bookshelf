@@ -80,24 +80,3 @@ export async function loadSearchEngines() {
 
 	return search;
 }
-
-export const Google = new OpenSearchEngine(
-	"Google",
-	GoogleIcon,
-	"https://www.google.com/search?client=firefox-b-d&q=",
-	"https://www.google.com/complete/search?client=firefox&q=",
-);
-
-export const DuckDuckGo = new OpenSearchEngine(
-	i18n("DuckDuckGo"),
-	DuckDuckGoIcon,
-	"https://duckduckgo.com/?t=ffsb&ia=web&q=",
-	"https://ac.duckduckgo.com/ac/?type=list&q=",
-);
-
-export const Baidu = new OpenSearchEngine(
-	i18n("Baidu"),
-	BaiduIcon,
-	"https://www.baidu.com/baidu?tn=monline_7_dg&ie=utf-8&wd=",
-	"https://www.baidu.com/su?tn=monline_7_dg&ie=utf-8&action=opensearch&wd=",
-);
