@@ -53,3 +53,40 @@ export function getImageResolution(url) {
 export function indexInParent(el) {
 	return Array.prototype.indexOf.call(el.parentNode.children, el);
 }
+
+export function dragSortContext() {
+	let dragEl = null;
+
+	function dragstart(event) {
+		dragEl = event.currentTarget;
+		dragEl.removeEventListener("dragenter", dragenter);
+	}
+
+	function dragend() {
+		dragEl.isDragging = false;
+		dragEl.addEventListener("dragenter", dragenter);
+		dragEl = null;
+	}
+
+	function dragenter(event) {
+		if (!dragEl) {
+			return;
+		}
+		const { currentTarget } = event;
+		dragEl.isDragging = true;
+
+		const i = indexInParent(dragEl);
+		const j = indexInParent(currentTarget);
+		if (i < j) {
+			currentTarget.after(dragEl);
+		} else {
+			currentTarget.before(dragEl);
+		}
+	}
+
+	return element => {
+		element.addEventListener("dragstart", dragstart);
+		element.addEventListener("dragend", dragend);
+		element.addEventListener("dragenter", dragenter);
+	};
+}

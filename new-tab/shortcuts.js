@@ -1,4 +1,4 @@
-import { indexInParent } from "../share/index.js";
+import { dragSortContext } from "../share/index.js";
 import { checkSync, iconCache, loadConfig, saveConfig } from "./storage.js";
 
 /*
@@ -10,8 +10,6 @@ import { checkSync, iconCache, loadConfig, saveConfig } from "./storage.js";
  */
 
 const container = document.getElementById("shortcuts");
-
-let dragEl = null;	// 当前被拖动的元素
 
 /**
  * 保存数据模型，在每次修改 shortcuts 后都要调用。
@@ -29,39 +27,7 @@ function persistDataModel() {
 	return saveConfig({ shortcuts });
 }
 
-/**
- * 拖拽排序的几个事件，把它们方法打包放在对象里排版上更紧凑。
- *
- * 无法支持从浏览器的书签拖动导入，因为浏览器会直接打开书签的页面。
- */
-const dragSortHandlers = {
-	ondragstart(event) {
-		dragEl = event.currentTarget;
-		dragEl.ondragenter = null;
-	},
-	ondragend() {
-		dragEl.ondragenter = dragSortHandlers.ondragenter;
-		dragEl.isDragging = false;
-		dragEl = null;
-		return persistDataModel();
-	},
-	ondragenter(event) {
-		const { currentTarget } = event;
-
-		if (!dragEl) {
-			return; // 拖拽元素不是快捷方式
-		}
-		dragEl.isDragging = true;
-
-		const i = indexInParent(dragEl);
-		const j = indexInParent(currentTarget);
-		if (i < j) {
-			currentTarget.after(dragEl);
-		} else {
-			currentTarget.before(dragEl);
-		}
-	},
-};
+const dragSort = dragSortContext();
 
 function appendElement(props) {
 	const el = document.createElement("book-mark");
@@ -71,8 +37,10 @@ function appendElement(props) {
 	el.label = props.label;
 	el.iconUrl = props.iconUrl;
 
+	dragSort(el);
 	container.append(el);
-	return Object.assign(el, dragSortHandlers);
+	el.addEventListener("dragend", persistDataModel);
+	return el;
 }
 
 export async function add(props) {

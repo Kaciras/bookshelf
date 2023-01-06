@@ -3,7 +3,7 @@ import AddIcon from "@tabler/icons/plus.svg";
 import xIcon from "@tabler/icons/x.svg";
 import CheckIcon from "@tabler/icons/check.svg";
 import { selectFile } from "@kaciras/utilities/browser";
-import { i18n, indexInParent } from "../share/index.js";
+import { dragSortContext, i18n, indexInParent } from "../share/index.js";
 import styles from "./SearchEngineDialog.css";
 
 const template = document.createElement("template");
@@ -61,7 +61,7 @@ template.innerHTML = `
 
 const itemTemplate = document.createElement("template");
 itemTemplate.innerHTML = `
-	<li>
+	<li draggable='true'>
 		<img alt='icon'>
 		<span class='one-line'/>
 		<button
@@ -73,6 +73,8 @@ itemTemplate.innerHTML = `
 		</button>
 	</li>
 `;
+
+const dragSort = dragSortContext();
 
 const kData = Symbol();
 
@@ -137,6 +139,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		li.querySelector("img").src = engine.favicon;
 		li.querySelector("span").textContent = engine.name;
 
+		dragSort(li);
 		this.listEl.insertBefore(li, this.addEl);
 		this.switchTab(li);
 
