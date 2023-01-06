@@ -29,25 +29,25 @@ template.innerHTML = `
 					${i18n("Default")}
 				</check-box>
 				<textarea
-					name='searchAPI' 
+					name='searchAPI'
 					placeholder='${i18n("SearchAPI")}'
 				></textarea>
 				<textarea
-					name='suggestAPI' 
+					name='suggestAPI'
 					placeholder='${i18n("SuggestAPI")}'
 				></textarea>
 				
 				<div id='actions'>
 					<button
-						id='cancel' 
+						id='cancel'
 						type='button'
 					>
 						${xIcon}
 						${i18n("Cancel")}
 					</button>
 					<button
-						id='accept' 
-						class='primary' 
+						id='accept'
+						class='primary'
 						type='button'
 					>
 						${CheckIcon}
@@ -63,7 +63,7 @@ const itemTemplate = document.createElement("template");
 itemTemplate.innerHTML = `
 	<li>
 		<img alt='icon'>
-		<span></span>
+		<span class='one-line'></span>
 		<button
 			class='plain'
 			title='${i18n("Delete")}'

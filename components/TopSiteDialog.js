@@ -34,8 +34,8 @@ const itemTemplate = document.createElement("template");
 itemTemplate.innerHTML = `
 	<li>
 		<img alt='favicon'>
-		<span></span>
-		<span class='url'></span>
+		<span class='one-line'></span>
+		<span class='one-line url'></span>
 		<button
 			class='icon'
 			title='${i18n("AddToShortcut")}'

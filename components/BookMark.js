@@ -8,10 +8,13 @@ template.innerHTML = `
 	<style>${styles}</style>
 	
 	<a id='link'>
-		<div id='icon-box'>
-			<img id='favicon' alt='favicon'>
+		<div class='shortcut-icon'>
+			<img id='favicon' alt='icon'>
 		</div>
-		<span id='label'></span>
+		<span 
+			id='label' 
+			class='one-line'
+		></span>
 	</a>
 	
 	<button

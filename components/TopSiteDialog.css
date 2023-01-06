@@ -36,12 +36,6 @@ img {
 	border-radius: 4px;
 }
 
-span {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 button {
 	grid-area: button;
 	align-self: center;
