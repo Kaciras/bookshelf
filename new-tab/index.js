@@ -4,20 +4,20 @@ import "../components/SearchBox.js";
 import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
 import { loadConfig } from "./storage.js";
-import { Baidu, DuckDuckGo, Google } from "./search.js";
+import { loadSearchEngines, OpenSearchEngine } from "./search.js";
 import { setShortcutEditable } from "./shortcuts.js";
 
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
 
 document.title = i18n("NewTab");
-searchBox.engine = Google;
+// searchBox.engine = Google;
 
 document.getElementById("engine-select").replaceWith(engineSelect);
 document.getElementById("search-box").replaceWith(searchBox);
 
-engineSelect.list = [DuckDuckGo, Google, Baidu];
-engineSelect.value = searchBox.engine;
+// engineSelect.list = [DuckDuckGo, Google, Baidu];
+// engineSelect.value = searchBox.engine;
 engineSelect.addEventListener("input", e => {
 	searchBox.focus();
 	searchBox.engine = e.target.value;
@@ -38,6 +38,13 @@ searchBox.onkeydown = e => {
 	searchBox.engine = engineSelect.value;
 };
 
+export function setSearchEngines(config) {
+	const { defaultIndex, engines } = config;
+	engineSelect.list = engines.map(e => Object.assign(Object.create(OpenSearchEngine.prototype), e));
+	engineSelect.index = defaultIndex;
+	searchBox.engine = engineSelect.list[defaultIndex];
+}
+
 function switchToNormalMode() {
 	const button = document.createElement("button");
 	button.innerHTML = SettingIcon;
@@ -57,3 +64,4 @@ function switchToNormalMode() {
 switchToNormalMode();
 
 Object.assign(searchBox, await loadConfig(["threshold", "waitIME", "limit"]));
+setSearchEngines(await loadSearchEngines());

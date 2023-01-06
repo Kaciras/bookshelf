@@ -2,6 +2,9 @@
 	"NewTab": {
 		"message": "新标签页"
 	},
+	"Add": {
+		"message": "添加"
+	},
 	"Accept": {
 		"message": "确定"
 	},
@@ -71,7 +74,7 @@
 	"EditShortcutDialog": {
 		"message": "编辑快捷方式"
 	},
-	"ShortcutName": {
+	"Name": {
 		"message": "名字"
 	},
 	"ShortcutURL": {
@@ -79,5 +82,20 @@
 	},
 	"DownloadFavicon": {
 		"message": "自动获取"
+	},
+	"RequireSearchEngine": {
+		"message": "至少要有一个搜索引擎。"
+	},
+	"SearchEngines": {
+		"message": "搜索引擎"
+	},
+	"Default": {
+		"message": "默认"
+	},
+	"SearchAPI": {
+		"message": "搜索页的 URL 模板"
+	},
+	"SuggestAPI": {
+		"message": "建议的 URL 模板（可选）"
 	}
 }

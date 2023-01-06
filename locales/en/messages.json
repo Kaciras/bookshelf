@@ -2,6 +2,9 @@
 	"NewTab": {
 		"message": "New Tab"
 	},
+	"Add": {
+		"message": "Add"
+	},
 	"Accept": {
 		"message": "Accept"
 	},
@@ -71,13 +74,28 @@
 	"EditShortcutDialog": {
 		"message": "Edit shortcut"
 	},
-	"ShortcutName": {
-		"message": "Title"
+	"Name": {
+		"message": "Name"
 	},
 	"ShortcutURL": {
 		"message": "URL"
 	},
 	"DownloadFavicon": {
 		"message": "Download"
+	},
+	"RequireSearchEngine": {
+		"message": "At least one search engine is required."
+	},
+	"SearchEngines": {
+		"message": "Search engines"
+	},
+	"Default": {
+		"message": "Default"
+	},
+	"SearchAPI": {
+		"message": "URL template of the search page"
+	},
+	"SuggestAPI": {
+		"message": "URL template of suggestions (optional)"
 	}
 }

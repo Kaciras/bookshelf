@@ -36,7 +36,7 @@ template.innerHTML = `
 			</div>
 			<div id='field-group'>
 				<label>
-					${i18n("ShortcutName")}
+					${i18n("Name")}
 					<input 
 						name='name'
 						required

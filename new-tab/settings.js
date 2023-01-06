@@ -4,19 +4,26 @@ import DevicesIcon from "@material-design-icons/svg/outlined/important_devices.s
 import DownloadIcon from "@tabler/icons/download.svg";
 import UploadIcon from "@tabler/icons/upload.svg";
 import TrashIcon from "@tabler/icons/trash.svg";
+import SearchIcon from "@tabler/icons/search.svg";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
+import "../components/SearchEngineDialog.js";
 import { bindInput, i18n, indexInParent } from "../share/index.js";
 import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
+import { setSearchEngines } from "./index.js";
 
 const container = document.getElementById("shortcuts");
+const engineSelect = document.querySelector("engine-select");
+const searchBox = document.querySelector("search-box");
+
 const importDialog = document.createElement("top-site-dialog");
 const editDialog = document.createElement("edit-dialog");
+const searchEngineDialog = document.createElement("search-engine-dialog");
 
-document.body.append(importDialog, editDialog);
+document.body.append(importDialog, editDialog, searchEngineDialog);
 
 /**
  * 快捷方式右上角的编辑按钮被点击时调用。
@@ -47,6 +54,15 @@ editDialog.addEventListener("change", event => {
 
 importDialog.addEventListener("add", event => add(event.detail));
 
+searchEngineDialog.addEventListener("change", event => {
+	setSearchEngines(event.detail);
+	return saveConfig(event.detail);
+});
+
+function showSearchEngineDialog() {
+	searchEngineDialog.show(engineSelect.list, engineSelect.defaultIndex ?? 1);
+}
+
 export function startAddShortcut() {
 	editDialog.show();
 	editDialog.index = undefined;
@@ -65,6 +81,9 @@ const rightTemplate = document.createElement("template");
 rightTemplate.innerHTML = `
 	<button class='primary'>
 		${CheckIcon}${i18n("Accept")}
+	</button>
+	<button>
+		${SearchIcon}${i18n("SearchEngines")}
 	</button>
 	<button>
 		${StarIcon}${i18n("AddShortcut")}
@@ -119,11 +138,12 @@ export function switchToSettingMode() {
 	bindInput(left.querySelector("input[name='limit']"), searchBox);
 	bindInput(left.querySelector("check-box[name='waitIME']"), searchBox);
 
-	right.children[1].onclick = startAddShortcut;
-	right.children[2].onclick = startImportTopSites;
-	right.children[3].onclick = importSettings;
-	right.children[4].onclick = exportSettings;
-	right.children[5].onclick = requestClearData;
+	right.children[1].onclick = showSearchEngineDialog;
+	right.children[2].onclick = startAddShortcut;
+	right.children[3].onclick = startImportTopSites;
+	right.children[4].onclick = importSettings;
+	right.children[5].onclick = exportSettings;
+	right.children[6].onclick = requestClearData;
 
 	return new Promise(resolve => right.children[0].onclick = () => {
 		const searchBox = document.querySelector("search-box");
