@@ -11,8 +11,6 @@ import varCompress from "postcss-variable-compress";
  * 要正确的处理必须在构建期获取打包期的路径，很麻烦。
  */
 
-const cssLangRE = /\.(css|pcss)($|\?)/;
-
 const plugins = [
 	vars(),		// Support SCSS-style variables.
 	csso(),		// Compress output.
@@ -25,9 +23,9 @@ if (env.NODE_ENV === "production") {
 
 const convertor = postcss(plugins);
 
-export default function (source, info) {
-	if (!cssLangRE.test(info.id)) {
+export default function (source, { path }) {
+	if (!/\.css$/.test(path)) {
 		return;
 	}
-	return convertor.process(source.string).css;
+	return convertor.process(source.string, { from: path }).css;
 }

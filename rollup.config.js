@@ -14,8 +14,8 @@ import template from "./rollup/template.js";
 
 const isProduction = env.NODE_ENV === "production";
 
-function minifyJson(source, info) {
-	if (/\.json(\?|$)/.test(info.id)) {
+function minifyJson(source, { path }) {
+	if (/\.json$/.test(path)) {
 		return JSON.stringify(JSON.parse(source.data));
 	}
 }

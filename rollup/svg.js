@@ -43,30 +43,29 @@ const builtInPlugins = {
 	},
 };
 
-const inlineConfig = {
-	plugins: [
-		{
-			name: "removeAttrs",
-			params: {
-				attrs: "class",
-			},
+const inlinePlugins = [
+	{
+		name: "removeAttrs",
+		params: {
+			attrs: "class",
 		},
-		builtInPlugins,
-		reactivePlugin(),
-	],
-};
+	},
+	builtInPlugins,
+	reactivePlugin(),
+];
 
-const resourceConfig = {
-	plugins: [builtInPlugins],
-};
+const resourcePlugins = [
+	builtInPlugins,
+];
 
-export default function (source, info) {
-	if (!/\.svg(\?|$)/.test(info.id)) {
+export default function (source, { type, path }) {
+	if (!/\.svg$/.test(path)) {
 		return;
 	}
-	const config = info.type === AssetType.Source
-		? inlineConfig : resourceConfig;
+	const plugins = type === AssetType.Source
+		? inlinePlugins : resourcePlugins;
 
-	return optimize(source.string, config).data
+	return optimize(source.string, { plugins, path })
+		.data
 		.replaceAll('"', "'"); // Avoid escapes
 }

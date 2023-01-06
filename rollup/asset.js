@@ -142,12 +142,12 @@ export default function staticAssetPlugin(options) {
 			if (type === undefined) {
 				return null;
 			}
-			const [file, query] = id.split("?", 2);
+			const [path, query] = id.split("?", 2);
 			const params = new URLSearchParams(query);
-			this.addWatchFile(file);
+			this.addWatchFile(path);
 
-			const info = { id, type, params };
-			let source = new BufferSource(await readFile(file));
+			const info = { path, type, params };
+			let source = new BufferSource(await readFile(path));
 
 			for (const loaderFn of loaders) {
 				const rv = await loaderFn.call(this, source, info);
@@ -171,12 +171,12 @@ export default function staticAssetPlugin(options) {
 						configurable: false,
 					});
 
-					const mimetype = mime.getType(file);
+					const mimetype = mime.getType(path);
 					const url = toDataUrl(source, mimetype);
 					return `export default "${url}"`;
 				}
 			}
-			const fileName = params.get("filename") || basename(file);
+			const fileName = params.get("filename") || basename(path);
 			referenceMap.set(id, this.emitFile({
 				type: "asset",
 				fileName,

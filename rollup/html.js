@@ -34,7 +34,7 @@ function check(importer, url) {
  * A Rollup plugin which process HTML files, resolves <script src="..."> that
  * references your JavaScript source code.
  *
- * It also minify the output HTML and removes whitespace-only text node between element tags.
+ * It also minifies the output HTML and removes whitespace-only text node between element tags.
  */
 export default function htmlPlugin() {
 	const documents = new Map();
