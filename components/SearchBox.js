@@ -12,7 +12,7 @@ template.innerHTML = `
 		enterkeyhint='search'
 		placeholder='${i18n("Search")}'
 	>
-	<div id='spinner'></div>
+	<div id='spinner'/>
 	<button
 		id='button'
 		tabindex='-1'
@@ -23,7 +23,7 @@ template.innerHTML = `
 		${SearchIcon}
 	</button>
 
-	<ul id='suggestions'></ul>
+	<ul id='suggestions'/>
 `;
 
 /**

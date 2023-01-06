@@ -17,13 +17,22 @@ export function jsImports(ids) {
 	return code;
 }
 
-export const minifyOptions = {
+/**
+ * Does not work if attribute value contains "/>".
+ */
+const selfCloseRE = /<([^\s>]+)([^>]*)\/>/gs;
+
+const minifyOptions = {
 	collapseBooleanAttributes: true,
 	collapseWhitespace: true,
 	collapseInlineTagWhitespace: true,
 	removeComments: true,
 	removeAttributeQuotes: true,
 };
+
+export function transformHTML(html) {
+	return minify(html.replaceAll(selfCloseRE, "<$1$2></$1>"), minifyOptions);
+}
 
 // Only process existing files with relative paths.
 function check(importer, url) {
@@ -91,7 +100,7 @@ export default function htmlPlugin() {
 				this.emitFile({
 					type: "asset",
 					fileName,
-					source: await minify(document.toString(), minifyOptions),
+					source: await transformHTML(document.toString()),
 				});
 			}
 		},

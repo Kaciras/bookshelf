@@ -31,11 +31,11 @@ template.innerHTML = `
 				<textarea
 					name='searchAPI'
 					placeholder='${i18n("SearchAPI")}'
-				></textarea>
+				/>
 				<textarea
 					name='suggestAPI'
 					placeholder='${i18n("SuggestAPI")}'
-				></textarea>
+				/>
 				
 				<div id='actions'>
 					<button
@@ -63,7 +63,7 @@ const itemTemplate = document.createElement("template");
 itemTemplate.innerHTML = `
 	<li>
 		<img alt='icon'>
-		<span class='one-line'></span>
+		<span class='one-line'/>
 		<button
 			class='plain'
 			title='${i18n("Delete")}'

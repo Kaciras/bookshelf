@@ -26,7 +26,7 @@ const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
 	<dialog-base name='${i18n("TopSiteDialog")}'>
-		<ul id='top-sites'></ul>
+		<ul id='top-sites'/>
 	</dialog-base>
 `;
 
@@ -34,8 +34,8 @@ const itemTemplate = document.createElement("template");
 itemTemplate.innerHTML = `
 	<li>
 		<img alt='favicon'>
-		<span class='one-line'></span>
-		<span class='one-line url'></span>
+		<span class='one-line'/>
+		<span class='one-line url'/>
 		<button
 			class='icon'
 			title='${i18n("AddToShortcut")}'

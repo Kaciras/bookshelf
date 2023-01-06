@@ -14,7 +14,7 @@ template.innerHTML = `
 		<span 
 			id='label' 
 			class='one-line'
-		></span>
+		/>
 	</a>
 	
 	<button

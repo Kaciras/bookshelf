@@ -8,7 +8,7 @@ template.innerHTML = `
 	<style>${styles}</style>
 	<input id='input' type='checkbox'>
 	<div id='icon'></div>
-	<label for='input'><slot></slot></label>
+	<label for='input'><slot/></label>
 `;
 
 /**

@@ -5,7 +5,7 @@ template.innerHTML = `
 	<style>${styles}</style>
 	<slot></slot>
 	<div class='dot-flashing'>
-		<div class='middle'></div>
+		<div class='middle'/>
 	</div>
 `;
 

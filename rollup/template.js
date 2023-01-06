@@ -1,6 +1,5 @@
-import { minify } from "html-minifier-terser";
 import MagicString from "magic-string";
-import { minifyOptions } from "./html.js";
+import { transformHTML } from "./html.js";
 
 // Finding an innerHtml=`...` is so troublesome with ESTree.
 function getTemplateLiteral(node) {
@@ -46,7 +45,7 @@ export default function inlineTemplatePlugin() {
 				const end = literal.end - 1;
 
 				let html = code.slice(start, end);
-				html = await minify(html, minifyOptions);
+				html = await transformHTML(html);
 				s.overwrite(start, end, html);
 			}
 
