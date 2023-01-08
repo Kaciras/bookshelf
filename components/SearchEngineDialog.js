@@ -174,6 +174,8 @@ class SearchEngineDialogElement extends HTMLElement {
 
 	async changeIcon() {
 		const [file] = await selectFile("image/*");
+
+		URL.revokeObjectURL(this.iconEl.src);
 		const url = URL.createObjectURL(file);
 
 		this.current[kData].favicon = url;

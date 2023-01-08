@@ -1,6 +1,6 @@
 import GoogleIcon from "../assets/google.ico";
-import BaiduIcon from "../assets/baidu.svg?url";
-import DuckDuckGoIcon from "../assets/dax-logo.svg?url";
+import BaiduIcon from "../assets/baidu.svg?resource";
+import DuckDuckGoIcon from "../assets/dax-logo.svg?resource";
 import { i18n } from "../share/index.js";
 import { loadConfig, saveConfig } from "./storage.js";
 

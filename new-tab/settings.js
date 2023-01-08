@@ -11,7 +11,7 @@ import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
 import "../components/SearchEngineDialog.js";
 import { bindInput, i18n, indexInParent } from "../share/index.js";
-import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
+import { clearAllData, exportSettings, iconCache, importSettings, saveConfig } from "./storage.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines } from "./index.js";
 
@@ -53,9 +53,12 @@ editDialog.addEventListener("change", event => {
 
 importDialog.addEventListener("add", event => add(event.detail));
 
-searchEngineDialog.addEventListener("change", event => {
-	setSearchEngines(event.detail);
-	return saveConfig(event.detail);
+searchEngineDialog.addEventListener("change", async ({ detail }) => {
+	const { engines } = detail;
+	for (const engine of engines) {
+		engine.favicon = await iconCache.save(engine.favicon);
+	}
+	return Promise.all([saveConfig(detail), setSearchEngines(detail)]);
 });
 
 function showSearchEngineDialog() {

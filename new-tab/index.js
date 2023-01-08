@@ -3,7 +3,7 @@ import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
 import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
-import { loadConfig } from "./storage.js";
+import { iconCache, loadConfig } from "./storage.js";
 import { loadSearchEngines, OpenSearchEngine } from "./search.js";
 import { setShortcutEditable } from "./shortcuts.js";
 
@@ -34,8 +34,14 @@ searchBox.onkeydown = e => {
 	searchBox.engine = engineSelect.value;
 };
 
-export function setSearchEngines({ defaultIndex, engines }) {
-	engineSelect.list = engines.map(e => Object.assign(Object.create(OpenSearchEngine.prototype), e));
+export async function setSearchEngines({ defaultIndex, engines }) {
+	const list = new Array(engines.length);
+	for (let i = 0; i < list.length; i++) {
+		const value = Object.create(OpenSearchEngine.prototype);
+		list[i] = Object.assign(value, engines[i]);
+		value.favicon = await iconCache.load(value.favicon);
+	}
+	engineSelect.list = list;
 	engineSelect.index = defaultIndex;
 	searchBox.engine = engineSelect.value;
 }
@@ -59,4 +65,4 @@ function switchToNormalMode() {
 switchToNormalMode();
 
 Object.assign(searchBox, await loadConfig(["threshold", "waitIME", "limit"]));
-setSearchEngines(await loadSearchEngines());
+await setSearchEngines(await loadSearchEngines());

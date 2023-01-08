@@ -112,8 +112,8 @@ export const CACHE_ORIGIN = "https://internal-cache/";
 export const iconCache = {
 
 	/**
-	 * Save a favicon to CacheStorage and download it if the url uses
-	 * HTTP protocol. return a string key for retrieval.
+	 * Save a favicon to CacheStorage and download it is a remote file.
+	 * return a string key for retrieval.
 	 *
 	 * For data size limit, we can not save image sa data url
 	 * to sync storage.
@@ -129,10 +129,17 @@ export const iconCache = {
 		let url;
 		let response;
 
-		if (typeof rawUrl !== "string") {
+		// Internal resource is relative URL.
+		try {
+			new URL(rawUrl);
+		} catch {
+			return rawUrl;
+		}
+
+		if (typeof rawUrl !== "string") {	// Response object.
 			url = rawUrl.url;
 			response = rawUrl;
-		} else {
+		} else { 							// Remote file.
 			response = await fetch(rawUrl);
 			const data = await response.clone().arrayBuffer();
 			const hash = (await sha256(data)).slice(0, 20);
@@ -157,8 +164,11 @@ export const iconCache = {
 		if (!urlKey) {
 			return defaultFavicon;
 		}
-		const cache = await caches.open("favicon");
+		if (!/^https?:/.test(urlKey)) {
+			return urlKey;
+		}
 
+		const cache = await caches.open("favicon");
 		let response = await cache.match(urlKey);
 		if (!response) {
 			if (urlKey.startsWith(CACHE_ORIGIN)) {
