@@ -87,9 +87,8 @@ const defaultData = {
 
 class SearchEngineDialogElement extends HTMLElement {
 
-	defaultIndex;
-
-	current;
+	defaultTab;	// Tab element of the default engine.
+	current;	// Current active tab element.
 
 	constructor() {
 		super();
@@ -129,7 +128,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		for (const e of engines) {
 			this.AddTab(e);
 		}
-		this.defaultIndex = defaultIndex;
+		this.defaultTab = this.listEl.children[defaultIndex];
 		this.dialogEl.showModal();
 	}
 
@@ -186,7 +185,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		if (this.defaultEl.checked) {
 			return event.preventDefault();
 		}
-		this.defaultIndex = indexInParent(this.current);
+		this.defaultTab = this.current;
 	}
 
 	switchTab(li) {
@@ -195,7 +194,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		li.classList.add("active");
 
 		const data = li[kData];
-		this.defaultEl.checked = this.defaultIndex === indexInParent(li);
+		this.defaultEl.checked = this.defaultTab === li;
 		this.iconEl.src = data.favicon;
 		this.nameEl.value = data.name;
 		this.searchEl.value = data.searchAPI;
@@ -203,17 +202,17 @@ class SearchEngineDialogElement extends HTMLElement {
 	}
 
 	handleActionClick(event) {
-		const { listEl, defaultIndex, dialogEl } = this;
+		const { listEl, defaultTab, dialogEl } = this;
 		dialogEl.close();
 
 		if (event.currentTarget.id === "cancel") {
 			return;
 		}
 
-		const engines = Array.from(listEl.children)
-			.slice(0, -1)
-			.map(el => el[kData]);
-		const detail = { engines, defaultIndex };
+		const detail = {
+			engines: Array.from(listEl.children).slice(0, -1).map(el => el[kData]),
+			defaultIndex: indexInParent(defaultTab),
+		};
 		this.dispatchEvent(new CustomEvent("change", { detail }));
 	}
 }
