@@ -1,5 +1,6 @@
 import { dragSortContext } from "../share/index.js";
-import { checkSync, iconCache, loadConfig, saveConfig } from "./storage.js";
+import { checkSync, loadConfig, saveConfig } from "./storage.js";
+import * as iconCache from "./cache.js";
 
 /*
  * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储有限制，
@@ -60,12 +61,12 @@ export async function update(index, props) {
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, newValue);
 
-	return persistDataModel().then(evictCache);
+	return persistDataModel().then(iconCache.evict);
 }
 
 export function remove(event) {
 	event.target.remove();
-	return persistDataModel().then(evictCache);
+	return persistDataModel().then(iconCache.evict);
 }
 
 export function setShortcutEditable(value) {
@@ -95,18 +96,7 @@ function mountShortcuts({ shortcuts = [] }) {
 			.then(v => el.favicon = v);
 	}
 
-	requestIdleCallback(() => checkSync(evictCache));
-}
-
-/**
- * 清理没有用到的图标缓存，该函数虽然开销较大，但调用并不频繁。
- *
- * 因为可能存在多个快捷方式使用同一图标的情况，
- * 所以不能仅靠被修改的对象来确定是否清理，只能全部扫描一遍。
- */
-function evictCache() {
-	const keys = Array.from(container.children).map(s => s.iconUrl);
-	return iconCache.evict(new Set(keys));
+	requestIdleCallback(() => checkSync(iconCache.evict));
 }
 
 loadConfig("shortcuts").then(mountShortcuts);

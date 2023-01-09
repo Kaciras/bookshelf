@@ -3,7 +3,8 @@ import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
 import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
-import { iconCache, loadConfig } from "./storage.js";
+import { loadConfig } from "./storage.js";
+import * as iconCache from "./cache.js";
 import { loadSearchEngines, OpenSearchEngine } from "./search.js";
 import { setShortcutEditable } from "./shortcuts.js";
 

@@ -11,7 +11,8 @@ import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
 import "../components/SearchEngineDialog.js";
 import { bindInput, i18n, indexInParent } from "../share/index.js";
-import { clearAllData, exportSettings, iconCache, importSettings, saveConfig } from "./storage.js";
+import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
+import * as iconCache from "./cache.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines } from "./index.js";
 
