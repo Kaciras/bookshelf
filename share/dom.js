@@ -47,40 +47,49 @@ export function getImageResolution(url) {
  * Gets the element's index among all children of its parent.
  * Throw an error if the element does not have a parent.
  *
- * @param el The DOM element.
+ * @param el {Node} The DOM element.
+ * @param from {number?} The array index at which to begin the search, default 0.
  * @return {number} The index.
  */
-export function indexInParent(el) {
-	return Array.prototype.indexOf.call(el.parentNode.children, el);
+export function indexInParent(el, from) {
+	return Array.prototype.indexOf.call(el.parentNode.children, el, from);
 }
 
+/**
+ * Add reorderable support for elements using drag-and-drop.
+ *
+ * This function creates a "Drag context" and return a register function.
+ * Elements registered in the same context can drag to swap with each other.
+ *
+ * You need add draggable="true" to the element if it is not default draggable.
+ */
 export function dragSortContext() {
-	let dragEl = null;
+	let dragging = null;
 
 	function dragstart(event) {
-		dragEl = event.currentTarget;
-		dragEl.removeEventListener("dragenter", dragenter);
+		dragging = event.currentTarget;
+		dragging.removeEventListener("dragenter", dragenter);
 	}
 
 	function dragend() {
-		dragEl.isDragging = false;
-		dragEl.addEventListener("dragenter", dragenter);
-		dragEl = null;
+		dragging.isDragging = false;
+		dragging.addEventListener("dragenter", dragenter);
+		dragging = null;
 	}
 
 	function dragenter(event) {
-		if (!dragEl) {
+		if (!dragging) {
 			return;
 		}
 		const { currentTarget } = event;
-		dragEl.isDragging = true;
+		dragging.isDragging = true;
 
-		const i = indexInParent(dragEl);
-		const j = indexInParent(currentTarget);
-		if (i < j) {
-			currentTarget.after(dragEl);
+		const i = indexInParent(currentTarget);
+		const j = indexInParent(dragging, i);
+		if (j === -1) {
+			currentTarget.after(dragging);
 		} else {
-			currentTarget.before(dragEl);
+			currentTarget.before(dragging);
 		}
 	}
 
