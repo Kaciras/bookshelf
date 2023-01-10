@@ -1,6 +1,6 @@
 import { sha256 } from "@kaciras/utilities/browser";
 import defaultFavicon from "../assets/Website.svg?url";
-import { loadConfig } from "./storage.js";
+import { settings } from "./storage.js";
 
 export { defaultFavicon };
 
@@ -83,7 +83,7 @@ export async function load(urlKey) {
  * Remove unused images from the cache.
  */
 export async function evict() {
-	const { shortcuts, engines } = loadConfig(["shortcuts", "engines"]);
+	const { shortcuts, engines } = settings;
 	const used = new Set();
 
 	shortcuts.forEach(i => used.add(i.iconUrl));

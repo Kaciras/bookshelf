@@ -3,10 +3,10 @@ import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
 import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
-import { loadConfig } from "./storage.js";
+import { loading, settings } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { loadSearchEngines, OpenSearchEngine } from "./search.js";
-import { setShortcutEditable } from "./shortcuts.js";
+import { mountShortcuts, setShortcutEditable } from "./shortcuts.js";
 
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
@@ -65,5 +65,11 @@ function switchToNormalMode() {
 
 switchToNormalMode();
 
-Object.assign(searchBox, await loadConfig(["threshold", "waitIME", "limit"]));
+await loading;
+
+searchBox.threshold = settings.threshold;
+searchBox.limit = settings.limit;
+searchBox.waitIME = settings.waitIME;
+
+mountShortcuts(settings.shortcuts);
 await setSearchEngines(await loadSearchEngines());

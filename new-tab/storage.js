@@ -12,6 +12,10 @@ import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities/browse
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
+export let settings;
+
+export const loading = syncSettings.get().then(saved => settings = saved);
+
 export async function saveConfig(object, keys) {
 	const uuid = Math.random();
 	const items = { uuid };
@@ -22,14 +26,11 @@ export async function saveConfig(object, keys) {
 		}
 	} else {
 		Object.assign(items, object);
+		Object.assign(settings, object);
 	}
 
 	await syncSettings.set(items);
 	await localSettings.set({ uuid });
-}
-
-export function loadConfig(keys) {
-	return syncSettings.get(keys);
 }
 
 /**
@@ -73,7 +74,7 @@ export async function exportSettings() {
 
 	const data = {
 		favicons,
-		sync: await syncSettings.get(),
+		sync: settings,
 		local: await localSettings.get(),
 	};
 

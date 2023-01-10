@@ -1,5 +1,5 @@
 import { dragSortContext } from "../share/index.js";
-import { checkSync, loadConfig, saveConfig } from "./storage.js";
+import { checkSync, saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 
 /*
@@ -80,10 +80,8 @@ export function setShortcutEditable(value) {
  * <h2>caches.open() 的影响</h2>
  * 在该函数中调用 caches.open() 会阻塞很久，然后 cache.match() 则很快返回，
  * 导致可见的布局移动，推测打开缓存区需要执行 IO 操作。
- *
- * @param saved 保存的数据
  */
-function mountShortcuts({ shortcuts = [] }) {
+export function mountShortcuts(shortcuts) {
 	if (import.meta.env.dev) {
 		console.debug("Shortcuts model:", shortcuts);
 	}
@@ -98,5 +96,3 @@ function mountShortcuts({ shortcuts = [] }) {
 
 	requestIdleCallback(() => checkSync(iconCache.evict));
 }
-
-loadConfig("shortcuts").then(mountShortcuts);

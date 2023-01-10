@@ -2,7 +2,7 @@ import GoogleIcon from "../assets/google.ico";
 import BaiduIcon from "../assets/baidu.svg?resource";
 import DuckDuckGoIcon from "../assets/dax-logo.svg?resource";
 import { i18n } from "../share/index.js";
-import { loadConfig, saveConfig } from "./storage.js";
+import { saveConfig, settings } from "./storage.js";
 
 /**
  * I can't find a way to get suggestions via `browser.search`.
@@ -45,7 +45,7 @@ export class OpenSearchEngine {
 }
 
 export async function loadSearchEngines() {
-	let search = await loadConfig(["defaultIndex", "engines"]);
+	let search = settings;
 
 	/*
  	 * Default search engines, you can find more at:
