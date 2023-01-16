@@ -1,3 +1,6 @@
+import { i18n } from "../share/index.js";
+import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities/browser";
+
 /*
  * 本项目同时使用了多个存储，包括在不同设备之间同步的 sync 和不同步的 local，
  * 为了保持数据一致性，必须提供能检测远程更改的方法。
@@ -6,9 +9,6 @@
  * 每次修改同步存储时，会生成一个随机数作为 UUID，该值同时保存到 sync 和 local 存储区，
  * 当 sync 远程同步后该值将跟 local 里的不同。
  */
-import { i18n } from "../share/index.js";
-import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities/browser";
-
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
@@ -33,10 +33,6 @@ export async function saveConfig(object, keys) {
 	await localSettings.set({ uuid });
 }
 
-/**
- * 清除所有保存的数据，因为使用了同步存储所以其它设备也会受到影响。
- * 其它设备的本地存储虽然不受影响，但在下次启动时也会由 syncAddonData 清理。
- */
 export async function clearAllData() {
 	await caches.delete("favicon");
 	await syncSettings.clear();
@@ -65,6 +61,7 @@ export async function checkSync(callback) {
 export async function exportSettings() {
 	const cache = await caches.open("favicon");
 	const favicons = [];
+
 	for (const { url } of await cache.keys()) {
 		const res = await cache.match(url);
 		const blob = await (res).blob();
@@ -79,10 +76,7 @@ export async function exportSettings() {
 	};
 
 	const json = JSON.stringify(data, null, "\t");
-	const blob = new Blob([json], {
-		type: "application/json",
-	});
-	saveFile(blob, "newtab-data.json");
+	saveFile(new File([json], "newtab-data.json"));
 }
 
 export async function importSettings() {

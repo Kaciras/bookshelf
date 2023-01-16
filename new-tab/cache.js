@@ -2,6 +2,17 @@ import { sha256 } from "@kaciras/utilities/browser";
 import defaultFavicon from "../assets/Website.svg?url";
 import { settings } from "./storage.js";
 
+/*
+ * Due to browser data size limit, we can not save images to synchronized storage.
+ *
+ * Firefox's new tab page also has this problem.
+ *
+ * If the website changed its favicon, and the shortcut to the site is
+ * synchronized to the new device, the displayed icon will be different.
+ *
+ * Also, search engine will lose its custom icon when syncing.
+ */
+
 export { defaultFavicon };
 
 export const CACHE_ORIGIN = "https://internal-cache/";
@@ -80,7 +91,7 @@ export async function load(urlKey) {
 }
 
 /**
- * Remove unused images from the cache.
+ * Remove unused entries from the cache storage.
  */
 export async function evict() {
 	const { shortcuts, engines } = settings;
@@ -95,5 +106,5 @@ export async function evict() {
 		.map(request => cache.delete(request));
 
 	await Promise.all(tasks);
-	console.debug(`Deleted ${tasks.length} expired favicons.`);
+	console.debug(`Deleted ${tasks.length} expired icons.`);
 }

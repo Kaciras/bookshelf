@@ -1,23 +1,13 @@
-import { dragSortContext } from "../share/index.js";
-import { checkSync, saveConfig } from "./storage.js";
+import { dragSortContext } from "@kaciras/utilities/browser";
+import { saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
-
-/*
- * 网页图标不支持自己上传，只能从目标网址下载，这是由于浏览器存储有限制，
- * 能同步的数据很少，图标等资源会超出限额所以只能存在本地，当数据同步到新的设备上后需必须新下载图标。
- * Firefox 自己的标签页也和书签也是这样的。
- *
- * 这个限制也导致了如果网站更换了图标，同时新设备同步来了该站点的快捷方式，则显示的图标会不一样。
- */
 
 const container = document.getElementById("shortcuts");
 
 /**
- * 保存数据模型，在每次修改 shortcuts 后都要调用。
- *
- * @return {Promise<void>} 等待保存完成
+ * Save data, called every time shortcuts are modified.
  */
-function persistDataModel() {
+function persist() {
 	const { children } = container;
 	const shortcuts = new Array(children.length);
 
@@ -40,7 +30,7 @@ function appendElement(props) {
 
 	dragSort(el);
 	container.append(el);
-	el.addEventListener("dragend", persistDataModel);
+	el.addEventListener("dragend", persist);
 	return el;
 }
 
@@ -50,7 +40,7 @@ export async function add(props) {
 	const el = appendElement(props);
 	el.isEditable = container.editable;
 
-	return persistDataModel();
+	return persist();
 }
 
 export async function update(index, props) {
@@ -61,12 +51,12 @@ export async function update(index, props) {
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, newValue);
 
-	return persistDataModel().then(iconCache.evict);
+	return persist().then(iconCache.evict);
 }
 
 export function remove(event) {
 	event.target.remove();
-	return persistDataModel().then(iconCache.evict);
+	return persist().then(iconCache.evict);
 }
 
 export function setShortcutEditable(value) {
@@ -89,10 +79,6 @@ export function mountShortcuts(shortcuts) {
 	for (const shortcut of shortcuts) {
 		const { iconUrl } = shortcut;
 		const el = appendElement(shortcut);
-
-		iconCache.load(iconUrl)
-			.then(v => el.favicon = v);
+		iconCache.load(iconUrl).then(v => el.favicon = v);
 	}
-
-	requestIdleCallback(() => checkSync(iconCache.evict));
 }

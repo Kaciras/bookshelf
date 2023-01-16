@@ -25,14 +25,6 @@ const searchEngineDialog = document.createElement("search-engine-dialog");
 
 document.body.append(importDialog, editDialog, searchEngineDialog);
 
-/**
- * 快捷方式右上角的编辑按钮被点击时调用。
- *
- * 【注意】
- * 这里用索引来记录当前编辑的对象，需要保证编辑时 shortcuts 里的顺序不变。
- *
- * @param event BookMark 元素的 edit 事件
- */
 container.addEventListener("edit", event => {
 	const el = event.target;
 	editDialog.index = indexInParent(el);
@@ -79,7 +71,6 @@ function requestClearData() {
 	window.confirm(i18n("ConfirmClearData")) && clearAllData();
 }
 
-// 因为有内联 SVG 所以没法写在 index.html 里。
 const rightTemplate = document.createElement("template");
 rightTemplate.innerHTML = `
 	<button class='primary'>
@@ -121,15 +112,15 @@ leftTemplate.innerHTML = `
 `;
 
 /**
- * 切换到设置模式，这将修改部分元素的内容，挂载上选项组件。
+ * Enter setting mode, which will mount some components.
  *
- * @return {Promise<void>} 点击确定按钮后 resolve，退出设置模式。
+ * @return {Promise<void>} Resolve when setting finished.
  */
 export function switchToSettingMode() {
 	const left = document.getElementById("setting-left");
 	const right = document.getElementById("setting-right");
 
-	// template 中从 HTML 解析的自定义元素没有关联到实现，必须先挂载。
+	// Does not work if put replaceChildren() to the end.
 	left.replaceChildren(leftTemplate.content.cloneNode(true));
 	right.replaceChildren(rightTemplate.content.cloneNode(true));
 

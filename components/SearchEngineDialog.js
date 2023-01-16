@@ -2,8 +2,8 @@ import SearchIconURL from "@tabler/icons/search.svg?url";
 import AddIcon from "@tabler/icons/plus.svg";
 import xIcon from "@tabler/icons/x.svg";
 import CheckIcon from "@tabler/icons/check.svg";
-import { selectFile } from "@kaciras/utilities/browser";
-import { dragSortContext, i18n, indexInParent } from "../share/index.js";
+import { dragSortContext, selectFile } from "@kaciras/utilities/browser";
+import { i18n, indexInParent } from "../share/index.js";
 import styles from "./SearchEngineDialog.css";
 
 const template = document.createElement("template");
@@ -24,12 +24,17 @@ template.innerHTML = `
 				<button id='icon' type='button'>
 					<img alt='icon'>
 				</button>
-				<input name='name' placeholder='${i18n("Name")}'>
+				<input
+					name='name'
+					required
+					placeholder='${i18n("Name")}'
+				>
 				<check-box name='isDefault'>
 					${i18n("Default")}
 				</check-box>
 				<textarea
 					name='searchAPI'
+					required
 					placeholder='${i18n("SearchAPI")}'
 				/>
 				<textarea
@@ -100,7 +105,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.addEl = root.querySelector("li");
 
 		this.iconEl = root.querySelector("img");
-		this.nameEl = root.querySelector("input");
+		this.nameEl = root.querySelector("input[name='name']");
 		this.defaultEl = root.querySelector("check-box");
 		this.searchEl = root.querySelector("textarea[name='searchAPI']");
 		this.suggestEl = root.querySelector("textarea[name='suggestAPI']");
@@ -164,12 +169,13 @@ class SearchEngineDialogElement extends HTMLElement {
 		tab.remove();
 	}
 
-	handleInput(event) {
-		const { name, value } = event.currentTarget;
+	handleInput({ currentTarget }) {
+		const { name, value } = currentTarget;
+		this.current[kData][name] = value;
+
 		if (name === "name") {
 			this.current.querySelector("span").textContent = value;
 		}
-		this.current[kData][name] = value;
 	}
 
 	async changeIcon() {
