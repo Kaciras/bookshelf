@@ -1,8 +1,8 @@
-# browser-theme
+# Bookshelf
 
 ![Screenshot](https://github.com/Kaciras/browser-theme/raw/master/screenshot.webp)
 
-Only 20 KB browser new tab page.
+Only 21 KB minimalist browser new tab page.
 
 Supported platforms:
 - Firefox >= 98.0

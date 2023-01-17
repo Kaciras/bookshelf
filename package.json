@@ -1,7 +1,7 @@
 {
-	"name": "firefox-theme",
+	"name": "bookshelf",
 	"version": "1.9.0",
-	"description": "My browser theme addon",
+	"description": "Minimalist new tab page",
 	"license": "MIT",
 	"author": "Kaciras",
 	"repository": {

@@ -76,7 +76,7 @@ export async function exportSettings() {
 	};
 
 	const json = JSON.stringify(data, null, "\t");
-	saveFile(new File([json], "newtab-data.json"));
+	saveFile(new File([json], "bookshelf-data.json"));
 }
 
 export async function importSettings() {
