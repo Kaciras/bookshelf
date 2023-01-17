@@ -1,4 +1,4 @@
-import GoogleIcon from "../assets/google.ico";
+import GoogleIcon from "../assets/google.svg?resource";
 import BaiduIcon from "../assets/baidu.svg?resource";
 import DuckDuckGoIcon from "../assets/dax-logo.svg?resource";
 import { i18n } from "../share/index.js";
