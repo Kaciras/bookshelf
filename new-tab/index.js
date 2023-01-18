@@ -47,20 +47,15 @@ export async function setSearchEngines({ defaultIndex, engines }) {
 	searchBox.engine = engineSelect.value;
 }
 
+const button = document.getElementById("settings");
+button.innerHTML = SettingIcon;
+button.title = i18n("SettingMode");
+button.onclick = () => import("./settings.js")
+	.then(module => module.switchToSettingMode())
+	.then(switchToNormalMode);
+
 function switchToNormalMode() {
-	const button = document.createElement("button");
-	button.innerHTML = SettingIcon;
-	button.title = i18n("SettingMode");
-	button.className = "icon";
-	button.onclick = () => import("./settings.js")
-		.then(module => module.switchToSettingMode())
-		.then(switchToNormalMode);
-
-	document.getElementById("setting-left").replaceChildren();
-	document.getElementById("setting-right").replaceChildren(button);
-
 	setShortcutEditable(false);
-	document.body.classList.remove("editing");
 }
 
 switchToNormalMode();
@@ -71,6 +66,6 @@ searchBox.threshold = settings.threshold;
 searchBox.limit = settings.limit;
 searchBox.waitIME = settings.waitIME;
 
-mountShortcuts(settings.shortcuts);
+mountShortcuts(settings.shortcuts ?? []);
 await setSearchEngines(await loadSearchEngines());
 requestIdleCallback(() => checkSync(iconCache.evict));

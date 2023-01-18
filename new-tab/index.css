@@ -1,10 +1,7 @@
 @import "/global.css";
 
-$edit-dash-width: 4px;
-$edit-padding: 15px;
 $shortcut-width: 120px;
-
-$body-padding: 34px;
+$top-margin: 32px;
 $section-margin: 48px;
 
 :root {
@@ -55,38 +52,22 @@ body {
 	align-items: center;
 
 	position: relative;
-	padding: $body-padding 0;
 	margin: 0;
 	min-height: 100vh;
 
-	/* Edge 的 body 字体大小只有 75% */
-	font-size: 1rem;
+	font-size: 1rem; /* For Edge */
 	background: var(--color-bg-1);
+}
 
-	&::before {
-		content: "";
-		position: absolute;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		right: 0;
+engine-select {
+	margin-top: $top-margin;
 
-		border: dashed $edit-dash-width transparent;
-		transition: .15s;
-		pointer-events: none;
-	}
-
-	&.editing::before {
-		left: $edit-padding;
-		top: $edit-padding;
-		bottom: $edit-padding;
-		right: $edit-padding;
-		border-color: #b3b3b3;
-	}
+	/* Avoid layout shifting on page load */
+	min-height: 48px;
 }
 
 #v-center {
-	$top: ($body-padding + $section-margin + 48px);
+	$top: ($section-margin + $top-margin + 48px);
 
 	display: flex;
 	flex-direction: column;
@@ -119,21 +100,26 @@ input[type="number"] {
 	width: 120px;
 }
 
-/* 左右上角的两片控件区域 */
-aside {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-
+#settings {
 	position: absolute;
-	top: calc($edit-padding * 2 + $edit-dash-width);
-	z-index: 10;
+	top: $top-margin;
+	right: $top-margin;
 }
 
-#setting-left {
-	left: calc($edit-padding * 2 + $edit-dash-width);
+#menu {
+	position: fixed;
+	margin: 0 0 0 auto;
+	height: 100vh;
+	border: none;
+	overflow-y: auto;
+
+	color: inherit;
+	background: var(--color-bg-2);
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
-#setting-right {
-	right: calc($edit-padding * 2 + $edit-dash-width);
+.menu-group {
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 1fr 1fr;
 }

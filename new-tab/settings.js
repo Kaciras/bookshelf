@@ -71,44 +71,46 @@ function requestClearData() {
 	window.confirm(i18n("ConfirmClearData")) && clearAllData();
 }
 
-const rightTemplate = document.createElement("template");
-rightTemplate.innerHTML = `
-	<button class='primary'>
-		${CheckIcon}${i18n("Accept")}
-	</button>
-	<button>
-		${SearchIcon}${i18n("SearchEngines")}
-	</button>
-	<button>
-		${StarIcon}${i18n("AddShortcut")}
-	</button>
-	<button>
-		${DevicesIcon}${i18n("TopSites")}
-	</button>
-	<button>
-		${UploadIcon}${i18n("ImportData")}
-	</button>
-	<button>
-		${DownloadIcon}${i18n("ExportData")}
-	</button>
-	<button class='warning'>
-		${TrashIcon}${i18n("ClearData")}
-	</button>
-`;
-
-const leftTemplate = document.createElement("template");
-leftTemplate.innerHTML = `
-	<label>
-		${i18n("MaxSuggestions")}
-		<input name='limit' type='number' min='0'>
-	</label>
-	<label>
-		${i18n("Debounce")}
-		<input name='threshold' type='number' min='0'>
-	</label>
-	<check-box title='${i18n("IMEDebounceTitle")}' name='waitIME'>
-		${i18n("IMEDebounce")}
-	</check-box>
+const template = document.createElement("template");
+template.innerHTML = `
+	<div class='menu-group'>
+		<button class='primary'>
+			${CheckIcon}${i18n("Accept")}
+		</button>
+		<button>
+			${SearchIcon}${i18n("SearchEngines")}
+		</button>
+		<button>
+			${StarIcon}${i18n("AddShortcut")}
+		</button>
+		<button>
+			${DevicesIcon}${i18n("TopSites")}
+		</button>
+		<button>
+			${UploadIcon}${i18n("ImportData")}
+		</button>
+		<button>
+			${DownloadIcon}${i18n("ExportData")}
+		</button>
+		<button class='warning'>
+			${TrashIcon}${i18n("ClearData")}
+		</button>
+	</div>
+	
+	<h2>${i18n("SearchBox")}</h2>
+	<div class='menu-group'>
+		<label>
+			${i18n("MaxSuggestions")}
+			<input name='limit' type='number' min='0'>
+		</label>
+		<label>
+			${i18n("Debounce")}
+			<input name='threshold' type='number' min='0'>
+		</label>
+		<check-box title='${i18n("IMEDebounceTitle")}' name='waitIME'>
+			${i18n("IMEDebounce")}
+		</check-box>
+	</div>
 `;
 
 /**
@@ -117,30 +119,30 @@ leftTemplate.innerHTML = `
  * @return {Promise<void>} Resolve when setting finished.
  */
 export function switchToSettingMode() {
-	const left = document.getElementById("setting-left");
-	const right = document.getElementById("setting-right");
+	const left = document.getElementById("menu");
 
 	// Does not work if put replaceChildren() to the end.
-	left.replaceChildren(leftTemplate.content.cloneNode(true));
-	right.replaceChildren(rightTemplate.content.cloneNode(true));
+	left.replaceChildren(template.content.cloneNode(true));
+	left.open = true;
 
 	setShortcutEditable(true);
-	document.body.classList.add("editing");
 
 	const searchBox = document.querySelector("search-box");
 	bindInput(left.querySelector("input[name='threshold']"), searchBox);
 	bindInput(left.querySelector("input[name='limit']"), searchBox);
 	bindInput(left.querySelector("check-box[name='waitIME']"), searchBox);
 
-	right.children[1].onclick = showSearchEngineDialog;
-	right.children[2].onclick = startAddShortcut;
-	right.children[3].onclick = startImportTopSites;
-	right.children[4].onclick = importSettings;
-	right.children[5].onclick = exportSettings;
-	right.children[6].onclick = requestClearData;
+	const { children } = left.firstChild;
+	children[1].onclick = showSearchEngineDialog;
+	children[2].onclick = startAddShortcut;
+	children[3].onclick = startImportTopSites;
+	children[4].onclick = importSettings;
+	children[5].onclick = exportSettings;
+	children[6].onclick = requestClearData;
 
-	return new Promise(resolve => right.children[0].onclick = () => {
+	return new Promise(resolve => children[0].onclick = () => {
 		const searchBox = document.querySelector("search-box");
+		left.open = false;
 		resolve();
 		return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);
 	});

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='zh-Hans'>
+<html lang='en'>
 <head>
 	<meta charset='UTF-8'>
 	<title></title>
@@ -8,11 +8,8 @@
 	<script type='module' src='./index.js'></script>
 </head>
 <body>
-<aside id='setting-left'></aside>
-<aside id='setting-right'></aside>
-
 <!--
-	Module JS implies defer，custom elements are not registered
+	Module JS implies defer，That means custom elements are not registered
 	until page load. So we use the <template> and replace it in JS.
 -->
 <template id='engine-select'></template>
@@ -20,5 +17,8 @@
 	<template id='search-box'></template>
 	<section id='shortcuts'></section>
 </div>
+
+<button id="settings" class="icon"></button>
+<dialog id='menu'></dialog>
 </body>
 </html>
