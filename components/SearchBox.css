@@ -44,7 +44,7 @@
 	}
 }
 
-/* 高亮跟建议列表有冲突，故仅在没有建议时才显示 */
+/* Show focus highlight shadow only if no suggestions */
 :host(:not(.suggested):focus) {
 	box-shadow: var(--block-focus-shadow);
 }
@@ -130,7 +130,10 @@ li {
 
 		border-radius: 50%;
 		border: 3px solid #ddd;
-		border-top-color: #2ea8ff; /* Firefox 有 BUG 不能用变量 */
+
+		/* Firefox 有 BUG 不能用变量 */
+		border-top-color: #2ea8ff;
+
 		animation: spinner .6s linear infinite;
 	}
 

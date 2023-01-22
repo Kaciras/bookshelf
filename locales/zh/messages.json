@@ -32,11 +32,14 @@
 	"Search": {
 		"message": "搜索"
 	},
+	"SearchBox": {
+		"message": "搜索框"
+	},
 	"ConfirmClearData": {
 		"message": "确定要清空本插件保存的所有数据？\n该过程不可撤销，并且会同步到所有设备！"
 	},
-	"AddShortcut": {
-		"message": "添加链接"
+	"EditShortcut": {
+		"message": "编辑快捷方式"
 	},
 	"TopSites": {
 		"message": "常用网站"
@@ -63,7 +66,7 @@
 		"message": "未上屏字符不触发建议"
 	},
 	"SettingMode": {
-		"message": "进入设置模式"
+		"message": "显示设置菜单"
 	},
 	"TopSiteDialog": {
 		"message": "导入常用网站"

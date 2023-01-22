@@ -32,11 +32,14 @@
 	"Search": {
 		"message": "Search"
 	},
+	"SearchBox": {
+		"message": "Search box"
+	},
 	"ConfirmClearData": {
 		"message": "Are you sure clear all data?\nThis operation is irreversible and syncs to all devices!"
 	},
-	"AddShortcut": {
-		"message": "Add Shortcut"
+	"EditShortcut": {
+		"message": "Edit Shortcuts"
 	},
 	"TopSites": {
 		"message": "Top Sites"
@@ -60,10 +63,10 @@
 		"message": "Wait for IME"
 	},
 	"IMEDebounceTitle": {
-		"message": "Do not fetch suggestion on compositing"
+		"message": "Do not fetch suggestion when compositing"
 	},
 	"SettingMode": {
-		"message": "Enable setting mode"
+		"message": "Show setting menu"
 	},
 	"TopSiteDialog": {
 		"message": "Add from top sites"

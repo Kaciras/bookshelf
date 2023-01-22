@@ -1,5 +1,7 @@
 @import "/global.css";
 
+$edit-dash-width: 4px;
+$edit-padding: 14px;
 $shortcut-width: 120px;
 $top-margin: 32px;
 $section-margin: 48px;
@@ -57,6 +59,27 @@ body {
 
 	font-size: 1rem; /* For Edge */
 	background: var(--color-bg-1);
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		right: 0;
+
+		border: dashed $edit-dash-width transparent;
+		transition: .15s;
+		pointer-events: none;
+	}
+
+	&.editing::before {
+		left: $edit-padding;
+		top: $edit-padding;
+		bottom: $edit-padding;
+		right: $edit-padding;
+		border-color: #b3b3b3;
+	}
 }
 
 engine-select {
@@ -74,7 +97,7 @@ engine-select {
 	justify-content: center;
 	align-items: center;
 
-	margin-top: $section-margin;
+	margin: $section-margin 0;
 	min-height: calc(100vh - $top * 2);
 }
 
@@ -87,6 +110,19 @@ search-box {
 	max-width: calc(var(--row-size) * $shortcut-width);
 	margin-top: $section-margin;
 	grid-template-columns: repeat(auto-fit, $shortcut-width);
+}
+
+#add-shortcut {
+	--icon-size: 36px;
+
+	display: none;
+	margin: 20px 20px 40px;
+	height: 80px;
+	border-radius: 6px;
+
+	.editing & {
+		display: block;
+	}
 }
 
 label {

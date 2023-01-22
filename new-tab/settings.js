@@ -5,6 +5,7 @@ import DownloadIcon from "@tabler/icons/download.svg";
 import UploadIcon from "@tabler/icons/upload.svg";
 import TrashIcon from "@tabler/icons/trash.svg";
 import SearchIcon from "@tabler/icons/search.svg";
+import AddIcon from "@tabler/icons/plus.svg";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
@@ -14,7 +15,7 @@ import { bindInput, i18n, indexInParent } from "../share/index.js";
 import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
-import { setSearchEngines } from "./index.js";
+import { setSearchEngines, switchToNormalMode } from "./index.js";
 
 const container = document.getElementById("shortcuts");
 const engineSelect = document.querySelector("engine-select");
@@ -58,9 +59,24 @@ function showSearchEngineDialog() {
 	searchEngineDialog.show(engineSelect.list, engineSelect.defaultIndex ?? 1);
 }
 
-export function startAddShortcut() {
-	editDialog.show();
-	editDialog.index = undefined;
+export function switchToEditingMode() {
+	document.body.classList.add("editing");
+	document.getElementById("add-shortcut").innerHTML = AddIcon;
+	document.getElementById("add-shortcut").onclick = () => {
+		editDialog.show();
+		editDialog.index = undefined;
+	};
+
+	document.getElementById("menu").open = false;
+	setShortcutEditable(true);
+
+	const button = document.getElementById("settings");
+	button.innerHTML = `${CheckIcon}Done`;
+	button.title = i18n("SettingMode");
+	button.onclick = () => {
+		switchToNormalMode();
+		document.body.classList.remove("editing");
+	};
 }
 
 export function startImportTopSites() {
@@ -81,7 +97,7 @@ template.innerHTML = `
 			${SearchIcon}${i18n("SearchEngines")}
 		</button>
 		<button>
-			${StarIcon}${i18n("AddShortcut")}
+			${StarIcon}${i18n("EditShortcut")}
 		</button>
 		<button>
 			${DevicesIcon}${i18n("TopSites")}
@@ -125,8 +141,6 @@ export function switchToSettingMode() {
 	left.replaceChildren(template.content.cloneNode(true));
 	left.open = true;
 
-	setShortcutEditable(true);
-
 	const searchBox = document.querySelector("search-box");
 	bindInput(left.querySelector("input[name='threshold']"), searchBox);
 	bindInput(left.querySelector("input[name='limit']"), searchBox);
@@ -134,16 +148,16 @@ export function switchToSettingMode() {
 
 	const { children } = left.firstChild;
 	children[1].onclick = showSearchEngineDialog;
-	children[2].onclick = startAddShortcut;
+	children[2].onclick = switchToEditingMode;
 	children[3].onclick = startImportTopSites;
 	children[4].onclick = importSettings;
 	children[5].onclick = exportSettings;
 	children[6].onclick = requestClearData;
 
-	return new Promise(resolve => children[0].onclick = () => {
+	children[0].onclick = () => {
 		const searchBox = document.querySelector("search-box");
 		left.open = false;
-		resolve();
+		switchToNormalMode();
 		return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);
-	});
+	};
 }

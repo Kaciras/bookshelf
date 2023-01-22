@@ -3,22 +3,23 @@ import { saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 
 const container = document.getElementById("shortcuts");
+const lastEl = container.lastChild;
+
+const dragSort = dragSortContext();
 
 /**
  * Save data, called every time shortcuts are modified.
  */
 function persist() {
-	const { children } = container;
+	const children = container.querySelectorAll("book-mark");
 	const shortcuts = new Array(children.length);
 
-	for (let i = 0; i < shortcuts.length; i++) {
+	for (let i = 0; i < children.length; i++) {
 		const { label, iconUrl, url } = children[i];
 		shortcuts[i] = { label, iconUrl, url };
 	}
 	return saveConfig({ shortcuts });
 }
-
-const dragSort = dragSortContext();
 
 function appendElement(props) {
 	const el = document.createElement("book-mark");
@@ -29,7 +30,7 @@ function appendElement(props) {
 	el.iconUrl = props.iconUrl;
 
 	dragSort(el);
-	container.append(el);
+	lastEl.before(el);
 	el.addEventListener("dragend", persist);
 	return el;
 }
@@ -61,16 +62,10 @@ export function remove(event) {
 
 export function setShortcutEditable(value) {
 	container.editable = value;
-	for (const el of container.children) el.isEditable = value;
+	for (const el of container.children)
+		el.isEditable = value;
 }
 
-/**
- * 挂载快捷方式组件，同时也会在空闲时清理下过期的数据。
- *
- * <h2>caches.open() 的影响</h2>
- * 在该函数中调用 caches.open() 会阻塞很久，然后 cache.match() 则很快返回，
- * 导致可见的布局移动，推测打开缓存区需要执行 IO 操作。
- */
 export function mountShortcuts(shortcuts) {
 	if (import.meta.env.dev) {
 		console.debug("Shortcuts model:", shortcuts);

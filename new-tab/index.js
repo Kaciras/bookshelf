@@ -47,14 +47,13 @@ export async function setSearchEngines({ defaultIndex, engines }) {
 	searchBox.engine = engineSelect.value;
 }
 
-const button = document.getElementById("settings");
-button.innerHTML = SettingIcon;
-button.title = i18n("SettingMode");
-button.onclick = () => import("./settings.js")
-	.then(module => module.switchToSettingMode())
-	.then(switchToNormalMode);
+export function switchToNormalMode() {
+	const button = document.getElementById("settings");
+	button.innerHTML = SettingIcon;
+	button.title = i18n("SettingMode");
+	button.onclick = () => import("./settings.js")
+		.then(module => module.switchToSettingMode());
 
-function switchToNormalMode() {
 	setShortcutEditable(false);
 }
 
