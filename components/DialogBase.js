@@ -1,4 +1,5 @@
 import xIcon from "@tabler/icons/x.svg";
+import { isPointerInside } from "@kaciras/utilities/browser";
 import { i18n } from "../share/index.js";
 import styles from "./DialogBase.css";
 
@@ -74,23 +75,16 @@ class DialogBaseElement extends HTMLElement {
 	 * https://stackoverflow.com/a/70593278/7065321
 	 */
 	handlePointerDown(event) {
-		this.pressOutside = this.isPointerOutside(event);
+		this.pressOutside = !isPointerInside(event);
 	}
 
 	handleClick(event) {
 		if (event.target !== this.dialogEl) {
 			return;
 		}
-		if (this.pressOutside && this.isPointerOutside(event)) {
+		if (this.pressOutside && !isPointerInside(event)) {
 			this.close();
 		}
-	}
-
-	isPointerOutside(event) {
-		const rect = this.dialogEl.getBoundingClientRect();
-		const { clientX, clientY } = event;
-		return clientY < rect.top || clientY > rect.bottom ||
-			clientX < rect.left || clientX > rect.right;
 	}
 }
 

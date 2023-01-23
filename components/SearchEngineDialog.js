@@ -2,8 +2,8 @@ import SearchIconURL from "@tabler/icons/search.svg?url";
 import AddIcon from "@tabler/icons/plus.svg";
 import xIcon from "@tabler/icons/x.svg";
 import CheckIcon from "@tabler/icons/check.svg";
-import { dragSortContext, selectFile } from "@kaciras/utilities/browser";
-import { i18n, indexInParent } from "../share/index.js";
+import { dragSortContext, nthInChildren, selectFile } from "@kaciras/utilities/browser";
+import { i18n } from "../share/index.js";
 import styles from "./SearchEngineDialog.css";
 
 const template = document.createElement("template");
@@ -143,7 +143,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		li.querySelector("img").src = engine.favicon;
 		li.querySelector("span").textContent = engine.name;
 
-		dragSort(li);
+		dragSort.register(li);
 		this.listEl.insertBefore(li, this.addEl);
 		this.switchTab(li);
 
@@ -219,7 +219,7 @@ class SearchEngineDialogElement extends HTMLElement {
 
 		const detail = {
 			engines: Array.from(listEl.children).slice(0, -1).map(el => el[kData]),
-			defaultIndex: indexInParent(defaultTab),
+			defaultIndex: nthInChildren(defaultTab),
 		};
 		this.dispatchEvent(new CustomEvent("change", { detail }));
 	}

@@ -29,7 +29,7 @@ function appendElement(props) {
 	el.label = props.label;
 	el.iconUrl = props.iconUrl;
 
-	dragSort(el);
+	dragSort.register(el);
 	lastEl.before(el);
 	el.addEventListener("dragend", persist);
 	return el;

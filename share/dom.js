@@ -42,15 +42,3 @@ export function getImageResolution(url) {
 		element.onload = () => resolve(element);
 	});
 }
-
-/**
- * Gets the element's index among all children of its parent.
- * Throw an error if the element does not have a parent.
- *
- * @param el {Node} The DOM element.
- * @param from {number?} The array index at which to begin the search, default 0.
- * @return {number} The index.
- */
-export function indexInParent(el, from) {
-	return Array.prototype.indexOf.call(el.parentNode.children, el, from);
-}
