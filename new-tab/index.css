@@ -25,7 +25,7 @@ $section-margin: 48px;
 	--block-focus-shadow: 0 0 0 3px #2ea8ff;
 }
 
-/* html 里的属性能被 ShadowDOM 继承，body 就不行 */
+/* Properties in HTML can be inherited by ShadowDOM, body cannot */
 html {
 	color: var(--color-text);
 
@@ -136,7 +136,7 @@ input[type="number"] {
 	width: 120px;
 }
 
-#settings {
+.settings {
 	position: absolute;
 	top: $top-margin;
 	right: $top-margin;

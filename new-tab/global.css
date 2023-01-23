@@ -41,7 +41,7 @@ button, .button {
 		background: var(--bg-active);
 	}
 
-	/* 用于内容只有一个图标的按钮 */
+	/* For buttons with only one icon */
 
 	&.icon {
 		padding: 8px;

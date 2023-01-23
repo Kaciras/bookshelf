@@ -35,6 +35,12 @@ searchBox.onkeydown = e => {
 	searchBox.engine = engineSelect.value;
 };
 
+const settingsButton = document.querySelector(".settings");
+settingsButton.innerHTML = SettingIcon;
+settingsButton.title = i18n("SettingMode");
+settingsButton.onclick = () => import("./settings.js")
+	.then(module => module.switchToSettingMode());
+
 export async function setSearchEngines({ defaultIndex, engines }) {
 	const list = new Array(engines.length);
 	for (let i = 0; i < list.length; i++) {
@@ -48,12 +54,6 @@ export async function setSearchEngines({ defaultIndex, engines }) {
 }
 
 export function switchToNormalMode() {
-	const button = document.getElementById("settings");
-	button.innerHTML = SettingIcon;
-	button.title = i18n("SettingMode");
-	button.onclick = () => import("./settings.js")
-		.then(module => module.switchToSettingMode());
-
 	setShortcutEditable(false);
 }
 

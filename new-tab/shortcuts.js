@@ -7,6 +7,8 @@ const lastEl = container.lastChild;
 
 const dragSort = dragSortContext();
 
+let editable = false;
+
 /**
  * Save data, called every time shortcuts are modified.
  */
@@ -39,7 +41,7 @@ export async function add(props) {
 	props.iconUrl = await iconCache.save(props.iconUrl);
 
 	const el = appendElement(props);
-	el.isEditable = container.editable;
+	el.isEditable = editable;
 
 	return persist();
 }
@@ -61,7 +63,7 @@ export function remove(event) {
 }
 
 export function setShortcutEditable(value) {
-	container.editable = value;
+	editable = value;
 	for (const el of container.children)
 		el.isEditable = value;
 }

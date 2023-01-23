@@ -75,8 +75,8 @@ async function fetchManifest(url, signal) {
  * Extract the best favicon of specified page. see the comments in
  * the function for the strategy.
  *
- * In order to get the real size, favicons may be downloaded.
- * Because browser have cache, download them again will not produce additional traffic.
+ * To get the real size, favicons can be downloaded. Because browsers have cache,
+ * downloading them again will not produce any additional traffic.
  *
  * @param url The URL of the page
  * @param signal The fetching is abortable.
@@ -93,7 +93,7 @@ export async function getFaviconUrl(url, signal) {
 		let actualSize = null;
 
 		if (selectedSVG && type !== "image/svg+xml") {
-			continue; // Ignore raster image if there are SVG。
+			continue; // Ignore raster images if there are SVG。
 		}
 
 		try {

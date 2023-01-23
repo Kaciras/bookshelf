@@ -20,6 +20,8 @@ import { setSearchEngines, switchToNormalMode } from "./index.js";
 
 const container = document.getElementById("shortcuts");
 const engineSelect = document.querySelector("engine-select");
+const settingButton = document.querySelector(".settings");
+const menu = document.getElementById("menu");
 
 const importDialog = document.createElement("top-site-dialog");
 const editDialog = document.createElement("edit-dialog");
@@ -56,28 +58,32 @@ searchEngineDialog.addEventListener("change", async ({ detail }) => {
 	return Promise.all([saveConfig(detail), setSearchEngines(detail)]);
 });
 
-function showSearchEngineDialog() {
-	searchEngineDialog.show(engineSelect.list, engineSelect.defaultIndex ?? 1);
-}
+const doneButton = document.createElement("button");
+doneButton.innerHTML = `${CheckIcon}Done`;
+doneButton.className = "settings icon primary";
+doneButton.title = i18n("SettingMode");
+doneButton.onclick = () => {
+	doneButton.replaceWith(settingButton);
+	switchToNormalMode();
+	document.body.classList.remove("editing");
+};
+
+const addShortcut = document.getElementById("add-shortcut");
+addShortcut.innerHTML = AddIcon;
+addShortcut.onclick = () => {
+	editDialog.show();
+	editDialog.index = undefined;
+};
 
 export function switchToEditingMode() {
-	document.body.classList.add("editing");
-	document.getElementById("add-shortcut").innerHTML = AddIcon;
-	document.getElementById("add-shortcut").onclick = () => {
-		editDialog.show();
-		editDialog.index = undefined;
-	};
-
-	document.getElementById("menu").open = false;
+	settingButton.replaceWith(doneButton);
 	setShortcutEditable(true);
+	menu.open = false;
+	document.body.classList.add("editing");
+}
 
-	const button = document.getElementById("settings");
-	button.innerHTML = `${CheckIcon}Done`;
-	button.title = i18n("SettingMode");
-	button.onclick = () => {
-		switchToNormalMode();
-		document.body.classList.remove("editing");
-	};
+function showSearchEngineDialog() {
+	searchEngineDialog.show(engineSelect.list, engineSelect.defaultIndex ?? 1);
 }
 
 export function startImportTopSites() {
@@ -130,24 +136,22 @@ template.innerHTML = `
 	</div>
 `;
 
+menu.replaceChildren(template.content.cloneNode(true));
+
 /**
  * Enter setting mode, which will mount some components.
  *
  * @return {Promise<void>} Resolve when setting finished.
  */
 export function switchToSettingMode() {
-	const left = document.getElementById("menu");
-
-	// Does not work if put replaceChildren() to the end.
-	left.replaceChildren(template.content.cloneNode(true));
-	left.open = true;
+	menu.open = true;
 
 	const searchBox = document.querySelector("search-box");
-	bindInput(left.querySelector("input[name='threshold']"), searchBox);
-	bindInput(left.querySelector("input[name='limit']"), searchBox);
-	bindInput(left.querySelector("check-box[name='waitIME']"), searchBox);
+	bindInput(menu.querySelector("input[name='threshold']"), searchBox);
+	bindInput(menu.querySelector("input[name='limit']"), searchBox);
+	bindInput(menu.querySelector("check-box[name='waitIME']"), searchBox);
 
-	const { children } = left.firstChild;
+	const { children } = menu.firstChild;
 	children[1].onclick = showSearchEngineDialog;
 	children[2].onclick = switchToEditingMode;
 	children[3].onclick = startImportTopSites;
@@ -157,7 +161,7 @@ export function switchToSettingMode() {
 
 	children[0].onclick = () => {
 		const searchBox = document.querySelector("search-box");
-		left.open = false;
+		menu.open = false;
 		switchToNormalMode();
 		return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);
 	};

@@ -18,7 +18,7 @@ export { defaultFavicon };
 export const CACHE_ORIGIN = "https://internal-cache/";
 
 /**
- * Save a favicon to CacheStorage and download it is a remote file.
+ * Save the icon to CacheStorage and download it if it is a remote file.
  * return a string key for retrieval.
  *
  * For data size limit, we can not save image sa data url
