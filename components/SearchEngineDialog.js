@@ -128,12 +128,12 @@ class SearchEngineDialogElement extends HTMLElement {
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
 
-	show(engines, defaultIndex) {
+	show(engines, defaultEngine) {
 		this.listEl.replaceChildren(this.listEl.lastChild);
 		for (const e of engines) {
 			this.AddTab(e);
 		}
-		this.defaultTab = this.listEl.children[defaultIndex];
+		this.defaultTab = this.listEl.children[defaultEngine];
 		this.dialogEl.showModal();
 	}
 
@@ -219,7 +219,7 @@ class SearchEngineDialogElement extends HTMLElement {
 
 		const detail = {
 			engines: Array.from(listEl.children).slice(0, -1).map(el => el[kData]),
-			defaultIndex: nthInChildren(defaultTab),
+			defaultEngine: nthInChildren(defaultTab),
 		};
 		this.dispatchEvent(new CustomEvent("change", { detail }));
 	}

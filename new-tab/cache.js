@@ -15,7 +15,7 @@ import { settings } from "./storage.js";
 
 export { defaultFavicon };
 
-export const CACHE_ORIGIN = "https://internal-cache/";
+export const CACHE_ORIGIN = "https://cache/";
 
 /**
  * Save the icon to CacheStorage and download it if it is a remote file.
@@ -31,7 +31,7 @@ export async function save(rawUrl) {
 	if (!rawUrl || rawUrl === defaultFavicon) {
 		return null;
 	}
-	const cache = await caches.open("favicon");
+	const cache = await caches.open("icon");
 	let url;
 	let response;
 
@@ -56,7 +56,7 @@ export async function save(rawUrl) {
 }
 
 /**
- * Get saved favicon from CacheStorage, if it does not exist:
+ * Get saved icon from CacheStorage, if it does not exist:
  * - For internal resource, fallback to default.
  * - For HTTP resource, download and put it to cache.
  *
@@ -74,7 +74,7 @@ export async function load(urlKey) {
 		return urlKey;
 	}
 
-	const cache = await caches.open("favicon");
+	const cache = await caches.open("icon");
 	let response = await cache.match(urlKey);
 	if (!response) {
 		if (urlKey.startsWith(CACHE_ORIGIN)) {
@@ -100,7 +100,7 @@ export async function evict() {
 	shortcuts.forEach(i => used.add(i.iconUrl));
 	engines.forEach(i => used.add(i.favicon));
 
-	const cache = await caches.open("favicon");
+	const cache = await caches.open("icon");
 	const tasks = (await cache.keys())
 		.filter(r => !used.has(r.url))
 		.map(request => cache.delete(request));

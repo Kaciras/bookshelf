@@ -41,7 +41,7 @@ settingsButton.title = i18n("SettingMode");
 settingsButton.onclick = () => import("./settings.js")
 	.then(module => module.switchToSettingMode());
 
-export async function setSearchEngines({ defaultIndex, engines }) {
+export async function setSearchEngines({ defaultEngine, engines }) {
 	const list = new Array(engines.length);
 	for (let i = 0; i < list.length; i++) {
 		const value = Object.create(OpenSearchEngine.prototype);
@@ -49,7 +49,7 @@ export async function setSearchEngines({ defaultIndex, engines }) {
 		value.favicon = await iconCache.load(value.favicon);
 	}
 	engineSelect.list = list;
-	engineSelect.index = defaultIndex;
+	engineSelect.index = defaultEngine;
 	searchBox.engine = engineSelect.value;
 }
 
@@ -61,10 +61,8 @@ switchToNormalMode();
 
 await loading;
 
-searchBox.threshold = settings.threshold;
-searchBox.limit = settings.limit;
-searchBox.waitIME = settings.waitIME;
-
+Object.assign(searchBox, settings.searchBox);
 mountShortcuts(settings.shortcuts);
 await setSearchEngines(settings);
+
 requestIdleCallback(() => checkSync(iconCache.evict));

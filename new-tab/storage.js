@@ -1,7 +1,7 @@
 import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities/browser";
-import BaiduIcon from "../assets/Baidu.svg";
-import GoogleIcon from "../assets/google.svg";
-import DuckDuckGoIcon from "../assets/dax-logo.svg";
+import BaiduIcon from "../assets/Baidu.svg?resource";
+import GoogleIcon from "../assets/google.svg?resource";
+import DuckDuckGoIcon from "../assets/dax-logo.svg?resource";
 import { i18n } from "../share/index.js";
 
 /*
@@ -16,55 +16,42 @@ const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
 export const settings = {
-	limit: 8,
-	threshold: 500,
-	waitIME: true,
-	
+	searchBox: {
+		limit: 8,
+		threshold: 500,
+		waitIME: true,
+	},
+
 	shortcuts: [],
 
 	/*
  	 * Default search engines, you can find more at:
  	 * https://github.com/chromium/chromium/blob/main/components/search_engines/prepopulated_engines.json
  	 */
-	defaultIndex: 1,
-	engines: [
-		{
-			name: i18n("DuckDuckGo"),
-			favicon: DuckDuckGoIcon,
-			searchAPI: "https://duckduckgo.com/?t=ffsb&ia=web&q=",
-			suggestAPI: "https://ac.duckduckgo.com/ac/?type=list&q=",
-		},
-		{
-			name: "Google",
-			favicon: GoogleIcon,
-			searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
-			suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
-		},
-		{
-			name: i18n("Baidu"),
-			favicon: BaiduIcon,
-			searchAPI: "https://www.baidu.com/baidu?ie=utf-8&wd=",
-			suggestAPI: "https://www.baidu.com/su?ie=utf-8&action=opensearch&wd=",
-		},
-	],
+	defaultEngine: 1,
+	engines: [{
+		name: i18n("DuckDuckGo"),
+		favicon: DuckDuckGoIcon,
+		searchAPI: "https://duckduckgo.com/?t=ffsb&ia=web&q=",
+		suggestAPI: "https://ac.duckduckgo.com/ac/?type=list&q=",
+	}, {
+		name: "Google",
+		favicon: GoogleIcon,
+		searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
+		suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
+	}, {
+		name: i18n("Baidu"),
+		favicon: BaiduIcon,
+		searchAPI: "https://www.baidu.com/baidu?ie=utf-8&wd=",
+		suggestAPI: "https://www.baidu.com/su?ie=utf-8&action=opensearch&wd=",
+	}],
 };
 
 export const loading = syncSettings.get().then(v => Object.assign(settings, v));
 
-export async function saveConfig(object, keys) {
+export async function saveConfig(object) {
 	const uuid = Math.random();
-	const items = { uuid };
-
-	if (keys) {
-		for (const key of keys) {
-			items[key] = object[key];
-		}
-	} else {
-		Object.assign(items, object);
-		Object.assign(settings, object);
-	}
-
-	await syncSettings.set(items);
+	await syncSettings.set({ uuid, ...object });
 	await localSettings.set({ uuid });
 }
 
@@ -94,18 +81,18 @@ export async function checkSync(callback) {
 }
 
 export async function exportSettings() {
-	const cache = await caches.open("favicon");
-	const favicons = [];
+	const cache = await caches.open("icon");
+	const icons = [];
 
 	for (const { url } of await cache.keys()) {
 		const res = await cache.match(url);
 		const blob = await (res).blob();
 		const body = await blobToBase64URL(blob);
-		favicons.push({ url, body });
+		icons.push({ url, body });
 	}
 
 	const data = {
-		favicons,
+		icons,
 		sync: settings,
 		local: await localSettings.get(),
 	};
@@ -123,8 +110,8 @@ export async function importSettings() {
 	await localSettings.set(s.local);
 	await syncSettings.set(s.sync);
 
-	const cache = await caches.open("favicon");
-	for (const { url, body } of s.favicons) {
+	const cache = await caches.open("icon");
+	for (const { url, body } of s.icons) {
 		await cache.put(url, await fetch(body));
 	}
 

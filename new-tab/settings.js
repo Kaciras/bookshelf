@@ -86,7 +86,7 @@ function switchToEditingMode() {
 }
 
 function showSearchEngineDialog() {
-	searchEngineDialog.show(engineSelect.list, engineSelect.defaultIndex ?? 1);
+	searchEngineDialog.show(engineSelect.list, engineSelect.defaultEngine ?? 1);
 }
 
 function startImportTopSites() {
@@ -166,6 +166,10 @@ export function switchToSettingMode() {
 		const searchBox = document.querySelector("search-box");
 		menu.open = false;
 		switchToNormalMode();
-		return saveConfig(searchBox, ["threshold", "waitIME", "limit"]);
+		
+		const { limit, waitIME, threshold } = searchBox;
+		return saveConfig({
+			searchBox: { limit, waitIME, threshold },
+		});
 	};
 }
