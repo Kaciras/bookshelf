@@ -1,9 +1,3 @@
-import GoogleIcon from "../assets/google.svg?resource";
-import BaiduIcon from "../assets/baidu.svg?resource";
-import DuckDuckGoIcon from "../assets/dax-logo.svg?resource";
-import { i18n } from "../share/index.js";
-import { saveConfig, settings } from "./storage.js";
-
 /**
  * I can't find a way to get suggestions via `browser.search`.
  *
@@ -42,43 +36,4 @@ export class OpenSearchEngine {
 	getResultURL(searchTerms) {
 		return this.searchAPI + encodeURIComponent(searchTerms);
 	}
-}
-
-/*
- * Default search engines, you can find more at:
- * https://github.com/chromium/chromium/blob/main/components/search_engines/prepopulated_engines.json
- */
-const defaultConfig = {
-	defaultIndex: 1,
-	engines: [
-		{
-			name: i18n("DuckDuckGo"),
-			favicon: DuckDuckGoIcon,
-			searchAPI: "https://duckduckgo.com/?t=ffsb&ia=web&q=",
-			suggestAPI: "https://ac.duckduckgo.com/ac/?type=list&q=",
-		},
-		{
-			name: "Google",
-			favicon: GoogleIcon,
-			searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
-			suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
-		},
-		{
-			name: i18n("Baidu"),
-			favicon: BaiduIcon,
-			searchAPI: "https://www.baidu.com/baidu?ie=utf-8&wd=",
-			suggestAPI: "https://www.baidu.com/su?ie=utf-8&action=opensearch&wd=",
-		},
-	],
-};
-
-export async function loadSearchEngines() {
-	let search = settings;
-
-	if (!search.engines) {
-		search = defaultConfig;
-		await saveConfig(search);
-	}
-
-	return search;
 }

@@ -53,7 +53,6 @@ class SearchBoxElement extends HTMLElement {
 		this.suggestionEl = root.getElementById("suggestions");
 
 		this.fetcher = new Debounced(this.suggest.bind(this));
-		this.fetcher.threshold = 500;
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);

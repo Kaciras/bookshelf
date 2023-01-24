@@ -5,7 +5,7 @@ import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
 import { checkSync, loading, settings } from "./storage.js";
 import * as iconCache from "./cache.js";
-import { loadSearchEngines, OpenSearchEngine } from "./search.js";
+import { OpenSearchEngine } from "./search.js";
 import { mountShortcuts, setShortcutEditable } from "./shortcuts.js";
 
 const engineSelect = document.createElement("engine-select");
@@ -65,6 +65,6 @@ searchBox.threshold = settings.threshold;
 searchBox.limit = settings.limit;
 searchBox.waitIME = settings.waitIME;
 
-mountShortcuts(settings.shortcuts ?? []);
-await setSearchEngines(await loadSearchEngines());
+mountShortcuts(settings.shortcuts);
+await setSearchEngines(settings);
 requestIdleCallback(() => checkSync(iconCache.evict));

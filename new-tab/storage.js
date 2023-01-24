@@ -1,5 +1,8 @@
-import { i18n } from "../share/index.js";
 import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities/browser";
+import BaiduIcon from "../assets/Baidu.svg";
+import GoogleIcon from "../assets/google.svg";
+import DuckDuckGoIcon from "../assets/dax-logo.svg";
+import { i18n } from "../share/index.js";
 
 /*
  * 本项目同时使用了多个存储，包括在不同设备之间同步的 sync 和不同步的 local，
@@ -12,9 +15,41 @@ import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities/browse
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
-export let settings;
+export const settings = {
+	limit: 8,
+	threshold: 500,
+	waitIME: true,
+	
+	shortcuts: [],
 
-export const loading = syncSettings.get().then(saved => settings = saved);
+	/*
+ 	 * Default search engines, you can find more at:
+ 	 * https://github.com/chromium/chromium/blob/main/components/search_engines/prepopulated_engines.json
+ 	 */
+	defaultIndex: 1,
+	engines: [
+		{
+			name: i18n("DuckDuckGo"),
+			favicon: DuckDuckGoIcon,
+			searchAPI: "https://duckduckgo.com/?t=ffsb&ia=web&q=",
+			suggestAPI: "https://ac.duckduckgo.com/ac/?type=list&q=",
+		},
+		{
+			name: "Google",
+			favicon: GoogleIcon,
+			searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
+			suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
+		},
+		{
+			name: i18n("Baidu"),
+			favicon: BaiduIcon,
+			searchAPI: "https://www.baidu.com/baidu?ie=utf-8&wd=",
+			suggestAPI: "https://www.baidu.com/su?ie=utf-8&action=opensearch&wd=",
+		},
+	],
+};
+
+export const loading = syncSettings.get().then(v => Object.assign(settings, v));
 
 export async function saveConfig(object, keys) {
 	const uuid = Math.random();
