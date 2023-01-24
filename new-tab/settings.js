@@ -29,6 +29,9 @@ const searchEngineDialog = document.createElement("search-engine-dialog");
 
 document.body.append(importDialog, editDialog, searchEngineDialog);
 
+// Click outside to close the menu.
+document.addEventListener("click", e => menu.open &= menu.contains(e.target));
+
 container.addEventListener("edit", event => {
 	const el = event.target;
 	editDialog.index = nthInChildren(el);
@@ -75,7 +78,7 @@ addShortcut.onclick = () => {
 	editDialog.index = undefined;
 };
 
-export function switchToEditingMode() {
+function switchToEditingMode() {
 	settingButton.replaceWith(doneButton);
 	setShortcutEditable(true);
 	menu.open = false;
@@ -86,7 +89,7 @@ function showSearchEngineDialog() {
 	searchEngineDialog.show(engineSelect.list, engineSelect.defaultIndex ?? 1);
 }
 
-export function startImportTopSites() {
+function startImportTopSites() {
 	importDialog.show();
 }
 
