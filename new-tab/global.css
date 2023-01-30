@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 }
 
-button, .button {
+:where(button, .button) {
 	display: inline-flex;
 	gap: 5px;
 	justify-content: center;
@@ -32,8 +32,7 @@ button, .button {
 	transition: .15s;
 	transition-property: color, background-color;
 
-	&:hover,
-	&:focus-visible {
+	&:where(:hover, :focus-visible)  {
 		background: var(--bg-focus);
 	}
 
@@ -52,7 +51,7 @@ button, .button {
 	}
 }
 
-input, textarea {
+:where(input, textarea) {
 	display: block;
 	padding: 6px;
 	font-size: 1rem;
@@ -88,7 +87,6 @@ input, textarea {
 }
 
 .plain {
-	background: none;
 	--bg: none;
 	--bg-focus: rgba(186, 186, 186, 0.18);
 	--bg-active: rgba(186, 186, 186, 0.24);

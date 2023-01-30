@@ -3,6 +3,7 @@
 $added-color: #00b000;
 
 ul {
+	list-style: none;
 	width: 700px;
 	height: 400px;
 	padding: 0;
@@ -10,11 +11,9 @@ ul {
 }
 
 li {
-	list-style: none;
 	display: grid;
 	column-gap: 12px;
 	grid-template-columns: auto 1fr auto;
-
 	grid-template-areas:
 			"img title button"
 			"img  url  button";

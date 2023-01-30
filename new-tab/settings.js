@@ -94,8 +94,7 @@ function requestClearData() {
 	window.confirm(i18n("ConfirmClearData")) && clearAllData();
 }
 
-const template = document.createElement("template");
-template.innerHTML = `
+menu.innerHTML = `
 	<div class='menu-group'>
 		<button class='primary'>
 			${CheckIcon}${i18n("Accept")}
@@ -135,8 +134,6 @@ template.innerHTML = `
 		</check-box>
 	</div>
 `;
-
-menu.replaceChildren(template.content.cloneNode(true));
 
 /**
  * Enter setting mode, which will mount some components.
