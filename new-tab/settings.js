@@ -1,11 +1,11 @@
-import CheckIcon from "@tabler/icons/check.svg";
-import StarIcon from "@tabler/icons/star.svg";
+import CheckIcon from "@tabler/icons/icons/check.svg";
+import StarIcon from "@tabler/icons/icons/star.svg";
 import DevicesIcon from "@material-design-icons/svg/outlined/important_devices.svg";
-import DownloadIcon from "@tabler/icons/download.svg";
-import UploadIcon from "@tabler/icons/upload.svg";
-import TrashIcon from "@tabler/icons/trash.svg";
-import SearchIcon from "@tabler/icons/search.svg";
-import AddIcon from "@tabler/icons/plus.svg";
+import DownloadIcon from "@tabler/icons/icons/download.svg";
+import UploadIcon from "@tabler/icons/icons/upload.svg";
+import TrashIcon from "@tabler/icons/icons/trash.svg";
+import SearchIcon from "@tabler/icons/icons/search.svg";
+import AddIcon from "@tabler/icons/icons/plus.svg";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";

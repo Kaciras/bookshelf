@@ -1,7 +1,7 @@
 import "../components/BookMark.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
-import SettingIcon from "@tabler/icons/settings.svg";
+import SettingIcon from "@tabler/icons/icons/settings.svg";
 import { i18n } from "../share/index.js";
 import { appConfig, checkSync, loading } from "./storage.js";
 import * as iconCache from "./cache.js";
