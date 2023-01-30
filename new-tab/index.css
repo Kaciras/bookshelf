@@ -98,19 +98,24 @@ engine-select {
 	justify-content: center;
 	align-items: center;
 
+	width: 100%;
 	margin: $section-margin 0;
 	min-height: calc(100vh - $top * 2);
 }
 
 search-box {
-	width: var(--search-box-width);
+	width: calc(100% - 40px);
+	max-width: var(--search-box-width);
 }
 
 #shortcuts {
 	display: grid;
-	max-width: calc(var(--row-size) * $shortcut-width);
-	margin-top: $section-margin;
 	grid-template-columns: repeat(auto-fit, $shortcut-width);
+	justify-content: center;
+
+	margin-top: $section-margin;
+	width: 100%;
+	max-width: calc(var(--row-size) * $shortcut-width);
 }
 
 #add-shortcut {

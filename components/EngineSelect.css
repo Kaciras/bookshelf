@@ -1,12 +1,12 @@
 @import "/global.css";
 
 :host {
-	display: block;
+	display: flex;
+	gap: 15px;
 }
 
 #container {
-	display: flex;
-	gap: 15px;
+	display: contents;
 }
 
 img {
