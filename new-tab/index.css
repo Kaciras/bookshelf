@@ -58,6 +58,7 @@ body {
 	min-height: 100vh;
 
 	font-size: 1rem; /* For Edge */
+	font-family: arial, sans-serif;
 	background: var(--color-bg-1);
 
 	&::before {

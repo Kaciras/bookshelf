@@ -18,27 +18,28 @@ import * as iconCache from "./cache.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines, switchToNormalMode } from "./index.js";
 
-const container = document.getElementById("shortcuts");
-const engineSelect = document.querySelector("engine-select");
 const settingButton = document.querySelector(".settings");
 const menu = document.getElementById("menu");
 
-const importDialog = document.createElement("top-site-dialog");
-const editDialog = document.createElement("edit-dialog");
-const searchEngineDialog = document.createElement("search-engine-dialog");
+const shortcuts = document.getElementById("shortcuts");
+const engineSelect = document.querySelector("engine-select");
 
-document.body.append(importDialog, editDialog, searchEngineDialog);
+const topSiteDialog = document.createElement("top-site-dialog");
+const editDialog = document.createElement("edit-dialog");
+const enginesDialog = document.createElement("search-engine-dialog");
+
+document.body.append(topSiteDialog, editDialog, enginesDialog);
 
 // Click outside to close the menu.
 document.addEventListener("click", e => menu.open &= menu.contains(e.target));
 
-container.addEventListener("edit", event => {
+shortcuts.addEventListener("edit", event => {
 	const el = event.target;
 	editDialog.index = nthInChildren(el);
 	editDialog.show(el);
 });
 
-container.addEventListener("remove", remove);
+shortcuts.addEventListener("remove", remove);
 
 editDialog.addEventListener("change", event => {
 	const { target, detail } = event;
@@ -51,9 +52,9 @@ editDialog.addEventListener("change", event => {
 	}
 });
 
-importDialog.addEventListener("add", event => add(event.detail));
+topSiteDialog.addEventListener("add", event => add(event.detail));
 
-searchEngineDialog.addEventListener("change", async ({ detail }) => {
+enginesDialog.addEventListener("change", async ({ detail }) => {
 	const { engines } = detail;
 	for (const engine of engines) {
 		engine.favicon = await iconCache.save(engine.favicon);
@@ -86,11 +87,7 @@ function switchToEditingMode() {
 }
 
 function showSearchEngineDialog() {
-	searchEngineDialog.show(engineSelect.list, engineSelect.defaultEngine ?? 1);
-}
-
-function startImportTopSites() {
-	importDialog.show();
+	enginesDialog.show(engineSelect.list, engineSelect.defaultEngine);
 }
 
 function requestClearData() {
@@ -157,13 +154,12 @@ export function switchToSettingMode() {
 	const { children } = menu.firstChild;
 	children[1].onclick = showSearchEngineDialog;
 	children[2].onclick = switchToEditingMode;
-	children[3].onclick = startImportTopSites;
+	children[3].onclick = () => topSiteDialog.show();
 	children[4].onclick = importSettings;
 	children[5].onclick = exportSettings;
 	children[6].onclick = requestClearData;
 
 	children[0].onclick = () => {
-		const searchBox = document.querySelector("search-box");
 		menu.open = false;
 		switchToNormalMode();
 		

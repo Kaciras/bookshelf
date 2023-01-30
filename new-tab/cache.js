@@ -1,6 +1,6 @@
 import { sha256 } from "@kaciras/utilities/browser";
 import defaultFavicon from "../assets/Website.svg?url";
-import { settings } from "./storage.js";
+import { appConfig } from "./storage.js";
 
 /*
  * Due to browser data size limit, we can not save images to synchronized storage.
@@ -94,7 +94,7 @@ export async function load(urlKey) {
  * Remove unused entries from the cache storage.
  */
 export async function evict() {
-	const { shortcuts, engines } = settings;
+	const { shortcuts, engines } = appConfig;
 	const used = new Set();
 
 	shortcuts.forEach(i => used.add(i.iconUrl));

@@ -15,7 +15,7 @@ import { i18n } from "../share/index.js";
 const localSettings = browser.storage.local;
 const syncSettings = browser.storage.sync;
 
-export const settings = {
+export const appConfig = {
 	searchBox: {
 		limit: 8,
 		threshold: 500,
@@ -47,7 +47,7 @@ export const settings = {
 	}],
 };
 
-export const loading = syncSettings.get().then(v => Object.assign(settings, v));
+export const loading = syncSettings.get().then(v => Object.assign(appConfig, v));
 
 export async function saveConfig(object) {
 	const uuid = Math.random();
@@ -93,7 +93,7 @@ export async function exportSettings() {
 
 	const data = {
 		icons,
-		sync: settings,
+		sync: appConfig,
 		local: await localSettings.get(),
 	};
 
