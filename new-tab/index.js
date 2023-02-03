@@ -3,7 +3,7 @@ import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
 import SettingIcon from "@tabler/icons/icons/settings.svg";
 import { i18n } from "../share/index.js";
-import { appConfig, checkSync, loading } from "./storage.js";
+import { loadingAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { OpenSearchEngine } from "./search.js";
 import { mountShortcuts, setShortcutEditable } from "./shortcuts.js";
@@ -59,10 +59,11 @@ export function switchToNormalMode() {
 
 switchToNormalMode();
 
-await loading;
+const appConfig = await loadingAppConfig;
 
 Object.assign(searchBox, appConfig.searchBox);
 mountShortcuts(appConfig.shortcuts);
 await setSearchEngines(appConfig);
 
-requestIdleCallback(() => checkSync(iconCache.evict));
+
+requestIdleCallback(iconCache.evict);

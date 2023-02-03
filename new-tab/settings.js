@@ -59,7 +59,8 @@ enginesDialog.addEventListener("change", async ({ detail }) => {
 	for (const engine of engines) {
 		engine.favicon = await iconCache.save(engine.favicon);
 	}
-	return Promise.all([saveConfig(detail), setSearchEngines(detail)]);
+	const persist = saveConfig(detail).then(iconCache.evict);
+	return Promise.all([persist, setSearchEngines(detail)]);
 });
 
 const doneButton = document.createElement("button");
