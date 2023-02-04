@@ -44,8 +44,7 @@ settingsButton.onclick = () => import("./settings.js")
 export async function setSearchEngines({ defaultEngine, engines }) {
 	const list = new Array(engines.length);
 	for (let i = 0; i < list.length; i++) {
-		const value = Object.create(OpenSearchEngine.prototype);
-		list[i] = Object.assign(value, engines[i]);
+		const value = list[i] = new OpenSearchEngine(engines[i]);
 		value.favicon = await iconCache.load(value.favicon);
 	}
 	engineSelect.list = list;
