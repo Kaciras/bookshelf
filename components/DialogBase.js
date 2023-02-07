@@ -31,7 +31,7 @@ class DialogBaseElement extends HTMLElement {
 
 	constructor() {
 		super();
-		const root = this.attachShadow({ mode: "closed" });
+		const root = this.attachShadow({ mode: "open" });
 		root.append(template.content.cloneNode(true));
 
 		this.dialogEl = root.querySelector("dialog");

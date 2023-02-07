@@ -21,17 +21,12 @@ template.innerHTML = `
  */
 class TaskButtonElement extends HTMLElement {
 
-	/**
-	 * Click handler returns a Promise for long running task.
-	 */
-	taskFn;
-
 	running = false;
 	controller = new AbortController();
 
 	constructor() {
 		super();
-		const root = this.attachShadow({ mode: "closed" });
+		const root = this.attachShadow({ mode: "open" });
 		root.append(template.content.cloneNode(true));
 
 		this.slotEl = root.querySelector("slot");

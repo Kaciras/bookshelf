@@ -13,7 +13,7 @@ class EngineSelectElement extends HTMLElement {
 
 	constructor() {
 		super();
-		const root = this.attachShadow({ mode: "closed" });
+		const root = this.attachShadow({ mode: "open" });
 		root.append(template.content.cloneNode(true));
 
 		this.container = root.getElementById("container");
