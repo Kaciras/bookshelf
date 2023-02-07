@@ -2,21 +2,20 @@ import CheckIcon from "@tabler/icons/icons/check.svg";
 import xIcon from "@tabler/icons/icons/x.svg";
 import DownCircleIcon from "@tabler/icons/icons/arrow-down-circle.svg";
 import { delegate, getFaviconUrl, i18n } from "../share/index.js";
-import { defaultFavicon } from "../new-tab/cache.js";
+import defaultFavicon from "../assets/Website.svg?url";
+
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
 
 const defaultData = {
 	label: "",
 	url: "",
-	iconUrl: null,
 	favicon: defaultFavicon,
 };
 
 function pick(source, target) {
 	target.label = source.label;
 	target.url = source.url;
-	target.iconUrl = source.iconUrl;
 	target.favicon = source.favicon;
 }
 
@@ -96,6 +95,9 @@ class EditDialogElement extends HTMLElement {
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
 
+	connectedCallback() {
+	}
+
 	show(data = defaultData) {
 		pick(data, this);
 		this.dialogEl.showModal();
@@ -122,9 +124,8 @@ class EditDialogElement extends HTMLElement {
 		const url = this.urlInput.value;
 
 		try {
-			const href = await getFaviconUrl(url, signal);
 			URL.revokeObjectURL(this.favicon);
-			this.favicon = this.iconUrl = href;
+			this.favicon = await getFaviconUrl(url, signal);
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

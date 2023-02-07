@@ -1,5 +1,4 @@
 import { sha256 } from "@kaciras/utilities/browser";
-import defaultFavicon from "../assets/Website.svg?url";
 import { appConfig } from "./storage.js";
 
 /*
@@ -13,9 +12,12 @@ import { appConfig } from "./storage.js";
  * Also, search engine will lose its custom icon when syncing.
  */
 
-export { defaultFavicon };
-
 export const CACHE_ORIGIN = "https://cache/";
+
+/**
+ * Object url -> url of the response.
+ */
+const objectURLMap = Object.create(null);
 
 /**
  * Save the icon to CacheStorage and download it if it is a remote file.
@@ -24,16 +26,19 @@ export const CACHE_ORIGIN = "https://cache/";
  * For data size limit, we can not save image sa data url
  * to sync storage.
  *
- * @param rawUrl {string|Response} URL or response of the image.
+ * 4 kind of urls:
+ * 1) null to indicate default value.
+ * 2) Internal resource, is a path.
+ * 3) Remote file.
+ * 4) Temporary (DataURL, ObjectURL).
+ *
+ * @param rawUrl {string} URL or response of the image.
  * @returns {Promise<null|string>} Key used for load the cached image.
  */
-export async function save(rawUrl) {
-	if (!rawUrl || rawUrl === defaultFavicon) {
+export async function save(rawUrl, fallback) {
+	if (rawUrl === fallback) {
 		return null;
 	}
-	const cache = await caches.open("icon");
-	let url;
-	let response;
 
 	// Internal resource is relative URL.
 	try {
@@ -42,10 +47,18 @@ export async function save(rawUrl) {
 		return rawUrl;
 	}
 
-	if (typeof rawUrl !== "string") {	// Response object.
-		url = rawUrl.url;
-		response = rawUrl;
-	} else { 							// Remote file.
+	let url = objectURLMap[rawUrl];
+	if (url) {
+		return url;
+	}
+
+	const cache = await caches.open("icon");
+	let response;
+
+	if (/^https?:/.test(rawUrl)) {		// Remote file.
+		url = rawUrl;
+		response = fetch(rawUrl, { mode: "no-cors" });
+	} else { 							// Temporary
 		response = await fetch(rawUrl);
 		const data = await response.clone().arrayBuffer();
 		const hash = (await sha256(data)).slice(0, 20);
@@ -66,9 +79,9 @@ export async function save(rawUrl) {
  * @param urlKey The return value of save()
  * @returns {Promise<string>} URL of the image.
  */
-export async function load(urlKey) {
+export async function load(urlKey, fallback) {
 	if (!urlKey) {
-		return defaultFavicon;
+		return fallback;
 	}
 	if (!/^https?:/.test(urlKey)) {
 		return urlKey;
@@ -78,7 +91,7 @@ export async function load(urlKey) {
 	let response = await cache.match(urlKey);
 	if (!response) {
 		if (urlKey.startsWith(CACHE_ORIGIN)) {
-			return defaultFavicon;
+			return fallback;
 		}
 		response = await fetch(urlKey, { mode: "no-cors" });
 		if (!response.ok) {
@@ -87,7 +100,9 @@ export async function load(urlKey) {
 		await cache.put(urlKey, response.clone());
 	}
 
-	return URL.createObjectURL(await response.blob());
+	const ou = URL.createObjectURL(await response.blob());
+	objectURLMap[ou] = urlKey;
+	return ou;
 }
 
 /**
@@ -97,7 +112,7 @@ export async function evict() {
 	const { shortcuts, engines } = appConfig;
 	const used = new Set();
 
-	shortcuts.forEach(i => used.add(i.iconUrl));
+	shortcuts.forEach(i => used.add(i.favicon));
 	engines.forEach(i => used.add(i.favicon));
 
 	const cache = await caches.open("icon");

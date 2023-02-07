@@ -6,7 +6,8 @@ import { i18n } from "../share/index.js";
 import { loadingAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { OpenSearchEngine } from "./search.js";
-import { mountShortcuts, setShortcutEditable } from "./shortcuts.js";
+import { mountShortcuts } from "./shortcuts.js";
+import SearchIconURL from "@tabler/icons/icons/search.svg?url";
 
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
@@ -45,24 +46,16 @@ export async function setSearchEngines({ defaultEngine, engines }) {
 	const list = new Array(engines.length);
 	for (let i = 0; i < list.length; i++) {
 		const value = list[i] = new OpenSearchEngine(engines[i]);
-		value.favicon = await iconCache.load(value.favicon);
+		value.favicon = await iconCache.load(value.favicon, SearchIconURL);
 	}
 	engineSelect.list = list;
 	engineSelect.index = defaultEngine;
 	searchBox.engine = engineSelect.value;
 }
 
-export function switchToNormalMode() {
-	setShortcutEditable(false);
-}
-
-switchToNormalMode();
-
 const appConfig = await loadingAppConfig;
-
-Object.assign(searchBox, appConfig.searchBox);
 mountShortcuts(appConfig.shortcuts);
-await setSearchEngines(appConfig);
-
+setSearchEngines(appConfig);
+Object.assign(searchBox, appConfig.searchBox);
 
 requestIdleCallback(iconCache.evict);

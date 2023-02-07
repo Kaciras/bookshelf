@@ -1,6 +1,7 @@
 import { dragSortContext } from "@kaciras/utilities/browser";
 import { saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
+import defaultFavicon from "../assets/Website.svg?url";
 
 const container = document.getElementById("shortcuts");
 const lastEl = container.lastChild;
@@ -12,13 +13,17 @@ let editable = false;
 /**
  * Save data, called every time shortcuts are modified.
  */
-function persist() {
+async function persist() {
 	const children = container.querySelectorAll("book-mark");
 	const shortcuts = new Array(children.length);
 
 	for (let i = 0; i < children.length; i++) {
-		const { label, iconUrl, url } = children[i];
-		shortcuts[i] = { label, iconUrl, url };
+		const { label, favicon, url } = children[i];
+		shortcuts[i] = {
+			label,
+			url,
+			favicon: await iconCache.save(favicon, defaultFavicon),
+		};
 	}
 	return saveConfig({ shortcuts });
 }
@@ -29,7 +34,6 @@ function appendElement(props) {
 	el.url = props.url;
 	el.favicon = props.favicon;
 	el.label = props.label;
-	el.iconUrl = props.iconUrl;
 
 	dragSort.register(el);
 	lastEl.before(el);
@@ -38,21 +42,14 @@ function appendElement(props) {
 }
 
 export async function add(props) {
-	props.iconUrl = await iconCache.save(props.iconUrl);
-
-	const el = appendElement(props);
-	el.isEditable = editable;
-
+	appendElement(props).isEditable = editable;
 	return persist();
 }
 
 export async function update(index, props) {
-	const { iconUrl, ...newValue } = props;
-	newValue.iconUrl = await iconCache.save(iconUrl);
-
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
-	Object.assign(el, newValue);
+	Object.assign(el, props);
 
 	return persist().then(iconCache.evict);
 }
@@ -74,8 +71,8 @@ export function mountShortcuts(shortcuts) {
 	}
 
 	for (const shortcut of shortcuts) {
-		const { iconUrl } = shortcut;
+		const { favicon } = shortcut;
 		const el = appendElement(shortcut);
-		iconCache.load(iconUrl).then(v => el.favicon = v);
+		iconCache.load(favicon, defaultFavicon).then(v => el.favicon = v);
 	}
 }

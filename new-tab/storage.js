@@ -40,8 +40,9 @@ export const appConfig = {
 
 export const loadingAppConfig = syncSettings.get().then(v => Object.assign(appConfig, v));
 
-export async function saveConfig(object) {
-	await syncSettings.set({ ...object });
+export function saveConfig(object) {
+	Object.assign(appConfig, object);
+	return syncSettings.set(object);
 }
 
 export async function clearAllData() {

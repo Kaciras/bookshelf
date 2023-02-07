@@ -13,10 +13,11 @@ import "../components/TopSiteDialog.js";
 import "../components/SearchEngineDialog.js";
 import { nthInChildren } from "@kaciras/utilities/browser";
 import { bindInput, i18n } from "../share/index.js";
-import { clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
+import { appConfig, clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
-import { setSearchEngines, switchToNormalMode } from "./index.js";
+import { setSearchEngines } from "./index.js";
+import SearchIconURL from "@tabler/icons/icons/search.svg?url";
 
 const settingButton = document.querySelector(".settings");
 const menu = document.getElementById("menu");
@@ -57,10 +58,10 @@ topSiteDialog.addEventListener("add", event => add(event.detail));
 enginesDialog.addEventListener("change", async ({ detail }) => {
 	const { engines } = detail;
 	for (const engine of engines) {
-		engine.favicon = await iconCache.save(engine.favicon);
+		engine.favicon = await iconCache.save(engine.favicon, SearchIconURL);
 	}
-	const persist = saveConfig(detail).then(iconCache.evict);
-	return Promise.all([persist, setSearchEngines(detail)]);
+	setSearchEngines(detail);
+	return saveConfig(detail).then(iconCache.evict);
 });
 
 const doneButton = document.createElement("button");
@@ -69,7 +70,7 @@ doneButton.className = "settings icon primary";
 doneButton.title = i18n("SettingMode");
 doneButton.onclick = () => {
 	doneButton.replaceWith(settingButton);
-	switchToNormalMode();
+	setShortcutEditable(false);
 	document.body.classList.remove("editing");
 };
 
@@ -88,7 +89,7 @@ function switchToEditingMode() {
 }
 
 function showSearchEngineDialog() {
-	enginesDialog.show(engineSelect.list, engineSelect.defaultEngine);
+	enginesDialog.show(engineSelect.list, appConfig.defaultEngine);
 }
 
 function requestClearData() {
@@ -159,8 +160,7 @@ export function switchToSettingMode() {
 
 	children[0].onclick = () => {
 		menu.open = false;
-		switchToNormalMode();
-		
+
 		const { limit, waitIME, threshold } = searchBox;
 		return saveConfig({
 			searchBox: { limit, waitIME, threshold },

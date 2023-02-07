@@ -1,7 +1,8 @@
 import AddIcon from "@tabler/icons/icons/plus.svg";
 import CheckIcon from "@tabler/icons/icons/check.svg";
 import { i18n } from "../share/index.js";
-import { defaultFavicon } from "../new-tab/cache.js";
+import defaultFavicon from "../assets/Website.svg?url";
+
 import styles from "./TopSiteDialog.css";
 
 /**
@@ -100,7 +101,6 @@ class TopSiteDialogElement extends HTMLElement {
 						label: title,
 						url,
 						favicon,
-						iconUrl: favicon,
 					},
 				});
 				if (this.dispatchEvent(event)) {
