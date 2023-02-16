@@ -1,7 +1,8 @@
-import { basename } from "path";
 import { readFileSync } from "fs";
+import { basename } from "path";
 import { jsImports } from "./html.js";
 import { getRefId } from "./asset.js";
+import packageJson from "../package.json" assert { type: "json" };
 
 const mark = "?webext";
 
@@ -83,6 +84,7 @@ export default function createManifestPlugin() {
 
 			if (chunk) {
 				manifest.chrome_url_overrides.newtab = "new-tab.html";
+				manifest.version = packageJson.version;
 
 				for (const { host, key, value } of resources) {
 					const { id } = await this.resolve(value, selfId);
