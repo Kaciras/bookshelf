@@ -1,11 +1,11 @@
-import CheckIcon from "@tabler/icons/icons/check.svg";
-import StarIcon from "@tabler/icons/icons/star.svg";
+import CheckIcon from "@tabler/icons/check.svg";
+import StarIcon from "@tabler/icons/star.svg";
 import DevicesIcon from "@material-design-icons/svg/outlined/important_devices.svg";
-import DownloadIcon from "@tabler/icons/icons/download.svg";
-import UploadIcon from "@tabler/icons/icons/upload.svg";
-import TrashIcon from "@tabler/icons/icons/trash.svg";
-import SearchIcon from "@tabler/icons/icons/search.svg";
-import AddIcon from "@tabler/icons/icons/plus.svg";
+import DownloadIcon from "@tabler/icons/download.svg";
+import UploadIcon from "@tabler/icons/upload.svg";
+import TrashIcon from "@tabler/icons/trash.svg";
+import SearchIcon from "@tabler/icons/search.svg";
+import AddIcon from "@tabler/icons/plus.svg";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
@@ -17,7 +17,7 @@ import { appConfig, clearAllData, exportSettings, importSettings, saveConfig } f
 import * as iconCache from "./cache.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines } from "./index.js";
-import SearchIconURL from "@tabler/icons/icons/search.svg?url";
+import SearchIconURL from "@tabler/icons/search.svg?url";
 
 const settingButton = document.querySelector(".settings");
 const menu = document.getElementById("menu");

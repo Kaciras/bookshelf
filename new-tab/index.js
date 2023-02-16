@@ -1,13 +1,13 @@
 import "../components/BookMark.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
-import SettingIcon from "@tabler/icons/icons/settings.svg";
+import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
 import { loadingAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { OpenSearchEngine } from "./search.js";
 import { mountShortcuts } from "./shortcuts.js";
-import SearchIconURL from "@tabler/icons/icons/search.svg?url";
+import SearchIconURL from "@tabler/icons/search.svg?url";
 
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");

@@ -1,5 +1,5 @@
 import { Debounced, i18n } from "../share/index.js";
-import SearchIcon from "@tabler/icons/icons/search.svg";
+import SearchIcon from "@tabler/icons/search.svg";
 import styles from "./SearchBox.css";
 
 const template = document.createElement("template");
@@ -44,7 +44,7 @@ class SearchBoxElement extends HTMLElement {
 
 	constructor() {
 		super();
-		const root = this.attachShadow({ mode: "closed", delegatesFocus: true });
+		const root = this.attachShadow({ mode: "open", delegatesFocus: true });
 		root.append(template.content.cloneNode(true));
 
 		this.inputEl = root.getElementById("input");

@@ -1,7 +1,7 @@
-import SearchIconURL from "@tabler/icons/icons/search.svg?url";
-import AddIcon from "@tabler/icons/icons/plus.svg";
-import xIcon from "@tabler/icons/icons/x.svg";
-import CheckIcon from "@tabler/icons/icons/check.svg";
+import SearchIconURL from "@tabler/icons/search.svg?url";
+import AddIcon from "@tabler/icons/plus.svg";
+import xIcon from "@tabler/icons/x.svg";
+import CheckIcon from "@tabler/icons/check.svg";
 import { dragSortContext, nthInChildren, selectFile } from "@kaciras/utilities/browser";
 import { i18n } from "../share/index.js";
 import styles from "./SearchEngineDialog.css";
