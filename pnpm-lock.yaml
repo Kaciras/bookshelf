@@ -3,13 +3,13 @@ lockfileVersion: 5.4
 specifiers:
   '@kaciras/eslint-config-core': ^2.5.0
   '@kaciras/utilities': ^0.6.5
-  '@material-design-icons/svg': ^0.14.2
+  '@material-design-icons/svg': ^0.14.3
   '@rollup/plugin-node-resolve': ^15.0.1
   '@rollup/plugin-replace': ^5.0.2
   '@rollup/plugin-terser': ^0.4.0
   '@rollup/pluginutils': ^5.0.2
-  '@tabler/icons': ^2.7.0
-  '@types/firefox-webext-browser': ^109.0.0
+  '@tabler/icons': ^2.9.0
+  '@types/firefox-webext-browser': ^111.0.0
   eslint: ^8.35.0
   fast-glob: ^3.2.12
   html-minifier-terser: 7.1.0
@@ -30,8 +30,8 @@ specifiers:
 
 dependencies:
   '@kaciras/utilities': 0.6.5
-  '@material-design-icons/svg': 0.14.2
-  '@tabler/icons': 2.7.0
+  '@material-design-icons/svg': 0.14.3
+  '@tabler/icons': 2.9.0
 
 devDependencies:
   '@kaciras/eslint-config-core': 2.5.0_eslint@8.35.0
@@ -39,7 +39,7 @@ devDependencies:
   '@rollup/plugin-replace': 5.0.2_rollup@3.18.0
   '@rollup/plugin-terser': 0.4.0_rollup@3.18.0
   '@rollup/pluginutils': 5.0.2_rollup@3.18.0
-  '@types/firefox-webext-browser': 109.0.0
+  '@types/firefox-webext-browser': 111.0.0
   eslint: 8.35.0
   fast-glob: 3.2.12
   html-minifier-terser: 7.1.0
@@ -162,8 +162,8 @@ packages:
     resolution: {integrity: sha512-+zjD4d3OPXLbh7x+3eH0EIrV/QnrC76rTCtS3EIOtMW4/6Hjb8bjNklROGj76kilELSXvaRJ6aMv/dlEiUyRxQ==}
     dev: false
 
-  /@material-design-icons/svg/0.14.2:
-    resolution: {integrity: sha512-QjAzZmqV+7VI8+0eONVYBvSSlytpR+QQ/elT+YADoYq7R5Tc7kU1PaR0xOrEhwMR9MYK2yhUXqXymP8QY01ehg==}
+  /@material-design-icons/svg/0.14.3:
+    resolution: {integrity: sha512-kozh4B9vg9TRAfNu7zOuL58N52DDlrp/M2fH/RNDRyJM4Y0ToHmnt1lW9WDeTmJBHRhxWxWJX8f7Lgx3iJjFWA==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -249,8 +249,8 @@ packages:
       rollup: 3.18.0
     dev: true
 
-  /@tabler/icons/2.7.0:
-    resolution: {integrity: sha512-mSjUKhwN5fJHI9yITqFn9GXGnsJ4gBAyQDWyP4Ev5fk6hD78G7u6cHEF1KARr5FOOdiIKSZWCzNzUzyLhiNPrg==}
+  /@tabler/icons/2.9.0:
+    resolution: {integrity: sha512-x0Vafi2m0jP+fgWxgOu/wI6/o7r+uVWr0NtpsNiboYn4KIDOPyxtJ6T156ZQ3XfDU51WZDaMUIxY35AF5QoowQ==}
     dev: false
 
   /@trysound/sax/0.2.0:
@@ -262,8 +262,8 @@ packages:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
     dev: true
 
-  /@types/firefox-webext-browser/109.0.0:
-    resolution: {integrity: sha512-tkEjBP/zZxaS5bv8MH/0kUs3WeUm8KU3Ew1B9BtQQdq5PwtG23SXvAbjxjMSQpoIzbxyWG4Yu4mi1uB2S8W7ng==}
+  /@types/firefox-webext-browser/111.0.0:
+    resolution: {integrity: sha512-KboW0ughUYzuYAvzWGJsiSMmH9AgJDvnstjsNrXMgf6cpJ5g1eBGzkqpjPzVqkOyTH/mFl7gd15+XyaVQhKywA==}
     dev: true
 
   /@types/resolve/1.20.2:

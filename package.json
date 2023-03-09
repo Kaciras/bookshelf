@@ -21,8 +21,8 @@
 	},
 	"dependencies": {
 		"@kaciras/utilities": "^0.6.5",
-		"@material-design-icons/svg": "^0.14.2",
-		"@tabler/icons": "^2.7.0"
+		"@material-design-icons/svg": "^0.14.3",
+		"@tabler/icons": "^2.9.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.5.0",
@@ -30,7 +30,7 @@
 		"@rollup/plugin-replace": "^5.0.2",
 		"@rollup/plugin-terser": "^0.4.0",
 		"@rollup/pluginutils": "^5.0.2",
-		"@types/firefox-webext-browser": "^109.0.0",
+		"@types/firefox-webext-browser": "^111.0.0",
 		"eslint": "^8.35.0",
 		"fast-glob": "^3.2.12",
 		"html-minifier-terser": "7.1.0",
