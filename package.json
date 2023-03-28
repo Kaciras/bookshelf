@@ -20,8 +20,8 @@
 		"build": "rollup -c --environment NODE_ENV:production"
 	},
 	"dependencies": {
-		"@kaciras/utilities": "^0.7.0",
-		"@material-design-icons/svg": "^0.14.3",
+		"@kaciras/utilities": "^0.8.0",
+		"@material-design-icons/svg": "^0.14.4",
 		"@tabler/icons": "^2.11.0"
 	},
 	"devDependencies": {
@@ -44,7 +44,7 @@
 		"postcss-nested": "^6.0.1",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^2.1.0",
-		"rollup": "^3.20.0",
+		"rollup": "^3.20.2",
 		"rollup-plugin-visualizer": "^5.9.0",
 		"rollup-plugin-zip": "^1.0.3",
 		"svgo": "^3.0.2"
