@@ -20,9 +20,9 @@
 		"build": "rollup -c --environment NODE_ENV:production"
 	},
 	"dependencies": {
-		"@kaciras/utilities": "^0.8.0",
-		"@material-design-icons/svg": "^0.14.4",
-		"@tabler/icons": "^2.11.0"
+		"@kaciras/utilities": "^0.8.1",
+		"@material-design-icons/svg": "^0.14.5",
+		"@tabler/icons": "^2.13.2"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.5.1",
@@ -30,8 +30,8 @@
 		"@rollup/plugin-replace": "^5.0.2",
 		"@rollup/plugin-terser": "^0.4.0",
 		"@rollup/pluginutils": "^5.0.2",
-		"@types/firefox-webext-browser": "^111.0.0",
-		"eslint": "^8.36.0",
+		"@types/firefox-webext-browser": "^111.0.1",
+		"eslint": "^8.37.0",
 		"fast-glob": "^3.2.12",
 		"html-minifier-terser": "7.1.0",
 		"is-builtin-module": "^3.2.1",
