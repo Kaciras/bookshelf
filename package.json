@@ -22,18 +22,18 @@
 	"dependencies": {
 		"@kaciras/utilities": "^0.8.1",
 		"@material-design-icons/svg": "^0.14.5",
-		"@tabler/icons": "^2.13.2"
+		"@tabler/icons": "^2.15.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.5.1",
-		"@rollup/plugin-node-resolve": "^15.0.1",
+		"@rollup/plugin-node-resolve": "^15.0.2",
 		"@rollup/plugin-replace": "^5.0.2",
-		"@rollup/plugin-terser": "^0.4.0",
+		"@rollup/plugin-terser": "^0.4.1",
 		"@rollup/pluginutils": "^5.0.2",
 		"@types/firefox-webext-browser": "^111.0.1",
-		"eslint": "^8.37.0",
+		"eslint": "^8.38.0",
 		"fast-glob": "^3.2.12",
-		"html-minifier-terser": "7.1.0",
+		"html-minifier-terser": "7.2.0",
 		"is-builtin-module": "^3.2.1",
 		"magic-string": "^0.30.0",
 		"mime": "^3.0.0",
