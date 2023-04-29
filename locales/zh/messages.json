@@ -32,6 +32,9 @@
 	"Search": {
 		"message": "搜索"
 	},
+	"NoSuggestions": {
+		"message": "没有建议"
+	},
 	"SearchBox": {
 		"message": "搜索框"
 	},

@@ -23,7 +23,9 @@ template.innerHTML = `
 		${SearchIcon}
 	</button>
 
-	<ul id='suggestions'/>
+	<ul/>
+
+	<output>${i18n("NoSuggestions")}</output>
 `;
 
 /**
@@ -50,7 +52,7 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl = root.getElementById("input");
 		this.iconEl = root.querySelector("img");
 		this.loadingEl = root.getElementById("spinner");
-		this.suggestionEl = root.getElementById("suggestions");
+		this.suggestionEl = root.querySelector("ul");
 
 		this.fetcher = new Debounced(this.suggest.bind(this));
 
@@ -139,8 +141,8 @@ class SearchBoxElement extends HTMLElement {
 			el.onclick = () => location.href = this.api.getResultURL(text);
 		}
 
+		this.classList.add("suggested");
 		this.suggestionEl.replaceChildren(...newItems);
-		this.classList.toggle("suggested", count > 0);
 	}
 
 	/**

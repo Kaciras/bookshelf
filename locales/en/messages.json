@@ -32,6 +32,9 @@
 	"Search": {
 		"message": "Search"
 	},
+	"NoSuggestions": {
+		"message": "No Suggestions"
+	},
 	"SearchBox": {
 		"message": "Search box"
 	},

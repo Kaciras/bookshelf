@@ -1,5 +1,7 @@
 @import "/global.css";
 
+$item-padding: 8px;
+
 :host {
 	position: relative;
 	display: flex;
@@ -22,20 +24,21 @@
 }
 
 /*
- * 建议列表的显示由两个变量控制，仅当同时存在建议列表才会显示：
- * 1）.suggested 	类表示列表不为空，在获取建议后设置，输入框为空时删除。
- * 2）:focus-within	此元素的聚焦状态，在失去焦点时删除。
- *
- * 【纯 CSS 实现？】
- * 使用 #suggestions:empty 也可以判断是否为空，但由于建议列表在输入框后面，
- * 没法让输入框匹配到该状态以去掉圆角和高亮。
- * 如果把列表移放到输入框前面，就不符合直觉，因为视觉上建议列表是在下方的。
+ * The display of the suggestion list is controlled by two variables,
+  which are displayed only when both are present.
+
+ * 1）.suggested 	Set after suggestions fetched and removed when the input box is empty.
+ * 2）:focus		The focus state of this element, removed when focus is lost.
  */
 :host(.suggested:focus) {
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
 
-	& > #suggestions {
+	& > ul:not(:empty) {
+		display: block;
+	}
+
+	& > ul:empty + output {
 		display: block;
 	}
 
@@ -72,7 +75,7 @@ input {
 	border-radius: 0 var(--panel-radius) var(--panel-radius) 0;
 }
 
-#suggestions {
+ul, output {
 	list-style: none;
 	display: none;
 
@@ -95,8 +98,15 @@ input {
 			0 2px 2px rgba(29, 17, 51, 0.12);
 }
 
+output {
+	display: none;
+	padding: $item-padding;
+	text-align: center;
+	color: var(--color-placeholder);
+}
+
 li {
-	padding: 8px;
+	padding: $item-padding;
 	cursor: pointer;
 
 	&.active,
@@ -107,7 +117,7 @@ li {
 }
 
 #spinner {
-$diameter: 24 px;
+	$diameter: 24px;
 
 	display: none;
 	position: relative;
@@ -132,7 +142,7 @@ $diameter: 24 px;
 		border-radius: 50%;
 		border: 3px solid #ddd;
 
-		/* Firefox 有 BUG 不能用变量 */
+		/* TODO: variables does not work on FireFox */
 		border-top-color: #2ea8ff;
 
 		animation: spinner .6s linear infinite;
