@@ -8,9 +8,6 @@ template.innerHTML = `
 
 class EngineSelectElement extends HTMLElement {
 
-	selected;
-	engines;
-
 	constructor() {
 		super();
 		const root = this.attachShadow({ mode: "open" });

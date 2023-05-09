@@ -39,14 +39,14 @@ export default {
 		}),
 		asset({
 			loaders: [
-				postcss, 
-				svg, 
+				postcss,
+				svg,
 				isProduction && minifyJson,
 			],
-			source: { 
+			source: {
 				include: ["components/**/*.css", "**/*.svg"],
 			},
-			url: { 
+			url: {
 				include: ["**/*.{ico,png,jpg}"],
 			},
 		}),

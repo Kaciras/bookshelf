@@ -30,10 +30,11 @@
 }
 
 svg {
-	vertical-align: text-top;
+	vertical-align: middle;
 }
 
 label {
 	margin-left: 4px;
 	cursor: inherit;
+	vertical-align: middle;
 }

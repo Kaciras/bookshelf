@@ -12,6 +12,20 @@ Supported platforms:
 
 `PageUp/PageDown` switches search engines when focus on the search box.
 
+# Developing
+
+Install all dependencies:
+
+```
+pnpm install
+```
+
+Build and package the app:
+
+```
+pnpm run build
+```
+
 # FAQ
 
 ## Why images are not synchronized?

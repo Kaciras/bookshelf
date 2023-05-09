@@ -32,12 +32,11 @@ class TaskButtonElement extends HTMLElement {
 		this.slotEl = root.querySelector("slot");
 		this.loadingEl = root.querySelector(".dot-flashing");
 		this.loadingEl.remove();
-
-		this.addEventListener("click", this.handleClick);
 	}
 
 	connectedCallback() {
 		this.classList.add("button");
+		this.addEventListener("click", this.handleClick);
 	}
 
 	async handleClick() {
