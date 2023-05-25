@@ -21,17 +21,17 @@
 	},
 	"dependencies": {
 		"@kaciras/utilities": "^0.8.2",
-		"@material-design-icons/svg": "^0.14.7",
-		"@tabler/icons": "^2.17.0"
+		"@material-design-icons/svg": "^0.14.8",
+		"@tabler/icons": "^2.20.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^2.5.1",
 		"@rollup/plugin-node-resolve": "^15.0.2",
 		"@rollup/plugin-replace": "^5.0.2",
-		"@rollup/plugin-terser": "^0.4.1",
+		"@rollup/plugin-terser": "^0.4.3",
 		"@rollup/pluginutils": "^5.0.2",
 		"@types/firefox-webext-browser": "^111.0.1",
-		"eslint": "^8.40.0",
+		"eslint": "^8.41.0",
 		"fast-glob": "^3.2.12",
 		"html-minifier-terser": "7.2.0",
 		"is-builtin-module": "^3.2.1",
@@ -44,7 +44,7 @@
 		"postcss-nested": "^6.0.1",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^3.21.5",
+		"rollup": "^3.23.0",
 		"rollup-plugin-visualizer": "^5.9.0",
 		"rollup-plugin-zip": "^1.0.3",
 		"svgo": "^3.0.2"
