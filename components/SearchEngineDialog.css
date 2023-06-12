@@ -17,8 +17,8 @@ li {
 	gap: 8px;
 	align-items: center;
 
-	padding: 10px 0 10px 20px;
-	width: 220px;
+	padding: 10px 10px 10px 20px;
+	width: 230px;
 	height: 48px;
 	font-size: 0.875em;
 
@@ -30,8 +30,8 @@ li {
 }
 
 img {
-	width: 32px;
-	height: 32px;
+	width: 24px;
+	height: 24px;
 }
 
 span {
@@ -45,7 +45,7 @@ span {
 
 form {
 	display: grid;
-	padding: 20px;
+	padding: 0 20px 20px;
 	gap: 10px;
 	align-items: center;
 	grid-template-columns: auto 1fr auto;
