@@ -83,8 +83,14 @@
 	"Name": {
 		"message": "Name"
 	},
+	"Icon": {
+		"message": "Icon"
+	},
 	"ShortcutURL": {
 		"message": "URL"
+	},
+	"SelectFile": {
+		"message": "Select file"
 	},
 	"DownloadFavicon": {
 		"message": "Download"

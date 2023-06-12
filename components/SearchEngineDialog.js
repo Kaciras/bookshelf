@@ -1,9 +1,12 @@
 import SearchIconURL from "@tabler/icons/search.svg?url";
 import AddIcon from "@tabler/icons/plus.svg";
 import xIcon from "@tabler/icons/x.svg";
+import PhotoIcon from "@tabler/icons/photo-plus.svg";
+import DownCircleIcon from "@tabler/icons/circle-arrow-down.svg";
 import CheckIcon from "@tabler/icons/check.svg";
 import { dragSortContext, nthInChildren, selectFile } from "@kaciras/utilities/browser";
-import { i18n } from "../share/index.js";
+import "./TaskButton.js";
+import { getFaviconUrl, i18n } from "../share/index.js";
 import styles from "./SearchEngineDialog.css";
 
 const template = document.createElement("template");
@@ -21,17 +24,37 @@ template.innerHTML = `
 			</ol>
 			
 			<form>
-				<button id='icon' type='button'>
+				${i18n("Name")}:
+				<div class='group'>
+					<input
+						name='name'
+						required
+						placeholder='${i18n("Name")}'
+					>
+					<check-box name='isDefault'>
+						${i18n("Default")}
+					</check-box>
+				</div>
+				
+				${i18n("Icon")}:
+				<div class='group'>
 					<img alt='icon'>
-				</button>
-				<input
-					name='name'
-					required
-					placeholder='${i18n("Name")}'
-				>
-				<check-box name='isDefault'>
-					${i18n("Default")}
-				</check-box>
+					<task-button
+						type='button'
+						id='download'
+					>
+						${DownCircleIcon}
+						${i18n("DownloadFavicon")}
+					</task-button>
+					<button
+						type='button'
+						id='file'
+					>
+						${PhotoIcon}
+						${i18n("SelectFile")}
+					</button>
+				</div>
+				
 				<textarea
 					name='searchAPI'
 					required
@@ -116,14 +139,14 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.suggestEl.oninput = handleInput;
 
 		this.defaultEl.oninput = this.changeDefault.bind(this);
-		this.iconEl.parentElement.onclick = this.changeIcon.bind(this);
-
 		this.addEl.onclick = () => this.AddTab(defaultData);
 
 		this.handleActionClick = this.handleActionClick.bind(this);
 		this.handleRemove = this.handleRemove.bind(this);
 		this.handleTabChange = this.handleTabChange.bind(this);
 
+		root.getElementById("download").taskFn = this.fetchFavicon.bind(this);
+		root.getElementById("file").onclick = this.uploadIcon.bind(this);
 		root.getElementById("cancel").onclick = this.handleActionClick;
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
@@ -178,7 +201,26 @@ class SearchEngineDialogElement extends HTMLElement {
 		}
 	}
 
-	async changeIcon() {
+	async fetchFavicon(signal) {
+		if (!this.searchEl.reportValidity()) {
+			return;
+		}
+		const url = this.searchEl.value;
+
+		try {
+			URL.revokeObjectURL(this.favicon);
+			const icon = await getFaviconUrl(url, signal);
+
+			this.current[kData].favicon = icon;
+			this.iconEl.src = icon;
+			this.current.querySelector("img").src = icon;
+		} catch (e) {
+			console.error(e);
+			window.alert(`Favicon download failed: ${e.message}`);
+		}
+	}
+
+	async uploadIcon() {
 		const [file] = await selectFile("image/*");
 
 		URL.revokeObjectURL(this.iconEl.src);

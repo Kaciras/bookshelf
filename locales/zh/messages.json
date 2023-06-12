@@ -83,8 +83,14 @@
 	"Name": {
 		"message": "名字"
 	},
+	"Icon": {
+		"message": "图标"
+	},
 	"ShortcutURL": {
 		"message": "地址（URL）"
+	},
+	"SelectFile": {
+		"message": "选择文件"
 	},
 	"DownloadFavicon": {
 		"message": "自动获取"
