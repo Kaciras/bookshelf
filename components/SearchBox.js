@@ -59,7 +59,7 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
-		root.getElementById("button").onclick = this.handleSearchClick.bind(this);
+		root.getElementById("button").onclick = this.search.bind(this);
 	}
 
 	/**
@@ -162,7 +162,7 @@ class SearchBoxElement extends HTMLElement {
 		location.href = this.api.getResultURL(this.searchTerms);
 	}
 
-	handleSearchClick() {
+	search() {
 		location.href = this.api.getResultURL(this.searchTerms);
 	}
 

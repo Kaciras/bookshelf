@@ -16,10 +16,14 @@ document.title = i18n("NewTab");
 document.getElementById("engine-select").replaceWith(engineSelect);
 document.getElementById("search-box").replaceWith(searchBox);
 
-engineSelect.addEventListener("input", e => {
+engineSelect.oninput = e => {
 	searchBox.focus();
 	searchBox.engine = e.target.value;
-});
+};
+
+engineSelect.ondblclick = () => {
+	searchBox.search();
+};
 
 searchBox.onkeydown = e => {
 	switch (e.key) {
@@ -46,7 +50,7 @@ export async function setSearchEngines({ defaultEngine, engines }) {
 	const list = new Array(engines.length);
 	for (let i = 0; i < list.length; i++) {
 		const value = list[i] = new OpenSearchEngine(engines[i]);
-		value.favicon = await iconCache.load(value.favicon, SearchIconURL);
+		await iconCache.load(value, SearchIconURL);
 	}
 	engineSelect.list = list;
 	engineSelect.index = defaultEngine;
