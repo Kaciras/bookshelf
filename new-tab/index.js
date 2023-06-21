@@ -1,13 +1,13 @@
 import "../components/BookMark.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
+import SearchIconURL from "@tabler/icons/search.svg?url";
 import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
 import { loadingAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { OpenSearchEngine } from "./search.js";
 import { mountShortcuts } from "./shortcuts.js";
-import SearchIconURL from "@tabler/icons/search.svg?url";
 
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
@@ -50,7 +50,7 @@ export async function setSearchEngines({ defaultEngine, engines }) {
 	const list = new Array(engines.length);
 	for (let i = 0; i < list.length; i++) {
 		const value = list[i] = new OpenSearchEngine(engines[i]);
-		await iconCache.load(value, SearchIconURL);
+		value.favicon = await iconCache.load(value.iconKey, SearchIconURL);
 	}
 	engineSelect.list = list;
 	engineSelect.index = defaultEngine;

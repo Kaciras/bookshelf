@@ -58,10 +58,11 @@ topSiteDialog.addEventListener("add", event => add(event.detail));
 enginesDialog.addEventListener("change", async ({ detail }) => {
 	const { engines } = detail;
 	for (const engine of engines) {
-		engine.favicon = await iconCache.save(engine.favicon, SearchIconURL);
+		engine.iconKey = await iconCache.save(engine.favicon, SearchIconURL);
+		delete engine.favicon;
 	}
 	setSearchEngines(detail);
-	return saveConfig(detail).then(iconCache.evict);
+	saveConfig(detail).then(iconCache.evict);
 });
 
 const doneButton = document.createElement("button");

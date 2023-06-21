@@ -6,14 +6,15 @@
 export class OpenSearchEngine {
 
 	name;			// Display name of the search engine.
+	iconKey;		// Cache key of favicon.
 	favicon;		// 32x32 is the best size.
 	searchAPI;		// Search term will append to the end.
 	suggestAPI;		// Search term will append to the end, may not exist.
 
-	constructor({ name, favicon, searchAPI, suggestAPI }) {
+	constructor({ name, iconKey, searchAPI, suggestAPI }) {
 		this.name = name;
+		this.iconKey = iconKey;
 		this.searchAPI = searchAPI;
-		this.favicon = favicon;
 		this.suggestAPI = suggestAPI;
 	}
 

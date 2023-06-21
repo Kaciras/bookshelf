@@ -22,17 +22,17 @@ export const appConfig = {
 	defaultEngine: 1,
 	engines: [{
 		name: i18n("DuckDuckGo"),
-		favicon: DuckDuckGoIcon,
+		iconKey: DuckDuckGoIcon,
 		searchAPI: "https://duckduckgo.com/?t=ffsb&ia=web&q=",
 		suggestAPI: "https://ac.duckduckgo.com/ac/?type=list&q=",
 	}, {
 		name: "Google",
-		favicon: GoogleIcon,
+		iconKey: GoogleIcon,
 		searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
 		suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
 	}, {
 		name: i18n("Baidu"),
-		favicon: BaiduIcon,
+		iconKey: BaiduIcon,
 		searchAPI: "https://www.baidu.com/baidu?ie=utf-8&wd=",
 		suggestAPI: "https://www.baidu.com/su?ie=utf-8&action=opensearch&wd=",
 	}],

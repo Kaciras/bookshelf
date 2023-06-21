@@ -14,26 +14,28 @@ let editable = false;
  * Save data, called every time shortcuts are modified.
  */
 async function persist() {
-	const children = container.querySelectorAll("book-mark");
-	const shortcuts = new Array(children.length);
+	const els = container.querySelectorAll("book-mark");
+	const shortcuts = new Array(els.length);
 
-	for (let i = 0; i < children.length; i++) {
-		const { label, favicon, url } = children[i];
-		shortcuts[i] = {
-			label,
-			url,
-			favicon: await iconCache.save(favicon, defaultFavicon),
-		};
+	for (let i = 0; i < els.length; i++) {
+		const { label, iconKey, url } = els[i];
+		shortcuts[i] = { label, url, iconKey };
 	}
 	return saveConfig({ shortcuts });
+}
+
+function loadFavicon(el) {
+	iconCache.load(el.iconKey, defaultFavicon).then(v => el.favicon = v);
 }
 
 function appendElement(props) {
 	const el = document.createElement("book-mark");
 
 	el.url = props.url;
-	el.favicon = props.favicon;
+	el.iconKey = props.iconKey;
 	el.label = props.label;
+
+	loadFavicon(el);
 
 	dragSort.register(el);
 	lastEl.before(el);
@@ -42,20 +44,23 @@ function appendElement(props) {
 }
 
 export async function add(props) {
+	props.iconKey = await iconCache.save(props.favicon, defaultFavicon);
 	appendElement(props).isEditable = editable;
 	return persist();
 }
 
 export async function update(index, props) {
+	props.iconKey = await iconCache.save(props.favicon, defaultFavicon);
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, props);
-
+	loadFavicon(el);
 	return persist().then(iconCache.evict);
 }
 
-export function remove(event) {
-	event.target.remove();
+export function remove({ target }) {
+	target.remove();
+	URL.revokeObjectURL(target.favicon);
 	return persist().then(iconCache.evict);
 }
 
@@ -66,13 +71,10 @@ export function setShortcutEditable(value) {
 }
 
 export function mountShortcuts(shortcuts) {
+	for (const shortcut of shortcuts) {
+		appendElement(shortcut);
+	}
 	if (import.meta.env.dev) {
 		console.debug("Shortcuts model:", shortcuts);
-	}
-
-	for (const shortcut of shortcuts) {
-		const { favicon } = shortcut;
-		const el = appendElement(shortcut);
-		iconCache.load(favicon, defaultFavicon).then(v => el.favicon = v);
 	}
 }

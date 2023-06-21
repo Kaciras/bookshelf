@@ -15,11 +15,6 @@ import { appConfig } from "./storage.js";
 export const CACHE_ORIGIN = "https://cache/";
 
 /**
- * Object url -> url of the response.
- */
-const objectURLMap = Object.create(null);
-
-/**
  * Save the icon to CacheStorage and download it if it is a remote file.
  * return a string key for retrieval.
  *
@@ -47,17 +42,13 @@ export async function save(rawUrl, fallback) {
 		return rawUrl;
 	}
 
-	let url = objectURLMap[rawUrl];
-	if (url) {
-		return url;
-	}
-
 	const cache = await caches.open("icon");
+	let url;
 	let response;
 
 	if (/^https?:/.test(rawUrl)) {		// Remote file.
 		url = rawUrl;
-		response = fetch(rawUrl, { mode: "no-cors" });
+		response = await fetch(rawUrl, { mode: "no-cors" });
 	} else { 							// Temporary
 		response = await fetch(rawUrl);
 		const data = await response.clone().arrayBuffer();
@@ -100,9 +91,7 @@ export async function load(urlKey, fallback) {
 		await cache.put(urlKey, response.clone());
 	}
 
-	const ou = URL.createObjectURL(await response.blob());
-	objectURLMap[ou] = urlKey;
-	return ou;
+	return URL.createObjectURL(await response.blob());
 }
 
 /**
@@ -112,8 +101,8 @@ export async function evict() {
 	const { shortcuts, engines } = appConfig;
 	const used = new Set();
 
-	shortcuts.forEach(i => used.add(i.favicon));
-	engines.forEach(i => used.add(i.favicon));
+	shortcuts.forEach(i => used.add(i.iconKey));
+	engines.forEach(i => used.add(i.iconKey));
 
 	const cache = await caches.open("icon");
 	const tasks = (await cache.keys())
