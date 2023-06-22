@@ -160,11 +160,8 @@ export function switchToSettingMode() {
 	children[6].onclick = requestClearData;
 
 	children[0].onclick = () => {
-		menu.open = false;
-
 		const { limit, waitIME, threshold } = searchBox;
-		return saveConfig({
-			searchBox: { limit, waitIME, threshold },
-		});
+		menu.open = false;
+		return saveConfig({ searchBox: { limit, waitIME, threshold } });
 	};
 }

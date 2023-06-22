@@ -82,5 +82,5 @@ export async function importSettings() {
 		await cache.put(url, await fetch(body));
 	}
 
-	window.alert(i18n("AfterImportSuccess"));
+	window.alert(i18n("SettingsImportedSuccess"));
 }

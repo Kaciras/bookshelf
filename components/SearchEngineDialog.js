@@ -115,8 +115,8 @@ const defaultData = {
 
 class SearchEngineDialogElement extends HTMLElement {
 
-	defaultTab;	// Tab element of the default engine.
-	current;	// Current active tab element.
+	defaultTab;		// Tab element of the default engine.
+	current;		// Current active tab element.
 
 	constructor() {
 		super();
@@ -152,11 +152,13 @@ class SearchEngineDialogElement extends HTMLElement {
 	}
 
 	show(engines, defaultEngine) {
-		this.listEl.replaceChildren(this.listEl.lastChild);
+		const { listEl } = this;
+
+		listEl.replaceChildren(listEl.lastChild);
 		for (const e of engines) {
 			this.AddTab(e);
 		}
-		this.defaultTab = this.listEl.children[defaultEngine];
+		this.defaultTab = listEl.children[defaultEngine];
 		this.dialogEl.showModal();
 	}
 
@@ -208,12 +210,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		const url = this.searchEl.value;
 
 		try {
-			URL.revokeObjectURL(this.favicon);
-			const icon = await getFaviconUrl(url, signal);
-
-			this.current[kData].favicon = icon;
-			this.iconEl.src = icon;
-			this.current.querySelector("img").src = icon;
+			this.changeIcon(await getFaviconUrl(url, signal));
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);
@@ -222,13 +219,14 @@ class SearchEngineDialogElement extends HTMLElement {
 
 	async uploadIcon() {
 		const [file] = await selectFile("image/*");
+		this.changeIcon(URL.createObjectURL(file));
+	}
 
+	changeIcon(value) {
 		URL.revokeObjectURL(this.iconEl.src);
-		const url = URL.createObjectURL(file);
-
-		this.current[kData].favicon = url;
-		this.iconEl.src = url;
-		this.current.querySelector("img").src = url;
+		this.current[kData].favicon = value;
+		this.iconEl.src = value;
+		this.current.querySelector("img").src = value;
 	}
 
 	changeDefault(event) {

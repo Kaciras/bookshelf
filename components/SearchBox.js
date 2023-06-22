@@ -39,10 +39,10 @@ template.innerHTML = `
 class SearchBoxElement extends HTMLElement {
 
 	limit = 8;		// Maximum number of suggestions.
-	api;			// Backend of the engine property.
+	api;					// Backend of the engine property.
 	waitIME = true;	// Don't show suggestions for uncompleted IME input.
 
-	index = null;	// The index of the selected suggestion.
+	index = null;		// The index of the selected suggestion.
 
 	constructor() {
 		super();
@@ -186,9 +186,12 @@ class SearchBoxElement extends HTMLElement {
 				return;
 		}
 
+		/*
+		 * When the search term is empty, previous suggestions can
+		 * still be accessed via the arrow keys, that's not a big deal.
+		 */
 		event.preventDefault();
-		const { children } = this.suggestionEl;
-		const { index } = this;
+		const { index, suggestionEl: { children } } = this;
 		const { length } = children;
 
 		if (index !== null) {

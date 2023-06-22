@@ -26,7 +26,7 @@
 	"Baidu": {
 		"message": "Baidu"
 	},
-	"AfterImportSuccess": {
+	"SettingsImportedSuccess": {
 		"message": "Data imported, refresh to see changes."
 	},
 	"Search": {

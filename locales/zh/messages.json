@@ -26,7 +26,7 @@
 	"Baidu": {
 		"message": "百度搜索"
 	},
-	"AfterImportSuccess": {
+	"SettingsImportedSuccess": {
 		"message": "数据导入成功，刷新页面后生效。"
 	},
 	"Search": {

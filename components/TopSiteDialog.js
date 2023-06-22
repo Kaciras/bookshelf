@@ -77,7 +77,6 @@ class TopSiteDialogElement extends HTMLElement {
 		}
 
 		const listItems = new Array(sites.length);
-
 		for (let i = 0; i < sites.length; i++) {
 			let { title, url, favicon } = sites[i];
 
@@ -89,23 +88,19 @@ class TopSiteDialogElement extends HTMLElement {
 			title ||= adviceTitle(url);
 
 			const fragment = itemTemplate.content.cloneNode(true);
-			const item = listItems[i] = fragment.firstChild;
+			const { children, classList } = listItems[i] = fragment.firstChild;
 
-			item.children[0].src = favicon;
-			item.children[1].textContent = title;
-			item.children[2].textContent = url;
-			item.children[3].onclick = async () => {
+			children[0].src = favicon;
+			children[1].textContent = title;
+			children[2].textContent = url;
+			children[3].onclick = () => {
 				const event = new CustomEvent("add", {
 					bubbles: true,
-					detail: {
-						label: title,
-						url,
-						favicon,
-					},
+					detail: { label: title, url, favicon },
 				});
 				if (this.dispatchEvent(event)) {
-					item.classList.add("added");
-					item.children[3].innerHTML = CheckIcon;
+					classList.add("added");
+					children[3].innerHTML = CheckIcon;
 				}
 			};
 		}

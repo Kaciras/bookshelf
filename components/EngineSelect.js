@@ -30,14 +30,15 @@ class EngineSelectElement extends HTMLElement {
 	}
 
 	set index(value) {
-		const old = this.container.children[this.selected];
+		const { children } = this.container;
+		const old = children[this.selected];
 
 		const { length } = this.engines;
 		value = (value + length) % length;
 		this.selected = value;
 
 		old?.classList.remove("active");
-		this.container.children[value].classList.add("active");
+		children[value].classList.add("active");
 	}
 
 	get value() {

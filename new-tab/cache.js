@@ -96,6 +96,9 @@ export async function load(urlKey, fallback) {
 
 /**
  * Remove unused entries from the cache storage.
+ *
+ * An icon may be referenced by multiple entities, so we should
+ * check all references when removing any cached item.
  */
 export async function evict() {
 	const { shortcuts, engines } = appConfig;

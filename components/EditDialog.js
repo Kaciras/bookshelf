@@ -94,9 +94,6 @@ class EditDialogElement extends HTMLElement {
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
 
-	connectedCallback() {
-	}
-
 	show(data = defaultData) {
 		pick(data, this);
 		this.dialogEl.showModal();
