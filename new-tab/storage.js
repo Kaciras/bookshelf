@@ -7,6 +7,9 @@ import { i18n } from "../share/index.js";
 const syncSettings = browser.storage.sync;
 
 export const appConfig = {
+	/** Increase when config has breaking changes */
+	version: 1,
+
 	searchBox: {
 		limit: 8,
 		threshold: 500,
