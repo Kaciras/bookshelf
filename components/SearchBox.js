@@ -103,8 +103,8 @@ class SearchBoxElement extends HTMLElement {
 			this.fetcher.reschedule();
 		} else {
 			this.fetcher.stop();
-			this.index = null;
 			this.classList.remove("suggested");
+			this.loadingEl.classList.remove("active");
 		}
 	}
 
@@ -125,7 +125,7 @@ class SearchBoxElement extends HTMLElement {
 			}
 			console.error(e);
 		}
-		// Hide loading indicator only if finished (not aborted).
+		// To avoid flashing while typing, don't hide loading indicator on abort.
 		loadingEl.classList.remove("active");
 	}
 
@@ -142,6 +142,7 @@ class SearchBoxElement extends HTMLElement {
 		}
 
 		this.classList.add("suggested");
+		this.index = null;
 		this.suggestionEl.replaceChildren(...newItems);
 	}
 
