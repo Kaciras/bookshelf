@@ -102,7 +102,7 @@ output {
 	display: none;
 	padding: $item-padding;
 	text-align: center;
-	color: var(--color-placeholder);
+	color: var(--color-minor);
 }
 
 li {

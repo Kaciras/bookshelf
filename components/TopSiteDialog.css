@@ -46,11 +46,12 @@ button {
 	}
 }
 
-.url {
-	font-size: 14px;
-	color: #747577;
+span {
+	align-self: center;
+}
 
-	@media (prefers-color-scheme: dark) {
-		color: #a5a6a9;
-	}
+.url {
+	font-family: consolas, monospace;
+	font-size: 14px;
+	color: var(--color-minor);
 }

@@ -66,10 +66,6 @@
 		outline: none;
 		border-color: #1c98ff;
 	}
-
-	&::placeholder {
-		color: var(--color-placeholder);
-	}
 }
 
 .primary {
