@@ -1,6 +1,6 @@
-import { delegate, i18n } from "../share/index.js";
 import EditIcon from "@tabler/icons/edit.svg";
 import CloseIcon from "@tabler/icons/x.svg";
+import { delegate, i18n } from "../share/index.js";
 import styles from "./BookMark.css";
 
 const template = document.createElement("template");

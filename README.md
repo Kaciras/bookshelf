@@ -1,12 +1,17 @@
 # Bookshelf
 
 ![Screenshot](https://github.com/Kaciras/browser-theme/raw/master/screenshot.webp)
-
-Only 21 KB minimalist browser new tab page.
+ 
+minimalist (< 30 KB) browser new tab page.
 
 Supported platforms:
-- Firefox >= 98.0
+- Firefox >= 109.0
 - Edge & Chrome >= 89
+
+> **Note**
+> As of Some of the suggestion providers does not support CORS, Bookshelf need [host permissions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/host_permissions) to read responses of them. In Manifest V3 host permissions are disabled by default, you need to turn on it after install.
+> 
+> Firefox: goto "about:addons" > extensions > Bookshelf > permissions > Access your data for all websites
 
 # Shortcuts
 
@@ -23,7 +28,7 @@ pnpm install
 Build and package the app:
 
 ```
-pnpm run build
+pnpm build
 ```
 
 # FAQ

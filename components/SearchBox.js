@@ -135,7 +135,6 @@ class SearchBoxElement extends HTMLElement {
 
 		for (let i = 0; i < count; i++) {
 			const text = list[i];
-
 			const el = newItems[i] = document.createElement("li");
 			el.textContent = text;
 			el.onclick = () => location.href = this.api.getResultURL(text);

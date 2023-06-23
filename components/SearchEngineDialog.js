@@ -95,7 +95,6 @@ itemTemplate.innerHTML = `
 		<button
 			class='plain'
 			title='${i18n("Delete")}'
-			type='button'
 		 >
 			${xIcon}
 		</button>
@@ -210,7 +209,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		const url = this.searchEl.value;
 
 		try {
-			this.changeIcon(await getFaviconUrl(url, signal));
+			this.changeIcon(await getFaviconUrl(48, url, signal));
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

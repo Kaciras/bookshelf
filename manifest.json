@@ -15,7 +15,7 @@
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "bookshelf@kaciras",
-			"strict_min_version": "98.0"
+			"strict_min_version": "109.0"
 		}
 	},
 	"permissions": [

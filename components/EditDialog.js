@@ -81,13 +81,12 @@ class EditDialogElement extends HTMLElement {
 		this.iconEl = root.getElementById("favicon");
 		this.nameInput = root.querySelector("input[name='name']");
 		this.urlInput = root.querySelector("input[name='url']");
-		this.fetchButton = root.getElementById("fetch");
 
 		delegate(this, "label", this.nameInput, "value");
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		this.fetchButton.taskFn = this.fetchFavicon.bind(this);
+		root.getElementById("fetch").taskFn = this.fetchFavicon.bind(this);
 
 		this.handleActionClick = this.handleActionClick.bind(this);
 		root.getElementById("cancel").onclick = this.handleActionClick;
@@ -121,7 +120,7 @@ class EditDialogElement extends HTMLElement {
 
 		try {
 			URL.revokeObjectURL(this.favicon);
-			this.favicon = await getFaviconUrl(url, signal);
+			this.favicon = await getFaviconUrl(48, url, signal);
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

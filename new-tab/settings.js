@@ -19,15 +19,15 @@ import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines } from "./index.js";
 import SearchIconURL from "@tabler/icons/search.svg?url";
 
-const settingButton = document.querySelector(".settings");
-const menu = document.getElementById("menu");
-
-const shortcuts = document.getElementById("shortcuts");
-const engineSelect = document.querySelector("engine-select");
-
-const topSiteDialog = document.createElement("top-site-dialog");
-const editDialog = document.createElement("edit-dialog");
-const enginesDialog = document.createElement("search-engine-dialog");
+// @formatter:off
+const engineSelect	= document.querySelector("engine-select");
+const settingButton	= document.querySelector(".settings");
+const menu			= document.getElementById("menu");
+const shortcuts		= document.getElementById("shortcuts");
+const topSiteDialog	= document.createElement("top-site-dialog");
+const editDialog	= document.createElement("edit-dialog");
+const enginesDialog	= document.createElement("search-engine-dialog");
+// @formatter:on
 
 document.body.append(topSiteDialog, editDialog, enginesDialog);
 

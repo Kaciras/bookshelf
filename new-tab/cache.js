@@ -113,5 +113,5 @@ export async function evict() {
 		.map(request => cache.delete(request));
 
 	await Promise.all(tasks);
-	console.debug(`Deleted ${tasks.length} expired icons.`);
+	console.debug(`Evict ${tasks.length} icons.`);
 }

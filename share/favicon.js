@@ -1,9 +1,6 @@
 import { dirname } from "./lang.js";
 import { getImageResolution } from "./dom.js";
 
-/** Favicons are 48x48 in our page */
-const BEST_SIZE = 48;
-
 /**
  * This function gets favicons of the page from the following sources:
  * 1）<link> elements in the <head>.
@@ -78,11 +75,12 @@ async function fetchManifest(url, signal) {
  * To get the real size, favicons can be downloaded. Because browsers have cache,
  * downloading them again will not produce any additional traffic.
  *
+ * @param bestSize The size of the icon you want to download.
  * @param url The URL of the page
  * @param signal The fetching is abortable.
  * @return {Promise<string>} URL of the favicon, may not exist.
  */
-export async function getFaviconUrl(url, signal) {
+export async function getFaviconUrl(bestSize, url, signal) {
 	let selected;
 	let selectedSize = Number.MAX_SAFE_INTEGER;
 	let selectedSVG = false;
@@ -109,25 +107,25 @@ export async function getFaviconUrl(url, signal) {
 			/*
 			 * 1) SVG is better than raster image.
 			 * 2) Choose one first.
-			 * 3) Choose the smallest among larger than BEST_SIZE.
+			 * 3) Choose the smallest among larger than bestSize.
 			 */
 			if (
 				!selectedSVG && type === "image/svg+xml" ||
 				!selected ||
-				size >= BEST_SIZE && size < selectedSize
+				size >= bestSize && size < selectedSize
 			) {
 				// Ensure the file is available。
 				if (!actualSize) {
 					await getImageResolution(href);
 				}
-				if (size >= BEST_SIZE) {
+				if (size >= bestSize) {
 					selectedSize = size;
 				}
 				selected = href;
 				selectedSVG = type === "image/svg+xml";
 			}
 		} catch (e) {
-			console.warn("Cannot load favicon", e);
+			console.warn(`Cannot load favicon ${href}`, e);
 		}
 	}
 
