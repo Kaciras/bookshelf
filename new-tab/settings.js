@@ -78,6 +78,7 @@ doneButton.onclick = () => {
 };
 
 const addShortcut = document.getElementById("add-shortcut");
+addShortcut.title = i18n("NewShortcut");
 addShortcut.innerHTML = AddIcon;
 addShortcut.onclick = () => {
 	editDialog.show();
@@ -108,7 +109,7 @@ menu.innerHTML = `
 			${SearchIcon}${i18n("SearchEngines")}
 		</button>
 		<button>
-			${StarIcon}${i18n("EditShortcut")}
+			${StarIcon}${i18n("ManageShortcuts")}
 		</button>
 		<button>
 			${DevicesIcon}${i18n("TopSites")}

@@ -41,8 +41,8 @@
 	"ConfirmClearData": {
 		"message": "确定要清空本插件保存的所有数据？\n该过程不可撤销，并且会同步到所有设备！"
 	},
-	"EditShortcut": {
-		"message": "编辑快捷方式"
+	"ManageShortcuts": {
+		"message": "管理快捷方式"
 	},
 	"TopSites": {
 		"message": "常用网站"
@@ -74,7 +74,10 @@
 	"TopSiteDialog": {
 		"message": "导入常用网站"
 	},
-	"AddToShortcut": {
+	"NewShortcut": {
+		"message": "添加快捷方式"
+	},
+	"AddToShortcuts": {
 		"message": "添加到快捷方式"
 	},
 	"EditShortcutDialog": {

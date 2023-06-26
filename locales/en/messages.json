@@ -41,8 +41,8 @@
 	"ConfirmClearData": {
 		"message": "Are you sure clear all data?\nThis operation is irreversible and syncs to all devices!"
 	},
-	"EditShortcut": {
-		"message": "Edit Shortcuts"
+	"ManageShortcuts": {
+		"message": "Manage Shortcuts"
 	},
 	"TopSites": {
 		"message": "Top Sites"
@@ -74,7 +74,10 @@
 	"TopSiteDialog": {
 		"message": "Add from top sites"
 	},
-	"AddToShortcut": {
+	"NewShortcut": {
+		"message": "New shortcut"
+	},
+	"AddToShortcuts": {
 		"message": "Add to shortcut"
 	},
 	"EditShortcutDialog": {

@@ -39,7 +39,7 @@ itemTemplate.innerHTML = `
 		<span class='one-line url'/>
 		<button
 			class='icon'
-			title='${i18n("AddToShortcut")}'
+			title='${i18n("AddToShortcuts")}'
 		 >
 			${AddIcon}
 		</button>
