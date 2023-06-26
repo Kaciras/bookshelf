@@ -36,6 +36,7 @@ class TaskButtonElement extends HTMLElement {
 
 	connectedCallback() {
 		this.classList.add("button");
+		this.tabIndex = 0;
 		this.addEventListener("click", this.handleClick);
 	}
 

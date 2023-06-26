@@ -32,8 +32,12 @@
 	transition: .15s;
 	transition-property: color, background-color;
 
-	&:where(:hover, :focus-visible)  {
+	&:hover  {
 		background: var(--bg-focus);
+	}
+
+	&:focus-visible {
+		box-shadow: var(--block-focus-shadow);
 	}
 
 	&:active {

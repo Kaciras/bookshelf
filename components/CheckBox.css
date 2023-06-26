@@ -1,9 +1,12 @@
 /*
- * Unable to add focus highlighting.
- * 1）delegatesFocus doesn't work with focus-visible。
- * 2）No :focus-visible-within pseudo-class。
+ * Unable to add focus highlighting using CSS only:
  *
+ * 1）delegatesFocus doesn't work with focus-visible.
+ * 2）No :focus-visible-within pseudo-class.
  * https://github.com/WICG/focus-visible/issues/151
+ *
+ * 3) :host(:has(:focus-visible)) does not work.
+ * https://github.com/w3c/csswg-drafts/issues/7953
  */
 :host {
 	position: relative;
