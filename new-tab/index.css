@@ -149,6 +149,8 @@ input[type="number"] {
 }
 
 #menu {
+	max-height: unset;
+
 	position: fixed;
 	margin: 0 0 0 auto;
 	height: 100vh;

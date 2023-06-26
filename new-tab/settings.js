@@ -6,18 +6,18 @@ import UploadIcon from "@tabler/icons/upload.svg";
 import TrashIcon from "@tabler/icons/trash.svg";
 import SearchIcon from "@tabler/icons/search.svg";
 import AddIcon from "@tabler/icons/plus.svg";
+import SearchIconURL from "@tabler/icons/search.svg?url";
+import { isPointerInside, nthInChildren } from "@kaciras/utilities/browser";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";
 import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
 import "../components/SearchEngineDialog.js";
-import { nthInChildren } from "@kaciras/utilities/browser";
 import { bindInput, i18n } from "../share/index.js";
 import { appConfig, clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines } from "./index.js";
-import SearchIconURL from "@tabler/icons/search.svg?url";
 
 // @formatter:off
 const engineSelect	= document.querySelector("engine-select");
@@ -32,7 +32,9 @@ const enginesDialog	= document.createElement("search-engine-dialog");
 document.body.append(topSiteDialog, editDialog, enginesDialog);
 
 // Click outside to close the menu.
-document.addEventListener("click", e => menu.open &= menu.contains(e.target));
+menu.onclick = e => {
+	if (!isPointerInside(e)) menu.close();
+};
 
 shortcuts.addEventListener("edit", event => {
 	const el = event.target;
@@ -85,7 +87,7 @@ addShortcut.onclick = () => {
 function switchToEditingMode() {
 	settingButton.replaceWith(doneButton);
 	setShortcutEditable(true);
-	menu.open = false;
+	menu.close();
 	document.body.classList.add("editing");
 }
 
@@ -144,7 +146,7 @@ menu.innerHTML = `
  * @return {Promise<void>} Resolve when setting finished.
  */
 export function switchToSettingMode() {
-	menu.open = true;
+	menu.showModal();
 
 	const searchBox = document.querySelector("search-box");
 	bindInput(menu.querySelector("input[name='threshold']"), searchBox);
@@ -161,7 +163,7 @@ export function switchToSettingMode() {
 
 	children[0].onclick = () => {
 		const { limit, waitIME, threshold } = searchBox;
-		menu.open = false;
+		menu.close();
 		return saveConfig({ searchBox: { limit, waitIME, threshold } });
 	};
 }
