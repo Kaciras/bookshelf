@@ -62,6 +62,7 @@ class EngineSelectElement extends HTMLElement {
 
 			const button = document.createElement("button");
 			button.type = "button";
+			button.tabIndex = -1;
 			button.title = engine.name;
 			button.engine = engine;
 			button.onclick = this.handleClick.bind(this);
