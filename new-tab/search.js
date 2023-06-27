@@ -1,3 +1,8 @@
+import SearchIconURL from "@tabler/icons/search.svg?url";
+import { IconCache } from "./cache.js";
+
+export const searchIcons = new IconCache(SearchIconURL);
+
 /**
  * I can't find a way to get suggestions via `browser.search`.
  *

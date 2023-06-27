@@ -1,8 +1,9 @@
 import { dragSortContext } from "@kaciras/utilities/browser";
 import { saveConfig } from "./storage.js";
-import * as iconCache from "./cache.js";
+import { evict, IconCache } from "./cache.js";
 import defaultFavicon from "../assets/Website.svg?url";
 
+const siteIcons = new IconCache(defaultFavicon);
 const container = document.getElementById("shortcuts");
 const lastEl = container.lastChild;
 
@@ -25,7 +26,7 @@ async function persist() {
 }
 
 function loadFavicon(el) {
-	iconCache.load(el.iconKey, defaultFavicon).then(v => el.favicon = v);
+	siteIcons.load(el.iconKey).then(v => el.favicon = v);
 }
 
 function appendElement(props) {
@@ -44,24 +45,24 @@ function appendElement(props) {
 }
 
 export async function add(props) {
-	props.iconKey = await iconCache.save(props.favicon, defaultFavicon);
+	props.iconKey = await siteIcons.save(props.favicon);
 	appendElement(props).isEditable = editable;
 	return persist();
 }
 
 export async function update(index, props) {
-	props.iconKey = await iconCache.save(props.favicon, defaultFavicon);
+	props.iconKey = await siteIcons.save(props.favicon);
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, props);
 	loadFavicon(el);
-	return persist().then(iconCache.evict);
+	return persist().then(evict);
 }
 
 export function remove({ target }) {
 	target.remove();
 	URL.revokeObjectURL(target.favicon);
-	return persist().then(iconCache.evict);
+	return persist().then(evict);
 }
 
 export function setShortcutEditable(value) {

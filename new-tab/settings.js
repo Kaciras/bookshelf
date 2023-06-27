@@ -6,7 +6,6 @@ import UploadIcon from "@tabler/icons/upload.svg";
 import TrashIcon from "@tabler/icons/trash.svg";
 import SearchIcon from "@tabler/icons/search.svg";
 import AddIcon from "@tabler/icons/plus.svg";
-import SearchIconURL from "@tabler/icons/search.svg?url";
 import { isPointerInside, nthInChildren } from "@kaciras/utilities/browser";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";
@@ -18,6 +17,7 @@ import { appConfig, clearAllData, exportSettings, importSettings, saveConfig } f
 import * as iconCache from "./cache.js";
 import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines } from "./index.js";
+import { searchIcons } from "./search.js";
 
 // @formatter:off
 const engineSelect	= document.querySelector("engine-select");
@@ -60,7 +60,7 @@ topSiteDialog.addEventListener("add", event => add(event.detail));
 enginesDialog.addEventListener("change", async ({ detail }) => {
 	const { engines } = detail;
 	for (const engine of engines) {
-		engine.iconKey = await iconCache.save(engine.favicon, SearchIconURL);
+		engine.iconKey = await searchIcons.save(engine.favicon);
 		delete engine.favicon;
 	}
 	setSearchEngines(detail);
