@@ -1,9 +1,9 @@
 import { dragSortContext } from "@kaciras/utilities/browser";
 import { saveConfig } from "./storage.js";
-import { evict, IconCache } from "./cache.js";
+import * as iconCache from "./cache.js";
 import defaultFavicon from "../assets/Website.svg?url";
 
-const siteIcons = new IconCache(defaultFavicon);
+const siteIcons = new iconCache.IconCache(defaultFavicon);
 const container = document.getElementById("shortcuts");
 const lastEl = container.lastChild;
 
@@ -56,13 +56,13 @@ export async function update(index, props) {
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, props);
 	loadFavicon(el);
-	return persist().then(evict);
+	return persist().then(iconCache.removeUnused);
 }
 
 export function remove({ target }) {
 	target.remove();
 	URL.revokeObjectURL(target.favicon);
-	return persist().then(evict);
+	return persist().then(iconCache.removeUnused);
 }
 
 export function setShortcutEditable(value) {

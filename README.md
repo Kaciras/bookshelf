@@ -9,9 +9,10 @@ Supported platforms:
 - Edge & Chrome >= 89
 
 > **Note**
-> As of Some of the suggestion providers does not support CORS, Bookshelf need [host permissions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/host_permissions) to read responses of them. In Manifest V3 host permissions are disabled by default, you need to turn on it after install.
 > 
-> Firefox: goto "about:addons" > extensions > Bookshelf > permissions > Access your data for all websites
+> As of Some of the suggestion providers does not support CORS, Bookshelf need [host permissions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/host_permissions) to read responses of them. In Firefox host permissions are disabled by default, you need to turn on it after install.
+> 
+> goto "about:addons" > extensions > Bookshelf > permissions > Access your data for all websites
 
 # Shortcuts
 

@@ -11,14 +11,6 @@
 	background: rgba(150, 150, 150, 0.13);
 }
 
-/* Anchor has built-in drag effect, don't set the display to contents */
-a {
-	display: block;
-	color: inherit;
-	outline: none;
-	text-decoration: none;
-}
-
 .shortcut-icon {
 	margin: 0 4px;
 

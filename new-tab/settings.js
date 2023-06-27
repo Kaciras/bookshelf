@@ -64,7 +64,7 @@ enginesDialog.addEventListener("change", async ({ detail }) => {
 		delete engine.favicon;
 	}
 	setSearchEngines(detail);
-	saveConfig(detail).then(iconCache.evict);
+	saveConfig(detail).then(iconCache.removeUnused);
 });
 
 const doneButton = document.createElement("button");

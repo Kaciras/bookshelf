@@ -15,10 +15,10 @@ import { appConfig } from "./storage.js";
 export const CACHE_ORIGIN = "https://cache/";
 
 /**
- *
+ * Cache for remote resources.
  *
  * 4 kind of urls:
- * 1) null to indicate default value.
+ * 1) `null` to indicate default value.
  * 2) Internal resource, is a path.
  * 3) Remote file.
  * 4) Temporary (DataURL, ObjectURL).
@@ -107,7 +107,7 @@ export class IconCache {
  * An icon may be referenced by multiple entities, so we should
  * check all references when removing any cached item.
  */
-export async function evict() {
+export async function removeUnused() {
 	const { shortcuts, engines } = appConfig;
 	const used = new Set();
 

@@ -14,12 +14,13 @@
  */
 export class Debounced {
 
-	/** Debounce delay in millisecond */
-	threshold;
-
 	controller = new AbortController();
 	timer = 0;
 
+	/**
+	 * @param handler The function to execute.
+	 * @param threshold Debounce delay in millisecond.
+	 */
 	constructor(handler, threshold = 0) {
 		this.handler = handler;
 		this.threshold = threshold;

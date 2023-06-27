@@ -61,4 +61,4 @@ mountShortcuts(appConfig.shortcuts);
 setSearchEngines(appConfig);
 Object.assign(searchBox, appConfig.searchBox);
 
-requestIdleCallback(iconCache.evict);
+requestIdleCallback(iconCache.removeUnused);
