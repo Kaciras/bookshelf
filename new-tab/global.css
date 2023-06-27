@@ -2,6 +2,13 @@
 	box-sizing: border-box;
 }
 
+a {
+	display: block;
+	color: inherit;
+	outline: none;
+	text-decoration: none;
+}
+
 :where(button, .button) {
 	display: inline-flex;
 	gap: 5px;

@@ -14,14 +14,15 @@ template.innerHTML = `
 	<style>${styles}</style>
 	<dialog-base name='${i18n("SearchEngines")}'>
 		<div>
-			<ol>
-				<li
-					class='plain button'
+			<section>
+				<button
+					id='new-engine'
+					class='plain'
 					title='${i18n("Add")}'
 				>
 					${AddIcon}
-				</li>
-			</ol>
+				</button>
+			</section>
 			
 			<form>
 				${i18n("Name")}:
@@ -89,7 +90,7 @@ template.innerHTML = `
 
 const itemTemplate = document.createElement("template");
 itemTemplate.innerHTML = `
-	<li draggable='true'>
+	<a class='plain button' draggable='true' href='#'>
 		<img alt='icon'>
 		<span class='one-line'/>
 		<button
@@ -98,7 +99,7 @@ itemTemplate.innerHTML = `
 		 >
 			${xIcon}
 		</button>
-	</li>
+	</a>
 `;
 
 const dragSort = dragSortContext();
@@ -123,8 +124,8 @@ class SearchEngineDialogElement extends HTMLElement {
 		root.append(template.content.cloneNode(true));
 
 		this.dialogEl = root.querySelector("dialog-base");
-		this.listEl = root.querySelector("ol");
-		this.addEl = root.querySelector("li");
+		this.listEl = root.querySelector("section");
+		this.addEl = root.getElementById("new-engine");
 
 		this.iconEl = root.querySelector("img");
 		this.nameEl = root.querySelector("input[name='name']");

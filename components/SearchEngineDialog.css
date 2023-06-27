@@ -4,15 +4,14 @@ div {
 	display: flex;
 }
 
-ol {
-	list-style: none;
+section {
+	height: 330px;
 	margin: 0;
 	padding: 0;
-	height: 330px;
 	overflow-y: auto;
 }
 
-li {
+a {
 	display: flex;
 	gap: 8px;
 	align-items: center;
@@ -30,6 +29,7 @@ li {
 	}
 
 	& > button {
+		padding: 3px;
 		color: #ef6565;
 	}
 }
@@ -43,18 +43,19 @@ span {
 	flex: 1;
 }
 
-.plain {
-	border-radius: 0;
-	padding: 2px;
+#new-engine {
+	display: flex;
+	width: 100%;
+	padding: 10px;
 }
 
 form {
 	display: grid;
-	padding: 0 20px 20px;
-	gap: 10px;
-	align-items: center;
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto auto 1fr 1fr auto;
+	gap: 10px;
+	align-items: center;
+	padding: 0 20px 20px;
 }
 
 .group {
