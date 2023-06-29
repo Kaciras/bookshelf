@@ -30,12 +30,10 @@ export class IconCache {
 	}
 
 	/**
-	 * Save the icon to CacheStorage and download it if it is a remote file.
-	 * return a string key for retrieval.
+	 * Save the icon to CacheStorage, download it if it is a remote file.
+	 * Cache key is set to property `model.iconKey`.
 	 */
-	async save(model) {
-		const rawUrl = model.favicon;
-
+	async save(model, rawUrl = model.favicon) {
 		if (rawUrl === this.defaultValue) {
 			return model.iconKey = null;
 		}
@@ -48,33 +46,32 @@ export class IconCache {
 		}
 
 		const cache = await caches.open("icon");
-		let url;
+		let iconKey;
 		let response;
 
 		if (/^https?:/.test(rawUrl)) {		// Remote file.
-			url = rawUrl;
-			response = await fetch(rawUrl, { mode: "no-cors" });
+			iconKey = rawUrl;
+			response = await fetch(rawUrl);
 		} else { 							// Temporary
 			response = await fetch(rawUrl);
 			const data = await response.clone().arrayBuffer();
-			const hash = (await sha256(data)).slice(0, 20);
-			url = CACHE_ORIGIN + hash;
+			const hash = await sha256(data);
+			iconKey = CACHE_ORIGIN + hash.slice(0, 20);
 		}
 
-		return cache.put(url, response).then(() => model.iconKey = url);
+		model.iconKey = iconKey;
+		return cache.put(iconKey, response);
 	}
 
 	/**
 	 * Get saved icon from CacheStorage, if it does not exist:
-	 * - For internal resource, defaultValue to default.
+	 * - For internal resource, fallback to default.
 	 * - For HTTP resource, download and put it to cache.
 	 *
-	 * The returned URL is created by `URL.createObjectURL`, you should
-	 * dispose it with `URL.revokeObjectURL` if no longer used.
+	 * The favicon URL may be created by `URL.createObjectURL`, you
+	 * should dispose it with `URL.revokeObjectURL` if no longer used.
 	 */
-	async populate(model) {
-		const iconKey = model.iconKey;
-
+	async populate(model, iconKey = model.iconKey) {
 		if (!iconKey) {
 			return model.favicon = this.defaultValue;
 		}
@@ -85,10 +82,11 @@ export class IconCache {
 		const cache = await caches.open("icon");
 		let response = await cache.match(iconKey);
 		if (!response) {
+			// Uploaded file cannot be downloaded, fallback to default.
 			if (iconKey.startsWith(CACHE_ORIGIN)) {
 				return model.favicon = this.defaultValue;
 			}
-			response = await fetch(iconKey, { mode: "no-cors" });
+			response = await fetch(iconKey);
 			if (!response.ok) {
 				throw new Error("Download failed: " + iconKey);
 			}
@@ -118,5 +116,5 @@ export async function removeUnused() {
 		.map(request => cache.delete(request));
 
 	await Promise.all(tasks);
-	console.debug(`Evict ${tasks.length} icons.`);
+	console.debug(`Remove ${tasks.length} unused icons.`);
 }

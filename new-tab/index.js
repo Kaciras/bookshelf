@@ -1,12 +1,12 @@
+import SettingIcon from "@tabler/icons/settings.svg";
 import "../components/BookMark.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";
-import SettingIcon from "@tabler/icons/settings.svg";
 import { i18n } from "../share/index.js";
 import { loadingAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
+import * as shortcuts from "./shortcuts.js";
 import { OpenSearchEngine, searchIcons } from "./search.js";
-import { mountShortcuts } from "./shortcuts.js";
 
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
@@ -61,7 +61,7 @@ export async function setSearchEngines({ defaultEngine, engines }) {
 }
 
 const appConfig = await loadingAppConfig;
-mountShortcuts(appConfig.shortcuts);
+shortcuts.mount(appConfig.shortcuts);
 setSearchEngines(appConfig);
 Object.assign(searchBox, appConfig.searchBox);
 

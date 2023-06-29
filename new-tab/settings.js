@@ -15,18 +15,18 @@ import "../components/SearchEngineDialog.js";
 import { bindInput, i18n } from "../share/index.js";
 import { appConfig, clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
-import { add, remove, setShortcutEditable, update } from "./shortcuts.js";
 import { setSearchEngines } from "./index.js";
 import { searchIcons } from "./search.js";
+import * as shortcuts from "./shortcuts.js";
 
 // @formatter:off
-const engineSelect	= document.querySelector("engine-select");
-const settingButton	= document.querySelector(".settings");
-const menu			= document.getElementById("menu");
-const shortcuts		= document.getElementById("shortcuts");
-const topSiteDialog	= document.createElement("top-site-dialog");
-const editDialog	= document.createElement("edit-dialog");
-const enginesDialog	= document.createElement("search-engine-dialog");
+const engineSelect		= document.querySelector("engine-select");
+const settingButton		= document.querySelector(".settings");
+const menu				= document.getElementById("menu");
+const shortcutSection	= document.getElementById("shortcuts");
+const topSiteDialog		= document.createElement("top-site-dialog");
+const editDialog		= document.createElement("edit-dialog");
+const enginesDialog		= document.createElement("search-engine-dialog");
 // @formatter:on
 
 document.body.append(topSiteDialog, editDialog, enginesDialog);
@@ -36,26 +36,26 @@ menu.onclick = e => {
 	if (!isPointerInside(e)) menu.close();
 };
 
-shortcuts.addEventListener("edit", event => {
+shortcutSection.addEventListener("edit", event => {
 	const el = event.target;
 	editDialog.index = nthInChildren(el);
 	editDialog.show(el);
 });
 
-shortcuts.addEventListener("remove", remove);
+shortcutSection.addEventListener("remove", shortcuts.remove);
 
 editDialog.addEventListener("change", event => {
 	const { target, detail } = event;
 	const { index } = target;
 
 	if (index === undefined) {
-		return add(detail);
+		return shortcuts.add(detail);
 	} else {
-		return update(index, detail);
+		return shortcuts.update(index, detail);
 	}
 });
 
-topSiteDialog.addEventListener("add", event => add(event.detail));
+topSiteDialog.addEventListener("add", event => shortcuts.add(event.detail));
 
 enginesDialog.addEventListener("change", async ({ detail }) => {
 	const { engines } = detail;
@@ -73,7 +73,7 @@ doneButton.className = "settings icon primary";
 doneButton.title = i18n("SettingMode");
 doneButton.onclick = () => {
 	doneButton.replaceWith(settingButton);
-	setShortcutEditable(false);
+	shortcuts.setEditable(false);
 	document.body.classList.remove("editing");
 };
 
@@ -87,7 +87,7 @@ addShortcut.onclick = () => {
 
 function switchToEditingMode() {
 	settingButton.replaceWith(doneButton);
-	setShortcutEditable(true);
+	shortcuts.setEditable(true);
 	menu.close();
 	document.body.classList.add("editing");
 }

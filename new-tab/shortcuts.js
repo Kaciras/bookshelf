@@ -4,10 +4,10 @@ import * as iconCache from "./cache.js";
 import defaultFavicon from "../assets/Website.svg?url";
 
 const siteIcons = new iconCache.IconCache(defaultFavicon);
-const container = document.getElementById("shortcuts");
-const lastEl = container.lastChild;
 
 const dragSort = dragSortContext();
+const container = document.getElementById("shortcuts");
+const newShortcutButton = container.lastChild;
 
 let editable = false;
 
@@ -27,21 +27,22 @@ async function persist() {
 
 function appendElement(props) {
 	const el = document.createElement("book-mark");
-
 	el.url = props.url;
 	el.iconKey = props.iconKey;
 	el.label = props.label;
+
+	// noinspection JSIgnoredPromiseFromCall
 	siteIcons.populate(el);
 
+	el.isEditable = editable;
 	dragSort.register(el);
-	lastEl.before(el);
+	newShortcutButton.before(el);
 	el.addEventListener("dragend", persist);
-	return el;
 }
 
 export async function add(props) {
 	await siteIcons.save(props);
-	appendElement(props).isEditable = editable;
+	appendElement(props);
 	return persist();
 }
 
@@ -49,6 +50,7 @@ export async function update(index, props) {
 	await siteIcons.save(props);
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
+
 	Object.assign(el, props);
 	siteIcons.populate(el);
 
@@ -61,15 +63,15 @@ export function remove({ target }) {
 	return persist().then(iconCache.removeUnused);
 }
 
-export function setShortcutEditable(value) {
+export function setEditable(value) {
 	editable = value;
 	for (const el of container.children)
 		el.isEditable = value;
 }
 
-export function mountShortcuts(shortcuts) {
-	for (const shortcut of shortcuts) {
-		appendElement(shortcut);
+export function mount(shortcuts) {
+	for (const props of shortcuts) {
+		appendElement(props);
 	}
 	if (import.meta.env.dev) {
 		console.debug("Shortcuts model:", shortcuts);

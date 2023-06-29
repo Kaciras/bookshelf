@@ -5,16 +5,17 @@ import { minify } from "html-minifier-terser";
 import HtmlParser from "node-html-parser";
 
 /**
- * Create a JavaScript code contains imports of IDs;
+ * Create a JavaScript code contains imports of ids;
  *
- * @param ids {Iterable<string>} ID list to import.
+ * @param ids {Iterable<string>} Id list to import.
  * @return {string} JavaScript code.
  */
 export function jsImports(ids) {
-	let code = "";
-	for (const id of ids)
-		code += `import "${id}"\n`;
-	return code;
+	const code = [];
+	for (const id of ids) {
+		code.push(`import "${id}"`);
+	}
+	return code.join("\n");
 }
 
 /**
@@ -30,6 +31,12 @@ const minifyOptions = {
 	removeAttributeQuotes: true,
 };
 
+/**
+ * Process a HTML string, expand self-closed tags and minify.
+ *
+ * @param html Original HTML string.
+ * @return {Promise<string>} Transform HTML
+ */
 export function transformHTML(html) {
 	return minify(html.replaceAll(selfCloseRE, "<$1$2></$1>"), minifyOptions);
 }
