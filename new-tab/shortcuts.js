@@ -25,18 +25,13 @@ async function persist() {
 	return saveConfig({ shortcuts });
 }
 
-function loadFavicon(el) {
-	siteIcons.load(el.iconKey).then(v => el.favicon = v);
-}
-
 function appendElement(props) {
 	const el = document.createElement("book-mark");
 
 	el.url = props.url;
 	el.iconKey = props.iconKey;
 	el.label = props.label;
-
-	loadFavicon(el);
+	siteIcons.populate(el);
 
 	dragSort.register(el);
 	lastEl.before(el);
@@ -45,17 +40,18 @@ function appendElement(props) {
 }
 
 export async function add(props) {
-	props.iconKey = await siteIcons.save(props.favicon);
+	await siteIcons.save(props);
 	appendElement(props).isEditable = editable;
 	return persist();
 }
 
 export async function update(index, props) {
-	props.iconKey = await siteIcons.save(props.favicon);
+	await siteIcons.save(props);
 	const el = container.children[index];
 	URL.revokeObjectURL(el.favicon);
 	Object.assign(el, props);
-	loadFavicon(el);
+	siteIcons.populate(el);
+
 	return persist().then(iconCache.removeUnused);
 }
 

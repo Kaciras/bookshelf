@@ -46,11 +46,15 @@ settingsButton.onclick = () => import("./settings.js")
 	.then(module => module.switchToSettingMode());
 
 export async function setSearchEngines({ defaultEngine, engines }) {
+	const tasks = new Array(engines.length);
 	const list = new Array(engines.length);
+
 	for (let i = 0; i < list.length; i++) {
 		const value = list[i] = new OpenSearchEngine(engines[i]);
-		value.favicon = await searchIcons.load(value.iconKey);
+		tasks[i] = searchIcons.populate(value);
 	}
+
+	await Promise.all(tasks);
 	engineSelect.list = list;
 	engineSelect.index = defaultEngine;
 	searchBox.engine = engineSelect.value;

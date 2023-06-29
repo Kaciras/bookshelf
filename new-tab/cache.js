@@ -25,27 +25,26 @@ export const CACHE_ORIGIN = "https://cache/";
  */
 export class IconCache {
 
-	constructor(fallback) {
-		this.fallback = fallback;
+	constructor(defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
 	/**
 	 * Save the icon to CacheStorage and download it if it is a remote file.
 	 * return a string key for retrieval.
-	 *
-	 * @param rawUrl {string} URL or response of the image.
-	 * @returns {Promise<null|string>} Key used for load the cached image.
 	 */
-	async save(rawUrl) {
-		if (rawUrl === this.fallback) {
-			return null;
+	async save(model) {
+		const rawUrl = model.favicon;
+
+		if (rawUrl === this.defaultValue) {
+			return model.iconKey = null;
 		}
 
 		// Internal resource is relative URL.
 		try {
 			new URL(rawUrl);
 		} catch {
-			return rawUrl;
+			return model.iconKey = rawUrl;
 		}
 
 		const cache = await caches.open("icon");
@@ -62,42 +61,41 @@ export class IconCache {
 			url = CACHE_ORIGIN + hash;
 		}
 
-		return cache.put(url, response).then(() => url);
+		return cache.put(url, response).then(() => model.iconKey = url);
 	}
 
 	/**
 	 * Get saved icon from CacheStorage, if it does not exist:
-	 * - For internal resource, fallback to default.
+	 * - For internal resource, defaultValue to default.
 	 * - For HTTP resource, download and put it to cache.
 	 *
 	 * The returned URL is created by `URL.createObjectURL`, you should
 	 * dispose it with `URL.revokeObjectURL` if no longer used.
-	 *
-	 * @param urlKey The return value of save()
-	 * @returns {Promise<string>} URL of the image.
 	 */
-	async load(urlKey) {
-		if (!urlKey) {
-			return this.fallback;
+	async populate(model) {
+		const iconKey = model.iconKey;
+
+		if (!iconKey) {
+			return model.favicon = this.defaultValue;
 		}
-		if (!/^https?:/.test(urlKey)) {
-			return urlKey;
+		if (!/^https?:/.test(iconKey)) {
+			return model.favicon = iconKey;
 		}
 
 		const cache = await caches.open("icon");
-		let response = await cache.match(urlKey);
+		let response = await cache.match(iconKey);
 		if (!response) {
-			if (urlKey.startsWith(CACHE_ORIGIN)) {
-				return this.fallback;
+			if (iconKey.startsWith(CACHE_ORIGIN)) {
+				return model.favicon = this.defaultValue;
 			}
-			response = await fetch(urlKey, { mode: "no-cors" });
+			response = await fetch(iconKey, { mode: "no-cors" });
 			if (!response.ok) {
-				throw new Error("Download failed: " + urlKey);
+				throw new Error("Download failed: " + iconKey);
 			}
-			await cache.put(urlKey, response.clone());
+			await cache.put(iconKey, response.clone());
 		}
 
-		return URL.createObjectURL(await response.blob());
+		model.favicon = URL.createObjectURL(await response.blob());
 	}
 }
 

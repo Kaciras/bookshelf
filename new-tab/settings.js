@@ -60,7 +60,7 @@ topSiteDialog.addEventListener("add", event => add(event.detail));
 enginesDialog.addEventListener("change", async ({ detail }) => {
 	const { engines } = detail;
 	for (const engine of engines) {
-		engine.iconKey = await searchIcons.save(engine.favicon);
+		await searchIcons.save(engine);
 		delete engine.favicon;
 	}
 	setSearchEngines(detail);
