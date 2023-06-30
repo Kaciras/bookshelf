@@ -1,5 +1,6 @@
 import SearchIconURL from "@tabler/icons/search.svg?url";
 import { IconCache } from "./cache.js";
+import { fetchChecked } from "../share/index.js";
 
 export const searchIcons = new IconCache(SearchIconURL);
 
@@ -27,15 +28,10 @@ export class OpenSearchEngine {
 		searchTerms = encodeURIComponent(searchTerms);
 		const url = this.suggestAPI + searchTerms;
 
-		const response = await fetch(url, {
+		const response = await fetchChecked(url, {
 			signal,
 			credentials: "omit", // Prevent tracking.
 		});
-
-		const { status } = response;
-		if (status !== 200) {
-			throw new Error("Failed to fetch suggestions: " + status);
-		}
 		return (await response.json())[1];
 	}
 

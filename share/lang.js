@@ -64,3 +64,18 @@ export function dirname(path) {
 	const i = path.lastIndexOf("/");
 	return i < 0 ? path : path.slice(0, i);
 }
+
+/**
+ * Just like the `fetch`, but checks the status code.
+ *
+ * @param input {RequestInfo | URL}
+ * @param init {RequestInit}
+ * @return {Promise<Response>}
+ */
+export async function fetchChecked(input, init) {
+	const response = await fetch(input, init);
+	if (response.ok) {
+		return response;
+	}
+	throw new Error(`Request failed (${response.status})`);
+}

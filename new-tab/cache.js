@@ -1,5 +1,6 @@
 import { sha256 } from "@kaciras/utilities/browser";
 import { appConfig } from "./storage.js";
+import { fetchChecked } from "../share/index.js";
 
 /*
  * Due to browser data size limit, we can not save images to synchronized storage.
@@ -51,7 +52,7 @@ export class IconCache {
 
 		if (/^https?:/.test(rawUrl)) {		// Remote file.
 			iconKey = rawUrl;
-			response = await fetch(rawUrl);
+			response = await fetchChecked(rawUrl);
 		} else { 							// Temporary
 			response = await fetch(rawUrl);
 			const data = await response.clone().arrayBuffer();
@@ -82,14 +83,11 @@ export class IconCache {
 		const cache = await caches.open("icon");
 		let response = await cache.match(iconKey);
 		if (!response) {
-			// Uploaded file cannot be downloaded, fallback to default.
+			// Uploaded file cannot be downloaded, fallback to the default.
 			if (iconKey.startsWith(CACHE_ORIGIN)) {
 				return model.favicon = this.defaultValue;
 			}
-			response = await fetch(iconKey);
-			if (!response.ok) {
-				throw new Error("Download failed: " + iconKey);
-			}
+			response = await fetchChecked(iconKey);
 			await cache.put(iconKey, response.clone());
 		}
 
