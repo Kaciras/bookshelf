@@ -1,7 +1,7 @@
 import CheckIcon from "@tabler/icons/check.svg";
 import xIcon from "@tabler/icons/x.svg";
 import DownCircleIcon from "@tabler/icons/circle-arrow-down.svg";
-import { delegate, getFaviconUrl, i18n } from "../share/index.js";
+import { delegate, i18n, metaScraper } from "../share/index.js";
 import defaultFavicon from "../assets/Website.svg?url";
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
@@ -86,7 +86,7 @@ class EditDialogElement extends HTMLElement {
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		root.getElementById("fetch").taskFn = this.fetchFavicon.bind(this);
+		root.getElementById("fetch").taskFn = this.fetchSiteMetadata.bind(this);
 
 		this.handleActionClick = this.handleActionClick.bind(this);
 		root.getElementById("cancel").onclick = this.handleActionClick;
@@ -112,15 +112,18 @@ class EditDialogElement extends HTMLElement {
 		}
 	}
 
-	async fetchFavicon(signal) {
-		if (!this.urlInput.reportValidity()) {
+	async fetchSiteMetadata(signal) {
+		const { nameInput, urlInput } = this;
+		if (!urlInput.reportValidity()) {
 			return;
 		}
-		const url = this.urlInput.value;
-
 		try {
+			const scraper = await metaScraper(urlInput.value, signal);
+			if (nameInput.value === "") {
+				nameInput.value = scraper.doc.title;
+			}
 			URL.revokeObjectURL(this.favicon);
-			this.favicon = await getFaviconUrl(48, url, signal);
+			this.favicon = await scraper.selectFavicon(48);
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

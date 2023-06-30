@@ -6,7 +6,7 @@ import DownCircleIcon from "@tabler/icons/circle-arrow-down.svg";
 import CheckIcon from "@tabler/icons/check.svg";
 import { dragSortContext, nthInChildren, selectFile } from "@kaciras/utilities/browser";
 import "./TaskButton.js";
-import { getFaviconUrl, i18n } from "../share/index.js";
+import { i18n, metaScraper } from "../share/index.js";
 import styles from "./SearchEngineDialog.css";
 
 const template = document.createElement("template");
@@ -210,7 +210,8 @@ class SearchEngineDialogElement extends HTMLElement {
 		const url = this.searchEl.value;
 
 		try {
-			this.changeIcon(await getFaviconUrl(48, url, signal));
+			const scraper = await metaScraper(url, signal);
+			this.changeIcon(await scraper.selectFavicon(48));
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

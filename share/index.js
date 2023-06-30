@@ -1,6 +1,6 @@
 export * from "./lang.js";
 export * from "./dom.js";
-export * from "./favicon.js";
+export * from "./meta.js";
 
 if (globalThis.browser === undefined) {
 	// noinspection JSUnresolvedVariable; The `chrome` is avaliable in Chromium-based browsers.
