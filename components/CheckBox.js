@@ -1,14 +1,13 @@
 import Icon from "@material-design-icons/svg/filled/check_box_outline_blank.svg";
 import IconChecked from "@material-design-icons/svg/filled/check_box.svg";
-import { delegate } from "../share/index.js";
 import styles from "./CheckBox.css";
+import { delegateAttribute } from "../share/index.js";
 
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	<input id='input' type='checkbox'>
-	<div id='icon'></div>
-	<label for='input'><slot/></label>
+	<div></div>
+	<span><slot></slot></span>
 `;
 
 /**
@@ -21,7 +20,7 @@ template.innerHTML = `
 class CheckBoxElement extends HTMLElement {
 
 	static get observedAttributes() {
-		return ["checked", "disabled", "name"];
+		return ["checked"];
 	}
 
 	constructor() {
@@ -29,31 +28,20 @@ class CheckBoxElement extends HTMLElement {
 		const root = this.attachShadow({ mode: "open" });
 		root.append(template.content.cloneNode(true));
 
-		this.inputEl = root.getElementById("input");
-		this.markEl = root.getElementById("icon");
-
-		delegate(this, "name", this.inputEl, "name");
+		this.markEl = root.querySelector("div");
 
 		this.addEventListener("keyup", this.handleKeyup);
 		this.addEventListener("click", this.toggleChecked);
 	}
 
-	set checked(value) {
-		this.inputEl.checked = Boolean(value);
-		this.markEl.innerHTML = value ? IconChecked : Icon;
+	connectedCallback() {
+		this.tabIndex = 0;
+		this.setAttribute("role", "checkbox");
 	}
 
-	get checked() {
-		return this.inputEl.checked;
-	}
-
-	attributeChangedCallback(name, oldValue, newValue) {
-		const { inputEl } = this;
-		if (newValue === null) {
-			inputEl.removeAttribute(name);
-		} else {
-			inputEl.setAttribute(name, newValue);
-		}
+	attributeChangedCallback(name, oldValue, value) {
+		// Only "checked" attribute currently.
+		this.markEl.innerHTML = value !== null ? IconChecked : Icon;
 	}
 
 	handleKeyup(event) {
@@ -68,7 +56,7 @@ class CheckBoxElement extends HTMLElement {
 	 * so no need to set `event.detail`.
 	 */
 	toggleChecked() {
-		if (this.inputEl.disabled) {
+		if (this.disabled) {
 			return;
 		}
 		const event = new CustomEvent("input", {
@@ -79,6 +67,10 @@ class CheckBoxElement extends HTMLElement {
 		}
 	}
 }
+
+delegateAttribute(CheckBoxElement.prototype, "name");
+delegateAttribute(CheckBoxElement.prototype, "disabled", true);
+delegateAttribute(CheckBoxElement.prototype, "checked", true);
 
 // Simulation <input type="checkbox"> for compatibility.
 CheckBoxElement.prototype.type = "checkbox";

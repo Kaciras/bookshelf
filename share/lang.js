@@ -57,6 +57,35 @@ export function delegate(object, name, target, prop) {
 	});
 }
 
+export function delegateAttribute(el, name, isBool) {
+	function getBool() {
+		return this.hasAttribute(name);
+	}
+
+	function setBool(value) {
+		if (value) {
+			this.setAttribute(name, "");
+		} else {
+			this.removeAttribute(name);
+		}
+	}
+
+	function getDefault() {
+		return this.getAttribute(name);
+	}
+
+	function setDefault(value) {
+		return this.setAttribute(name, value);
+	}
+
+	Object.defineProperty(el, name, {
+		configurable: true,
+		enumerable: true,
+		get: isBool ? getBool : getDefault,
+		set: isBool ? setBool : setDefault,
+	});
+}
+
 /**
  * returns the directory name of a path.
  */
