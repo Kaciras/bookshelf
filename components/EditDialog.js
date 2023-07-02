@@ -123,7 +123,7 @@ class EditDialogElement extends HTMLElement {
 				nameInput.value = scraper.doc.title;
 			}
 			URL.revokeObjectURL(this.favicon);
-			this.favicon = await scraper.selectFavicon(48);
+			this.favicon = await scraper.selectFavicon(48, signal);
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

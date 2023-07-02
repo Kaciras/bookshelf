@@ -211,7 +211,7 @@ class SearchEngineDialogElement extends HTMLElement {
 
 		try {
 			const scraper = await metaScraper(url, signal);
-			this.changeIcon(await scraper.selectFavicon(48));
+			this.changeIcon(await scraper.selectFavicon(48, signal));
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);

@@ -79,25 +79,26 @@ export async function metaScraper(pageURL, signal) {
 	async function selectFavicon(bestSize, signal) {
 		let selected;
 		let selectedSize = Number.MAX_SAFE_INTEGER;
-		let selectedSVG = false;
+		let hasSVG = false;
 
 		for await (const link of fetchIconLinks(signal)) {
 			const { sizes, href, type } = link;
-			let size;
+			let width;
 			let actualSize = null;
 
-			if (selectedSVG && type !== "image/svg+xml") {
+			const isSVG = type === "image/svg+xml";
+			if (hasSVG && !isSVG) {
 				continue; // Ignore raster images if there are SVG。
 			}
 
 			try {
-				// Assume the image has same width and height.
+				// Assume the image is square.
 				const match = /(\d+)x(\d+)/.exec(sizes[0]);
 				if (match !== null) {
-					size = parseInt(match[1]);
+					width = parseInt(match[1]);
 				} else {
 					actualSize = await getImageResolution(href);
-					size = actualSize.width;
+					width = actualSize.width;
 				}
 
 				/*
@@ -106,19 +107,18 @@ export async function metaScraper(pageURL, signal) {
 				 * 3) Choose the smallest among larger than bestSize.
 				 */
 				if (
-					!selectedSVG && type === "image/svg+xml" ||
-					!selected ||
-					size >= bestSize && size < selectedSize
+					isSVG || !selected ||
+					width >= bestSize && width < selectedSize
 				) {
 					// Ensure the file is available。
 					if (!actualSize) {
 						await getImageResolution(href);
 					}
-					if (size >= bestSize) {
-						selectedSize = size;
-					}
 					selected = href;
-					selectedSVG = type === "image/svg+xml";
+					hasSVG = isSVG;
+					if (width >= bestSize) {
+						selectedSize = width;
+					}
 				}
 			} catch (e) {
 				console.warn(`Cannot load favicon ${href}`, e);
