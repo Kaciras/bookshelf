@@ -17,10 +17,10 @@ dialog {
 }
 
 h1 {
-	margin: 0;
-	padding: 10px 20px;
+	margin: 10px 20px;
 	font-size: 1.4rem;
 	font-weight: normal;
+	line-height: 28px;
 }
 
 button {

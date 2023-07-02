@@ -35,11 +35,12 @@ class CheckBoxElement extends HTMLElement {
 	}
 
 	connectedCallback() {
-		this.tabIndex = 0;
 		this.setAttribute("role", "checkbox");
+		this.tabIndex = 0;
+		this.attributeChangedCallback("checked", "", null);
 	}
 
-	attributeChangedCallback(name, oldValue, value) {
+	attributeChangedCallback(name, _, value) {
 		// Only "checked" attribute currently.
 		this.markEl.innerHTML = value !== null ? IconChecked : Icon;
 	}
