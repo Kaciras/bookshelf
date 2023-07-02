@@ -16,7 +16,7 @@ import { fetchChecked } from "../share/index.js";
 export const CACHE_ORIGIN = "https://cache/";
 
 /**
- * Cache for remote resources.
+ * Offline cache for remote resources.
  *
  * 4 kind of urls:
  * 1) `null` to indicate default value.
@@ -39,9 +39,8 @@ export class IconCache {
 			return model.iconKey = null;
 		}
 
-		// Internal resource is relative URL.
 		try {
-			new URL(rawUrl);
+			new URL(rawUrl); // Internal resource.
 		} catch {
 			return model.iconKey = rawUrl;
 		}
@@ -69,8 +68,10 @@ export class IconCache {
 	 * - For internal resource, fallback to default.
 	 * - For HTTP resource, download and put it to cache.
 	 *
-	 * The favicon URL may be created by `URL.createObjectURL`, you
-	 * should dispose it with `URL.revokeObjectURL` if no longer used.
+	 * `model.favicon` will be set to URL of the cached item.
+	 *
+	 * The URL may be created by `URL.createObjectURL`, you should
+	 * dispose it with `URL.revokeObjectURL` if no longer used.
 	 */
 	async populate(model, iconKey = model.iconKey) {
 		if (!iconKey) {

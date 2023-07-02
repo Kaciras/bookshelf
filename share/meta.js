@@ -2,9 +2,10 @@ import { dirname, fetchChecked } from "./lang.js";
 import { getImageResolution } from "./dom.js";
 
 /**
+ * Download and parse a page for retrieve its metadata (favicon, title, etc...).
  *
- * @param pageURL The URL of the page
- * @param signal
+ * @param pageURL The URL of the page.
+ * @param signal The downloading is abortable.
  */
 export async function metaScraper(pageURL, signal) {
 	const html = await (await fetchChecked(pageURL, signal)).text();
@@ -20,7 +21,7 @@ export async function metaScraper(pageURL, signal) {
 	 * 1）<link> elements in the <head>.
 	 * 2）icons property in PWA manifest。
 	 */
-	async function* fetchIconLinks() {
+	async function* fetchIconLinks(signal) {
 		const links = doc.head.getElementsByTagName("link");
 		let manifestURL;
 
@@ -49,16 +50,17 @@ export async function metaScraper(pageURL, signal) {
 	 * PWA manifest may contain HD favicons, add them to candidate list.
 	 *
 	 * @param url The URL of the manifest.json.
+	 * @param signal The fetching is abortable.
 	 * @see https://developer.mozilla.org/zh-CN/docs/Web/Manifest#icons
 	 */
-	async function searchManifest(url) {
+	async function searchManifest(url, signal) {
 		const response = await fetchChecked(url, { signal });
 		const { icons = [] } = await response.json();
 		const baseURL = dirname(url);
 
 		return icons.map(icon => {
 			const sizes = icon.sizes.split(" ");
-			const href = new URL(icon.src, baseURL);
+			const href = new URL(icon.src, baseURL).toString();
 			return { href, sizes, type: icon.type };
 		});
 	}
@@ -71,9 +73,10 @@ export async function metaScraper(pageURL, signal) {
 	 * downloading them again will not produce any additional traffic.
 	 *
 	 * @param bestSize The size of the icon you want to download.
+	 * @param signal The fetching is abortable.
 	 * @return {Promise<string>} URL of the favicon, may not exist.
 	 */
-	async function selectFavicon(bestSize) {
+	async function selectFavicon(bestSize, signal) {
 		let selected;
 		let selectedSize = Number.MAX_SAFE_INTEGER;
 		let selectedSVG = false;

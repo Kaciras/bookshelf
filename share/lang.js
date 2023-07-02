@@ -57,7 +57,10 @@ export function delegate(object, name, target, prop) {
 	});
 }
 
-export function delegateAttribute(el, name, isBool) {
+/**
+ * Define getter & setter for an attribute of the custom element.
+ */
+export function delegateAttribute(clazz, name, isBool) {
 	function getBool() {
 		return this.hasAttribute(name);
 	}
@@ -78,7 +81,7 @@ export function delegateAttribute(el, name, isBool) {
 		return this.setAttribute(name, value);
 	}
 
-	Object.defineProperty(el, name, {
+	Object.defineProperty(clazz.prototype, name, {
 		configurable: true,
 		enumerable: true,
 		get: isBool ? getBool : getDefault,

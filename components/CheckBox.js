@@ -68,9 +68,9 @@ class CheckBoxElement extends HTMLElement {
 	}
 }
 
-delegateAttribute(CheckBoxElement.prototype, "name");
-delegateAttribute(CheckBoxElement.prototype, "disabled", true);
-delegateAttribute(CheckBoxElement.prototype, "checked", true);
+delegateAttribute(CheckBoxElement, "name");
+delegateAttribute(CheckBoxElement, "disabled", true);
+delegateAttribute(CheckBoxElement, "checked", true);
 
 // Simulation <input type="checkbox"> for compatibility.
 CheckBoxElement.prototype.type = "checkbox";
