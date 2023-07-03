@@ -34,6 +34,9 @@ devDependencies:
   '@types/firefox-webext-browser':
     specifier: ^111.0.1
     version: 111.0.1
+  adm-zip:
+    specifier: ^0.5.10
+    version: 0.5.10
   eslint:
     specifier: ^8.43.0
     version: 8.43.0
@@ -43,6 +46,9 @@ devDependencies:
   html-minifier-terser:
     specifier: 7.2.0
     version: 7.2.0
+  ignore:
+    specifier: ^5.2.4
+    version: 5.2.4
   is-builtin-module:
     specifier: ^3.2.1
     version: 3.2.1
@@ -79,9 +85,6 @@ devDependencies:
   rollup-plugin-visualizer:
     specifier: ^5.9.2
     version: 5.9.2(rollup@3.25.3)
-  rollup-plugin-zip:
-    specifier: ^1.0.3
-    version: 1.0.3(rollup@3.25.3)
   svgo:
     specifier: ^3.0.2
     version: 3.0.2
@@ -336,6 +339,11 @@ packages:
     hasBin: true
     dev: true
 
+  /adm-zip@0.5.10:
+    resolution: {integrity: sha512-x0HvcHqVJNTPk/Bw8JbLWlWoo6Wwnsug0fnYYro1HBrjxZ3G7/AZk7Ahv8JwDe1uIcz8eBqvu86FuF1POiG7vQ==}
+    engines: {node: '>=6.0'}
+    dev: true
+
   /ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
     dependencies:
@@ -381,10 +389,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       fill-range: 7.0.1
-    dev: true
-
-  /buffer-crc32@0.2.13:
-    resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
     dev: true
 
   /buffer-from@1.1.2:
@@ -1308,15 +1312,6 @@ packages:
       yargs: 17.7.2
     dev: true
 
-  /rollup-plugin-zip@1.0.3(rollup@3.25.3):
-    resolution: {integrity: sha512-HTF9I4VjJnDVXd37P/POZPi8p5Luq4mP7A3Lbaxk3wPxRg8DXbxLHDlWxP9X3I1wYYgbT+xHuw8WEwb8RKwpQw==}
-    peerDependencies:
-      rollup: '>=2.0.2'
-    dependencies:
-      rollup: 3.25.3
-      yazl: 2.5.1
-    dev: true
-
   /rollup@3.25.3:
     resolution: {integrity: sha512-ZT279hx8gszBj9uy5FfhoG4bZx8c+0A1sbqtr7Q3KNWIizpTdDEPZbV2xcbvHsnFp4MavCQYZyzApJ+virB8Yw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -1515,12 +1510,6 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
-    dev: true
-
-  /yazl@2.5.1:
-    resolution: {integrity: sha512-phENi2PLiHnHb6QBVot+dJnaAZ0xosj7p3fWl+znIjBDlnMI2PsZCJZ306BPTFOaHf5qdDEI8x5qFrSOBN5vrw==}
-    dependencies:
-      buffer-crc32: 0.2.13
     dev: true
 
   /yocto-queue@0.1.0:

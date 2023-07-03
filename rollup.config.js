@@ -2,7 +2,6 @@ import { env } from "node:process";
 import { visualizer } from "rollup-plugin-visualizer";
 import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
-import zip from "rollup-plugin-zip";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import asset from "./rollup/asset.js";
 import htmlEntry from "./rollup/html.js";
@@ -11,6 +10,7 @@ import copy from "./rollup/copy.js";
 import postcss from "./rollup/postcss.js";
 import svg from "./rollup/svg.js";
 import template from "./rollup/template.js";
+import { packBundle, packSources } from "./rollup/pack.js";
 
 const isProduction = env.NODE_ENV === "production";
 
@@ -69,7 +69,12 @@ export default {
 		template(),
 
 		isProduction && terser(),
-		isProduction && zip(),
 		isProduction && visualizer(),
+
+		env.PACK && packBundle(true),
+		env.PACK && packSources(
+			"dist/source.zip",
+			["chrome", "dist", "screenshot.webp"],
+		),
 	],
 };
