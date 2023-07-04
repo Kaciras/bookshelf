@@ -13,6 +13,7 @@ import template from "./rollup/template.js";
 import { packBundle, packSources } from "./rollup/pack.js";
 
 const isProduction = env.NODE_ENV === "production";
+const addonZipName = `${env.npm_package_name}-${env.npm_package_version}.zip`;
 
 function minifyJson(source, { path }) {
 	if (/\.json$/.test(path)) {
@@ -71,10 +72,10 @@ export default {
 		isProduction && terser(),
 		isProduction && visualizer(),
 
-		env.PACK && packBundle(true),
+		env.PACK && packBundle(addonZipName, true),
 		env.PACK && packSources(
-			"dist/source.zip",
-			["chrome", "dist", "screenshot.webp"],
+			`source-${env.npm_package_version}.zip`,
+			["/chrome", "/screenshot.webp"],
 		),
 	],
 };
