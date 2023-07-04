@@ -60,12 +60,8 @@ class CheckBoxElement extends HTMLElement {
 		if (this.disabled) {
 			return;
 		}
-		const event = new CustomEvent("input", {
-			cancelable: true,
-		});
-		if (this.dispatchEvent(event)) {
-			this.checked = !this.checked;
-		}
+		this.checked = !this.checked;
+		this.dispatchEvent(new CustomEvent("input"));
 	}
 }
 
