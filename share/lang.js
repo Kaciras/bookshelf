@@ -11,6 +11,12 @@
  * Debouncing will bunch a series of sequential calls to a function into
  * a single call to that function. It ensures that one notification is
  * made for an event that fires multiple times.
+ *
+ * There 2 kind of debouncing: cancel previous or ignore next,
+ * this class support the first.
+ *
+ * If you pass `delay = 0` it will not do throttling.
+ * If you ignore the signal in the handler, it will not do debouncing.
  */
 export class Debounced {
 
@@ -18,12 +24,14 @@ export class Debounced {
 	timer = 0;
 
 	/**
+	 * Create an instance with handler & delay, you can change them later.
+	 *
 	 * @param handler The function to execute.
-	 * @param threshold Debounce delay in millisecond.
+	 * @param delay Debounce delay in millisecond, 0 = disabled.
 	 */
-	constructor(handler, threshold = 0) {
+	constructor(handler, delay = 0) {
 		this.handler = handler;
-		this.threshold = threshold;
+		this.delay = delay;
 		this.run = this.run.bind(this);
 	}
 
@@ -39,9 +47,18 @@ export class Debounced {
 	}
 
 	reschedule() {
-		const { timer, run, threshold } = this;
+		const { timer, run, delay } = this;
 		clearTimeout(timer);
-		this.timer = setTimeout(run, threshold);
+
+		/*
+		 * Don't use `setTimeout(run, 0)` when throttling is disabled,
+		 * because JS engine may have minimum delay for setTimeout.
+		 */
+		if (delay === 0) {
+			run();
+		} else {
+			this.timer = setTimeout(run, delay);
+		}
 	}
 }
 
@@ -54,38 +71,6 @@ export function delegate(object, name, target, prop) {
 		enumerable: true,
 		get: () => target[prop],
 		set: value => { target[prop] = value; },
-	});
-}
-
-/**
- * Define getter & setter for an attribute of the custom element.
- */
-export function delegateAttribute(clazz, name, isBool) {
-	function getBool() {
-		return this.hasAttribute(name);
-	}
-
-	function setBool(value) {
-		if (value) {
-			this.setAttribute(name, "");
-		} else {
-			this.removeAttribute(name);
-		}
-	}
-
-	function getDefault() {
-		return this.getAttribute(name);
-	}
-
-	function setDefault(value) {
-		return this.setAttribute(name, value);
-	}
-
-	Object.defineProperty(clazz.prototype, name, {
-		configurable: true,
-		enumerable: true,
-		get: isBool ? getBool : getDefault,
-		set: isBool ? setBool : setDefault,
 	});
 }
 

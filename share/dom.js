@@ -28,6 +28,38 @@ export function bindInput(input, receiver) {
 }
 
 /**
+ * Define getter & setter for an attribute of the custom element.
+ */
+export function delegateAttribute(clazz, name, isBool) {
+	function getBool() {
+		return this.hasAttribute(name);
+	}
+
+	function setBool(value) {
+		if (value) {
+			this.setAttribute(name, "");
+		} else {
+			this.removeAttribute(name);
+		}
+	}
+
+	function getDefault() {
+		return this.getAttribute(name);
+	}
+
+	function setDefault(value) {
+		return this.setAttribute(name, value);
+	}
+
+	Object.defineProperty(clazz.prototype, name, {
+		configurable: true,
+		enumerable: true,
+		get: isBool ? getBool : getDefault,
+		set: isBool ? setBool : setDefault,
+	});
+}
+
+/**
  * Download the image by url and return its width & height.
  *
  * @param url The url of the image.
