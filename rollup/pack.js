@@ -34,11 +34,12 @@ export function packBundle(output, clean = false) {
  * Source files are read from disk, rollup output and git related files are auto-ignored.
  *
  * @param output Name to the output zip file.
- * @param excludes Additional files to exclude.
+ * @param excludes Additional files to exclude, support gitignore pattern.
  */
 export function packSources(output, excludes = []) {
 	const ignored = ignore();
 	ignored.add(".git");
+	ignored.add(".gitignore");
 	ignored.add(readFileSync(".gitignore", "utf8"));
 	ignored.add(excludes);
 	const filter = ignored.createFilter();
