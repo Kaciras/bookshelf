@@ -18,7 +18,8 @@ export function packBundle(output, clean = false) {
 				if (clean) {
 					delete bundle[k];
 				}
-				zip.addFile(k, v.code ?? v.source);
+				const name = v.fileName.replaceAll("\\", "/");
+				zip.addFile(name, v.code ?? v.source);
 			}
 			this.emitFile({
 				type: "asset",
