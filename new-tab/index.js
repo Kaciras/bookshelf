@@ -8,6 +8,14 @@ import * as iconCache from "./cache.js";
 import * as shortcuts from "./shortcuts.js";
 import { OpenSearchEngine, searchIcons } from "./search.js";
 
+/*
+ * Features are currently not available:
+ * 1) Autofocus on page load. Browsers are focus on address box when open a new-tab page,
+ *    and ignore `focus()` calls.
+ * 2) Display latest visited site as shortcuts. Web extension API does not provide a way
+ *    to retrieve cache favicon of history items.
+ */
+
 const engineSelect = document.createElement("engine-select");
 const searchBox = document.createElement("search-box");
 

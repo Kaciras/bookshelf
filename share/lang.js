@@ -99,10 +99,6 @@ export function dirname(path) {
 
 /**
  * Just like the `fetch`, but checks the status code.
- *
- * @param input {RequestInfo | URL}
- * @param init {RequestInit}
- * @return {Promise<Response>}
  */
 export async function fetchChecked(input, init) {
 	const response = await fetch(input, init);

@@ -7,22 +7,25 @@ import { i18n } from "../share/index.js";
 const syncSettings = browser.storage.sync;
 
 export const appConfig = {
-	/** Increase when config has breaking changes */
+	/** Increase when config has breaking changes. */
 	version: 1,
 
+	/** Configurable properties of the search box. */
 	searchBox: {
+		waitIME: true,
 		limit: 8,
 		threshold: 500,
-		waitIME: true,
 	},
 
 	shortcuts: [],
 
-	/*
+	/** Index of the engines used by default. */
+	defaultEngine: 1,
+
+	/**
  	 * Default search engines, you can find more at:
  	 * https://github.com/chromium/chromium/blob/main/components/search_engines/prepopulated_engines.json
  	 */
-	defaultEngine: 1,
 	engines: [{
 		name: i18n("DuckDuckGo"),
 		iconKey: DuckDuckGoIcon,
@@ -41,11 +44,14 @@ export const appConfig = {
 	}],
 };
 
+/**
+ * await it before accessing `appConfig`.
+ */
 export const loadingAppConfig = syncSettings.get().then(v => Object.assign(appConfig, v));
 
-export function saveConfig(object) {
-	Object.assign(appConfig, object);
-	return syncSettings.set(object);
+export function saveAppConfig(changes) {
+	Object.assign(appConfig, changes);
+	return syncSettings.set(changes);
 }
 
 export async function clearAllData() {

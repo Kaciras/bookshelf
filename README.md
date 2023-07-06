@@ -2,7 +2,7 @@
 
 ![Screenshot](https://github.com/Kaciras/browser-theme/raw/master/screenshot.webp)
  
-minimalist (< 30 KB) browser new tab page.
+minimalist (< 30 KB zipped) browser new tab page.
 
 Supported platforms:
 - Firefox >= 109.0

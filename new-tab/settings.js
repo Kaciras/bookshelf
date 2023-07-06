@@ -13,7 +13,7 @@ import "../components/EditDialog.js";
 import "../components/TopSiteDialog.js";
 import "../components/SearchEngineDialog.js";
 import { bindInput, i18n } from "../share/index.js";
-import { appConfig, clearAllData, exportSettings, importSettings, saveConfig } from "./storage.js";
+import { appConfig, clearAllData, exportSettings, importSettings, saveAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import { setSearchEngines } from "./index.js";
 import { searchIcons } from "./search.js";
@@ -64,7 +64,7 @@ enginesDialog.addEventListener("change", async ({ detail }) => {
 		delete engine.favicon;
 	}
 	setSearchEngines(detail);
-	saveConfig(detail).then(iconCache.removeUnused);
+	saveAppConfig(detail).then(iconCache.removeUnused);
 });
 
 const doneButton = document.createElement("button");
@@ -165,6 +165,6 @@ export function switchToSettingMode() {
 	children[0].onclick = () => {
 		const { limit, waitIME, threshold } = searchBox;
 		menu.close();
-		return saveConfig({ searchBox: { limit, waitIME, threshold } });
+		return saveAppConfig({ searchBox: { limit, waitIME, threshold } });
 	};
 }

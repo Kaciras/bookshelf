@@ -1,5 +1,5 @@
 import { dragSortContext } from "@kaciras/utilities/browser";
-import { saveConfig } from "./storage.js";
+import { saveAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
 import defaultFavicon from "../assets/Website.svg?url";
 
@@ -22,7 +22,7 @@ async function persist() {
 		const { label, iconKey, url } = els[i];
 		shortcuts[i] = { label, url, iconKey };
 	}
-	return saveConfig({ shortcuts });
+	return saveAppConfig({ shortcuts });
 }
 
 function appendElement(props) {
