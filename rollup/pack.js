@@ -21,6 +21,7 @@ export function packBundle(output, clean = false) {
 				const name = v.fileName.replaceAll("\\", "/");
 				zip.addFile(name, v.code ?? v.source);
 			}
+			this.info(`Pack the bundle into ${output}`);
 			this.emitFile({
 				type: "asset",
 				fileName: output,
@@ -60,6 +61,7 @@ export function packSources(output, excludes = []) {
 					zip.addLocalFolder(file, file);
 				}
 			}
+			this.info(`Pack the source into ${output}`);
 			return zip.writeZipPromise(output);
 		},
 	};

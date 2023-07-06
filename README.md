@@ -1,12 +1,14 @@
 # Bookshelf
 
+[![Firefox Add-on](https://img.shields.io/amo/v/bookshelf-newtab)](https://addons.mozilla.org/en-US/firefox/addon/bookshelf-newtab)
+
 ![Screenshot](https://github.com/Kaciras/browser-theme/raw/master/screenshot.webp)
  
-minimalist (< 30 KB zipped) browser new tab page.
+minimalist & small (< 30 KB zipped) browser new tab page.
 
-Supported platforms:
-- Firefox >= 109.0
-- Edge & Chrome >= 89
+# Install
+
+[Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/bookshelf-newtab)
 
 > **Note**
 > 
@@ -26,10 +28,16 @@ Install all dependencies:
 pnpm install
 ```
 
-Build and package the app:
+Build and the app:
 
 ```
 pnpm build
+```
+
+Pack build result and source files:
+
+```
+pnpm run pack
 ```
 
 # FAQ
