@@ -75,7 +75,7 @@ export default {
 		env.PACK && packBundle(addonZipName, true),
 		env.PACK && packSources(
 			`source-${env.npm_package_version}.zip`,
-			["/chrome", "/screenshot.webp"],
+			["/chrome", "/doc"],
 		),
 	],
 };

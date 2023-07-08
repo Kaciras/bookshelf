@@ -2,7 +2,7 @@
 
 [![Firefox Add-on](https://img.shields.io/amo/v/bookshelf-newtab)](https://addons.mozilla.org/en-US/firefox/addon/bookshelf-newtab)
 
-![Screenshot](https://github.com/Kaciras/browser-theme/raw/master/doc/screenshot.webp)
+![Screenshot](https://github.com/Kaciras/browser-theme/raw/master/doc/banner.webp)
  
 minimalist & small (< 30 KB zipped) browser new tab page.
 
