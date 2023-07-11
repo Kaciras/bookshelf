@@ -95,7 +95,7 @@
 	"SelectFile": {
 		"message": "选择文件"
 	},
-	"DownloadFavicon": {
+	"Fetch": {
 		"message": "自动获取"
 	},
 	"RequireSearchEngine": {

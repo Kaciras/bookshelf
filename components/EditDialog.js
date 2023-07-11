@@ -29,7 +29,7 @@ template.innerHTML = `
 				</div>
 				<task-button id='fetch'>
 					${DownCircleIcon}
-					${i18n("DownloadFavicon")}
+					${i18n("Fetch")}
 				</task-button>
 			</div>
 			<div id='field-group'>

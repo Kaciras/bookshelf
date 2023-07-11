@@ -72,13 +72,13 @@
 		"message": "Show setting menu"
 	},
 	"TopSiteDialog": {
-		"message": "Add from top sites"
+		"message": "Import shortcuts from top sites"
 	},
 	"NewShortcut": {
 		"message": "New shortcut"
 	},
 	"AddToShortcuts": {
-		"message": "Add to shortcut"
+		"message": "Add to shortcuts"
 	},
 	"EditShortcutDialog": {
 		"message": "Edit shortcut"
@@ -95,8 +95,8 @@
 	"SelectFile": {
 		"message": "Select file"
 	},
-	"DownloadFavicon": {
-		"message": "Download"
+	"Fetch": {
+		"message": "Fetch"
 	},
 	"RequireSearchEngine": {
 		"message": "At least one search engine is required."
