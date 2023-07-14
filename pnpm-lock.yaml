@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@kaciras/utilities':
-    specifier: ^0.9.3
-    version: 0.9.3
+    specifier: ^0.10.0
+    version: 0.10.0
   '@material-design-icons/svg':
     specifier: ^0.14.9
     version: 0.14.9
   '@tabler/icons':
-    specifier: ^2.24.0
-    version: 2.24.0
+    specifier: ^2.25.0
+    version: 2.25.0
 
 devDependencies:
   '@kaciras/eslint-config-core':
@@ -62,23 +62,23 @@ devDependencies:
     specifier: 6.1.5
     version: 6.1.5
   postcss:
-    specifier: ^8.4.25
-    version: 8.4.25
+    specifier: ^8.4.26
+    version: 8.4.26
   postcss-calc:
     specifier: ^9.0.1
-    version: 9.0.1(postcss@8.4.25)
+    version: 9.0.1(postcss@8.4.26)
   postcss-csso:
     specifier: ^6.0.1
-    version: 6.0.1(postcss@8.4.25)
+    version: 6.0.1(postcss@8.4.26)
   postcss-nested:
     specifier: ^6.0.1
-    version: 6.0.1(postcss@8.4.25)
+    version: 6.0.1(postcss@8.4.26)
   postcss-simple-vars:
     specifier: ^7.0.1
-    version: 7.0.1(postcss@8.4.25)
+    version: 7.0.1(postcss@8.4.26)
   postcss-variable-compress:
     specifier: ^3.0.0
-    version: 3.0.0(postcss@8.4.25)
+    version: 3.0.0(postcss@8.4.26)
   rollup:
     specifier: ^3.26.2
     version: 3.26.2
@@ -213,8 +213,8 @@ packages:
       eslint-utils: 3.0.0(eslint@8.44.0)
     dev: true
 
-  /@kaciras/utilities@0.9.3:
-    resolution: {integrity: sha512-GrA1Wu5iV1NtdvvwSJQuP8PKKjdCnWGrSpkPlEln/VjG8qphYgjyO2nxyveQkAtQEBAWU1q6V710wH8jnH496w==}
+  /@kaciras/utilities@0.10.0:
+    resolution: {integrity: sha512-OF3wqlpo+BRWdoJowaN9/cRM7N/F4qORPnRvw2sN/HPUEfSBVrJ9BuY/niI00/tQFftmCKasWm5KR3ztlh6UiQ==}
     dev: false
 
   /@material-design-icons/svg@0.14.9:
@@ -304,8 +304,8 @@ packages:
       rollup: 3.26.2
     dev: true
 
-  /@tabler/icons@2.24.0:
-    resolution: {integrity: sha512-Otv6zrVF3HU54G6FK7OPODcQmKR9KgM6Ppi+ib3gHHB1LZEs2HIdQJYTHP5dGE+yOQWtXS9ZnGmSZDkSFLbkkg==}
+  /@tabler/icons@2.25.0:
+    resolution: {integrity: sha512-Z+FtSZoG/CM1TMCgg7elUew2m0+qMdh5gutMhvxiIY77KIIsE6L/6fUBy+rPXWE9v7MV296fsnCvbpfgwpXupQ==}
     dev: false
 
   /@trysound/sax@0.2.0:
@@ -1175,34 +1175,34 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
-  /postcss-calc@9.0.1(postcss@8.4.25):
+  /postcss-calc@9.0.1(postcss@8.4.26):
     resolution: {integrity: sha512-TipgjGyzP5QzEhsOZUaIkeO5mKeMFpebWzRogWG/ysonUlnHcq5aJe0jOjpfzUU8PeSaBQnrE8ehR0QA5vs8PQ==}
     engines: {node: ^14 || ^16 || >=18.0}
     peerDependencies:
       postcss: ^8.2.2
     dependencies:
-      postcss: 8.4.25
+      postcss: 8.4.26
       postcss-selector-parser: 6.0.13
       postcss-value-parser: 4.2.0
     dev: true
 
-  /postcss-csso@6.0.1(postcss@8.4.25):
+  /postcss-csso@6.0.1(postcss@8.4.26):
     resolution: {integrity: sha512-ZV4yEziMrx6CEiqabGLrDva0pMD7Fbw7yP+LzJvaynM4OJgTssGN6dHiMsJMJdpmNaLJltXVLsrb/5sxbFa8sA==}
     engines: {node: ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
     peerDependencies:
       postcss: ^8.0.0
     dependencies:
       csso: 5.0.5
-      postcss: 8.4.25
+      postcss: 8.4.26
     dev: true
 
-  /postcss-nested@6.0.1(postcss@8.4.25):
+  /postcss-nested@6.0.1(postcss@8.4.26):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
-      postcss: 8.4.25
+      postcss: 8.4.26
       postcss-selector-parser: 6.0.13
     dev: true
 
@@ -1214,30 +1214,30 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
-  /postcss-simple-vars@7.0.1(postcss@8.4.25):
+  /postcss-simple-vars@7.0.1(postcss@8.4.26):
     resolution: {integrity: sha512-5GLLXaS8qmzHMOjVxqkk1TZPf1jMqesiI7qLhnlyERalG0sMbHIbJqrcnrpmZdKCLglHnRHoEBB61RtGTsj++A==}
     engines: {node: '>=14.0'}
     peerDependencies:
       postcss: ^8.2.1
     dependencies:
-      postcss: 8.4.25
+      postcss: 8.4.26
     dev: true
 
   /postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
     dev: true
 
-  /postcss-variable-compress@3.0.0(postcss@8.4.25):
+  /postcss-variable-compress@3.0.0(postcss@8.4.26):
     resolution: {integrity: sha512-BTQHgBF3dmM1UmqR/Zn8X4U1jYnE9iQywKJFYaf4h0+KRKYvXd6jjU8ODlPq681I/Wdy97sja603b9kD3xq9Ow==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       postcss: ^8.2.8
     dependencies:
-      postcss: 8.4.25
+      postcss: 8.4.26
     dev: true
 
-  /postcss@8.4.25:
-    resolution: {integrity: sha512-7taJ/8t2av0Z+sQEvNzCkpDynl0tX3uJMCODi6nT3PfASC7dYCWV9aQ+uiCf+KBD4SEFcu+GvJdGdwzQ6OSjCw==}
+  /postcss@8.4.26:
+    resolution: {integrity: sha512-jrXHFF8iTloAenySjM/ob3gSj7pCu0Ji49hnjqzsgSRa50hkWCKD0HQ+gMNJkW38jBI68MpAAg7ZWwHwX8NMMw==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.6
