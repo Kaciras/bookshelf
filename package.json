@@ -40,14 +40,14 @@
 		"is-builtin-module": "^3.2.1",
 		"magic-string": "^0.30.3",
 		"mime": "^3.0.0",
-		"node-html-parser": "6.1.9",
-		"postcss": "^8.4.29",
+		"node-html-parser": "6.1.10",
+		"postcss": "^8.4.30",
 		"postcss-calc": "^9.0.1",
 		"postcss-csso": "^6.0.1",
 		"postcss-nested": "^6.0.1",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^3.29.1",
+		"rollup": "^3.29.2",
 		"rollup-plugin-visualizer": "^5.9.2",
 		"svgo": "^3.0.2"
 	}
