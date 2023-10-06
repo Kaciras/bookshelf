@@ -42,7 +42,7 @@ $item-padding: 8px;
 		display: block;
 	}
 
-	& > #button {
+	& > button {
 		border-bottom-right-radius: 0;
 	}
 }
@@ -70,7 +70,7 @@ input {
 	}
 }
 
-#button {
+button {
 	padding: 14px;
 	border-radius: 0 var(--panel-radius) var(--panel-radius) 0;
 }

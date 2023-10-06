@@ -14,11 +14,10 @@ template.innerHTML = `
 	>
 	<div id='spinner'/>
 	<button
-		id='button'
+		type='button'
 		tabindex='-1'
 		title='${i18n("Search")}'
 		class='plain'
-		type='button'
 	>
 		${SearchIcon}
 	</button>
@@ -38,9 +37,9 @@ template.innerHTML = `
  */
 class SearchBoxElement extends HTMLElement {
 
-	limit = 8;		// Maximum number of suggestions.
-	api;					// Backend of the engine property.
-	waitIME = true;	// Don't show suggestions for uncompleted IME input.
+	limit = 8;			// Maximum number of suggestions.
+	api;				// Backend of the engine property.
+	waitIME = true;		// Don't show suggestions for uncompleted IME input.
 
 	index = null;		// The index of the selected suggestion.
 
@@ -59,7 +58,7 @@ class SearchBoxElement extends HTMLElement {
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
-		root.getElementById("button").onclick = this.search.bind(this);
+		root.querySelector("button").onclick = this.search.bind(this);
 	}
 
 	/**
@@ -88,11 +87,11 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	get threshold() {
-		return this.fetcher.threshold;
+		return this.fetcher.delay;
 	}
 
 	set threshold(value) {
-		this.fetcher.threshold = value;
+		this.fetcher.delay = value;
 	}
 
 	handleInput(event) {
