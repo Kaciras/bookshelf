@@ -35,6 +35,7 @@ a {
 }
 
 img {
+	margin-right: auto;
 	width: 32px;
 	height: 32px;
 }

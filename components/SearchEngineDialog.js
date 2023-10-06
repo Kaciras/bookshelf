@@ -45,7 +45,7 @@ template.innerHTML = `
 						id='download'
 					>
 						${DownCircleIcon}
-						${i18n("DownloadFavicon")}
+						${i18n("Fetch")}
 					</task-button>
 					<button
 						type='button'
