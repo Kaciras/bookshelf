@@ -36,7 +36,7 @@ export default function createManifestPlugin() {
 			if (!file) {
 				return null;
 			}
-			const resolved = this.resolve(file, undefined, { skipSelf: true });
+			const resolved = this.resolve(file, undefined);
 			return selfId = (await resolved).id + mark;
 		},
 

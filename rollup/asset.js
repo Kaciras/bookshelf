@@ -129,7 +129,7 @@ export default function staticAssetPlugin(options) {
 				return null;
 			}
 			const [file, query] = source.split("?", 2);
-			const resolved = await this.resolve(file, importer, { skipSelf: true });
+			const resolved = await this.resolve(file, importer);
 
 			if (resolved) {
 				return resolved.id + "?" + query;

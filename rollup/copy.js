@@ -60,7 +60,7 @@ export default function copyPlugin(list) {
 			if (importer !== VID) {
 				return null;
 			}
-			return this.resolve(source, undefined, { skipSelf: true });
+			return this.resolve(source, undefined);
 		},
 
 		/**
