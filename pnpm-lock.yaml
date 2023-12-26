@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@kaciras/utilities':
-    specifier: ^0.10.3
-    version: 0.10.3
+    specifier: ^0.10.4
+    version: 0.10.4
   '@material-design-icons/svg':
     specifier: ^0.14.13
     version: 0.14.13
@@ -17,8 +17,8 @@ dependencies:
 
 devDependencies:
   '@kaciras/eslint-config-core':
-    specifier: ^2.6.1
-    version: 2.6.1(eslint@8.56.0)
+    specifier: ^2.6.3
+    version: 2.6.3(eslint@8.56.0)
   '@rollup/plugin-node-resolve':
     specifier: ^15.2.3
     version: 15.2.3(rollup@4.9.1)
@@ -59,8 +59,8 @@ devDependencies:
     specifier: ^4.0.1
     version: 4.0.1
   node-html-parser:
-    specifier: 6.1.11
-    version: 6.1.11
+    specifier: 6.1.12
+    version: 6.1.12
   postcss:
     specifier: ^8.4.32
     version: 8.4.32
@@ -190,8 +190,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@kaciras/eslint-config-core@2.6.1(eslint@8.56.0):
-    resolution: {integrity: sha512-dwV8S/d3a2KujWd1jxU+0HIF2ZcOMSUsl+QPrNvRRS6MGNwpSpvHf7m5+zNJQMqeX8lyoJNlq3QOMuUT24/L0Q==}
+  /@kaciras/eslint-config-core@2.6.3(eslint@8.56.0):
+    resolution: {integrity: sha512-tTPOZlR58N7colpQp/ds72VzV5B8z7HDEkbpdIepQIW+EPifuAVDFBuRmYKoJevUi9a3FiCTNlgUyDJTCu+VsQ==}
     engines: {node: '>=14'}
     peerDependencies:
       eslint: '>=8'
@@ -209,8 +209,8 @@ packages:
       eslint-utils: 3.0.0(eslint@8.56.0)
     dev: true
 
-  /@kaciras/utilities@0.10.3:
-    resolution: {integrity: sha512-qf6xKyxrmnnBtCQ/PyB9TYM+dDHIJkf4Sr30B5tOrNDO8nc1+Nt7uIMndUi4s2Mn8b3AtBhdhgtz769HJMznvQ==}
+  /@kaciras/utilities@0.10.4:
+    resolution: {integrity: sha512-7TyMpLebd0TlzVK532HKHRxeR8M89P8RDOzqWlpVBhztPyXiFuQlcYHSiYthTdIB6Azz63VVFAkT62TVerJ+pw==}
     dev: false
 
   /@material-design-icons/svg@0.14.13:
@@ -1173,8 +1173,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /node-html-parser@6.1.11:
-    resolution: {integrity: sha512-FAgwwZ6h0DSDWxfD0Iq1tsDcBCxdJB1nXpLPPxX8YyVWzbfCjKWEzaynF4gZZ/8hziUmp7ZSaKylcn0iKhufUQ==}
+  /node-html-parser@6.1.12:
+    resolution: {integrity: sha512-/bT/Ncmv+fbMGX96XG9g05vFt43m/+SYKIs9oAemQVYyVcZmDAI2Xq/SbNcpOA35eF0Zk2av3Ksf+Xk8Vt8abA==}
     dependencies:
       css-select: 5.1.0
       he: 1.2.0

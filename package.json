@@ -21,12 +21,12 @@
 		"pack": "rollup -c --environment NODE_ENV:production,PACK"
 	},
 	"dependencies": {
-		"@kaciras/utilities": "^0.10.3",
+		"@kaciras/utilities": "^0.10.4",
 		"@material-design-icons/svg": "^0.14.13",
 		"@tabler/icons": "^2.44.0"
 	},
 	"devDependencies": {
-		"@kaciras/eslint-config-core": "^2.6.1",
+		"@kaciras/eslint-config-core": "^2.6.3",
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@rollup/plugin-replace": "^5.0.5",
 		"@rollup/plugin-terser": "^0.4.4",
@@ -40,7 +40,7 @@
 		"is-builtin-module": "^3.2.1",
 		"magic-string": "^0.30.5",
 		"mime": "^4.0.1",
-		"node-html-parser": "6.1.11",
+		"node-html-parser": "6.1.12",
 		"postcss": "^8.4.32",
 		"postcss-calc": "^9.0.1",
 		"postcss-csso": "^6.0.1",
