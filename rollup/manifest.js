@@ -36,8 +36,8 @@ export default function createManifestPlugin() {
 			if (!file) {
 				return null;
 			}
-			const resolved = this.resolve(file, undefined);
-			return selfId = (await resolved).id + mark;
+			const resolved = await this.resolve(file);
+			return selfId = resolved.id + mark;
 		},
 
 		// Since we added a mark to the id, we need to load it by ourselves.

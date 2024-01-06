@@ -10,7 +10,7 @@ minimalist & small (21KB zipped) new tab page. Instantly load without any networ
 
 [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/bookshelf-newtab)
 
-> **Note**
+> [!NOTE]
 > 
 > As of Some of the suggestion providers does not support CORS, Bookshelf need [host permissions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/host_permissions) to read responses of them. In Firefox host permissions are disabled by default, you need to turn on it after install.
 > 
@@ -22,13 +22,13 @@ minimalist & small (21KB zipped) new tab page. Instantly load without any networ
 
 # Developing
 
-Install all dependencies:
+Install dependencies:
 
 ```
 pnpm install
 ```
 
-Build and the app:
+Build the app:
 
 ```
 pnpm build
