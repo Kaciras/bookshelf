@@ -1,38 +1,6 @@
 import { optimize } from "svgo";
+import { responsiveSVGAttrs } from "vite-plugin-svg-sfc";
 import { AssetType } from "./asset.js";
-
-/**
- * Replace some attributes with reactive value:
- * 1) set width & height to "1em".
- * 2) set fill and stroke to "currentColor" if it's not transparent。
- */
-function reactivePlugin(options = {}) {
-	const { color = true, size = true } = options;
-
-	function enter({ name, attributes }) {
-		if (name !== "svg") {
-			return;
-		}
-		const { fill, stroke } = attributes;
-
-		if (color) {
-			if (stroke && stroke !== "none") {
-				attributes.stroke = "currentColor";
-			}
-			if (fill !== "none") {
-				attributes.fill = "currentColor";
-			}
-		}
-		if (size) {
-			attributes.width = attributes.height = "1em";
-		}
-	}
-
-	return {
-		name: "reactiveSVGAttrs",
-		fn: () => ({ element: { enter } }),
-	};
-}
 
 const builtInPlugins = {
 	name: "preset-default",
@@ -51,7 +19,7 @@ const inlinePlugins = [
 		},
 	},
 	builtInPlugins,
-	reactivePlugin(),
+	responsiveSVGAttrs,
 ];
 
 const resourcePlugins = [
@@ -67,5 +35,5 @@ export default function (source, { type, path }) {
 
 	return optimize(source.string, { plugins, path })
 		.data
-		.replaceAll('"', "'"); // Avoid escapes
+		.replaceAll('"', "'"); // Avoid escapes.
 }
