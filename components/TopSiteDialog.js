@@ -9,9 +9,9 @@ import styles from "./TopSiteDialog.css";
  * Use second level domain for title if it's not present.
  * If the domain has only 1 level, just return it.
  *
- * e.g.
- * "www.example.com" -> "example",
- * "localhost" -> "localhost"
+ * @example
+ * adviceTitle("www.example.com") // "example",
+ * adviceTitle("localhost") // "localhost"
  *
  * @param url The URL of the site
  * @return {string} SLD of TLD if the domain has only 1 level.

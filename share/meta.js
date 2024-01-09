@@ -11,15 +11,15 @@ export async function metaScraper(pageURL, signal) {
 	const html = await (await fetchChecked(pageURL, signal)).text();
 	const doc = new DOMParser().parseFromString(html, "text/html");
 
+	// Don't use .href as it returns absolute URL based on our page。
 	function resolveUrl(link) {
-		// Don't use .href as it returns absolute URL based on our page。
 		return new URL(link.getAttribute("href"), pageURL).toString();
 	}
 
 	/**
 	 * This function gets favicons of the page from the following sources:
 	 * 1）<link> elements in the <head>.
-	 * 2）icons property in PWA manifest。
+	 * 2）icons property in PWA manifest.
 	 */
 	async function* fetchIconLinks(signal) {
 		const links = doc.head.getElementsByTagName("link");

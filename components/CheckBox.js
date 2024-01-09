@@ -42,7 +42,7 @@ class CheckBoxElement extends HTMLElement {
 
 	attributeChangedCallback(name, _, value) {
 		// Only "checked" attribute currently.
-		this.markEl.innerHTML = value !== null ? IconChecked : Icon;
+		this.markEl.innerHTML = value === null ? Icon : IconChecked;
 	}
 
 	handleKeyup(event) {
@@ -53,8 +53,7 @@ class CheckBoxElement extends HTMLElement {
 	}
 
 	/**
-	 * We only use `event.target` to get the value,
-	 * so no need to set `event.detail`.
+	 * We only use `event.target` to get the value, so no need to set `event.detail`.
 	 */
 	toggleChecked() {
 		if (this.disabled) {
