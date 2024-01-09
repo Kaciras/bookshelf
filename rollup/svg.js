@@ -1,5 +1,5 @@
 import { optimize } from "svgo";
-import { responsiveSVGAttrs } from "vite-plugin-svg-sfc";
+import { modifySVGAttrs, responsiveSVGAttrs } from "vite-plugin-svg-sfc";
 import { AssetType } from "./asset.js";
 
 const builtInPlugins = {
@@ -12,14 +12,14 @@ const builtInPlugins = {
 };
 
 const inlinePlugins = [
-	{
-		name: "removeAttrs",
-		params: {
-			attrs: "class",
-		},
-	},
-	builtInPlugins,
 	responsiveSVGAttrs,
+	builtInPlugins,
+	modifySVGAttrs(attrs => {
+		delete attrs.class;
+		delete attrs.xmlns;
+		delete attrs.version;
+		delete attrs["xml:space"];
+	}),
 ];
 
 const resourcePlugins = [
@@ -35,5 +35,5 @@ export default function (source, { type, path }) {
 
 	return optimize(source.string, { plugins, path })
 		.data
-		.replaceAll('"', "'"); // Avoid escapes.
+		.replaceAll("\"", "'"); // Avoid escapes.
 }

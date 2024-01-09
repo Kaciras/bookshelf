@@ -89,8 +89,8 @@ devDependencies:
     specifier: ^3.2.0
     version: 3.2.0
   vite-plugin-svg-sfc:
-    specifier: ^1.2.1
-    version: 1.2.1
+    specifier: ^2.0.1
+    version: 2.0.1
 
 packages:
 
@@ -1592,8 +1592,8 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
-  /vite-plugin-svg-sfc@1.2.1:
-    resolution: {integrity: sha512-bV6q/tKIeFLviUfHkRsmcSA/MBypUAnOuqLWkSn0L/VYwBqvaK4DyokzVwuw57ALjcDMtFu6omxtPa5/tCgAEQ==}
+  /vite-plugin-svg-sfc@2.0.1:
+    resolution: {integrity: sha512-XCZeD1aeIF3MEEhUmnM1SUKrl3TMs/wuy4ONhU5K2rEGSiyzRr3GwPef2BaXIpFVKmkY1KWM/lLQunmERteS0Q==}
     dependencies:
       svgo: 3.2.0
     dev: true
