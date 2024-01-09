@@ -1,19 +1,21 @@
 import { join } from "path";
-import { readdirSync, readFileSync, statSync } from "fs";
+import { readdirSync, readFileSync, statSync, writeFileSync } from "fs";
 import ignore from "ignore";
 import AdmZip from "adm-zip";
+import { dataSizeIEC } from "@kaciras/utilities/node";
 
 /**
  * Rollup plugin to zip up emitted files, result is putted in output dir.
  *
- * @param output Name to the output zip file.
+ * @param fileName Name to the output zip file.
  * @param clean Remove zipped files from bundle, default false.
  */
-export function packBundle(output, clean = false) {
+export function packBundle(fileName, clean = false) {
 	return {
 		name: "pack-bundle",
 		async generateBundle(_, bundle) {
 			const zip = new AdmZip();
+
 			for (const [k, v] of Object.entries(bundle)) {
 				if (clean) {
 					delete bundle[k];
@@ -21,12 +23,12 @@ export function packBundle(output, clean = false) {
 				const name = v.fileName.replaceAll("\\", "/");
 				zip.addFile(name, v.code ?? v.source);
 			}
-			this.info(`Pack the bundle into ${output}`);
-			this.emitFile({
-				type: "asset",
-				fileName: output,
-				source: await zip.toBufferPromise(),
-			});
+
+			const source = await zip.toBufferPromise();
+			this.emitFile({ type: "asset", fileName, source });
+
+			const size = dataSizeIEC.formatDiv(source.length);
+			this.info(`Pack the bundle into ${fileName} (${size})`);
 		},
 	};
 }
@@ -48,8 +50,7 @@ export function packSources(output, excludes = []) {
 
 	return {
 		name: "pack-local-files",
-		writeBundle(options) {
-			output = join(options.dir, output);
+		async writeBundle(options) {
 			ignored.add("/" + options.dir);
 
 			const zip = new AdmZip();
@@ -61,8 +62,12 @@ export function packSources(output, excludes = []) {
 					zip.addLocalFolder(file, file);
 				}
 			}
-			this.info(`Pack the source into ${output}`);
-			return zip.writeZipPromise(output);
+
+			const buffer = await zip.toBufferPromise();
+			writeFileSync(join(options.dir, output), buffer);
+
+			const size = dataSizeIEC.formatDiv(buffer.length);
+			this.info(`Pack source into ${output} (${size})`);
 		},
 	};
 }
