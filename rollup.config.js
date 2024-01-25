@@ -53,18 +53,12 @@ export default {
 		}),
 
 		nodeResolve(),
-		copy([
-			{
-				from: "global.css",
-				context: "new-tab",
-			},
-			{
-				from: "**/*",
-				context: "locales",
-				to: "_locales",
-				toDirectory: true,
-			},
-		]),
+		copy([{
+			from: "**/*",
+			context: "locales",
+			to: "_locales",
+			toDirectory: true,
+		}]),
 		manifest(),
 		htmlEntry(),
 		template(),
