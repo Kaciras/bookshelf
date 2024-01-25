@@ -1,7 +1,6 @@
 import { env } from "node:process";
 import postcss from "postcss";
 import cssnano from "cssnano";
-import nested from "postcss-nested";
 import calc from "postcss-calc";
 import vars from "postcss-simple-vars";
 import varCompress from "postcss-variable-compress";
@@ -10,7 +9,6 @@ import varCompress from "postcss-variable-compress";
 
 const plugins = [
 	vars(),		// Support SCSS-style variables.
-	nested(),	// Support nesting.
 	calc(),		// Reduce calc() references.
 ];
 

@@ -69,7 +69,7 @@ button {
 #edit {
 	right: 20px;
 
-	&:is(:hover, :focus-visible) {
+	&:hover, &:focus-visible {
 		color: white;
 		background: #0e6be6;
 	}
@@ -78,7 +78,7 @@ button {
 #remove {
 	right: -15px;
 
-	&:is(:hover, :focus-visible) {
+	&:hover, &:focus-visible {
 		color: white;
 		background: #de4747;
 	}

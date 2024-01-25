@@ -62,7 +62,7 @@ a {
 	}
 }
 
-:where(input, textarea) {
+input, textarea {
 	display: block;
 	padding: 6px;
 	font-size: 1rem;
