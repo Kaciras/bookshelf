@@ -53,12 +53,12 @@ export default {
 		}),
 
 		nodeResolve(),
-		copy([{
-			from: "**/*",
+		copy({
 			context: "locales",
+			from: "**/*",
 			to: "_locales",
 			toDirectory: true,
-		}]),
+		}),
 		manifest(),
 		htmlEntry(),
 		template(),

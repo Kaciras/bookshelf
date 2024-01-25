@@ -12,7 +12,7 @@ const VID = "COPY_IMPORTER";
  * 1）This plugin add imports for files, let the asset plugin process them.
  * 2）This plugin add files to watch.
  */
-export default function copyPlugin(list) {
+export default function copyPlugin(...patterns) {
 	const ids = new Set();
 
 	return {
@@ -25,13 +25,13 @@ export default function copyPlugin(list) {
 		 * so that they can be processed by the asset plugin。
 		 */
 		async buildStart() {
-			const groups = await Promise.all(list.map(entry => {
+			const groups = await Promise.all(patterns.map(entry => {
 				const { from, context } = entry;
 				return glob(context ? `${context}/${from}` : from);
 			}));
 
-			for (let i = 0; i < list.length; i++) {
-				const { to, context, toDirectory } = list[i];
+			for (let i = 0; i < patterns.length; i++) {
+				const { to, context, toDirectory } = patterns[i];
 				const files = groups[i];
 
 				for (const file of files) {
