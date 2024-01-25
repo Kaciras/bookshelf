@@ -1,7 +1,7 @@
 import { env } from "node:process";
 import postcss from "postcss";
+import cssnano from "cssnano";
 import nested from "postcss-nested";
-import csso from "postcss-csso";
 import calc from "postcss-calc";
 import vars from "postcss-simple-vars";
 import varCompress from "postcss-variable-compress";
@@ -15,7 +15,7 @@ const plugins = [
 ];
 
 if (env.NODE_ENV === "production") {
-	plugins.push(csso());			// Compress output.
+	plugins.push(cssnano());			// Compress output.
 	plugins.push(varCompress());	// Minimum variable names.
 }
 
@@ -25,5 +25,7 @@ export default function (source, { path }) {
 	if (!/\.css$/.test(path)) {
 		return;
 	}
-	return convertor.process(source.string, { from: path }).css;
+	return convertor
+		.process(source.string, { from: path })
+		.then(result => result.css);
 }
