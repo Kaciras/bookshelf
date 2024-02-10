@@ -1,5 +1,4 @@
 import { env } from "node:process";
-import { visualizer } from "rollup-plugin-visualizer";
 import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
@@ -64,7 +63,6 @@ export default {
 		template(),
 
 		isProduction && terser(),
-		isProduction && visualizer(),
 
 		env.PACK && packBundle(addonZipName, true),
 		env.PACK && packSources(
