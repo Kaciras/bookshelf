@@ -21,7 +21,7 @@
 		"pack": "rollup -c --environment NODE_ENV:production,PACK"
 	},
 	"dependencies": {
-		"@kaciras/utilities": "^0.12.2",
+		"@kaciras/utilities": "^0.12.3",
 		"@material-design-icons/svg": "^0.14.13",
 		"@tabler/icons": "^2.47.0"
 	},
@@ -31,15 +31,15 @@
 		"@rollup/plugin-replace": "^5.0.5",
 		"@rollup/plugin-terser": "^0.4.4",
 		"@rollup/pluginutils": "^5.1.0",
-		"@types/firefox-webext-browser": "^120.0.0",
+		"@types/firefox-webext-browser": "^120.0.1",
 		"adm-zip": "^0.5.10",
-		"cssnano": "^6.0.3",
-		"eslint": "^8.56.0",
+		"cssnano": "^6.0.5",
+		"eslint": "^8.57.0",
 		"fast-glob": "^3.3.2",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^5.3.1",
 		"is-builtin-module": "^3.2.1",
-		"magic-string": "^0.30.7",
+		"magic-string": "^0.30.8",
 		"mime": "^4.0.1",
 		"node-html-parser": "6.1.12",
 		"postcss": "^8.4.35",
