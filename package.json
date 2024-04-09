@@ -26,7 +26,7 @@
 		"@tabler/icons": "^3.1.0"
 	},
 	"devDependencies": {
-		"@kaciras/eslint-config-core": "^2.6.4",
+		"@kaciras/eslint-config-core": "^3.0.1",
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@rollup/plugin-replace": "^5.0.5",
 		"@rollup/plugin-terser": "^0.4.4",
@@ -34,12 +34,12 @@
 		"@types/firefox-webext-browser": "^120.0.3",
 		"adm-zip": "^0.5.12",
 		"cssnano": "^6.1.2",
-		"eslint": "^8.57.0",
+		"eslint": "^9.0.0",
 		"fast-glob": "^3.3.2",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^5.3.1",
 		"is-builtin-module": "^3.2.1",
-		"magic-string": "^0.30.8",
+		"magic-string": "^0.30.9",
 		"mime": "^4.0.1",
 		"node-html-parser": "6.1.13",
 		"postcss": "^8.4.38",
@@ -47,7 +47,7 @@
 		"postcss-nested": "^6.0.1",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.13.2",
+		"rollup": "^4.14.1",
 		"svgo": "^3.2.0",
 		"vite-plugin-svg-sfc": "^2.0.1"
 	}
