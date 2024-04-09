@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { basename } from "path";
 import { jsImports } from "./html.js";
 import { getRefId } from "./asset.js";
-import packageJson from "../package.json" assert { type: "json" };
+import packageJson from "../package.json" with { type: "json" };
 
 const mark = "?webext";
 
