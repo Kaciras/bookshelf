@@ -75,3 +75,10 @@ setSearchEngines(appConfig);
 Object.assign(searchBox, appConfig.searchBox);
 
 requestIdleCallback(iconCache.removeUnused);
+
+if (import.meta.env.dev) {
+	globalThis.$debug = {
+		appConfig,
+		get engines() { return engineSelect.list; },
+	};
+}
