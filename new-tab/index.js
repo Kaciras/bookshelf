@@ -58,7 +58,8 @@ export async function setSearchEngines({ defaultEngine, engines }) {
 	const list = new Array(engines.length);
 
 	for (let i = 0; i < list.length; i++) {
-		const value = list[i] = new OpenSearchEngine(engines[i]);
+		const value = list[i] = new OpenSearchEngine();
+		Object.assign(value, engines[i]);
 		tasks[i] = searchIcons.populate(value);
 	}
 

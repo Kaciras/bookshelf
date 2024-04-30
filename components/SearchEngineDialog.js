@@ -139,7 +139,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.suggestEl.oninput = handleInput;
 
 		this.defaultEl.oninput = this.changeDefault.bind(this);
-		this.addEl.onclick = () => this.AddTab(defaultData);
+		this.addEl.onclick = () => this.addTab(defaultData);
 
 		this.handleActionClick = this.handleActionClick.bind(this);
 		this.handleRemove = this.handleRemove.bind(this);
@@ -156,15 +156,15 @@ class SearchEngineDialogElement extends HTMLElement {
 
 		listEl.replaceChildren(listEl.lastChild);
 		for (const e of engines) {
-			this.AddTab(e);
+			this.addTab(e);
 		}
 		this.defaultTab = listEl.children[defaultEngine];
 		this.dialogEl.showModal();
 	}
 
-	AddTab(engine) {
+	addTab(engine) {
 		const li = itemTemplate.content.cloneNode(true).firstChild;
-		li[kData] = structuredClone(engine);
+		li[kData] = { ...engine };
 		li.querySelector("img").src = engine.favicon;
 		li.querySelector("span").textContent = engine.name;
 

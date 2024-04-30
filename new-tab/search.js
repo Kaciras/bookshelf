@@ -17,13 +17,6 @@ export class OpenSearchEngine {
 	searchAPI;		// Search term will append to the end.
 	suggestAPI;		// Search term will append to the end, may not exist.
 
-	constructor({ name, iconKey, searchAPI, suggestAPI }) {
-		this.name = name;
-		this.iconKey = iconKey;
-		this.searchAPI = searchAPI;
-		this.suggestAPI = suggestAPI;
-	}
-
 	async suggest(searchTerms, signal) {
 		searchTerms = encodeURIComponent(searchTerms);
 		const url = this.suggestAPI + searchTerms;

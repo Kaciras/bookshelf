@@ -52,6 +52,7 @@ export async function update(index, props) {
 	URL.revokeObjectURL(el.favicon);
 
 	Object.assign(el, props);
+	// noinspection ES6MissingAwait
 	siteIcons.populate(el);
 
 	return persist().then(iconCache.removeUnused);
