@@ -1,9 +1,9 @@
-import SearchIconURL from "@tabler/icons/search.svg?url";
-import AddIcon from "@tabler/icons/plus.svg";
-import xIcon from "@tabler/icons/x.svg";
-import PhotoIcon from "@tabler/icons/photo-plus.svg";
-import DownCircleIcon from "@tabler/icons/circle-arrow-down.svg";
-import CheckIcon from "@tabler/icons/check.svg";
+import SearchIconURL from "@tabler/icons/outline/search.svg?url";
+import AddIcon from "@tabler/icons/outline/plus.svg";
+import xIcon from "@tabler/icons/outline/x.svg";
+import PhotoIcon from "@tabler/icons/outline/photo-plus.svg";
+import DownCircleIcon from "@tabler/icons/outline/circle-arrow-down.svg";
+import CheckIcon from "@tabler/icons/outline/check.svg";
 import { dragSortContext, nthInChildren, selectFile } from "@kaciras/utilities/browser";
 import "./TaskButton.js";
 import { i18n, metaScraper } from "../share/index.js";

@@ -1,5 +1,5 @@
-import EditIcon from "@tabler/icons/edit.svg";
-import CloseIcon from "@tabler/icons/x.svg";
+import EditIcon from "@tabler/icons/outline/edit.svg";
+import CloseIcon from "@tabler/icons/outline/x.svg";
 import { delegate, i18n } from "../share/index.js";
 import styles from "./BookMark.css";
 

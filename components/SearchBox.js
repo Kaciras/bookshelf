@@ -1,5 +1,5 @@
 import { Debounced, i18n } from "../share/index.js";
-import SearchIcon from "@tabler/icons/search.svg";
+import SearchIcon from "@tabler/icons/outline/search.svg";
 import styles from "./SearchBox.css";
 
 const template = document.createElement("template");

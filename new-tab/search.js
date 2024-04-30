@@ -1,4 +1,4 @@
-import SearchIconURL from "@tabler/icons/search.svg?url";
+import SearchIconURL from "@tabler/icons/outline/search.svg?url";
 import { IconCache } from "./cache.js";
 import { fetchChecked } from "../share/index.js";
 

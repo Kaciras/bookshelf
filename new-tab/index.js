@@ -1,4 +1,4 @@
-import SettingIcon from "@tabler/icons/settings.svg";
+import SettingIcon from "@tabler/icons/outline/settings.svg";
 import "../components/BookMark.js";
 import "../components/EngineSelect.js";
 import "../components/SearchBox.js";

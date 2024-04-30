@@ -1,6 +1,6 @@
-import CheckIcon from "@tabler/icons/check.svg";
-import xIcon from "@tabler/icons/x.svg";
-import DownCircleIcon from "@tabler/icons/circle-arrow-down.svg";
+import CheckIcon from "@tabler/icons/outline/check.svg";
+import xIcon from "@tabler/icons/outline/x.svg";
+import DownCircleIcon from "@tabler/icons/outline/circle-arrow-down.svg";
 import { delegate, i18n, metaScraper } from "../share/index.js";
 import defaultFavicon from "../assets/Website.svg?url";
 import "./TaskButton.js";

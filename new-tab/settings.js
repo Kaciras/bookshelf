@@ -1,11 +1,11 @@
-import CheckIcon from "@tabler/icons/check.svg";
-import StarIcon from "@tabler/icons/star.svg";
+import CheckIcon from "@tabler/icons/outline/check.svg";
+import StarIcon from "@tabler/icons/outline/star.svg";
 import DevicesIcon from "@material-design-icons/svg/outlined/important_devices.svg";
-import DownloadIcon from "@tabler/icons/download.svg";
-import UploadIcon from "@tabler/icons/upload.svg";
-import TrashIcon from "@tabler/icons/trash.svg";
-import SearchIcon from "@tabler/icons/search.svg";
-import AddIcon from "@tabler/icons/plus.svg";
+import DownloadIcon from "@tabler/icons/outline/download.svg";
+import UploadIcon from "@tabler/icons/outline/upload.svg";
+import TrashIcon from "@tabler/icons/outline/trash.svg";
+import SearchIcon from "@tabler/icons/outline/search.svg";
+import AddIcon from "@tabler/icons/outline/plus.svg";
 import { isPointerInside, nthInChildren } from "@kaciras/utilities/browser";
 import "../components/DialogBase.js";
 import "../components/CheckBox.js";

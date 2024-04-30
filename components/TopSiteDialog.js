@@ -1,5 +1,5 @@
-import AddIcon from "@tabler/icons/plus.svg";
-import CheckIcon from "@tabler/icons/check.svg";
+import AddIcon from "@tabler/icons/outline/plus.svg";
+import CheckIcon from "@tabler/icons/outline/check.svg";
 import { i18n } from "../share/index.js";
 import defaultFavicon from "../assets/Website.svg?url";
 

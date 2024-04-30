@@ -1,4 +1,4 @@
-import xIcon from "@tabler/icons/x.svg";
+import xIcon from "@tabler/icons/outline/x.svg";
 import { isPointerInside } from "@kaciras/utilities/browser";
 import { i18n } from "../share/index.js";
 import styles from "./DialogBase.css";
