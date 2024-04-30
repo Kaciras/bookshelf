@@ -39,9 +39,8 @@ export class IconCache {
 			return model.iconKey = null;
 		}
 
-		try {
-			new URL(rawUrl); // Internal resource.
-		} catch {
+		if (!URL.canParse(rawUrl)) {
+			// Internal resource.
 			return model.iconKey = rawUrl;
 		}
 
