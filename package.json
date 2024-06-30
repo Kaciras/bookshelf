@@ -21,9 +21,9 @@
 		"pack": "rollup -c --environment NODE_ENV:production,PACK"
 	},
 	"dependencies": {
-		"@kaciras/utilities": "^1.0.0",
+		"@kaciras/utilities": "^1.0.1",
 		"@material-design-icons/svg": "^0.14.13",
-		"@tabler/icons": "^3.6.0"
+		"@tabler/icons": "^3.7.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^3.0.3",
@@ -34,14 +34,14 @@
 		"@types/firefox-webext-browser": "^120.0.4",
 		"adm-zip": "^0.5.14",
 		"cssnano": "^7.0.3",
-		"eslint": "^9.5.0",
+		"eslint": "^9.6.0",
 		"fast-glob": "^3.3.2",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^5.3.1",
 		"magic-string": "^0.30.10",
 		"mime": "^4.0.3",
 		"node-html-parser": "6.1.13",
-		"postcss": "^8.4.38",
+		"postcss": "^8.4.39",
 		"postcss-calc": "^10.0.0",
 		"postcss-nested": "^6.0.1",
 		"postcss-simple-vars": "^7.0.1",
