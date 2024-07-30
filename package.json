@@ -21,7 +21,7 @@
 		"pack": "rollup -c --environment NODE_ENV:production,PACK"
 	},
 	"dependencies": {
-		"@kaciras/utilities": "^1.0.2",
+		"@kaciras/utilities": "^1.0.3",
 		"@material-design-icons/svg": "^0.14.13",
 		"@tabler/icons": "^3.11.0"
 	},
@@ -34,19 +34,19 @@
 		"@types/firefox-webext-browser": "^120.0.4",
 		"adm-zip": "^0.5.14",
 		"cssnano": "^7.0.4",
-		"eslint": "^9.7.0",
+		"eslint": "^9.8.0",
 		"fast-glob": "^3.3.2",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^5.3.1",
-		"magic-string": "^0.30.10",
+		"magic-string": "^0.30.11",
 		"mime": "^4.0.4",
 		"node-html-parser": "6.1.13",
-		"postcss": "^8.4.39",
+		"postcss": "^8.4.40",
 		"postcss-calc": "^10.0.0",
 		"postcss-nested": "^6.2.0",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.19.0",
+		"rollup": "^4.19.1",
 		"svgo": "^3.3.2",
 		"vite-plugin-svg-sfc": "^2.0.1"
 	}
