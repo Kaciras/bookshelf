@@ -42,11 +42,11 @@
 		"mime": "^4.0.4",
 		"node-html-parser": "6.1.13",
 		"postcss": "^8.4.41",
-		"postcss-calc": "^10.0.1",
+		"postcss-calc": "^10.0.2",
 		"postcss-nested": "^6.2.0",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.20.0",
+		"rollup": "^4.21.0",
 		"svgo": "^3.3.2",
 		"vite-plugin-svg-sfc": "^2.0.1"
 	}
