@@ -23,7 +23,7 @@
 	"dependencies": {
 		"@kaciras/utilities": "^1.0.4",
 		"@material-design-icons/svg": "^0.14.13",
-		"@tabler/icons": "^3.17.0"
+		"@tabler/icons": "^3.19.0"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^3.2.0",
@@ -46,7 +46,7 @@
 		"postcss-nested": "^6.2.0",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.22.4",
+		"rollup": "^4.23.0",
 		"svgo": "^3.3.2",
 		"vite-plugin-svg-sfc": "^2.0.1"
 	}
