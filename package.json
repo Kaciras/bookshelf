@@ -38,7 +38,7 @@
 		"fast-glob": "^3.3.2",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^6.0.2",
-		"magic-string": "^0.30.14",
+		"magic-string": "^0.30.15",
 		"mime": "^4.0.4",
 		"node-html-parser": "6.1.13",
 		"postcss": "^8.4.49",
@@ -46,7 +46,7 @@
 		"postcss-nested": "^7.0.2",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.28.0",
+		"rollup": "^4.28.1",
 		"svgo": "^3.3.2",
 		"vite-plugin-svg-sfc": "^2.0.1"
 	}
