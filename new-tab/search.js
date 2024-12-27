@@ -14,12 +14,12 @@ export class OpenSearchEngine {
 	name;			// Display name of the search engine.
 	iconKey;		// Cache key of favicon.
 	favicon;		// 32x32 is the best size.
-	searchAPI;		// Search term will append to the end.
-	suggestAPI;		// Search term will append to the end, may not exist.
+	searchAPI;		// Search term will replace %s
+	suggestAPI;		// Search term will replace %s, may not exist.
 
 	async suggest(searchTerms, signal) {
 		searchTerms = encodeURIComponent(searchTerms);
-		const url = this.suggestAPI + searchTerms;
+		const url = this.suggestAPI.replace("%s", searchTerms);
 
 		const response = await fetchChecked(url, {
 			signal,
@@ -29,6 +29,6 @@ export class OpenSearchEngine {
 	}
 
 	getResultURL(searchTerms) {
-		return this.searchAPI + encodeURIComponent(searchTerms);
+		return this.searchAPI.replace("%s", encodeURIComponent(searchTerms));
 	}
 }

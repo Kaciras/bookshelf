@@ -8,7 +8,7 @@ const syncSettings = browser.storage.sync;
 
 export const appConfig = {
 	/** Increase when config has breaking changes. */
-	version: 1,
+	version: 2,
 
 	/** Configurable properties of the search box. */
 	searchBox: {
@@ -29,25 +29,35 @@ export const appConfig = {
 	engines: [{
 		name: i18n("DuckDuckGo"),
 		iconKey: DuckDuckGoIcon,
-		searchAPI: "https://duckduckgo.com/?t=ffsb&ia=web&q=",
-		suggestAPI: "https://ac.duckduckgo.com/ac/?type=list&q=",
+		searchAPI: "https://duckduckgo.com/?t=ffsb&ia=web&q=%s",
+		suggestAPI: "https://ac.duckduckgo.com/ac/?type=list&q=%s",
 	}, {
 		name: "Google",
 		iconKey: GoogleIcon,
-		searchAPI: "https://www.google.com/search?client=firefox-b-d&q=",
-		suggestAPI: "https://www.google.com/complete/search?client=firefox&q=",
+		searchAPI: "https://www.google.com/search?client=firefox-b-d&q=%s",
+		suggestAPI: "https://www.google.com/complete/search?client=firefox&q=%s",
 	}, {
 		name: i18n("Baidu"),
 		iconKey: BaiduIcon,
-		searchAPI: "https://www.baidu.com/baidu?ie=utf-8&wd=",
-		suggestAPI: "https://www.baidu.com/su?ie=utf-8&action=opensearch&wd=",
+		searchAPI: "https://www.baidu.com/baidu?ie=utf-8&wd=%s",
+		suggestAPI: "https://www.baidu.com/su?ie=utf-8&action=opensearch&wd=%s",
 	}],
 };
 
 /**
- * await it before accessing `appConfig`.
+ * You should await it before accessing `appConfig`.
+ * This is also where configuration migrations are handled.
  */
-export const loadingAppConfig = syncSettings.get().then(v => Object.assign(appConfig, v));
+export const loadingAppConfig = syncSettings.get().then(v => {
+	if (v.version === 1) {
+		v.version = 2;
+		for (const e of v.engines) {
+			e.searchAPI += "%s";
+			e.suggestAPI += "%s";
+		}
+	}
+	return Object.assign(appConfig, v);
+});
 
 export function saveAppConfig(changes) {
 	Object.assign(appConfig, changes);
