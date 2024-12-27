@@ -114,5 +114,8 @@ export async function removeUnused() {
 		.map(request => cache.delete(request));
 
 	await Promise.all(tasks);
-	console.debug(`Remove ${tasks.length} unused icons.`);
+
+	if (import.meta.env.dev) {
+		console.debug(`Remove ${tasks.length} unused icons.`);
+	}
 }
