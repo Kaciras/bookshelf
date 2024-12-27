@@ -28,8 +28,6 @@ template.innerHTML = `
 `;
 
 /**
- * Search box in center of the page.
- *
  * SearchBox does not have a default engine, you muse set one before entering search terms.
  *
  * We do not use the Search API, because it does not support get suggestions.
@@ -57,6 +55,10 @@ class SearchBoxElement extends HTMLElement {
 
 		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
 		this.inputEl.oninput = this.handleInput.bind(this);
+
+		// There is no `compositionend` property.
+		this.inputEl.addEventListener("compositionend", this.handleComposition.bind(this));
+
 		root.addEventListener("keydown", this.handleKeyDown.bind(this));
 		root.querySelector("button").onclick = this.search.bind(this);
 	}
@@ -95,7 +97,7 @@ class SearchBoxElement extends HTMLElement {
 	}
 
 	handleInput(event) {
-		if (this.waitIME && event.isComposing) {
+		if (this.waitIME && event.inputType === "insertCompositionText") {
 			return;
 		}
 		if (this.searchTerms) {
@@ -105,6 +107,12 @@ class SearchBoxElement extends HTMLElement {
 			this.classList.remove("suggested");
 			this.loadingEl.classList.remove("active");
 		}
+	}
+
+	// Chrome cannot detect composition end on `input` event.
+	// https://github.com/w3c/uievents/issues/202
+	handleComposition() {
+		this.fetcher.reschedule();
 	}
 
 	/**
