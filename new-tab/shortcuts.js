@@ -1,7 +1,7 @@
 import { dragSortContext } from "@kaciras/utilities/browser";
 import { saveAppConfig } from "./storage.js";
 import * as iconCache from "./cache.js";
-import defaultFavicon from "../assets/Website.svg?url";
+import defaultFavicon from "../assets/website.svg?url";
 
 const siteIcons = new iconCache.IconCache(defaultFavicon);
 

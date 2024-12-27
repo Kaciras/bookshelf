@@ -1,5 +1,5 @@
 import { blobToBase64URL, saveFile, selectFile } from "@kaciras/utilities/browser";
-import BaiduIcon from "../assets/Baidu.svg?resource";
+import BaiduIcon from "../assets/baidu.svg?resource";
 import GoogleIcon from "../assets/google.svg?resource";
 import DuckDuckGoIcon from "../assets/dax-logo.svg?resource";
 import { i18n } from "../share/index.js";

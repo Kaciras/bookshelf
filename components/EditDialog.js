@@ -2,7 +2,7 @@ import CheckIcon from "@tabler/icons/outline/check.svg";
 import xIcon from "@tabler/icons/outline/x.svg";
 import DownCircleIcon from "@tabler/icons/outline/circle-arrow-down.svg";
 import { delegate, i18n, metaScraper } from "../share/index.js";
-import defaultFavicon from "../assets/Website.svg?url";
+import defaultFavicon from "../assets/website.svg?url";
 import "./TaskButton.js";
 import styles from "./EditDialog.css";
 

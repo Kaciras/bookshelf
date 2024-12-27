@@ -13,7 +13,7 @@ const plugins = [
 ];
 
 if (env.NODE_ENV === "production") {
-	plugins.push(cssnano());			// Compress output.
+	plugins.push(cssnano());		// Compress output.
 	plugins.push(varCompress());	// Minimum variable names.
 }
 

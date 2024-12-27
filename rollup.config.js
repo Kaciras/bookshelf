@@ -33,9 +33,8 @@ export default {
 	},
 	plugins: [
 		replace({
-			preventAssignment: true,
-			"typeof window": "'object'",
 			"import.meta.env.dev": `${!isProduction}`,
+			"typeof window": "'object'",
 		}),
 		asset({
 			loaders: [

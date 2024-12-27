@@ -79,7 +79,7 @@ export function delegate(object, name, target, prop) {
  */
 export function dirname(path) {
 	const i = path.lastIndexOf("/");
-	return i < 0 ? path : path.slice(0, i);
+	return i === -1 ? path : path.slice(0, i);
 }
 
 /**
