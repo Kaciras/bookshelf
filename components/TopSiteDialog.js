@@ -72,7 +72,7 @@ class TopSiteDialogElement extends HTMLElement {
 			})
 			: await browser.topSites.get();
 
-		if (import.meta.env.dev) {
+		if (import.meta.env.DEV) {
 			console.debug("topSites.get return:", sites);
 		}
 

@@ -33,7 +33,7 @@ export default {
 	},
 	plugins: [
 		replace({
-			"import.meta.env.dev": `${!isProduction}`,
+			"import.meta.env.DEV": `${!isProduction}`,
 			"typeof window": "'object'",
 		}),
 		asset({

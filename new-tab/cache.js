@@ -115,7 +115,7 @@ export async function removeUnused() {
 
 	await Promise.all(tasks);
 
-	if (import.meta.env.dev) {
+	if (import.meta.env.DEV) {
 		console.debug(`Remove ${tasks.length} unused icons.`);
 	}
 }

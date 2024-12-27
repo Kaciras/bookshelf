@@ -74,7 +74,7 @@ export function mount(shortcuts) {
 	for (const props of shortcuts) {
 		appendElement(props);
 	}
-	if (import.meta.env.dev) {
+	if (import.meta.env.DEV) {
 		console.debug("Shortcuts model:", shortcuts);
 	}
 }
