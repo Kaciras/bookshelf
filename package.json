@@ -33,8 +33,8 @@
 		"@rollup/pluginutils": "^5.1.4",
 		"@types/firefox-webext-browser": "^120.0.4",
 		"adm-zip": "^0.5.16",
-		"cssnano": "^7.0.6",
-		"eslint": "^9.25.1",
+		"cssnano": "^7.0.7",
+		"eslint": "^9.26.0",
 		"fast-glob": "^3.3.3",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^7.0.4",
@@ -46,7 +46,7 @@
 		"postcss-nested": "^7.0.2",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.40.0",
+		"rollup": "^4.40.2",
 		"svgo": "^3.3.2",
 		"vite-plugin-svg-sfc": "^2.1.0"
 	}
