@@ -2,18 +2,9 @@ import { optimize } from "svgo";
 import { modifySVGAttrs, responsiveSVGAttrs } from "vite-plugin-svg-sfc";
 import { AssetType } from "./asset.js";
 
-const builtInPlugins = {
-	name: "preset-default",
-	params: {
-		overrides: {
-			removeViewBox: false,
-		},
-	},
-};
-
 const inlinePlugins = [
 	responsiveSVGAttrs,
-	builtInPlugins,
+	"preset-default",
 	modifySVGAttrs(attrs => {
 		delete attrs.class;
 		delete attrs.xmlns;
@@ -23,7 +14,7 @@ const inlinePlugins = [
 ];
 
 const resourcePlugins = [
-	builtInPlugins,
+	"preset-default",
 ];
 
 export default function (source, { type, path }) {
