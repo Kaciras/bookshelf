@@ -46,7 +46,7 @@
 		"postcss-nested": "^7.0.2",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.46.1",
+		"rollup": "^4.46.2",
 		"svgo": "^4.0.0",
 		"vite-plugin-svg-sfc": "^2.2.0"
 	}
