@@ -26,15 +26,15 @@
 		"@tabler/icons": "^3.35.0"
 	},
 	"devDependencies": {
-		"@kaciras/eslint-config-core": "^3.3.0",
-		"@rollup/plugin-node-resolve": "^16.0.1",
+		"@kaciras/eslint-config-core": "^3.4.0",
+		"@rollup/plugin-node-resolve": "^16.0.3",
 		"@rollup/plugin-replace": "^6.0.2",
 		"@rollup/plugin-terser": "^0.4.4",
 		"@rollup/pluginutils": "^5.3.0",
-		"@types/firefox-webext-browser": "^120.0.4",
+		"@types/firefox-webext-browser": "^120.0.5",
 		"adm-zip": "^0.5.16",
 		"cssnano": "^7.1.1",
-		"eslint": "^9.36.0",
+		"eslint": "^9.37.0",
 		"fast-glob": "^3.3.3",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^7.0.5",
@@ -46,7 +46,7 @@
 		"postcss-nested": "^7.0.2",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.52.3",
+		"rollup": "^4.52.4",
 		"svgo": "^4.0.0",
 		"vite-plugin-svg-sfc": "^2.2.0"
 	}
