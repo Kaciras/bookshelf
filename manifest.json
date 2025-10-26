@@ -12,10 +12,11 @@
 		"48": "./assets/icon.svg",
 		"96": "./assets/icon.svg"
 	},
+	"minimum_chrome_version": "134",
 	"browser_specific_settings": {
 		"gecko": {
 			"id": "{D62F4BEC-4816-4E72-AD12-FD2DC48E7A6B}",
-			"strict_min_version": "117.0"
+			"strict_min_version": "141.0"
 		}
 	},
 	"permissions": [
