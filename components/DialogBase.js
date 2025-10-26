@@ -1,12 +1,11 @@
 import xIcon from "@tabler/icons/outline/x.svg";
-import { isPointerInside } from "@kaciras/utilities/browser";
 import { i18n } from "../share/index.js";
 import styles from "./DialogBase.css";
 
 const template = document.createElement("template");
 template.innerHTML = `
 	<style>${styles}</style>
-	<dialog>
+	<dialog closedby='any'>
 		<h1></h1>
 		<button
 			class='plain'
@@ -38,8 +37,6 @@ class DialogBaseElement extends HTMLElement {
 		this.titleEl = root.querySelector("h1");
 
 		root.querySelector("button").onclick = this.close.bind(this);
-		this.dialogEl.onclick = this.handleClick.bind(this);
-		this.dialogEl.onpointerdown = this.handlePointerDown.bind(this);
 	}
 
 	get name() {
@@ -61,30 +58,12 @@ class DialogBaseElement extends HTMLElement {
 		this[name] = value;
 	}
 
-	showModal() {
-		this.dialogEl.showModal();
-	}
-
 	close() {
 		this.dialogEl.close();
 	}
 
-	/**
-	 * Detect backdrop clicks and close the dialog.
-	 *
-	 * https://stackoverflow.com/a/70593278/7065321
-	 */
-	handlePointerDown(event) {
-		this.pressOutside = !isPointerInside(event);
-	}
-
-	handleClick(event) {
-		if (event.target !== this.dialogEl) {
-			return;
-		}
-		if (this.pressOutside && !isPointerInside(event)) {
-			this.close();
-		}
+	showModal() {
+		this.dialogEl.showModal();
 	}
 }
 
