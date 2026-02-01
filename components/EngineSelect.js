@@ -78,7 +78,7 @@ class EngineSelectElement extends HTMLElement {
 		const { engine } = event.currentTarget;
 		this.value = engine;
 		this.dispatchEvent(new CustomEvent("input"));
-	}
+	};
 }
 
 customElements.define("engine-select", EngineSelectElement);

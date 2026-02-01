@@ -230,7 +230,7 @@ class SearchEngineDialogElement extends HTMLElement {
 			return event.preventDefault();
 		}
 		this.defaultTab = this.current;
-	}
+	};
 
 	switchTab(li) {
 		this.current?.classList.remove("active");

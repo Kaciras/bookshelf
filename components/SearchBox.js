@@ -171,7 +171,7 @@ class SearchBoxElement extends HTMLElement {
 
 	search = () =>{
 		location.href = this.api.getResultURL(this.searchTerms);
-	}
+	};
 
 	// Input Method does not trigger this event.
 	handleKeyDown = (event) => {
