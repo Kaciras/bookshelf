@@ -32,14 +32,13 @@ export class Debounced {
 	constructor(handler, delay = 0) {
 		this.handler = handler;
 		this.delay = delay;
-		this.run = this.run.bind(this);
 	}
 
-	run() {
+	run = () => {
 		this.stop();
 		this.controller = new AbortController();
 		this.handler(this.controller.signal);
-	}
+	};
 
 	stop() {
 		clearTimeout(this.timer);

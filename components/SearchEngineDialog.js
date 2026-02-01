@@ -133,20 +133,15 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.searchEl = root.querySelector("textarea[name='searchAPI']");
 		this.suggestEl = root.querySelector("textarea[name='suggestAPI']");
 
-		const handleInput = this.handleInput.bind(this);
-		this.nameEl.oninput = handleInput;
-		this.searchEl.oninput = handleInput;
-		this.suggestEl.oninput = handleInput;
+		this.nameEl.oninput = this.handleInput;
+		this.searchEl.oninput = this.handleInput;
+		this.suggestEl.oninput = this.handleInput;
 
-		this.defaultEl.oninput = this.changeDefault.bind(this);
+		this.defaultEl.oninput = this.changeDefault;
 		this.addEl.onclick = () => this.addTab(defaultData);
 
-		this.handleActionClick = this.handleActionClick.bind(this);
-		this.handleRemove = this.handleRemove.bind(this);
-		this.handleTabChange = this.handleTabChange.bind(this);
-
-		root.getElementById("download").taskFn = this.fetchFavicon.bind(this);
-		root.getElementById("file").onclick = this.uploadIcon.bind(this);
+		root.getElementById("download").taskFn = this.fetchFavicon;
+		root.getElementById("file").onclick = this.uploadIcon;
 		root.getElementById("cancel").onclick = this.handleActionClick;
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
@@ -176,14 +171,14 @@ class SearchEngineDialogElement extends HTMLElement {
 		li.querySelector("button").onclick = this.handleRemove;
 	}
 
-	handleTabChange(event) {
+	handleTabChange = (event) => {
 		const { currentTarget } = event;
 		if (currentTarget !== this.current) {
 			this.switchTab(currentTarget);
 		}
-	}
+	};
 
-	handleRemove(event) {
+	handleRemove = (event) => {
 		const tab = event.currentTarget.parentNode;
 		event.stopPropagation();
 
@@ -192,18 +187,18 @@ class SearchEngineDialogElement extends HTMLElement {
 		}
 		this.switchTab(tab.previousSibling ?? tab.nextSibling);
 		tab.remove();
-	}
+	};
 
-	handleInput({ currentTarget }) {
+	handleInput = ({ currentTarget }) => {
 		const { name, value } = currentTarget;
 		this.current[kData][name] = value;
 
 		if (name === "name") {
 			this.current.querySelector("span").textContent = value;
 		}
-	}
+	};
 
-	async fetchFavicon(signal) {
+	fetchFavicon = async (signal) => {
 		if (!this.searchEl.reportValidity()) {
 			return;
 		}
@@ -216,12 +211,12 @@ class SearchEngineDialogElement extends HTMLElement {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);
 		}
-	}
+	};
 
-	async uploadIcon() {
+	uploadIcon = async () => {
 		const [file] = await selectFile("image/*");
 		this.changeIcon(URL.createObjectURL(file));
-	}
+	};
 
 	changeIcon(value) {
 		URL.revokeObjectURL(this.iconEl.src);
@@ -230,7 +225,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.current.querySelector("img").src = value;
 	}
 
-	changeDefault(event) {
+	changeDefault = (event) => {
 		if (this.defaultEl.checked) {
 			return event.preventDefault();
 		}
@@ -250,7 +245,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.suggestEl.value = data.suggestAPI;
 	}
 
-	handleActionClick(event) {
+	handleActionClick = (event) => {
 		const { listEl, defaultTab, dialogEl } = this;
 		dialogEl.close();
 
@@ -263,7 +258,7 @@ class SearchEngineDialogElement extends HTMLElement {
 			defaultEngine: nthInChildren(defaultTab),
 		};
 		this.dispatchEvent(new CustomEvent("change", { detail }));
-	}
+	};
 }
 
 customElements.define("search-engine-dialog", SearchEngineDialogElement);

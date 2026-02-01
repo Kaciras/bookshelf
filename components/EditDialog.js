@@ -86,9 +86,7 @@ class EditDialogElement extends HTMLElement {
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		root.getElementById("fetch").taskFn = this.fetchSiteMetadata.bind(this);
-
-		this.handleActionClick = this.handleActionClick.bind(this);
+		root.getElementById("fetch").taskFn = this.fetchSiteMetadata;
 		root.getElementById("cancel").onclick = this.handleActionClick;
 		root.getElementById("accept").onclick = this.handleActionClick;
 	}
@@ -99,7 +97,7 @@ class EditDialogElement extends HTMLElement {
 		this.nameInput.focus();
 	}
 
-	handleActionClick(event) {
+	handleActionClick = (event) => {
 		const { dialogEl, urlInput } = this;
 
 		if (event.currentTarget.id !== "accept") {
@@ -110,9 +108,9 @@ class EditDialogElement extends HTMLElement {
 			pick(this, detail);
 			this.dispatchEvent(new CustomEvent("change", { detail }));
 		}
-	}
+	};
 
-	async fetchSiteMetadata(signal) {
+	fetchSiteMetadata = async (signal) => {
 		const { nameInput, urlInput } = this;
 		if (!urlInput.reportValidity()) {
 			return;
@@ -128,7 +126,7 @@ class EditDialogElement extends HTMLElement {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);
 		}
-	}
+	};
 }
 
 customElements.define("edit-dialog", EditDialogElement);

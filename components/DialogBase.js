@@ -36,7 +36,7 @@ class DialogBaseElement extends HTMLElement {
 		this.dialogEl = root.querySelector("dialog");
 		this.titleEl = root.querySelector("h1");
 
-		root.querySelector("button").onclick = this.close.bind(this);
+		root.querySelector("button").onclick = this.close;
 	}
 
 	get name() {
@@ -58,9 +58,9 @@ class DialogBaseElement extends HTMLElement {
 		this[name] = value;
 	}
 
-	close() {
+	close = () => {
 		this.dialogEl.close();
-	}
+	};
 
 	showModal() {
 		this.dialogEl.showModal();

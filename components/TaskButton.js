@@ -65,14 +65,14 @@ class TaskButtonElement extends HTMLElement {
 
 		const { signal } = this.controller = new AbortController();
 		slotEl.replaceWith(loadingEl);
-		taskFn(signal).finally(this.switchToNormal.bind(this));
+		taskFn(signal).finally(this.switchToNormal);
 	}
 
-	switchToNormal() {
+	switchToNormal = () => {
 		this.removeAttribute("style");
 		this.running = false;
 		this.loadingEl.replaceWith(this.slotEl);
-	}
+	};
 }
 
 customElements.define("task-button", TaskButtonElement);

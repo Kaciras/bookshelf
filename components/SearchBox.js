@@ -51,16 +51,16 @@ class SearchBoxElement extends HTMLElement {
 		this.loadingEl = root.getElementById("spinner");
 		this.suggestionEl = root.querySelector("ul");
 
-		this.fetcher = new Debounced(this.suggest.bind(this));
+		this.fetcher = new Debounced(this.suggest);
 
-		this.inputEl.onkeydown = this.handleInputKeyDown.bind(this);
-		this.inputEl.oninput = this.handleInput.bind(this);
+		this.inputEl.onkeydown = this.handleInputKeyDown;
+		this.inputEl.oninput = this.handleInput;
 
-		// There is no `compositionend` property.
-		this.inputEl.addEventListener("compositionend", this.handleComposition.bind(this));
+		// There is no `oncompositionend` property.
+		this.inputEl.addEventListener("compositionend", this.handleComposition);
 
-		root.addEventListener("keydown", this.handleKeyDown.bind(this));
-		root.querySelector("button").onclick = this.search.bind(this);
+		root.querySelector("button").onclick = this.search;
+		root.addEventListener("keydown", this.handleKeyDown);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class SearchBoxElement extends HTMLElement {
 		this.fetcher.delay = value;
 	}
 
-	handleInput(event) {
+	handleInput = (event) => {
 		if (this.waitIME && event.inputType === "insertCompositionText") {
 			return;
 		}
@@ -107,20 +107,20 @@ class SearchBoxElement extends HTMLElement {
 			this.classList.remove("suggested");
 			this.loadingEl.classList.remove("active");
 		}
-	}
+	};
 
 	// Chrome cannot detect composition end on `input` event.
 	// https://github.com/w3c/uievents/issues/202
-	handleComposition() {
+	handleComposition = () => {
 		this.fetcher.reschedule();
-	}
+	};
 
 	/**
 	 * Fetch suggestions from search engine, and update the suggestion list.
 	 *
 	 * Call this method will abort the previous.
 	 */
-	async suggest(signal) {
+	suggest = async (signal) => {
 		const { api, searchTerms, loadingEl } = this;
 		loadingEl.classList.add("active");
 		try {
@@ -134,7 +134,7 @@ class SearchBoxElement extends HTMLElement {
 		}
 		// To avoid flashing while typing, don't hide loading indicator on abort.
 		loadingEl.classList.remove("active");
-	}
+	};
 
 	setSuggestions(list) {
 		const count = Math.min(this.limit, list.length);
@@ -158,7 +158,7 @@ class SearchBoxElement extends HTMLElement {
 	 * Since compositionend precedes KeyUp, only KeyDown can be used
 	 * to ensure `isComposing` is set. Google search also uses the KeyDown event.
 	 */
-	handleInputKeyDown(event) {
+	handleInputKeyDown = (event) => {
 		if (event.key !== "Enter") {
 			return;
 		}
@@ -167,14 +167,14 @@ class SearchBoxElement extends HTMLElement {
 		}
 		event.stopPropagation();
 		location.href = this.api.getResultURL(this.searchTerms);
-	}
+	};
 
-	search() {
+	search = () =>{
 		location.href = this.api.getResultURL(this.searchTerms);
 	}
 
 	// Input Method does not trigger this event.
-	handleKeyDown(event) {
+	handleKeyDown = (event) => {
 		let diff;
 
 		switch (event.key) {
@@ -209,7 +209,7 @@ class SearchBoxElement extends HTMLElement {
 
 		children[this.index].classList.add("active");
 		this.searchTerms = children[this.index].textContent;
-	}
+	};
 }
 
 customElements.define("search-box", SearchBoxElement);

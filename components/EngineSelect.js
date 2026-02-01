@@ -65,7 +65,7 @@ class EngineSelectElement extends HTMLElement {
 			button.tabIndex = -1;
 			button.title = engine.name;
 			button.engine = engine;
-			button.onclick = this.handleClick.bind(this);
+			button.onclick = this.handleClick;
 
 			button.append(img);
 			return button;
@@ -74,7 +74,7 @@ class EngineSelectElement extends HTMLElement {
 		this.container.replaceChildren(...buttons);
 	}
 
-	handleClick(event) {
+	handleClick = (event) => {
 		const { engine } = event.currentTarget;
 		this.value = engine;
 		this.dispatchEvent(new CustomEvent("input"));

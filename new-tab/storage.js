@@ -75,7 +75,7 @@ export async function exportSettings() {
 
 	for (const { url } of await cache.keys()) {
 		const res = await cache.match(url);
-		const blob = await (res).blob();
+		const blob = await res.blob();
 		const body = await blobToBase64URL(blob);
 		icons.push({ url, body });
 	}
