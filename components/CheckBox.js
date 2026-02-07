@@ -30,8 +30,8 @@ class CheckBoxElement extends HTMLElement {
 
 		this.markEl = root.querySelector("div");
 
-		this.addEventListener("keyup", this.handleKeyup);
-		this.addEventListener("click", this.toggleChecked);
+		this.addEventListener("keyup", this.#handleKeyup);
+		this.addEventListener("click", this.#handleClick);
 	}
 
 	connectedCallback() {
@@ -45,22 +45,21 @@ class CheckBoxElement extends HTMLElement {
 		this.markEl.innerHTML = value === null ? Icon : IconChecked;
 	}
 
-	handleKeyup(event) {
+	#handleKeyup(event) {
 		if (event.key === " ") {
 			event.preventDefault();
-			this.toggleChecked();
+			this.#handleClick();
 		}
 	}
 
 	/**
 	 * We only use `event.target` to get the value, so no need to set `event.detail`.
 	 */
-	toggleChecked() {
-		if (this.disabled) {
-			return;
+	#handleClick() {
+		if (!this.disabled) {
+			this.checked = !this.checked;
+			this.dispatchEvent(new CustomEvent("input"));
 		}
-		this.checked = !this.checked;
-		this.dispatchEvent(new CustomEvent("input"));
 	}
 }
 

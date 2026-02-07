@@ -22,7 +22,7 @@ class EngineSelectElement extends HTMLElement {
 
 	set list(value) {
 		this.engines = value;
-		this.render(value);
+		this.#render(value);
 	}
 
 	get index() {
@@ -54,7 +54,7 @@ class EngineSelectElement extends HTMLElement {
 		}
 	}
 
-	render(value) {
+	#render(value) {
 		const buttons = value.map(engine => {
 			const img = document.createElement("img");
 			img.alt = engine.name;
@@ -65,7 +65,7 @@ class EngineSelectElement extends HTMLElement {
 			button.tabIndex = -1;
 			button.title = engine.name;
 			button.engine = engine;
-			button.onclick = this.handleClick;
+			button.onclick = this.#handleClick;
 
 			button.append(img);
 			return button;
@@ -74,7 +74,7 @@ class EngineSelectElement extends HTMLElement {
 		this.container.replaceChildren(...buttons);
 	}
 
-	handleClick = (event) => {
+	#handleClick = (event) => {
 		const { engine } = event.currentTarget;
 		this.value = engine;
 		this.dispatchEvent(new CustomEvent("input"));

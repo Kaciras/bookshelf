@@ -53,14 +53,14 @@ class SearchBoxElement extends HTMLElement {
 
 		this.fetcher = new Debounced(this.suggest);
 
-		this.inputEl.onkeydown = this.handleInputKeyDown;
-		this.inputEl.oninput = this.handleInput;
+		this.inputEl.onkeydown = this.#handleInputKeyDown;
+		this.inputEl.oninput = this.#handleInput;
 
 		// There is no `oncompositionend` property.
-		this.inputEl.addEventListener("compositionend", this.handleComposition);
+		this.inputEl.addEventListener("compositionend", this.#handleComposition);
 
 		root.querySelector("button").onclick = this.search;
-		root.addEventListener("keydown", this.handleKeyDown);
+		root.addEventListener("keydown", this.#handleKeyDown);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class SearchBoxElement extends HTMLElement {
 		this.fetcher.delay = value;
 	}
 
-	handleInput = (event) => {
+	#handleInput = (event) => {
 		if (this.waitIME && event.inputType === "insertCompositionText") {
 			return;
 		}
@@ -111,7 +111,7 @@ class SearchBoxElement extends HTMLElement {
 
 	// Chrome cannot detect composition end on `input` event.
 	// https://github.com/w3c/uievents/issues/202
-	handleComposition = () => {
+	#handleComposition = () => {
 		this.fetcher.reschedule();
 	};
 
@@ -125,7 +125,7 @@ class SearchBoxElement extends HTMLElement {
 		loadingEl.classList.add("active");
 		try {
 			const list = await api.suggest(searchTerms, signal);
-			this.setSuggestions(list);
+			this.#renderSuggestions(list);
 		} catch (e) {
 			if (e.name === "AbortError") {
 				return;
@@ -136,7 +136,7 @@ class SearchBoxElement extends HTMLElement {
 		loadingEl.classList.remove("active");
 	};
 
-	setSuggestions(list) {
+	#renderSuggestions(list) {
 		const count = Math.min(this.limit, list.length);
 		const newItems = new Array(count);
 
@@ -158,7 +158,7 @@ class SearchBoxElement extends HTMLElement {
 	 * Since compositionend precedes KeyUp, only KeyDown can be used
 	 * to ensure `isComposing` is set. Google search also uses the KeyDown event.
 	 */
-	handleInputKeyDown = (event) => {
+	#handleInputKeyDown = (event) => {
 		if (event.key !== "Enter") {
 			return;
 		}
@@ -174,7 +174,7 @@ class SearchBoxElement extends HTMLElement {
 	};
 
 	// Input Method does not trigger this event.
-	handleKeyDown = (event) => {
+	#handleKeyDown = (event) => {
 		let diff;
 
 		switch (event.key) {
@@ -186,7 +186,7 @@ class SearchBoxElement extends HTMLElement {
 				break;
 			case "Escape":
 				this.searchTerms = "";
-				this.handleInput(event);
+				this.#handleInput(event);
 				return;
 			default:
 				return;

@@ -37,10 +37,10 @@ class TaskButtonElement extends HTMLElement {
 	connectedCallback() {
 		this.classList.add("button");
 		this.tabIndex = 0;
-		this.addEventListener("click", this.handleClick);
+		this.addEventListener("click", this.#handleClick);
 	}
 
-	async handleClick() {
+	async #handleClick() {
 		const { running, taskFn } = this;
 
 		// Just like a normal button if no taskFn.
@@ -50,7 +50,7 @@ class TaskButtonElement extends HTMLElement {
 			this.startTask();
 		} else {
 			this.controller.abort();
-			this.switchToNormal();
+			this.#switchToNormal();
 		}
 	}
 
@@ -65,10 +65,10 @@ class TaskButtonElement extends HTMLElement {
 
 		const { signal } = this.controller = new AbortController();
 		slotEl.replaceWith(loadingEl);
-		taskFn(signal).finally(this.switchToNormal);
+		taskFn(signal).finally(this.#switchToNormal);
 	}
 
-	switchToNormal = () => {
+	#switchToNormal = () => {
 		this.removeAttribute("style");
 		this.running = false;
 		this.loadingEl.replaceWith(this.slotEl);

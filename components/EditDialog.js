@@ -86,9 +86,9 @@ class EditDialogElement extends HTMLElement {
 		delegate(this, "url", this.urlInput, "value");
 		delegate(this, "favicon", this.iconEl, "src");
 
-		root.getElementById("fetch").taskFn = this.fetchSiteMetadata;
-		root.getElementById("cancel").onclick = this.handleActionClick;
-		root.getElementById("accept").onclick = this.handleActionClick;
+		root.getElementById("fetch").taskFn = this.#handleFetch;
+		root.getElementById("cancel").onclick = this.#handleActionClick;
+		root.getElementById("accept").onclick = this.#handleActionClick;
 	}
 
 	show(data = defaultData) {
@@ -97,7 +97,7 @@ class EditDialogElement extends HTMLElement {
 		this.nameInput.focus();
 	}
 
-	handleActionClick = (event) => {
+	#handleActionClick = (event) => {
 		const { dialogEl, urlInput } = this;
 
 		if (event.currentTarget.id !== "accept") {
@@ -110,7 +110,7 @@ class EditDialogElement extends HTMLElement {
 		}
 	};
 
-	fetchSiteMetadata = async (signal) => {
+	#handleFetch = async (signal) => {
 		const { nameInput, urlInput } = this;
 		if (!urlInput.reportValidity()) {
 			return;

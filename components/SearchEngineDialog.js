@@ -133,17 +133,17 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.searchEl = root.querySelector("textarea[name='searchAPI']");
 		this.suggestEl = root.querySelector("textarea[name='suggestAPI']");
 
-		this.nameEl.oninput = this.handleInput;
-		this.searchEl.oninput = this.handleInput;
-		this.suggestEl.oninput = this.handleInput;
+		this.nameEl.oninput = this.#handleInput;
+		this.searchEl.oninput = this.#handleInput;
+		this.suggestEl.oninput = this.#handleInput;
 
-		this.defaultEl.oninput = this.changeDefault;
-		this.addEl.onclick = () => this.addTab(defaultData);
+		this.defaultEl.oninput = this.#changeDefault;
+		this.addEl.onclick = () => this.#addTab(defaultData);
 
-		root.getElementById("download").taskFn = this.fetchFavicon;
-		root.getElementById("file").onclick = this.uploadIcon;
-		root.getElementById("cancel").onclick = this.handleActionClick;
-		root.getElementById("accept").onclick = this.handleActionClick;
+		root.getElementById("download").taskFn = this.#fetchFavicon;
+		root.getElementById("file").onclick = this.#uploadIcon;
+		root.getElementById("cancel").onclick = this.#handleActionClick;
+		root.getElementById("accept").onclick = this.#handleActionClick;
 	}
 
 	show(engines, defaultEngine) {
@@ -151,13 +151,13 @@ class SearchEngineDialogElement extends HTMLElement {
 
 		listEl.replaceChildren(listEl.lastChild);
 		for (const e of engines) {
-			this.addTab(e);
+			this.#addTab(e);
 		}
 		this.defaultTab = listEl.children[defaultEngine];
 		this.dialogEl.showModal();
 	}
 
-	addTab(engine) {
+	#addTab(engine) {
 		const li = itemTemplate.content.cloneNode(true).firstChild;
 		li[kData] = { ...engine };
 		li.querySelector("img").src = engine.favicon;
@@ -165,31 +165,31 @@ class SearchEngineDialogElement extends HTMLElement {
 
 		dragSort.register(li);
 		this.listEl.insertBefore(li, this.addEl);
-		this.switchTab(li);
+		this.#switchTab(li);
 
-		li.onclick = this.handleTabChange;
-		li.querySelector("button").onclick = this.handleRemove;
+		li.onclick = this.#handleTabChange;
+		li.querySelector("button").onclick = this.#handleRemove;
 	}
 
-	handleTabChange = (event) => {
+	#handleTabChange = (event) => {
 		const { currentTarget } = event;
 		if (currentTarget !== this.current) {
-			this.switchTab(currentTarget);
+			this.#switchTab(currentTarget);
 		}
 	};
 
-	handleRemove = (event) => {
+	#handleRemove = (event) => {
 		const tab = event.currentTarget.parentNode;
 		event.stopPropagation();
 
 		if (tab.parentNode.children.length === 2) {
 			return alert(i18n("RequireSearchEngine"));
 		}
-		this.switchTab(tab.previousSibling ?? tab.nextSibling);
+		this.#switchTab(tab.previousSibling ?? tab.nextSibling);
 		tab.remove();
 	};
 
-	handleInput = ({ currentTarget }) => {
+	#handleInput = ({ currentTarget }) => {
 		const { name, value } = currentTarget;
 		this.current[kData][name] = value;
 
@@ -198,7 +198,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		}
 	};
 
-	fetchFavicon = async (signal) => {
+	#fetchFavicon = async (signal) => {
 		if (!this.searchEl.reportValidity()) {
 			return;
 		}
@@ -206,33 +206,33 @@ class SearchEngineDialogElement extends HTMLElement {
 
 		try {
 			const scraper = await metaScraper(url, signal);
-			this.changeIcon(await scraper.selectFavicon(48, signal));
+			this.#changeIcon(await scraper.selectFavicon(48, signal));
 		} catch (e) {
 			console.error(e);
 			window.alert(`Favicon download failed: ${e.message}`);
 		}
 	};
 
-	uploadIcon = async () => {
+	#uploadIcon = async () => {
 		const [file] = await selectFile("image/*");
-		this.changeIcon(URL.createObjectURL(file));
+		this.#changeIcon(URL.createObjectURL(file));
 	};
 
-	changeIcon(value) {
+	#changeIcon(value) {
 		URL.revokeObjectURL(this.iconEl.src);
 		this.current[kData].favicon = value;
 		this.iconEl.src = value;
 		this.current.querySelector("img").src = value;
 	}
 
-	changeDefault = (event) => {
+	#changeDefault = (event) => {
 		if (this.defaultEl.checked) {
 			return event.preventDefault();
 		}
 		this.defaultTab = this.current;
 	};
 
-	switchTab(li) {
+	#switchTab(li) {
 		this.current?.classList.remove("active");
 		this.current = li;
 		li.classList.add("active");
@@ -245,7 +245,7 @@ class SearchEngineDialogElement extends HTMLElement {
 		this.suggestEl.value = data.suggestAPI;
 	}
 
-	handleActionClick = (event) => {
+	#handleActionClick = (event) => {
 		const { listEl, defaultTab, dialogEl } = this;
 		dialogEl.close();
 
