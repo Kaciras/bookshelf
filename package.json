@@ -23,7 +23,7 @@
 	"dependencies": {
 		"@kaciras/utilities": "^1.0.5",
 		"@material-design-icons/svg": "^0.14.15",
-		"@tabler/icons": "^3.36.1"
+		"@tabler/icons": "^3.37.1"
 	},
 	"devDependencies": {
 		"@kaciras/eslint-config-core": "^3.4.2",
@@ -34,7 +34,7 @@
 		"@types/firefox-webext-browser": "^143.0.0",
 		"adm-zip": "^0.5.16",
 		"cssnano": "^7.1.2",
-		"eslint": "^10.0.0",
+		"eslint": "^10.0.2",
 		"fast-glob": "^3.3.3",
 		"html-minifier-terser": "^7.2.0",
 		"ignore": "^7.0.5",
@@ -46,7 +46,7 @@
 		"postcss-nested": "^7.0.2",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.56.0",
+		"rollup": "^4.59.0",
 		"svgo": "^4.0.0",
 		"vite-plugin-svg-sfc": "^2.2.0"
 	}
