@@ -20,6 +20,7 @@ function minifyJson(source, { path }) {
 	}
 }
 
+// TODO: https://github.com/rollup/rollup/pull/6240 导致多了一个 chunk
 export default {
 	// Avoid generate the "facade" entry chunk.
 	preserveEntrySignatures: false,
