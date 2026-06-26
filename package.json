@@ -40,13 +40,13 @@
 		"ignore": "^7.0.5",
 		"magic-string": "^0.30.21",
 		"mime": "^4.1.0",
-		"node-html-parser": "7.1.0",
+		"node-html-parser": "8.0.3",
 		"postcss": "^8.5.15",
 		"postcss-calc": "^10.1.1",
 		"postcss-nested": "^7.0.2",
 		"postcss-simple-vars": "^7.0.1",
 		"postcss-variable-compress": "^3.0.0",
-		"rollup": "^4.61.0",
+		"rollup": "^4.62.2",
 		"svgo": "^4.0.1",
 		"vite-plugin-svg-sfc": "^2.2.0"
 	}
